@@ -28,7 +28,6 @@ public class CommonProxy
 	{
 	}
 	
-
 	public void getHats()
 	{
 		if(!hatsFolder.exists())

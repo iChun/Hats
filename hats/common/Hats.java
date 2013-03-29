@@ -1,11 +1,15 @@
 package hats.common;
 
+import hats.client.core.ClientProxy;
 import hats.common.core.CommonProxy;
 import hats.common.core.ConnectionHandler;
 import hats.common.core.LoggerHelper;
 
 import java.io.File;
 import java.util.logging.Level;
+
+import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.Property;
 
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
@@ -38,6 +42,8 @@ public class Hats
 {
 	public static final String version = "1.0.0";
 	
+	public static int renderInFirstPerson;
+	
 	@Instance("Hats")
 	public static Hats instance;
 	
@@ -56,6 +62,20 @@ public class Hats
 			proxy.hatsFolder.mkdirs();
 		}
 		
+		boolean isClient = proxy instanceof ClientProxy;
+		
+		Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+		config.load();
+		
+		if(isClient)
+		{
+			config.addCustomCategoryComment("clientOnly", "These settings affect only the client that loads the mod.");
+			
+			renderInFirstPerson = addCommentAndReturnInt(config, "clientOnly", "renderInFirstPerson", "Should your hat render in first person?", 0);
+		}
+		
+		config.save();
+
 	}
 	
 	@Init
@@ -74,6 +94,16 @@ public class Hats
 	public void postInit(FMLPostInitializationEvent event)
 	{
 		
+	}
+	
+	public static int addCommentAndReturnInt(Configuration config, String cat, String s, String comment, int i) //Taken from iChun Util
+	{
+		Property prop = config.get(cat, s, i);
+		if(!comment.equalsIgnoreCase(""))
+		{
+			prop.comment = comment;
+		}
+		return prop.getInt();
 	}
 	
 	@ServerStarting
