@@ -62,6 +62,9 @@ public class Hats
 	public void load(FMLInitializationEvent event)
 	{
 		proxy.initMod();
+		proxy.initTickHandlers();
+		
+		proxy.initRenderersAndTextures();
 		
 		GameRegistry.registerPlayerTracker(new ConnectionHandler());
 		

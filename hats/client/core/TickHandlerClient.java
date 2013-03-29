@@ -74,6 +74,7 @@ public class TickHandlerClient
 			{
 				hat = new EntityHat(world, player);
 				hats.put(player.username, hat);
+				world.spawnEntityInWorld(hat);
 			}
 		}
 	}

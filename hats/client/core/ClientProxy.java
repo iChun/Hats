@@ -25,6 +25,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy 
 {
@@ -34,6 +36,14 @@ public class ClientProxy extends CommonProxy
 	{
 		RenderingRegistry.registerEntityRenderingHandler(EntityHat.class, new RenderHat());
 	}
+
+	@Override
+	public void initTickHandlers() 
+	{
+		tickHandlerClient = new TickHandlerClient();
+		TickRegistry.registerTickHandler(tickHandlerClient, Side.CLIENT);
+	}
+
 	
 	@Override
 	public void getHats()

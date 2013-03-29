@@ -17,6 +17,9 @@ public class EntityHat extends Entity
 	{
 		super(par1World);
 		setSize(0.1F, 0.1F);
+		hatName = "";
+		ignoreFrustumCheck = true;
+		renderDistanceWeight = 10D;
 	}
 	
 	public EntityHat(World par1World, EntityPlayer ply) 
@@ -24,6 +27,10 @@ public class EntityHat extends Entity
 		super(par1World);
 		setSize(0.1F, 0.1F);
 		player = ply;
+		hatName = "minerhat";
+		ignoreFrustumCheck = true;
+		renderDistanceWeight = 10D;
+
 	}
 	
 	@Override
