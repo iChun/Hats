@@ -40,6 +40,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 				)
 public class Hats 
 {
+	//Texture editing time
 	public static final String version = "1.0.0";
 	
 	public static int renderInFirstPerson;
