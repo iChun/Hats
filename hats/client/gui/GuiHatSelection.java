@@ -34,11 +34,14 @@ public class GuiHatSelection extends GuiScreen
 	protected int guiLeft;
 	protected int guiTop;
 	
+	public int pageNumber;
+	
 	public GuiHatSelection(EntityPlayer ply)
 	{
 		player = ply;
 		hat = Hats.proxy.tickHandlerClient.hats.get(player.username);
 		availableHats = ImmutableList.copyOf(Hats.proxy.tickHandlerClient.availableHats);
+		pageNumber = 0;
 	}
 	
 	@Override
@@ -53,17 +56,70 @@ public class GuiHatSelection extends GuiScreen
         buttonList.add(new GuiButton(2, width / 2 + 62, height / 2 + 54, 20, 20, ">"));
         buttonList.add(new GuiButton(3, width / 2 + 16, height / 2 + 54, 44, 20, "Done"));
         
-        System.out.println(availableHats.size());        
-
+        pageNumber = 0;
+        
+        updateButtonList();
+	}
+	
+    @Override
+    protected void keyTyped(char c, int i)
+    {
+    	super.keyTyped(c, i);
+    }
+    
+    @Override
+    protected void actionPerformed(GuiButton guibutton)
+    {
+    	if(guibutton.id == 1)
+    	{
+    		pageNumber--;
+    		if(pageNumber < 0)
+    		{
+    			pageNumber = 0;
+    		}
+    		updateButtonList();
+    	}
+    	if(guibutton.id == 2)
+    	{
+    		pageNumber++;
+    		if(pageNumber * 6 >= availableHats.size())
+    		{
+    			pageNumber--;
+    		}
+    		updateButtonList();
+    	}
+    	if(guibutton.id == 3)
+    	{
+    		
+    	}
+    	if(guibutton.id >= 10)
+    	{
+    		
+    	}
+    }
+    
+    public void updateButtonList()
+    {
+        for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
+        {
+            GuiButton guibutton = (GuiButton)this.buttonList.get(k1);
+            
+            if(guibutton.id >= 10)
+            {
+            	buttonList.remove(k1);
+            }
+        }
+    	
+    	
     	int button = 0;
 
-        for(int i = 0; i < availableHats.size(); i++)
+        for(int i = pageNumber * 6; i < availableHats.size() && i < (pageNumber + 1) * 6; i++)
         {
         	String hatName = (String)availableHats.get(i);
         	
         	GuiButton btn = new GuiButton(10 + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
         	
-        	if(hatName.toLowerCase().equalsIgnoreCase(hat.hatName));
+        	if(hatName.toLowerCase().equalsIgnoreCase(hat.hatName))
         	{
         		btn.enabled = false;
         	}
@@ -74,14 +130,10 @@ public class GuiHatSelection extends GuiScreen
         	if(button == 6)
         	{
         		button = 0;
+        		break;
         	}
         }
-	}
-	
-    @Override
-    protected void keyTyped(char c, int i)
-    {
-    	super.keyTyped(c, i);
+
     }
 
     @Override
@@ -95,7 +147,20 @@ public class GuiHatSelection extends GuiScreen
         int l = this.guiTop;
         this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
         
-    	super.drawScreen(par1, par2, par3);
+        for (int k1 = 0; k1 < this.buttonList.size(); ++k1)
+        {
+            GuiButton guibutton = (GuiButton)this.buttonList.get(k1);
+            
+            if(guibutton.id >= 10)
+            {
+            	int id = guibutton.id - 10;
+            	if(!((pageNumber) * 6 <= id && (pageNumber + 1) * 6 > id))
+            	{
+            		continue;
+            	}
+            }
+            guibutton.drawButton(this.mc, par1, par2);
+        }
     	
         this.mouseX = (float)par1;
         this.mouseY = (float)par2;
