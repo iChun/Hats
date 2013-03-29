@@ -1,14 +1,16 @@
 package hats.client.core;
 
+import hats.common.Hats;
+import hats.common.core.CommonProxy;
+
+import java.awt.image.BufferedImage;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-import hats.common.Hats;
-import hats.common.core.CommonProxy;
 
 public class ClientProxy extends CommonProxy 
 {
@@ -27,8 +29,10 @@ public class ClientProxy extends CommonProxy
 				while(entries.hasMoreElements())
 				{
 					ZipEntry entry = (ZipEntry)entries.nextElement();
-					System.out.println(entry);
-							
+					if(!entry.isDirectory())
+					{
+						System.out.println(entry);
+					}
 				}
 				
 				zipFile.close();
@@ -43,5 +47,8 @@ public class ClientProxy extends CommonProxy
 			}
 		}
 	}
+	
+	public static HashMap<BufferedImage, Integer> bufferedImageID = new HashMap<BufferedImage, Integer>();
+	public static HashMap<String, BufferedImage> bufferedImages = new HashMap<String, BufferedImage>();
 	
 }
