@@ -14,7 +14,7 @@ public class CommonProxy
 	
 	public void initMod()
 	{
-		
+		getHats();
 	}
 	
 	public void initRenderersAndTextures() {}
@@ -41,7 +41,6 @@ public class CommonProxy
 				hatNames.add(hatName);
 				hatFiles.add(file);
 				
-				System.out.println(hatName);
 			}
 		}
 	}
