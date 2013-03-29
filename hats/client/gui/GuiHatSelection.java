@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL12;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
@@ -47,6 +48,34 @@ public class GuiHatSelection extends GuiScreen
 		
         this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - this.ySize) / 2;
+        
+        buttonList.add(new GuiButton(1, width / 2 - 6, height / 2 + 54, 20, 20, "<"));
+        buttonList.add(new GuiButton(2, width / 2 + 62, height / 2 + 54, 20, 20, ">"));
+        buttonList.add(new GuiButton(3, width / 2 + 16, height / 2 + 54, 44, 20, "Done"));
+        
+        System.out.println(availableHats.size());        
+
+    	int button = 0;
+
+        for(int i = 0; i < availableHats.size(); i++)
+        {
+        	String hatName = (String)availableHats.get(i);
+        	
+        	GuiButton btn = new GuiButton(10 + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
+        	
+        	if(hatName.toLowerCase().equalsIgnoreCase(hat.hatName));
+        	{
+        		btn.enabled = false;
+        	}
+        
+        	buttonList.add(btn);
+        	
+        	button++;
+        	if(button == 6)
+        	{
+        		button = 0;
+        	}
+        }
 	}
 	
     @Override

@@ -43,7 +43,7 @@ public class ConnectionHandler
 		while(ite.hasNext())
 		{
 			Entry<File, String> e = ite.next();
-			Hats.proxy.tickHandlerClient.availableHats.add(e.getValue());
+			Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
 		}
 
 	}
