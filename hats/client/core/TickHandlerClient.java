@@ -1,5 +1,6 @@
 package hats.client.core;
 
+import hats.client.gui.GuiHatSelection;
 import hats.common.Hats;
 import hats.common.entity.EntityHat;
 
@@ -8,10 +9,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 
@@ -86,6 +90,13 @@ public class TickHandlerClient
 				}
 			}
 		}
+		
+		if(!guiKeyDown && Keyboard.isKeyDown(Keyboard.KEY_H))
+		{
+			FMLClientHandler.instance().displayGuiScreen(mc.thePlayer, new GuiHatSelection(mc.thePlayer));
+		}
+		
+		guiKeyDown = Keyboard.isKeyDown(Keyboard.KEY_H);
 	}
 
 	public void playerTick(World world, EntityPlayer player)
@@ -128,4 +139,6 @@ public class TickHandlerClient
 	
 	public HashMap<String, EntityHat> hats = new HashMap<String, EntityHat>();
 	public boolean serverHasMod = false;
+	
+	public boolean guiKeyDown;
 }
