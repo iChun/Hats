@@ -102,7 +102,8 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        RenderManager.instance.playerViewY = 180.0F;
 	        RenderManager.instance.renderEntityWithPosYaw(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
-	        RenderManager.instance.renderEntityWithPosYaw(hat, hat.rotationYaw, 0.0D, 0.0D, 0.0F, 1.0F);
+	        GL11.glTranslatef(0.0F, -0.22F, 0.0F);
+	        RenderManager.instance.renderEntityWithPosYaw(hat, 0.0D, 0.0D, 0.0D, hat.rotationYaw, hat.rotationPitch);
 	        
 	        player.renderYawOffset = f2;
 	        player.rotationYaw = f3;
