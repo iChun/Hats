@@ -1,10 +1,14 @@
 package hats.client.gui;
 
+import java.util.List;
+
 import hats.common.Hats;
 import hats.common.entity.EntityHat;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -17,6 +21,8 @@ public class GuiHatSelection extends GuiScreen
 {
 
 	public EntityPlayer player;
+	public EntityHat hat;
+	public List availableHats;
 	
 	protected int xSize = 176;
 	protected int ySize = 170;
@@ -30,6 +36,8 @@ public class GuiHatSelection extends GuiScreen
 	public GuiHatSelection(EntityPlayer ply)
 	{
 		player = ply;
+		hat = Hats.proxy.tickHandlerClient.hats.get(player.username);
+		availableHats = ImmutableList.copyOf(Hats.proxy.tickHandlerClient.availableHats);
 	}
 	
 	@Override
@@ -72,7 +80,7 @@ public class GuiHatSelection extends GuiScreen
     {
     	if(player != null)
     	{
-	    	EntityHat hat = Hats.proxy.tickHandlerClient.hats.get(player.username);
+	    	hat = Hats.proxy.tickHandlerClient.hats.get(player.username);
 	    	if(hat == null)
 	    	{
 	    		return;

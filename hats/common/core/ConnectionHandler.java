@@ -1,5 +1,9 @@
 package hats.common.core;
 
+import java.io.File;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
 import hats.common.Hats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
@@ -20,13 +24,28 @@ public class ConnectionHandler
 	@Override
 	public void connectionOpened(NetHandler netClientHandler, String server, int port, INetworkManager manager) //client: remove server
 	{
-		Hats.proxy.tickHandlerClient.serverHasMod = false;
+		onClientConnected();
 	}
 
 	@Override
 	public void connectionOpened(NetHandler netClientHandler, MinecraftServer server, INetworkManager manager) //client: local server
 	{
+		onClientConnected();
+	}
+	
+	public void onClientConnected()
+	{
 		Hats.proxy.tickHandlerClient.serverHasMod = false;
+		
+		Hats.proxy.tickHandlerClient.availableHats.clear();
+		
+		Iterator<Entry<File, String>> ite = Hats.proxy.hatNames.entrySet().iterator();
+		while(ite.hasNext())
+		{
+			Entry<File, String> e = ite.next();
+			Hats.proxy.tickHandlerClient.availableHats.add(e.getValue());
+		}
+
 	}
 
 	@Override

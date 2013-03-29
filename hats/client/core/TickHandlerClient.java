@@ -4,6 +4,7 @@ import hats.client.gui.GuiHatSelection;
 import hats.common.Hats;
 import hats.common.entity.EntityHat;
 
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -138,6 +139,9 @@ public class TickHandlerClient
 	}
 	
 	public HashMap<String, EntityHat> hats = new HashMap<String, EntityHat>();
+	
+	public ArrayList<String> availableHats = new ArrayList<String>();
+	
 	public boolean serverHasMod = false;
 	
 	public boolean guiKeyDown;
