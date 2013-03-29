@@ -27,7 +27,7 @@ public class EntityHat extends Entity
 		super(par1World);
 		setSize(0.1F, 0.1F);
 		player = ply;
-		hatName = "minerhat";
+		hatName = "tophat";
 		ignoreFrustumCheck = true;
 		renderDistanceWeight = 10D;
 
@@ -44,12 +44,12 @@ public class EntityHat extends Entity
 		}
 
 		lastTickPosX = prevPosX = player.prevPosX;
-		lastTickPosY = prevPosY = player.prevPosY - player.getEyeHeight();
+		lastTickPosY = prevPosY = player.prevPosY - player.getEyeHeight() - 0.10F;
 		lastTickPosZ = prevPosZ = player.prevPosZ;
 		
 		setPosition(posX, posY, posZ);
 		posX = player.posX;
-		posY = player.posY - player.getEyeHeight();
+		posY = player.posY - player.getEyeHeight() - 0.10F;
 		posZ = player.posZ;
 		
 		prevRotationYaw = player.prevRenderYawOffset;
@@ -80,6 +80,8 @@ public class EntityHat extends Entity
 				rotationYaw = ((EntityPig)player.ridingEntity).renderYawOffset;
 			}
 		}
+		
+//		worldObj.spawnParticle("smoke", posX, posY, posZ, 1.0D, 0.0D, 0.0D);
 	}
 
 	@Override

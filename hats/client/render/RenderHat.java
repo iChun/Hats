@@ -27,7 +27,7 @@ public class RenderHat extends Render
 	    	if(model != null)
 	    	{
 		        GL11.glPushMatrix();
-		        GL11.glTranslatef((float)par2, (float)par4 + (Minecraft.getMinecraft().renderViewEntity == null ? Minecraft.getMinecraft().renderViewEntity.getEyeHeight() : 0.0F ) + 0.1F, (float)par6);
+		        GL11.glTranslatef((float)par2, (float)par4 + (Minecraft.getMinecraft().renderViewEntity == null ? Minecraft.getMinecraft().renderViewEntity.getEyeHeight() : 0.0F ), (float)par6);
 		        GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 		        
 		        GL11.glRotatef(hat.rotationPitch, -1.0F, 0.0F, 0.0F);
