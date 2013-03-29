@@ -5,4 +5,6 @@ import hats.common.core.CommonProxy;
 public class ClientProxy extends CommonProxy 
 {
 
+	
+	
 }

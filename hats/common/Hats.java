@@ -4,6 +4,7 @@ import hats.common.core.CommonProxy;
 import hats.common.core.ConnectionHandler;
 import hats.common.core.LoggerHelper;
 
+import java.io.File;
 import java.util.logging.Level;
 
 import cpw.mods.fml.common.Mod;
@@ -47,6 +48,14 @@ public class Hats
 	public void preLoad(FMLPreInitializationEvent event)
 	{
 		LoggerHelper.init();
+		
+		proxy.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/mods/hats");
+		
+		if(!proxy.hatsFolder.exists())
+		{
+			proxy.hatsFolder.mkdirs();
+		}
+		
 	}
 	
 	@Init

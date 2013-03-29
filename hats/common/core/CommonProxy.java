@@ -1,6 +1,9 @@
 package hats.common.core;
 
+import java.io.File;
+
 import net.minecraft.server.MinecraftServer;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class CommonProxy 
 {
@@ -21,6 +24,11 @@ public class CommonProxy
 	{
 	}
 	
+
+	public void getHats()
+	{
+	}
 	
+	public static File hatsFolder;
 	
 }
