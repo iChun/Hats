@@ -36,7 +36,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 				)
 public class Hats 
 {
-	//Gone for a break!
 	public static final String version = "1.0.0";
 	
 	@Instance("Hats")
