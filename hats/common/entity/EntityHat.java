@@ -27,7 +27,7 @@ public class EntityHat extends Entity
 		super(par1World);
 		setSize(0.1F, 0.1F);
 		player = ply;
-		hatName = "minerhat";
+		hatName = "cakehat";
 		ignoreFrustumCheck = true;
 		renderDistanceWeight = 10D;
 
@@ -44,16 +44,16 @@ public class EntityHat extends Entity
 		}
 
 		lastTickPosX = prevPosX = player.prevPosX;
-		lastTickPosY = prevPosY = player.prevPosY - player.getEyeHeight() - 0.10F;
+		lastTickPosY = prevPosY = player.prevPosY + player.getEyeHeight() - 0.35F;
 		lastTickPosZ = prevPosZ = player.prevPosZ;
 		
 		setPosition(posX, posY, posZ);
 		posX = player.posX;
-		posY = player.posY - player.getEyeHeight() - 0.10F;
+		posY = player.posY + player.getEyeHeight() - 0.35F;
 		posZ = player.posZ;
 		
-		prevRotationYaw = player.prevRenderYawOffset;
-		rotationYaw = player.renderYawOffset;
+		prevRotationYaw = player.prevRotationYawHead;
+		rotationYaw = player.rotationYawHead;
 
 		motionX = posX - prevPosX;
 		motionY = posY - prevPosY;

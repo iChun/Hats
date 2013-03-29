@@ -30,13 +30,14 @@ public class RenderHat extends Render
     	{
     		boolean firstPerson = (hat.player == Minecraft.getMinecraft().renderViewEntity && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !((Minecraft.getMinecraft().currentScreen instanceof GuiInventory || Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative) && RenderManager.instance.playerViewY == 180.0F));
     		
-    		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && hat.player.isPotionActive(Potion.invisibility) && hat.player.getActivePotionEffect(Potion.invisibility).duration > 0)
+    		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && !(hat.player.isPotionActive(Potion.invisibility) && hat.player.getActivePotionEffect(Potion.invisibility).duration > 0))
     		{
 		    	ModelHat model = ClientProxy.models.get(hat.hatName);
 		    	if(model != null)
 		    	{
 			        GL11.glPushMatrix();
-			        GL11.glTranslatef((float)par2, (float)par4 + (Minecraft.getMinecraft().renderViewEntity == null ? Minecraft.getMinecraft().renderViewEntity.getEyeHeight() : 0.0F ) + (hat.player != null && hat.player.isSneaking() ? -0.05F : 0.0F), (float)par6);
+			        
+			        GL11.glTranslatef((float)par2, (float)par4 + (Minecraft.getMinecraft().renderViewEntity != hat.player ? -0.06F : 0.0F ) + (hat.player != null && hat.player.isSneaking() ? Minecraft.getMinecraft().renderViewEntity != hat.player ? -0.17F : -0.05F : 0.0F), (float)par6);
 			        GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 			        
 			        GL11.glRotatef(hat.rotationPitch, -1.0F, 0.0F, 0.0F);
@@ -55,6 +56,7 @@ public class RenderHat extends Render
 			        }
 	
 			        GL11.glScalef(-1.0F, -1.0F, 1.0F);
+			        
 			        model.render(hat, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 			        GL11.glPopMatrix();
 		    	}

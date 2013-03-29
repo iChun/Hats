@@ -96,11 +96,11 @@ public class TickHandlerClient
 				EntityPlayer player = hat.player;
 				
 				hat.prevPosX = player.prevPosX;
-				hat.prevPosY = player.prevPosY - player.getEyeHeight() - 0.10F;
+				hat.prevPosY = player.prevPosY + player.getEyeHeight() - 0.35F;
 				hat.prevPosZ = player.prevPosZ;
 				
 				hat.posX = player.posX;
-				hat.posY = player.posY - player.getEyeHeight() - 0.10F;
+				hat.posY = player.posY + player.getEyeHeight() - 0.35F;
 				hat.posZ = player.posZ;
 				
 				hat.prevRotationPitch = player.prevRotationPitch;
