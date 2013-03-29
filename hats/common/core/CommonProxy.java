@@ -2,6 +2,7 @@ package hats.common.core;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import net.minecraft.server.MinecraftServer;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -38,15 +39,13 @@ public class CommonProxy
 			if(file.getName().endsWith(".tcn"))
 			{
 				String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
-				hatNames.add(hatName);
-				hatFiles.add(file);
+				hatNames.put(file, hatName);
 				
 			}
 		}
 	}
 	
-	public static ArrayList<File> hatFiles = new ArrayList<File>();
-	public static ArrayList<String> hatNames = new ArrayList<String>();
+	public static HashMap<File, String> hatNames = new HashMap<File, String>();
 	public static File hatsFolder;
 	
 }

@@ -1,5 +1,6 @@
 package hats.client.core;
 
+import hats.client.model.ModelHat;
 import hats.common.Hats;
 import hats.common.core.CommonProxy;
 
@@ -7,10 +8,20 @@ import java.awt.image.BufferedImage;
 import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
 
 public class ClientProxy extends CommonProxy 
 {
@@ -20,35 +31,64 @@ public class ClientProxy extends CommonProxy
 	{
 		super.getHats();
 		
-		for(File hatFile : hatFiles)
+		Iterator<Entry<File,String>> hatFiles = hatNames.entrySet().iterator();
+		
+		while(hatFiles.hasNext())
 		{
+			Entry<File, String> e = hatFiles.next();
 			try
 			{
-				ZipFile zipFile = new ZipFile(hatFile);
+				ZipFile zipFile = new ZipFile(e.getKey());
 				Enumeration entries = zipFile.entries();
+				
 				while(entries.hasMoreElements())
 				{
 					ZipEntry entry = (ZipEntry)entries.nextElement();
 					if(!entry.isDirectory())
 					{
-						System.out.println(entry);
+						if(entry.getName().endsWith(".png"))
+						{
+							InputStream stream = zipFile.getInputStream(entry);
+							BufferedImage image = ImageIO.read(stream);
+							
+							bufferedImages.put(e.getValue(), image);
+							bufferedImageID.put(image, -1);
+							
+						}
+						if(entry.getName().endsWith(".xml"))
+						{
+							InputStream stream = zipFile.getInputStream(entry);
+							
+							DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+							
+							Document doc = builder.parse(stream);
+							
+							models.put(e.getValue(), new ModelHat(doc));	
+							
+						}
 					}
 				}
 				
 				zipFile.close();
 			}
-			catch(EOFException e)
+			catch(EOFException e1)
 			{
-				Hats.console("Failed to load: " + hatFile.getName() + " is corrupted!", true);
+				Hats.console("Failed to load: " + e.getKey().getName() + " is corrupted!", true);
 			}
-			catch(IOException e)
+			catch(IOException e1)
 			{
-				Hats.console("Failed to load: " + hatFile.getName() + " cannot be read!", true);
+				Hats.console("Failed to load: " + e.getKey().getName() + " cannot be read!", true);
+			} 
+			catch (Exception e1) 
+			{
+				Hats.console("Failed to load: " + e.getKey().getName() + " threw a generic exception!", true);
+				e1.printStackTrace();
 			}
 		}
 	}
 	
 	public static HashMap<BufferedImage, Integer> bufferedImageID = new HashMap<BufferedImage, Integer>();
 	public static HashMap<String, BufferedImage> bufferedImages = new HashMap<String, BufferedImage>();
+	public static HashMap<String, ModelHat> models = new HashMap<String, ModelHat>();
 	
 }
