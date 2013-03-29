@@ -20,11 +20,13 @@ public class ConnectionHandler
 	@Override
 	public void connectionOpened(NetHandler netClientHandler, String server, int port, INetworkManager manager) //client: remove server
 	{
+		Hats.proxy.tickHandlerClient.serverHasMod = false;
 	}
 
 	@Override
 	public void connectionOpened(NetHandler netClientHandler, MinecraftServer server, INetworkManager manager) //client: local server
 	{
+		Hats.proxy.tickHandlerClient.serverHasMod = false;
 	}
 
 	@Override

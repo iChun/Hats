@@ -5,9 +5,11 @@ import hats.client.core.TickHandlerClient;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.Random;
 
 import net.minecraft.server.MinecraftServer;
-import cpw.mods.fml.common.FMLCommonHandler;
 
 public class CommonProxy 
 {
@@ -44,6 +46,20 @@ public class CommonProxy
 				
 			}
 		}
+	}
+	
+	public String getRandomHatName()
+	{
+		ArrayList<String> hatNameList = new ArrayList<String>();
+		
+		Iterator<Entry<File, String>> ite = hatNames.entrySet().iterator();
+		while(ite.hasNext())
+		{
+			Entry<File, String> e = ite.next();
+			hatNameList.add(e.getValue());
+		}
+		
+		return hatNameList.get((new Random()).nextInt(hatNameList.size()));
 	}
 	
 	public static HashMap<File, String> hatNames = new HashMap<File, String>();

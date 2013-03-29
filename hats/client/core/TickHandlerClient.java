@@ -1,5 +1,6 @@
 package hats.client.core;
 
+import hats.common.Hats;
 import hats.common.entity.EntityHat;
 
 import java.util.EnumSet;
@@ -66,15 +67,23 @@ public class TickHandlerClient
 
 	public void worldTick(Minecraft mc, WorldClient world)
 	{
-		for(int i = 0; i < world.playerEntities.size(); i++)
+		if(Hats.enableInServersWithoutMod == 1 && !serverHasMod || serverHasMod)
 		{
-			EntityPlayer player = (EntityPlayer)world.playerEntities.get(i);
-			EntityHat hat = hats.get(player.username);
-			if(hat == null || hat.isDead)
+			for(int i = 0; i < world.playerEntities.size(); i++)
 			{
-				hat = new EntityHat(world, player);
-				hats.put(player.username, hat);
-				world.spawnEntityInWorld(hat);
+				EntityPlayer player = (EntityPlayer)world.playerEntities.get(i);
+				if(!serverHasMod && Hats.shouldOtherPlayersHaveHats == 0 && player != Minecraft.getMinecraft().thePlayer)
+				{
+					continue;
+				}
+				
+				EntityHat hat = hats.get(player.username);
+				if(hat == null || hat.isDead)
+				{
+					hat = new EntityHat(world, player, Hats.randomHat == 1 ? Hats.proxy.getRandomHatName() : Hats.favouriteHat);
+					hats.put(player.username, hat);
+					world.spawnEntityInWorld(hat);
+				}
 			}
 		}
 	}
@@ -118,4 +127,5 @@ public class TickHandlerClient
 	}
 	
 	public HashMap<String, EntityHat> hats = new HashMap<String, EntityHat>();
+	public boolean serverHasMod = false;
 }

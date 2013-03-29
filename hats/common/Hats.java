@@ -43,6 +43,10 @@ public class Hats
 	public static final String version = "1.0.0";
 	
 	public static int renderInFirstPerson;
+	public static int enableInServersWithoutMod;
+	public static int shouldOtherPlayersHaveHats;
+	public static int randomHat;
+	public static String favouriteHat;
 	
 	@Instance("Hats")
 	public static Hats instance;
@@ -72,6 +76,11 @@ public class Hats
 			config.addCustomCategoryComment("clientOnly", "These settings affect only the client that loads the mod.");
 			
 			renderInFirstPerson = addCommentAndReturnInt(config, "clientOnly", "renderInFirstPerson", "Should your hat render in first person?", 0);
+			enableInServersWithoutMod = addCommentAndReturnInt(config, "clientOnly", "enableInServersWithoutMod", "Enable hats in servers without the mod?", 1);
+			shouldOtherPlayersHaveHats = addCommentAndReturnInt(config, "clientOnly", "shouldOtherPlayersHaveHats", "Do other players have hats? Only when enableInServersWithoutMod = 1", 1);
+			randomHat = addCommentAndReturnInt(config, "clientOnly", "randomHat", "Should each player have a random hat? Only when enableInServersWithoutMod = 1", 1);
+			favouriteHat = addCommentAndReturnString(config, "clientOnly", "favouriteHat", "What hat do you want to use on servers without the mod? Only when randomHat = 0", "TopHat").toLowerCase();
+			
 		}
 		
 		config.save();
@@ -104,6 +113,16 @@ public class Hats
 			prop.comment = comment;
 		}
 		return prop.getInt();
+	}
+	
+	public static String addCommentAndReturnString(Configuration config, String cat, String s, String comment, String value)
+	{
+		Property prop = config.get(cat, s, value);
+		if(!comment.equalsIgnoreCase(""))
+		{
+			prop.comment = comment;
+		}
+		return prop.getString();
 	}
 	
 	@ServerStarting

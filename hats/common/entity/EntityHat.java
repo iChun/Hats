@@ -22,12 +22,12 @@ public class EntityHat extends Entity
 		renderDistanceWeight = 10D;
 	}
 	
-	public EntityHat(World par1World, EntityPlayer ply) 
+	public EntityHat(World par1World, EntityPlayer ply, String name) 
 	{
 		super(par1World);
 		setSize(0.1F, 0.1F);
 		player = ply;
-		hatName = "cakehat";
+		hatName = name;
 		ignoreFrustumCheck = true;
 		renderDistanceWeight = 10D;
 
