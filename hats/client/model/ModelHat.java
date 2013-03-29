@@ -85,9 +85,10 @@ public class ModelHat extends ModelBase
 						cube.addBox(Float.parseFloat(offsets[0]), Float.parseFloat(offsets[1]), Float.parseFloat(offsets[2]), Integer.parseInt(size[0]), Integer.parseInt(size[1]), Integer.parseInt(size[2]));
 						cube.setRotationPoint(Float.parseFloat(positions[0]), Float.parseFloat(positions[1]) - 23.4F, Float.parseFloat(positions[2]));
 						cube.mirror = mirrored;
-						cube.rotateAngleX = Float.parseFloat(rotations[0]);
-						cube.rotateAngleY = Float.parseFloat(rotations[1]);
-						cube.rotateAngleZ = Float.parseFloat(rotations[2]);
+						
+						cube.rotateAngleX = (float)Math.toRadians(Float.parseFloat(rotations[0]));
+						cube.rotateAngleY = (float)Math.toRadians(Float.parseFloat(rotations[1]));
+						cube.rotateAngleZ = (float)Math.toRadians(Float.parseFloat(rotations[2]));
 
 						models.add(cube);
 					}
