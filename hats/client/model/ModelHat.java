@@ -83,7 +83,7 @@ public class ModelHat extends ModelBase
 						}
 						ModelRenderer cube = new ModelRenderer(this, Integer.parseInt(textureOffsets[0]), Integer.parseInt(textureOffsets[1]));
 						cube.addBox(Float.parseFloat(offsets[0]), Float.parseFloat(offsets[1]), Float.parseFloat(offsets[2]), Integer.parseInt(size[0]), Integer.parseInt(size[1]), Integer.parseInt(size[2]));
-						cube.setRotationPoint(Float.parseFloat(positions[0]), Float.parseFloat(positions[1]) - 23F, Float.parseFloat(positions[2]));
+						cube.setRotationPoint(Float.parseFloat(positions[0]), Float.parseFloat(positions[1]) - 27F, Float.parseFloat(positions[2]));
 						cube.mirror = mirrored;
 						cube.rotateAngleX = Float.parseFloat(rotations[0]);
 						cube.rotateAngleY = Float.parseFloat(rotations[1]);
