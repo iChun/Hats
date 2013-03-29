@@ -8,19 +8,20 @@ import org.w3c.dom.NodeList;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.entity.Entity;
 
 public class ModelHat extends ModelBase 
 {
 
-	public ArrayList models;
-	
-	
+	public ArrayList<ModelRenderer> models;
+
+
 	public ModelHat(Document doc)
 	{
-		models = new ArrayList();
-		
+		models = new ArrayList<ModelRenderer>();
+
 		String[] textureSizes = doc.getElementsByTagName("TextureSize").item(0).getChildNodes().item(0).getNodeValue().split(",");
-		
+
 		try
 		{
 			textureWidth = Integer.parseInt(textureSizes[0]);
@@ -31,13 +32,13 @@ public class ModelHat extends ModelBase
 			textureWidth = 64;
 			textureHeight = 32;
 		}
-		
+
 		NodeList list = doc.getElementsByTagName("Shape");
-		
+
 		for(int i = 0; i < list.getLength(); i++)
 		{
 			Node node = list.item(i);
-			
+
 			for(int j = 0; j < node.getAttributes().getLength(); j++)
 			{
 				Node attribute = node.getAttributes().item(j);
@@ -47,38 +48,64 @@ public class ModelHat extends ModelBase
 					try
 					{
 						boolean mirrored = false;
-						String[] offsets;
-						String[] positions;
-						String[] rotations;
-						String[] size;
-						String[] textureOffsets;
+						String[] offsets = new String[3];
+						String[] positions = new String[3];
+						String[] rotations = new String[3];
+						String[] size = new String[3];
+						String[] textureOffsets = new String[2];
 						for(int k = 0; k < node.getChildNodes().getLength(); k++)
 						{
 							Node child = node.getChildNodes().item(k);
-//							System.out.println(child);
-							System.out.println(child.getTextContent());
 							if(child.getNodeName().equalsIgnoreCase("IsMirrored"))
 							{
-//								System.out.println(child.getTextContent());
-//								mirrored = !child.getNodeValue().equalsIgnoreCase("False");
+								mirrored = !child.getTextContent().trim().equalsIgnoreCase("False");
 							}
 							else if(child.getNodeName().equalsIgnoreCase("Offset"))
 							{
-//								offsets = child.getNodeValue().split(",");
-//								System.out.println(offsets.length);
-								
+								offsets = child.getTextContent().trim().split(",");
+							}
+							else if(child.getNodeName().equalsIgnoreCase("Position"))
+							{
+								positions = child.getTextContent().trim().split(",");
+							}
+							else if(child.getNodeName().equalsIgnoreCase("Rotation"))
+							{
+								rotations = child.getTextContent().trim().split(",");
+							}
+							else if(child.getNodeName().equalsIgnoreCase("Size"))
+							{
+								size = child.getTextContent().trim().split(",");
+							}
+							else if(child.getNodeName().equalsIgnoreCase("TextureOffset"))
+							{
+								textureOffsets = child.getTextContent().trim().split(",");
 							}
 						}
-//						ModelRenderer cube =
+						ModelRenderer cube = new ModelRenderer(this, Integer.parseInt(textureOffsets[0]), Integer.parseInt(textureOffsets[1]));
+						cube.addBox(Float.parseFloat(offsets[0]), Float.parseFloat(offsets[1]), Float.parseFloat(offsets[2]), Integer.parseInt(size[0]), Integer.parseInt(size[1]), Integer.parseInt(size[2]));
+						cube.setRotationPoint(Float.parseFloat(positions[0]), Float.parseFloat(positions[1]), Float.parseFloat(positions[2]));
+						cube.mirror = mirrored;
+						cube.rotateAngleX = Float.parseFloat(rotations[0]);
+						cube.rotateAngleY = Float.parseFloat(rotations[1]);
+						cube.rotateAngleZ = Float.parseFloat(rotations[2]);
+
+						models.add(cube);
 					}
 					catch(NumberFormatException e)
 					{
-						
 					}
 				}
 			}
 		}
-		
 	}
-	
+
+	@Override
+	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
+	{
+		for(ModelRenderer cube : models)
+		{
+			cube.render(f5);
+		}
+	}
+
 }

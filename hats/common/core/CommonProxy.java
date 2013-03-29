@@ -1,5 +1,7 @@
 package hats.common.core;
 
+import hats.client.core.TickHandlerClient;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -47,5 +49,7 @@ public class CommonProxy
 	
 	public static HashMap<File, String> hatNames = new HashMap<File, String>();
 	public static File hatsFolder;
+	
+	public static TickHandlerClient tickHandlerClient;
 	
 }
