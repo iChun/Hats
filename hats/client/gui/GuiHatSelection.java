@@ -15,6 +15,15 @@ public class GuiHatSelection extends GuiScreen
 
 	public EntityPlayer player;
 	
+	protected int xSize = 176;
+	protected int ySize = 170;
+	
+	public float mouseX;
+	public float mouseY;
+	
+	protected int guiLeft;
+	protected int guiTop;
+	
 	public GuiHatSelection(EntityPlayer ply)
 	{
 		player = ply;
@@ -24,6 +33,9 @@ public class GuiHatSelection extends GuiScreen
 	public void initGui()
 	{
 		buttonList.clear();
+		
+        this.guiLeft = (this.width - this.xSize) / 2;
+        this.guiTop = (this.height - this.ySize) / 2;
 	}
 	
     @Override
@@ -39,12 +51,17 @@ public class GuiHatSelection extends GuiScreen
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.renderEngine.bindTexture("/mods/hats/textures/gui/hatchooser.png");
-        int k = 0;
-        int l = 0;
-        this.drawTexturedModalRect(k, l, 0, 0, 176, 176);
-//        drawPlayerOnGui(k + 51, l + 75, 30, (float)(k + 51) - this.xSize_lo, (float)(l + 75 - 50) - this.ySize_lo);
-
+        int k = this.guiLeft;
+        int l = this.guiTop;
+        this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
+        
     	super.drawScreen(par1, par2, par3);
+    	
+        this.mouseX = (float)par1;
+        this.mouseY = (float)par2;
+
+        drawPlayerOnGui(k + 51, l + 75, 70, (float)(k + 51) - (float)mouseX, (float)(l + 75 - 50) - (float)mouseY);
+
     }
 
     
