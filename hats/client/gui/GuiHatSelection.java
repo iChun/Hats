@@ -1,5 +1,8 @@
 package hats.client.gui;
 
+import hats.common.Hats;
+import hats.common.entity.EntityHat;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -60,41 +63,61 @@ public class GuiHatSelection extends GuiScreen
         this.mouseX = (float)par1;
         this.mouseY = (float)par2;
 
-        drawPlayerOnGui(k + 51, l + 75, 70, (float)(k + 51) - (float)mouseX, (float)(l + 75 - 50) - (float)mouseY);
+        drawPlayerOnGui(k + 42, l + 155, 55, (float)(k + 42) - (float)mouseX, (float)(l + 155 - 92) - (float)mouseY);
 
     }
 
     
     public void drawPlayerOnGui(int par1, int par2, int par3, float par4, float par5)
     {
-        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float)par1, (float)par2, 50.0F);
-        GL11.glScalef((float)(-par3), (float)par3, (float)par3);
-        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-        float f2 = player.renderYawOffset;
-        float f3 = player.rotationYaw;
-        float f4 = player.rotationPitch;
-        GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
-        RenderHelper.enableStandardItemLighting();
-        GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-        GL11.glRotatef(-((float)Math.atan((double)(par5 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-        player.renderYawOffset = (float)Math.atan((double)(par4 / 40.0F)) * 20.0F;
-        player.rotationYaw = (float)Math.atan((double)(par4 / 40.0F)) * 40.0F;
-        player.rotationPitch = -((float)Math.atan((double)(par5 / 40.0F))) * 20.0F;
-        player.rotationYawHead = player.rotationYaw;
-        GL11.glTranslatef(0.0F, player.yOffset, 0.0F);
-        RenderManager.instance.playerViewY = 180.0F;
-        RenderManager.instance.renderEntityWithPosYaw(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
-        player.renderYawOffset = f2;
-        player.rotationYaw = f3;
-        player.rotationPitch = f4;
-        GL11.glPopMatrix();
-        RenderHelper.disableStandardItemLighting();
-        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-        OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+    	if(player != null)
+    	{
+	    	EntityHat hat = Hats.proxy.tickHandlerClient.hats.get(player.username);
+	    	if(hat == null)
+	    	{
+	    		return;
+	    	}
+	        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+	        GL11.glPushMatrix();
+	        GL11.glTranslatef((float)par1, (float)par2, 50.0F);
+	        GL11.glScalef((float)(-par3), (float)par3, (float)par3);
+	        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
+	        float f2 = player.renderYawOffset;
+	        float f3 = player.rotationYaw;
+	        float f4 = player.rotationPitch;
+	        
+	        float ff3 = hat.rotationYaw;
+	        float ff4 = hat.rotationPitch;
+	        
+	        GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
+	        RenderHelper.enableStandardItemLighting();
+	        GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
+	        GL11.glRotatef(-((float)Math.atan((double)(par5 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+	        
+	        player.renderYawOffset = (float)Math.atan((double)(par4 / 40.0F)) * 20.0F;
+	        player.rotationYaw = hat.rotationYaw = (float)Math.atan((double)(par4 / 40.0F)) * 40.0F;
+	        player.rotationPitch = hat.rotationPitch = -((float)Math.atan((double)(par5 / 40.0F))) * 20.0F;
+	        player.rotationYawHead = player.rotationYaw;
+	        GL11.glTranslatef(0.0F, player.yOffset, 0.0F);
+	        
+	        RenderManager.instance.playerViewY = 180.0F;
+	        RenderManager.instance.renderEntityWithPosYaw(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+	        RenderManager.instance.renderEntityWithPosYaw(hat, hat.rotationYaw, 0.0D, 0.0D, 0.0F, 1.0F);
+	        
+	        player.renderYawOffset = f2;
+	        player.rotationYaw = f3;
+	        player.rotationPitch = f4;
+	        
+	        hat.rotationYaw = ff3;
+	        hat.rotationPitch = ff4;
+	        
+	        GL11.glPopMatrix();
+	        RenderHelper.disableStandardItemLighting();
+	        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+	        OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+	        GL11.glDisable(GL11.GL_TEXTURE_2D);
+	        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+    	}
     }
 
 }

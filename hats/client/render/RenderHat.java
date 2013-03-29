@@ -3,6 +3,7 @@ package hats.client.render;
 import java.awt.image.BufferedImage;
 
 import hats.client.core.ClientProxy;
+import hats.client.gui.GuiHatSelection;
 import hats.client.model.ModelHat;
 import hats.common.Hats;
 import hats.common.entity.EntityHat;
@@ -28,7 +29,7 @@ public class RenderHat extends Render
     {
     	if(!hat.hatName.equalsIgnoreCase("") && hat.player != null)
     	{
-    		boolean firstPerson = (hat.player == Minecraft.getMinecraft().renderViewEntity && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !((Minecraft.getMinecraft().currentScreen instanceof GuiInventory || Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative) && RenderManager.instance.playerViewY == 180.0F));
+    		boolean firstPerson = (hat.player == Minecraft.getMinecraft().renderViewEntity && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !((Minecraft.getMinecraft().currentScreen instanceof GuiInventory || Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative || Minecraft.getMinecraft().currentScreen instanceof GuiHatSelection) && RenderManager.instance.playerViewY == 180.0F));
     		
     		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && !(hat.player.isPotionActive(Potion.invisibility) && hat.player.getActivePotionEffect(Potion.invisibility).duration > 0))
     		{

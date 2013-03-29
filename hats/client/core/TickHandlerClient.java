@@ -84,7 +84,7 @@ public class TickHandlerClient
 				EntityHat hat = hats.get(player.username);
 				if(hat == null || hat.isDead)
 				{
-					hat = new EntityHat(world, player, Hats.randomHat == 1 ? Hats.proxy.getRandomHatName() : Hats.favouriteHat);
+					hat = new EntityHat(world, player, (Hats.randomHat == 1 || Hats.randomHat == 2 && player != mc.thePlayer) ? Hats.proxy.getRandomHatName() : Hats.favouriteHat);
 					hats.put(player.username, hat);
 					world.spawnEntityInWorld(hat);
 				}
