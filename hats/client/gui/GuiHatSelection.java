@@ -90,11 +90,20 @@ public class GuiHatSelection extends GuiScreen
     	}
     	if(guibutton.id == 3)
     	{
+    		mc.displayGuiScreen(null);
     		
+    		if(!Hats.proxy.tickHandlerClient.serverHasMod)
+    		{
+	    		Hats.favouriteHat = hat.hatName;
+	    		
+	    		Hats.handleConfig();
+    		}
     	}
     	if(guibutton.id >= 10)
     	{
+    		hat.hatName = guibutton.displayString.toLowerCase();
     		
+    		updateButtonList();
     	}
     }
     
