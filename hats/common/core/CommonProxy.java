@@ -32,20 +32,11 @@ public class CommonProxy
 	
 	public void getHats()
 	{
-		if(!hatsFolder.exists())
-		{
-			return;
-		}
-		File[] files = hatsFolder.listFiles();
-		for(File file : files)
-		{
-			if(file.getName().endsWith(".tcn"))
-			{
-				String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
-				hatNames.put(file, hatName);
-				
-			}
-		}
+		((Thread)new ThreadReadHats(hatsFolder, this)).start();
+	}
+	
+	public void postGetHats()
+	{
 	}
 	
 	public String getRandomHatName()

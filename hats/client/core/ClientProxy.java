@@ -46,10 +46,8 @@ public class ClientProxy extends CommonProxy
 
 	
 	@Override
-	public void getHats()
+	public void postGetHats()
 	{
-		super.getHats();
-		
 		Iterator<Entry<File,String>> hatFiles = hatNames.entrySet().iterator();
 		
 		while(hatFiles.hasNext())
