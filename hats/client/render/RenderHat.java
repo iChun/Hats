@@ -38,10 +38,15 @@ public class RenderHat extends Render
 		    	{
 			        GL11.glPushMatrix();
 			        
+		            GL11.glEnable(GL11.GL_BLEND);
+		            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			        
 			        GL11.glTranslatef((float)par2, (float)par4 + (Minecraft.getMinecraft().renderViewEntity != hat.player ? -0.06F : 0.0F ) + (hat.player != null && hat.player.isSneaking() ? Minecraft.getMinecraft().renderViewEntity != hat.player ? -0.17F : -0.05F : 0.0F), (float)par6);
 			        GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 			        
 			        GL11.glRotatef(hat.rotationPitch, -1.0F, 0.0F, 0.0F);
+			        
+			        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			        
 			        BufferedImage image = ClientProxy.bufferedImages.get(hat.hatName);
 			        
@@ -59,6 +64,9 @@ public class RenderHat extends Render
 			        GL11.glScalef(-1.0F, -1.0F, 1.0F);
 			        
 			        model.render(hat, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+			        
+			        GL11.glDisable(GL11.GL_BLEND);
+			        
 			        GL11.glPopMatrix();
 		    	}
     		}

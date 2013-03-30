@@ -64,7 +64,12 @@ public class GuiHatSelection extends GuiScreen
     @Override
     protected void keyTyped(char c, int i)
     {
-    	super.keyTyped(c, i);
+        if (c == 1)
+        {
+        	exitAndUpdate();
+        	
+            this.mc.setIngameFocus();
+        }
     }
     
     @Override
@@ -90,14 +95,13 @@ public class GuiHatSelection extends GuiScreen
     	}
     	if(guibutton.id == 3)
     	{
-    		mc.displayGuiScreen(null);
+    		exitAndUpdate();
+    	}
+    	if(guibutton.id == 5)
+    	{
+    		hat.hatName = "";
     		
-    		if(!Hats.proxy.tickHandlerClient.serverHasMod)
-    		{
-	    		Hats.favouriteHat = hat.hatName;
-	    		
-	    		Hats.handleConfig();
-    		}
+    		updateButtonList();
     	}
     	if(guibutton.id >= 10)
     	{
@@ -107,13 +111,25 @@ public class GuiHatSelection extends GuiScreen
     	}
     }
     
+    public void exitAndUpdate()
+    {
+		mc.displayGuiScreen(null);
+		
+		if(!Hats.proxy.tickHandlerClient.serverHasMod)
+		{
+    		Hats.favouriteHat = hat.hatName;
+    		
+    		Hats.handleConfig();
+		}
+    }
+    
     public void updateButtonList()
     {
         for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
         {
             GuiButton guibutton = (GuiButton)this.buttonList.get(k1);
             
-            if(guibutton.id >= 10)
+            if(guibutton.id >= 10 || guibutton.id == 5)
             {
             	buttonList.remove(k1);
             }
@@ -143,6 +159,24 @@ public class GuiHatSelection extends GuiScreen
         	}
         }
 
+        if(button != 0)
+        {
+        	GuiButton btn = new GuiButton(5, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, "None");
+        	
+        	if(hat.hatName.equalsIgnoreCase(""))
+        	{
+        		btn.enabled = false;
+        	}
+        	
+        	buttonList.add(btn);
+        	
+        	button++;
+        	if(button == 6)
+        	{
+        		button = 0;
+        	}
+        }
+        
     }
 
     @Override
@@ -190,6 +224,9 @@ public class GuiHatSelection extends GuiScreen
 	    	}
 	        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 	        GL11.glPushMatrix();
+	        
+	        GL11.glDisable(GL11.GL_ALPHA_TEST);
+	        
 	        GL11.glTranslatef((float)par1, (float)par2, 50.0F);
 	        GL11.glScalef((float)(-par3), (float)par3, (float)par3);
 	        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
@@ -222,6 +259,8 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        hat.rotationYaw = ff3;
 	        hat.rotationPitch = ff4;
+	        
+	        GL11.glEnable(GL11.GL_ALPHA_TEST);
 	        
 	        GL11.glPopMatrix();
 	        RenderHelper.disableStandardItemLighting();
