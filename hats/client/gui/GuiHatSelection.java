@@ -58,6 +58,26 @@ public class GuiHatSelection extends GuiScreen
         
         pageNumber = 0;
         
+        if(hat.hatName.equalsIgnoreCase(""))
+        {
+        	int i = availableHats.size();
+    		i -= i % 6;
+    		pageNumber = i / 6;
+        }
+        else
+        {
+	        for(int i = 0; i < availableHats.size(); i++)
+	        {
+	        	String hatName = (String)availableHats.get(i);
+	        	if(hatName.equalsIgnoreCase(hat.hatName))
+	        	{
+	        		i -= i % 6;
+	        		pageNumber = i / 6;
+	        		break;
+	        	}
+	        }
+        }
+        
         updateButtonList();
 	}
 	
@@ -132,6 +152,28 @@ public class GuiHatSelection extends GuiScreen
             if(guibutton.id >= 10 || guibutton.id == 5)
             {
             	buttonList.remove(k1);
+            }
+            if(guibutton.id == 1)
+            {
+	            if(pageNumber == 0)
+	            {
+	            	guibutton.enabled = false;
+	            }
+	            else
+	            {
+	            	guibutton.enabled = true;
+	            }
+            }
+            if(guibutton.id == 2)
+            {
+        		if((pageNumber + 1) * 6 >= availableHats.size())
+        		{
+        			guibutton.enabled = false;
+        		}
+	            else
+	            {
+	            	guibutton.enabled = true;
+	            }
             }
         }
     	
