@@ -8,9 +8,16 @@ import hats.common.core.LoggerHelper;
 import java.io.File;
 import java.util.logging.Level;
 
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
+import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.world.WorldEvent;
 
+import org.lwjgl.input.Keyboard;
+
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
@@ -18,18 +25,19 @@ import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.Mod.ServerStarted;
 import cpw.mods.fml.common.Mod.ServerStarting;
-import cpw.mods.fml.common.Mod.ServerStopping;
+import cpw.mods.fml.common.Mod.ServerStopped;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
-import cpw.mods.fml.common.event.FMLServerStoppingEvent;
+import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkModHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Hats", name = "Hats",
 			version = "1.0.0"
@@ -43,11 +51,17 @@ public class Hats
 	//Texture editing time
 	public static final String version = "1.0.0";
 	
+	//Server Options
+	public static int playerHatsMode = 1;
+	public static String defaultHat = "Top Hat";
+	
+	//Client Options
 	public static int renderInFirstPerson = 0;
 	public static int enableInServersWithoutMod = 1;
 	public static int shouldOtherPlayersHaveHats = 1;
 	public static int randomHat = 1;
-	public static String favouriteHat = "TopHat";
+	public static String favouriteHat = "Top Hat";
+	public static int guiKeyBind = Keyboard.KEY_H;
 	
 	public static File configFile;
 	public static boolean firstConfigLoad = true;
@@ -57,6 +71,38 @@ public class Hats
 	
 	@SidedProxy(clientSide = "hats.client.core.ClientProxy", serverSide = "hats.common.core.CommonProxy")
 	public static CommonProxy proxy;
+	
+	public static void handleConfig()
+	{
+		boolean isClient = proxy instanceof ClientProxy;
+		
+		Configuration config = new Configuration(configFile);
+		config.load();
+		
+		playerHatsMode = addCommentAndReturnInt(config, "serverOptions", "playerHatsMode", "Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = NOT AVAILABLE YET! Quest Mode, hats are rewarded by achieving certain tasks. NOT AVAILABLE YET!", playerHatsMode);
+		defaultHat = addCommentAndReturnString(config, "serverOptions", "defaultHat", "All players are given this hat by default, even in Quest Mode.\nLeave blank for no hat.", defaultHat).toLowerCase();
+		
+		if(isClient)
+		{
+			config.addCustomCategoryComment("clientOnly", "These settings affect only the client that loads the mod.");
+			
+			renderInFirstPerson = addCommentAndReturnInt(config, "clientOnly", "renderInFirstPerson", "Should your hat render in first person?", renderInFirstPerson);
+			enableInServersWithoutMod = addCommentAndReturnInt(config, "clientOnly", "enableInServersWithoutMod", "Enable hats in servers without the mod?", enableInServersWithoutMod);
+			shouldOtherPlayersHaveHats = addCommentAndReturnInt(config, "clientOnly", "shouldOtherPlayersHaveHats", "Do other players have hats? Only when enableInServersWithoutMod = 1", shouldOtherPlayersHaveHats);
+			randomHat = addCommentAndReturnInt(config, "clientOnly", "randomHat", "Should each player have a random hat?\n0 = No\n1 = Yes\n2 = Yes, but not the player!\nOnly when enableInServersWithoutMod = 1", randomHat);
+			favouriteHat = addCommentAndReturnString(config, "clientOnly", "favouriteHat", "What hat do you want to use on servers without the mod? Only when randomHat = 0", favouriteHat).toLowerCase();
+			
+			guiKeyBind = addCommentAndReturnInt(config, "clientOnly", "guiKeyBind", "What key code do you want to use to open the Hat Selection GUI?\nMouse binds are posible, starting from -100 and higher.\nFor info on Key codes, check here: http://www.minecraftwiki.net/wiki/Key_codes", guiKeyBind);
+			
+		}
+		
+		config.save();
+		
+		if(firstConfigLoad)
+		{
+			firstConfigLoad = false;
+		}
+	}
 	
 	@PreInit
 	public void preLoad(FMLPreInitializationEvent event)
@@ -86,39 +132,13 @@ public class Hats
 		
 		GameRegistry.registerPlayerTracker(new ConnectionHandler());
 		
+		MinecraftForge.EVENT_BUS.register(this);
+		
 	}
 	
 	@PostInit
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		
-	}
-	
-	public static void handleConfig()
-	{
-		boolean isClient = proxy instanceof ClientProxy;
-		
-		Configuration config = new Configuration(configFile);
-		config.load();
-		
-		if(isClient)
-		{
-			config.addCustomCategoryComment("clientOnly", "These settings affect only the client that loads the mod.");
-			
-			renderInFirstPerson = addCommentAndReturnInt(config, "clientOnly", "renderInFirstPerson", "Should your hat render in first person?", renderInFirstPerson);
-			enableInServersWithoutMod = addCommentAndReturnInt(config, "clientOnly", "enableInServersWithoutMod", "Enable hats in servers without the mod?", enableInServersWithoutMod);
-			shouldOtherPlayersHaveHats = addCommentAndReturnInt(config, "clientOnly", "shouldOtherPlayersHaveHats", "Do other players have hats? Only when enableInServersWithoutMod = 1", shouldOtherPlayersHaveHats);
-			randomHat = addCommentAndReturnInt(config, "clientOnly", "randomHat", "Should each player have a random hat?\n0 = No\n1 = Yes\n2 = Yes, but not the player!\nOnly when enableInServersWithoutMod = 1", randomHat);
-			favouriteHat = addCommentAndReturnString(config, "clientOnly", "favouriteHat", "What hat do you want to use on servers without the mod? Only when randomHat = 0", favouriteHat).toLowerCase();
-			
-		}
-		
-		config.save();
-		
-		if(firstConfigLoad)
-		{
-			firstConfigLoad = false;
-		}
 	}
 	
 	public static int addCommentAndReturnInt(Configuration config, String cat, String s, String comment, int i) //Taken from iChun Util
@@ -149,6 +169,15 @@ public class Hats
 		return prop.getString();
 	}
 	
+	@ForgeSubscribe
+	public void onWorldLoad(WorldEvent.Load event)
+	{
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && event.world.provider.dimensionId == 0)
+		{
+			proxy.loadData((WorldServer)event.world);
+		}
+	}
+
 	@ServerStarting
 	public void serverStarting(FMLServerStartingEvent event)
 	{
@@ -160,9 +189,10 @@ public class Hats
 	{
 	}
 	
-	@ServerStopping
-	public void serverStopping(FMLServerStoppingEvent event)
+	@ServerStopped
+	public void serverStopped(FMLServerStoppedEvent event)
 	{
+		proxy.playerHats.clear();
 	}
 	
     public static int getNetId()

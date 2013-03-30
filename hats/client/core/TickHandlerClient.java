@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -92,13 +93,27 @@ public class TickHandlerClient
 			}
 		}
 		
-		if(!guiKeyDown && Keyboard.isKeyDown(Keyboard.KEY_H))
+		if(mc.currentScreen == null && !hasScreen)
 		{
-			FMLClientHandler.instance().displayGuiScreen(mc.thePlayer, new GuiHatSelection(mc.thePlayer));
+			if(!guiKeyDown && isPressed(Hats.guiKeyBind))
+			{
+				FMLClientHandler.instance().displayGuiScreen(mc.thePlayer, new GuiHatSelection(mc.thePlayer));
+			}
 		}
 		
-		guiKeyDown = Keyboard.isKeyDown(Keyboard.KEY_H);
+		hasScreen = mc.currentScreen != null;
+		
+		guiKeyDown = isPressed(Hats.guiKeyBind);
 	}
+	
+    public static boolean isPressed(int key)
+    {
+    	if(key < 0)
+    	{
+    		return Mouse.isButtonDown(key + 100);
+    	}
+    	return Keyboard.isKeyDown(key);
+    }
 
 	public void playerTick(World world, EntityPlayer player)
 	{
@@ -145,4 +160,5 @@ public class TickHandlerClient
 	public boolean serverHasMod = false;
 	
 	public boolean guiKeyDown;
+	public boolean hasScreen;
 }

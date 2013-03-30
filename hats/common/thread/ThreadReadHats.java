@@ -1,4 +1,6 @@
-package hats.common.core;
+package hats.common.thread;
+
+import hats.common.core.CommonProxy;
 
 import java.io.File;
 
