@@ -1,9 +1,11 @@
 package hats.common;
 
 import hats.client.core.ClientProxy;
+import hats.client.core.PacketHandlerClient;
 import hats.common.core.CommonProxy;
 import hats.common.core.ConnectionHandler;
 import hats.common.core.LoggerHelper;
+import hats.common.core.MapPacketHandler;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -35,6 +37,7 @@ import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.network.NetworkModHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -45,7 +48,8 @@ import cpw.mods.fml.relauncher.Side;
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
 			connectionHandler = ConnectionHandler.class,
-			tinyPacketHandler = MapPacketHandler.class
+			tinyPacketHandler = MapPacketHandler.class,
+			clientPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerClient.class )
 				)
 public class Hats 
 {

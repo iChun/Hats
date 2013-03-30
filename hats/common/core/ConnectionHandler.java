@@ -15,10 +15,12 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
 import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet1Login;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.network.IConnectionHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 
@@ -76,6 +78,7 @@ public class ConnectionHandler
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 		{
 			Hats.proxy.tickHandlerClient.hats.clear();
+			Hats.proxy.tickHandlerClient.wornHatName.clear();
 		}
 	}
 
@@ -94,12 +97,26 @@ public class ConnectionHandler
 			
 			stream.writeByte((byte)Hats.playerHatsMode);
 			
+			if(Hats.proxy.saveData != null)
+			{
+				stream.writeUTF(Hats.playerHatsMode == 1 ? "" : ""); // TODO Quest mode list of available player hats
+				
+				Hats.proxy.playerWornHats.put(player.username, Hats.proxy.saveData.getString(player.username + "_wornHat"));
+			}
+			else
+			{
+				stream.writeUTF("");
+				
+				Hats.proxy.playerWornHats.put(player.username, "");
+			}
 			
-			
+			PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);
 		}
 		catch(IOException e)
 		{}
 
+		Hats.proxy.sendPlayerListOfWornHats(player, null);
+		
 	}
 
 	@Override
@@ -116,7 +133,6 @@ public class ConnectionHandler
 	@Override
 	public void onPlayerRespawn(EntityPlayer player) 
 	{
-
 	}
 
 }

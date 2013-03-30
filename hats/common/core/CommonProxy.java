@@ -4,6 +4,8 @@ import hats.client.core.TickHandlerClient;
 import hats.common.Hats;
 import hats.common.thread.ThreadReadHats;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,13 +13,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 
 public class CommonProxy 
 {
@@ -110,7 +117,58 @@ public class CommonProxy
     		Hats.console("Failed to read save data!");
     	}
     }
-	
+    
+    public void sendPlayerListOfWornHats(EntityPlayer player, String playerName)
+    {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream stream = new DataOutputStream(bytes);
+
+		try
+		{
+			stream.writeByte(1); //packetID;
+			
+			if(playerName == null)
+			{
+				Iterator<Entry<String, String>> ite = Hats.proxy.playerWornHats.entrySet().iterator();
+				
+				while(ite.hasNext())
+				{
+					Entry<String, String> e = ite.next();
+					
+					stream.writeUTF(e.getKey());
+					stream.writeUTF(e.getValue());
+					
+					if(bytes.toByteArray().length > 32000)
+					{
+						stream.writeUTF("#endPacket");
+						PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);
+						
+						bytes = new ByteArrayOutputStream();
+						stream = new DataOutputStream(bytes);
+						
+			        	stream.writeByte(1); //id
+					}
+				}
+			}
+			else
+			{
+				String hat = playerWornHats.get(playerName);
+				if(hat == null)
+				{
+					hat = "";
+				}
+				
+				stream.writeUTF(playerName);
+				stream.writeUTF(hat);
+			}
+
+			PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);
+		}
+		catch(IOException e)
+		{}
+
+    }
+    
 	public static NBTTagCompound saveData = null;
 	
 	public static HashMap<String, ArrayList> playerAvailableHats = new HashMap<String, ArrayList>();

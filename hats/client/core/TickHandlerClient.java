@@ -86,7 +86,7 @@ public class TickHandlerClient
 				EntityHat hat = hats.get(player.username);
 				if(hat == null || hat.isDead)
 				{
-					hat = new EntityHat(world, player, (Hats.randomHat == 1 || Hats.randomHat == 2 && player != mc.thePlayer) ? Hats.proxy.getRandomHatName() : Hats.favouriteHat);
+					hat = new EntityHat(world, player, serverHasMod ? getPlayerHat(player.username) : ((Hats.randomHat == 1 || Hats.randomHat == 2 && player != mc.thePlayer) ? Hats.proxy.getRandomHatName() : Hats.favouriteHat));
 					hats.put(player.username, hat);
 					world.spawnEntityInWorld(hat);
 				}
@@ -153,9 +153,23 @@ public class TickHandlerClient
 	{
 	}
 	
+	public String getPlayerHat(String s)
+	{
+		String name = wornHatName.get(s);
+		if(name == null)
+		{
+			return "";
+		}
+		return name;
+	}
+	
+	public HashMap<String, String> wornHatName = new HashMap<String, String>();
 	public HashMap<String, EntityHat> hats = new HashMap<String, EntityHat>();
 	
 	public ArrayList<String> availableHats = new ArrayList<String>();
+	
+	public int serverHatMode;
+	public String serverHat;
 	
 	public boolean serverHasMod = false;
 	
