@@ -59,6 +59,11 @@ public class CommonProxy
 			hatNameList.add(e.getValue());
 		}
 		
+		if(hatNameList.size() <= 0)
+		{
+			return "";
+		}
+		
 		return hatNameList.get((new Random()).nextInt(hatNameList.size()));
 	}
 	
