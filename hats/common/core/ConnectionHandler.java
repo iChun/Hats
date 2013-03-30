@@ -1,11 +1,15 @@
 package hats.common.core;
 
+import hats.common.Hats;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import hats.common.Hats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
@@ -81,11 +85,27 @@ public class ConnectionHandler
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream stream = new DataOutputStream(bytes);
+
+		try
+		{
+			stream.writeByte(0); //packetID;
+			
+			stream.writeByte((byte)Hats.playerHatsMode);
+			
+			
+			
+		}
+		catch(IOException e)
+		{}
+
 	}
 
 	@Override
 	public void onPlayerLogout(EntityPlayer player) 
 	{
+		Hats.proxy.playerWornHats.remove(player.username);
 	}
 
 	@Override

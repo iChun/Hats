@@ -113,7 +113,8 @@ public class CommonProxy
 	
 	public static NBTTagCompound saveData = null;
 	
-	public static HashMap<String, String> playerHats = new HashMap<String, String>();
+	public static HashMap<String, ArrayList> playerAvailableHats = new HashMap<String, ArrayList>();
+	public static HashMap<String, String> playerWornHats = new HashMap<String, String>();
 	
 	public static HashMap<File, String> hatNames = new HashMap<File, String>();
 	public static File hatsFolder;

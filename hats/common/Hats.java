@@ -44,7 +44,8 @@ import cpw.mods.fml.relauncher.Side;
 				)
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
-			connectionHandler = ConnectionHandler.class
+			connectionHandler = ConnectionHandler.class,
+			tinyPacketHandler = MapPacketHandler.class
 				)
 public class Hats 
 {
@@ -181,7 +182,6 @@ public class Hats
 	@ServerStarting
 	public void serverStarting(FMLServerStartingEvent event)
 	{
-
 	}
 	
 	@ServerStarted
@@ -192,7 +192,9 @@ public class Hats
 	@ServerStopped
 	public void serverStopped(FMLServerStoppedEvent event)
 	{
-		proxy.playerHats.clear();
+		proxy.playerAvailableHats.clear();
+		proxy.playerWornHats.clear();
+		proxy.saveData = null;
 	}
 	
     public static int getNetId()

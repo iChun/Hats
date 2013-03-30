@@ -1,5 +1,6 @@
 package hats.common.thread;
 
+import hats.common.Hats;
 import hats.common.core.CommonProxy;
 
 import java.io.File;
@@ -27,6 +28,9 @@ public class ThreadReadHats extends Thread
 		{
 			return;
 		}
+		
+		int hatCount = 0;
+		
 		File[] files = hatsFolder.listFiles();
 		for(File file : files)
 		{
@@ -34,9 +38,12 @@ public class ThreadReadHats extends Thread
 			{
 				String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
 				proxy.hatNames.put(file, hatName);
+				hatCount++;
 			}
 		}
 
 		proxy.postGetHats();
+		
+		Hats.console("Loaded " + Integer.toString(hatCount) + (hatCount == 1 ? " hat" : "hats"));
 	}
 }
