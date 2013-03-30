@@ -1,22 +1,27 @@
 package hats.client.gui;
 
-import java.util.List;
-
 import hats.common.Hats;
 import hats.common.entity.EntityHat;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.List;
 
-import com.google.common.collect.ImmutableList;
-
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.packet.Packet131MapData;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import com.google.common.collect.ImmutableList;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiHatSelection extends GuiScreen 
 {
@@ -140,6 +145,20 @@ public class GuiHatSelection extends GuiScreen
     		Hats.favouriteHat = hat.hatName;
     		
     		Hats.handleConfig();
+		}
+		else
+		{
+	        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+	        DataOutputStream stream = new DataOutputStream(bytes);
+
+	        try
+	        {
+	        	stream.writeUTF(hat.hatName);
+	        	
+	        	PacketDispatcher.sendPacketToServer(new Packet131MapData((short)Hats.getNetId(), (short)0, bytes.toByteArray()));
+	        }
+	        catch(IOException e)
+	        {}
 		}
     }
     

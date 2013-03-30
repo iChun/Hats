@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.WorldServer;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
@@ -118,7 +120,55 @@ public class CommonProxy
     	}
     }
     
-    public void sendPlayerListOfWornHats(EntityPlayer player, String playerName)
+    public void saveData(WorldServer world)
+    {
+    	if(saveData != null)
+    	{
+    		for(Map.Entry<String, String> e : playerWornHats.entrySet())
+    		{
+    			saveData.setString(e.getKey() + "_wornHat", e.getValue());
+    		}
+    		
+            try
+            {
+            	if(world.getChunkSaveLocation().exists())
+            	{
+	                File file = new File(world.getChunkSaveLocation(), "hats.dat");
+	                if(file.exists())
+	                {
+	                	File file1 = new File(world.getChunkSaveLocation(), "hats_backup.dat");
+	                	if(file1.exists())
+	                	{
+	                		if(file1.delete())
+	                		{
+	                			file.renameTo(file1);
+	                		}
+	                		else
+	                		{
+	                			Hats.console("Failed to delete mod backup data!", true);
+	                		}
+	                	}
+	                	else
+	                	{
+	                		file.renameTo(file1);
+	                	}
+	                }
+	                CompressedStreamTools.writeCompressed(saveData, new FileOutputStream(file));
+            	}
+            }
+            catch(IOException ioexception)
+            {
+                ioexception.printStackTrace();
+                throw new RuntimeException("Failed to save hat data");
+            }
+    	}
+    	else
+    	{
+    		Hats.console("Mod data is null! This is a problem!", true);
+    	}
+    }
+    
+    public void sendPlayerListOfWornHats(EntityPlayer player, boolean sendAllPlayerHatInfo) //if false send the only player's info to all players
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         DataOutputStream stream = new DataOutputStream(bytes);
@@ -127,7 +177,7 @@ public class CommonProxy
 		{
 			stream.writeByte(1); //packetID;
 			
-			if(playerName == null)
+			if(sendAllPlayerHatInfo)
 			{
 				Iterator<Entry<String, String>> ite = Hats.proxy.playerWornHats.entrySet().iterator();
 				
@@ -141,6 +191,8 @@ public class CommonProxy
 					if(bytes.toByteArray().length > 32000)
 					{
 						stream.writeUTF("#endPacket");
+						stream.writeUTF("#endPacket");
+						
 						PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);
 						
 						bytes = new ByteArrayOutputStream();
@@ -149,20 +201,34 @@ public class CommonProxy
 			        	stream.writeByte(1); //id
 					}
 				}
+				PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);
 			}
 			else
 			{
-				String hat = playerWornHats.get(playerName);
+				String hat = playerWornHats.get(player.username);
 				if(hat == null)
 				{
 					hat = "";
 				}
 				
-				stream.writeUTF(playerName);
+				stream.writeUTF(player.username);
 				stream.writeUTF(hat);
+
+				Packet250CustomPayload packet = new Packet250CustomPayload("Hats", bytes.toByteArray());
+				
+				for(int i = 0; i < FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList.size(); i++)
+				{
+					EntityPlayer player1 = (EntityPlayer)FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList.get(i);
+					
+					if(player.username.equalsIgnoreCase(player1.username))
+					{
+						continue;
+					}
+					
+					PacketDispatcher.sendPacketToAllPlayers(packet);
+				}
 			}
 
-			PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);
 		}
 		catch(IOException e)
 		{}

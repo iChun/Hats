@@ -1,6 +1,7 @@
 package hats.client.core;
 
 import hats.common.Hats;
+import hats.common.entity.EntityHat;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -32,6 +33,25 @@ public class PacketHandlerClient
 					Hats.proxy.tickHandlerClient.serverHatMode = stream.readByte();
 					
 					String availHats = stream.readUTF(); //ignored on Free Mode
+					break;
+				}
+				case 1:
+				{
+					String name = stream.readUTF();
+					while(!name.equalsIgnoreCase("#endPacket"))
+					{
+						String hatName = stream.readUTF();
+						
+						Hats.proxy.tickHandlerClient.playerWornHatsName.put(name, hatName);
+						
+						EntityHat hat = Hats.proxy.tickHandlerClient.hats.get(name);
+						if(hat != null)
+						{
+							hat.hatName = hatName;
+						}
+						
+						name = stream.readUTF();
+					}
 					break;
 				}
 			}

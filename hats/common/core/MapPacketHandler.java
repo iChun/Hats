@@ -1,5 +1,7 @@
 package hats.common.core;
 
+import hats.common.Hats;
+
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -9,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetServerHandler;
 import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet131MapData;
+import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.ITinyPacketHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -35,7 +38,21 @@ public class MapPacketHandler
 		DataInputStream stream = new DataInputStream(new ByteArrayInputStream(data));
 		try
 		{
-			stream.readInt();
+			switch(id)
+			{
+				case 0:
+				{
+					String hatName = stream.readUTF();
+					
+					Hats.proxy.playerWornHats.put(player.username, hatName);
+					
+					Hats.proxy.saveData(DimensionManager.getWorld(0));
+					
+					Hats.proxy.sendPlayerListOfWornHats(player, false);
+					
+					break;
+				}
+			}
 		}
 		catch(IOException e)
 		{

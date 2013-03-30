@@ -155,7 +155,7 @@ public class TickHandlerClient
 	
 	public String getPlayerHat(String s)
 	{
-		String name = wornHatName.get(s);
+		String name = playerWornHatsName.get(s);
 		if(name == null)
 		{
 			return "";
@@ -163,7 +163,7 @@ public class TickHandlerClient
 		return name;
 	}
 	
-	public HashMap<String, String> wornHatName = new HashMap<String, String>();
+	public HashMap<String, String> playerWornHatsName = new HashMap<String, String>();
 	public HashMap<String, EntityHat> hats = new HashMap<String, EntityHat>();
 	
 	public ArrayList<String> availableHats = new ArrayList<String>();
