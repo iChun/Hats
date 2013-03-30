@@ -236,6 +236,8 @@ public class GuiHatSelection extends GuiScreen
         {
             GuiButton guibutton = (GuiButton)this.buttonList.get(k1);
             
+            String disp = guibutton.displayString;
+            
             if(guibutton.id >= 10)
             {
             	int id = guibutton.id - 10;
@@ -243,8 +245,15 @@ public class GuiHatSelection extends GuiScreen
             	{
             		continue;
             	}
+            	
+            	if(guibutton.displayString.length() > 17)
+            	{
+            		guibutton.displayString = guibutton.displayString.substring(0, 14) + "...";
+            	}
             }
             guibutton.drawButton(this.mc, par1, par2);
+            
+            guibutton.displayString = disp;
         }
     	
         this.mouseX = (float)par1;

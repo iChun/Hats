@@ -1,6 +1,7 @@
 package hats.common.core;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
@@ -45,7 +46,7 @@ public class ConnectionHandler
 			Entry<File, String> e = ite.next();
 			Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
 		}
-
+		Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
 	}
 
 	@Override
