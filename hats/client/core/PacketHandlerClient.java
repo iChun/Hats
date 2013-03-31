@@ -1,6 +1,7 @@
 package hats.client.core;
 
 import hats.common.Hats;
+import hats.common.core.HatHandler;
 import hats.common.entity.EntityHat;
 
 import java.io.ByteArrayInputStream;
@@ -52,6 +53,11 @@ public class PacketHandlerClient
 						
 						name = stream.readUTF();
 					}
+					break;
+				}
+				case 2:
+				{
+					HatHandler.receiveHatData(stream, false);
 					break;
 				}
 			}

@@ -49,53 +49,9 @@ public class ThreadReadHats extends Thread
 		File[] files = hatsFolder.listFiles();
 		for(File file : files)
 		{
-			if(file.getName().endsWith(".tcn"))
+			if(HatHandler.readHatFromFile(file))
 			{
-//				file.
-				boolean hasTexture = false;
-				try
-				{
-					ZipFile zipFile = new ZipFile(file);
-					Enumeration entries = zipFile.entries();
-					
-					while(entries.hasMoreElements())
-					{
-						ZipEntry entry = (ZipEntry)entries.nextElement();
-						if(!entry.isDirectory())
-						{
-							if(entry.getName().endsWith(".png"))
-							{
-								hasTexture = true;
-							}
-						}
-					}
-					
-					zipFile.close();
-
-				}
-				catch(EOFException e1)
-				{
-					Hats.console("Failed to load: " + file.getName() + " is corrupted!", true);
-				}
-				catch(IOException e1)
-				{
-					Hats.console("Failed to load: " + file.getName() + " cannot be read!", true);
-				} 
-				catch (Exception e1) 
-				{
-					Hats.console("Failed to load: " + file.getName() + " threw a generic exception!", true);
-					e1.printStackTrace();
-				}
-				
-				if(hasTexture)
-				{
-					Hats.proxy.loadHatFile(file);
-					hatCount++;
-				}
-				else
-				{
-					Hats.console("Failed to load: " + file.getName() + " has no texture!", true);
-				}
+				hatCount++;	
 			}
 		}
 
