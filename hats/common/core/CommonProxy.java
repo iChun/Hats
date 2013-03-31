@@ -49,18 +49,24 @@ public class CommonProxy
 	
 	public void getHats()
 	{
-		((Thread)new ThreadReadHats(hatsFolder, this)).start();
+		((Thread)new ThreadReadHats(HatHandler.hatsFolder, this)).start();
 	}
 	
 	public void postGetHats()
 	{
 	}
 	
+	public void loadHatFile(File file)
+	{
+		String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
+		HatHandler.hatNames.put(file, hatName);
+	}
+	
 	public String getRandomHatName()
 	{
 		ArrayList<String> hatNameList = new ArrayList<String>();
 		
-		Iterator<Entry<File, String>> ite = hatNames.entrySet().iterator();
+		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
 		while(ite.hasNext())
 		{
 			Entry<File, String> e = ite.next();
@@ -239,9 +245,6 @@ public class CommonProxy
 	
 	public static HashMap<String, ArrayList> playerAvailableHats = new HashMap<String, ArrayList>();
 	public static HashMap<String, String> playerWornHats = new HashMap<String, String>();
-	
-	public static HashMap<File, String> hatNames = new HashMap<File, String>();
-	public static File hatsFolder;
 	
 	public static TickHandlerClient tickHandlerClient;
 	

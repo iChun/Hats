@@ -46,7 +46,7 @@ public class ConnectionHandler
 		
 		Hats.proxy.tickHandlerClient.availableHats.clear();
 		
-		Iterator<Entry<File, String>> ite = Hats.proxy.hatNames.entrySet().iterator();
+		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
 		while(ite.hasNext())
 		{
 			Entry<File, String> e = ite.next();

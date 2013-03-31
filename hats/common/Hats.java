@@ -4,6 +4,7 @@ import hats.client.core.ClientProxy;
 import hats.client.core.PacketHandlerClient;
 import hats.common.core.CommonProxy;
 import hats.common.core.ConnectionHandler;
+import hats.common.core.HatHandler;
 import hats.common.core.LoggerHelper;
 import hats.common.core.MapPacketHandler;
 
@@ -114,11 +115,11 @@ public class Hats
 	{
 		LoggerHelper.init();
 		
-		proxy.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/mods/hats");
+		HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/mods/hats");
 		
-		if(!proxy.hatsFolder.exists())
+		if(!HatHandler.hatsFolder.exists())
 		{
-			proxy.hatsFolder.mkdirs();
+			HatHandler.hatsFolder.mkdirs();
 		}
 		
 		configFile = event.getSuggestedConfigurationFile();

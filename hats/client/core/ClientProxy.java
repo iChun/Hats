@@ -4,6 +4,7 @@ import hats.client.model.ModelHat;
 import hats.client.render.RenderHat;
 import hats.common.Hats;
 import hats.common.core.CommonProxy;
+import hats.common.core.HatHandler;
 import hats.common.entity.EntityHat;
 
 import java.awt.image.BufferedImage;
@@ -44,54 +45,61 @@ public class ClientProxy extends CommonProxy
 		TickRegistry.registerTickHandler(tickHandlerClient, Side.CLIENT);
 	}
 
+	@Override
+	public void loadHatFile(File file)
+	{
+		super.loadHatFile(file);
+		
+		String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
+		
+		try
+		{
+			ZipFile zipFile = new ZipFile(file);
+			Enumeration entries = zipFile.entries();
+			
+			while(entries.hasMoreElements())
+			{
+				ZipEntry entry = (ZipEntry)entries.nextElement();
+				if(!entry.isDirectory())
+				{
+					if(entry.getName().endsWith(".png"))
+					{
+						InputStream stream = zipFile.getInputStream(entry);
+						BufferedImage image = ImageIO.read(stream);
+						
+						bufferedImages.put(hatName, image);
+						bufferedImageID.put(image, -1);
+						
+					}
+					if(entry.getName().endsWith(".xml"))
+					{
+						InputStream stream = zipFile.getInputStream(entry);
+						
+						DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+						
+						Document doc = builder.parse(stream);
+						
+						models.put(hatName, new ModelHat(doc));	
+					}
+				}
+			}
+			
+			zipFile.close();
+		}
+		catch (Exception e1) 
+		{
+			//an exception would have been thrown before this in the thread, so no output.
+		}
+	}
 	
 	@Override
 	public void postGetHats()
 	{
-		Iterator<Entry<File,String>> hatFiles = hatNames.entrySet().iterator();
+		Iterator<Entry<File,String>> hatFiles = HatHandler.hatNames.entrySet().iterator();
 		
 		while(hatFiles.hasNext())
 		{
 			Entry<File, String> e = hatFiles.next();
-			try
-			{
-				ZipFile zipFile = new ZipFile(e.getKey());
-				Enumeration entries = zipFile.entries();
-				
-				while(entries.hasMoreElements())
-				{
-					ZipEntry entry = (ZipEntry)entries.nextElement();
-					if(!entry.isDirectory())
-					{
-						if(entry.getName().endsWith(".png"))
-						{
-							InputStream stream = zipFile.getInputStream(entry);
-							BufferedImage image = ImageIO.read(stream);
-							
-							bufferedImages.put(e.getValue(), image);
-							bufferedImageID.put(image, -1);
-							
-						}
-						if(entry.getName().endsWith(".xml"))
-						{
-							InputStream stream = zipFile.getInputStream(entry);
-							
-							DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-							
-							Document doc = builder.parse(stream);
-							
-							models.put(e.getValue(), new ModelHat(doc));	
-							
-						}
-					}
-				}
-				
-				zipFile.close();
-			}
-			catch (Exception e1) 
-			{
-				//an exception would have been thrown before this in the thread, so no output.
-			}
 		}
 	}
 	

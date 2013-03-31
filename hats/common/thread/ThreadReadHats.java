@@ -3,6 +3,7 @@ package hats.common.thread;
 import hats.client.model.ModelHat;
 import hats.common.Hats;
 import hats.common.core.CommonProxy;
+import hats.common.core.HatHandler;
 
 import java.awt.image.BufferedImage;
 import java.io.EOFException;
@@ -87,8 +88,7 @@ public class ThreadReadHats extends Thread
 				
 				if(hasTexture)
 				{
-					String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
-					proxy.hatNames.put(file, hatName);
+					Hats.proxy.loadHatFile(file);
 					hatCount++;
 				}
 				else
