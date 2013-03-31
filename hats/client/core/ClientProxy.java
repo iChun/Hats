@@ -92,17 +92,6 @@ public class ClientProxy extends CommonProxy
 		}
 	}
 	
-	@Override
-	public void postGetHats()
-	{
-		Iterator<Entry<File,String>> hatFiles = HatHandler.hatNames.entrySet().iterator();
-		
-		while(hatFiles.hasNext())
-		{
-			Entry<File, String> e = hatFiles.next();
-		}
-	}
-	
 	public static HashMap<BufferedImage, Integer> bufferedImageID = new HashMap<BufferedImage, Integer>();
 	public static HashMap<String, BufferedImage> bufferedImages = new HashMap<String, BufferedImage>();
 	public static HashMap<String, ModelHat> models = new HashMap<String, ModelHat>();

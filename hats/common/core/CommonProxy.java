@@ -52,10 +52,6 @@ public class CommonProxy
 		((Thread)new ThreadReadHats(HatHandler.hatsFolder, this)).start();
 	}
 	
-	public void postGetHats()
-	{
-	}
-	
 	public void loadHatFile(File file)
 	{
 		String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
