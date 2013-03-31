@@ -117,7 +117,7 @@ public class Hats
 	{
 		LoggerHelper.init();
 		
-		HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), proxy instanceof ClientProxy ? "/mods/hats/notch" : "/mods/hats/server");
+		HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/mods/hats");
 		
 		if(!HatHandler.hatsFolder.exists())
 		{
