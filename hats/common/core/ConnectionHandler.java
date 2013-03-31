@@ -101,7 +101,14 @@ public class ConnectionHandler
 			{
 				stream.writeUTF(Hats.playerHatsMode == 1 ? "" : ""); // TODO Quest mode list of available player hats
 				
-				Hats.proxy.playerWornHats.put(player.username, Hats.proxy.saveData.getString(player.username + "_wornHat"));
+				String hatName = Hats.proxy.saveData.getString(player.username + "_wornHat");
+				
+				if(!HatHandler.hasHat(hatName))
+				{
+					HatHandler.requestHat(hatName, player);
+				}
+				
+				Hats.proxy.playerWornHats.put(player.username, hatName);
 			}
 			else
 			{

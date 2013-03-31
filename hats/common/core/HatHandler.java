@@ -11,8 +11,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -121,6 +123,8 @@ public class HatHandler
 			{
 				byteArray = new ArrayList<byte[]>();
 				
+				hatParts.put(hatName, byteArray);
+				
 				for(int i = 0; i < packets; i++)
 				{
 					byteArray.add(new byte[0]);
@@ -154,12 +158,14 @@ public class HatHandler
 				
 				fis.close();
 				
-				
+				readHatFromFile(file);
+
 				if(isServer)
 				{
 					ArrayList<String> queuedLists = queuedHats.get(hatName);
 					if(queuedLists != null)
 					{
+						queuedHats.remove(hatName);
 						for(String name : queuedLists)
 						{
 							EntityPlayer player1 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
@@ -168,20 +174,31 @@ public class HatHandler
 								sendHat(hatName, player);
 							}
 						}
-						queuedHats.remove(hatName);
 					}
 					
-					Hats.proxy.playerWornHats.put(player.username, hatName);
+					Hats.proxy.playerWornHats.put(player.username, hatName.toLowerCase());
 					
 					Hats.proxy.saveData(DimensionManager.getWorld(0));
 					
 					Hats.proxy.sendPlayerListOfWornHats(player, false);
+					
+					Hats.console("Received " + file.getName() + " from " + player.username);
 				}
 				else
 				{
-					readHatFromFile(file);
+					Hats.proxy.tickHandlerClient.requestedHats.remove(hatName.toLowerCase());
 					
-					Hats.proxy.tickHandlerClient.requestedHats.remove(hatName);
+					Hats.console("Received " + file.getName() + " from server.");
+					
+					Hats.proxy.tickHandlerClient.availableHats.clear();
+					Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+					while(ite.hasNext())
+					{
+						Entry<File, String> e = ite.next();
+						Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
+					}
+					Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+					System.out.println("asdsadsad");
 				}
 			}
 		}
@@ -217,13 +234,15 @@ public class HatHandler
 				FileInputStream fis = new FileInputStream(file);
 				int packetCount = 0;
 				
+				Hats.console("Sending " + file.getName() + " to " + (player == null ? "the server" : player.username));
+				
 				while(fileSize > 0)
 				{
 			        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 			        DataOutputStream stream = new DataOutputStream(bytes);
 	
 			        stream.writeByte(2); //id
-			        stream.writeUTF(hatName); //name
+			        stream.writeUTF(file.getName().substring(0, file.getName().length() - 4)); //name
 			        stream.writeByte((int)Math.ceil((float)fileSize / 32000F)); //number of overall packets to send
 			        stream.writeByte(packetCount); // packet number being sent
 			        stream.writeInt(fileSize > 32000 ? 32000 : fileSize); //byte size
@@ -253,6 +272,16 @@ public class HatHandler
 			}
 			
 			//byte size should be 32000
+		}
+		else if(player != null)
+		{
+			ArrayList<String> queuedLists = queuedHats.get(hatName);
+			if(queuedLists == null)
+			{
+				queuedLists = new ArrayList<String>();
+				queuedHats.put(hatName, queuedLists);
+			}
+			queuedLists.add(player.username);
 		}
 	}
 	

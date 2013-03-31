@@ -7,6 +7,7 @@ import hats.common.core.ConnectionHandler;
 import hats.common.core.HatHandler;
 import hats.common.core.LoggerHelper;
 import hats.common.core.MapPacketHandler;
+import hats.common.core.PacketHandlerServer;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -50,7 +51,8 @@ import cpw.mods.fml.relauncher.Side;
 			serverSideRequired = false,
 			connectionHandler = ConnectionHandler.class,
 			tinyPacketHandler = MapPacketHandler.class,
-			clientPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerClient.class )
+			clientPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerClient.class),
+			serverPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerServer.class)
 				)
 public class Hats 
 {
@@ -115,7 +117,7 @@ public class Hats
 	{
 		LoggerHelper.init();
 		
-		HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/mods/hats");
+		HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), proxy instanceof ClientProxy ? "/mods/hats/notch" : "/mods/hats/server");
 		
 		if(!HatHandler.hatsFolder.exists())
 		{

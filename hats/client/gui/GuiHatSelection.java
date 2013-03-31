@@ -199,15 +199,29 @@ public class GuiHatSelection extends GuiScreen
     	
     	int button = 0;
 
-        for(int i = pageNumber * 6; i < availableHats.size() && i < (pageNumber + 1) * 6; i++)
+        for(int i = pageNumber * 6; i < (availableHats.size() + 1) && i < (pageNumber + 1) * 6; i++)
         {
-        	String hatName = (String)availableHats.get(i);
-        	
-        	GuiButton btn = new GuiButton(10 + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
-        	
-        	if(hatName.toLowerCase().equalsIgnoreCase(hat.hatName))
+        	GuiButton btn;
+        	if(i == availableHats.size())
         	{
-        		btn.enabled = false;
+            	btn = new GuiButton(5, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, "None");
+            	
+            	if(hat.hatName.equalsIgnoreCase(""))
+            	{
+            		btn.enabled = false;
+            	}
+	
+        	}
+        	else
+        	{
+	        	String hatName = (String)availableHats.get(i);
+	        	
+	        	btn = new GuiButton(10 + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
+	        	
+	        	if(hatName.toLowerCase().equalsIgnoreCase(hat.hatName))
+	        	{
+	        		btn.enabled = false;
+	        	}
         	}
         
         	buttonList.add(btn);
@@ -219,25 +233,6 @@ public class GuiHatSelection extends GuiScreen
         		break;
         	}
         }
-
-        if(button != 0)
-        {
-        	GuiButton btn = new GuiButton(5, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, "None");
-        	
-        	if(hat.hatName.equalsIgnoreCase(""))
-        	{
-        		btn.enabled = false;
-        	}
-        	
-        	buttonList.add(btn);
-        	
-        	button++;
-        	if(button == 6)
-        	{
-        		button = 0;
-        	}
-        }
-        
     }
 
     @Override

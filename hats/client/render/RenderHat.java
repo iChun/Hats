@@ -35,6 +35,12 @@ public class RenderHat extends Render
     		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && !hat.player.getHasActivePotion())
     		{
 		    	ModelHat model = ClientProxy.models.get(hat.hatName);
+		    	
+	    		if(Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("Notch") && !hat.player.username.equalsIgnoreCase("Notch"))
+	    		{
+	    		}
+	    		
+
 		    	if(model != null)
 		    	{
 			        GL11.glPushMatrix();
