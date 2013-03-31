@@ -88,18 +88,9 @@ public class ClientProxy extends CommonProxy
 				
 				zipFile.close();
 			}
-			catch(EOFException e1)
-			{
-				Hats.console("Failed to load: " + e.getKey().getName() + " is corrupted!", true);
-			}
-			catch(IOException e1)
-			{
-				Hats.console("Failed to load: " + e.getKey().getName() + " cannot be read!", true);
-			} 
 			catch (Exception e1) 
 			{
-				Hats.console("Failed to load: " + e.getKey().getName() + " threw a generic exception!", true);
-				e1.printStackTrace();
+				//an exception would have been thrown before this in the thread, so no output.
 			}
 		}
 	}

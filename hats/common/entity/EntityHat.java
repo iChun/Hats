@@ -12,12 +12,14 @@ public class EntityHat extends Entity
 
 	public EntityPlayer player;
 	public String hatName;
+	public long lastUpdate;
 	
 	public EntityHat(World par1World) 
 	{
 		super(par1World);
 		setSize(0.1F, 0.1F);
 		hatName = "";
+		lastUpdate = par1World.getWorldTime();
 		ignoreFrustumCheck = true;
 		renderDistanceWeight = 10D;
 	}
@@ -28,6 +30,7 @@ public class EntityHat extends Entity
 		setSize(0.1F, 0.1F);
 		player = ply;
 		hatName = name;
+		lastUpdate = par1World.getWorldTime();
 		ignoreFrustumCheck = true;
 		renderDistanceWeight = 10D;
 
@@ -42,6 +45,8 @@ public class EntityHat extends Entity
 			setDead();
 			return;
 		}
+		
+		lastUpdate = worldObj.getWorldTime();
 
 		lastTickPosX = prevPosX = player.prevPosX;
 		lastTickPosY = prevPosY = player.prevPosY + player.getEyeHeight() - 0.35F;

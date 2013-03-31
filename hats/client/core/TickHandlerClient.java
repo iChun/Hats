@@ -78,7 +78,7 @@ public class TickHandlerClient
 			for(int i = 0; i < world.playerEntities.size(); i++)
 			{
 				EntityPlayer player = (EntityPlayer)world.playerEntities.get(i);
-				if(!serverHasMod && Hats.shouldOtherPlayersHaveHats == 0 && player != Minecraft.getMinecraft().thePlayer)
+				if(!serverHasMod && Hats.shouldOtherPlayersHaveHats == 0 && player != Minecraft.getMinecraft().thePlayer || !player.isEntityAlive())
 				{
 					continue;
 				}
@@ -90,6 +90,18 @@ public class TickHandlerClient
 					hats.put(player.username, hat);
 					world.spawnEntityInWorld(hat);
 				}
+			}
+		}
+		
+		Iterator<Entry<String, EntityHat>> ite = hats.entrySet().iterator();
+		
+		while(ite.hasNext())
+		{
+			Entry<String, EntityHat> e = ite.next();
+			if(e.getValue().worldObj.provider.dimensionId != world.provider.dimensionId || (world.getWorldTime() - e.getValue().lastUpdate) > 10L)
+			{
+				e.getValue().setDead();
+				ite.remove();
 			}
 		}
 		
