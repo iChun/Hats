@@ -198,7 +198,6 @@ public class HatHandler
 						Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
 					}
 					Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
-					System.out.println("asdsadsad");
 				}
 			}
 		}
