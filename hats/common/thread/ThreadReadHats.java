@@ -51,6 +51,7 @@ public class ThreadReadHats extends Thread
 		{
 			if(file.getName().endsWith(".tcn"))
 			{
+//				file.
 				boolean hasTexture = false;
 				try
 				{

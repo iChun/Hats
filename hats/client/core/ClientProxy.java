@@ -2,20 +2,14 @@ package hats.client.core;
 
 import hats.client.model.ModelHat;
 import hats.client.render.RenderHat;
-import hats.common.Hats;
 import hats.common.core.CommonProxy;
-import hats.common.core.HatHandler;
 import hats.common.entity.EntityHat;
 
 import java.awt.image.BufferedImage;
-import java.io.EOFException;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
