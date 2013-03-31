@@ -26,7 +26,7 @@ public class PacketHandlerServer
 			{
 				case 2:
 				{
-					HatHandler.receiveHatData(stream, true);
+					HatHandler.receiveHatData(stream, player, true);
 					break;
 				}
 			}

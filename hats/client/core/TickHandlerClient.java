@@ -179,6 +179,7 @@ public class TickHandlerClient
 	public HashMap<String, EntityHat> hats = new HashMap<String, EntityHat>();
 	
 	public ArrayList<String> availableHats = new ArrayList<String>();
+	public ArrayList<String> requestedHats = new ArrayList<String>();
 	
 	public int serverHatMode;
 	public String serverHat;

@@ -57,7 +57,7 @@ public class PacketHandlerClient
 				}
 				case 2:
 				{
-					HatHandler.receiveHatData(stream, false);
+					HatHandler.receiveHatData(stream, null, false);
 					break;
 				}
 			}

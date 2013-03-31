@@ -6,6 +6,7 @@ import hats.client.core.ClientProxy;
 import hats.client.gui.GuiHatSelection;
 import hats.client.model.ModelHat;
 import hats.common.Hats;
+import hats.common.core.HatHandler;
 import hats.common.entity.EntityHat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
@@ -68,6 +69,14 @@ public class RenderHat extends Render
 			        GL11.glDisable(GL11.GL_BLEND);
 			        
 			        GL11.glPopMatrix();
+		    	}
+		    	else
+		    	{
+		    		if(!Hats.proxy.tickHandlerClient.requestedHats.contains(hat.hatName))
+		    		{
+		    			HatHandler.requestHat(hat.hatName, null);
+		    			Hats.proxy.tickHandlerClient.requestedHats.add(hat.hatName);
+		    		}
 		    	}
     		}
     	}

@@ -44,11 +44,26 @@ public class MapPacketHandler
 				{
 					String hatName = stream.readUTF();
 					
-					Hats.proxy.playerWornHats.put(player.username, hatName);
+					if(HatHandler.hasHat(hatName))
+					{
+						Hats.proxy.playerWornHats.put(player.username, hatName);
+						
+						Hats.proxy.saveData(DimensionManager.getWorld(0));
+						
+						Hats.proxy.sendPlayerListOfWornHats(player, false);
+					}
+					else
+					{
+						HatHandler.requestHat(hatName, player);
+					}
 					
-					Hats.proxy.saveData(DimensionManager.getWorld(0));
+					break;
+				}
+				case 1:
+				{
+					String hatName = stream.readUTF();
 					
-					Hats.proxy.sendPlayerListOfWornHats(player, false);
+					HatHandler.sendHat(hatName, player);
 					
 					break;
 				}
@@ -67,7 +82,17 @@ public class MapPacketHandler
 		DataInputStream stream = new DataInputStream(new ByteArrayInputStream(data));
 		try
 		{
-			stream.readInt();
+			switch(id)
+			{
+				case 1:
+				{
+					String hatName = stream.readUTF();
+					
+					HatHandler.sendHat(hatName, null);
+					
+					break;
+				}
+			}
 		}
 		catch(IOException e)
 		{

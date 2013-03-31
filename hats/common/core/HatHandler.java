@@ -18,7 +18,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -79,12 +81,29 @@ public class HatHandler
 		return false;
 	}
 	
-	public static void requestHat(String name)
+	public static void requestHat(String name, EntityPlayer player)
 	{
-		
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream stream = new DataOutputStream(bytes);
+
+        try
+        {
+        	stream.writeUTF(name);
+        	
+        	if(player != null)
+        	{
+        		PacketDispatcher.sendPacketToPlayer(new Packet131MapData((short)Hats.getNetId(), (short)1, bytes.toByteArray()), (Player)player);
+        	}
+        	else
+        	{
+        		PacketDispatcher.sendPacketToServer(new Packet131MapData((short)Hats.getNetId(), (short)1, bytes.toByteArray()));
+        	}
+        }
+        catch(IOException e)
+        {}
 	}
 	
-	public static void receiveHatData(DataInputStream stream, boolean isServer)
+	public static void receiveHatData(DataInputStream stream, EntityPlayer player, boolean isServer)
 	{
 		try
 		{
@@ -143,17 +162,26 @@ public class HatHandler
 					{
 						for(String name : queuedLists)
 						{
-							EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
-							if(player != null)
+							EntityPlayer player1 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
+							if(player1 != null)
 							{
 								sendHat(hatName, player);
 							}
 						}
+						queuedHats.remove(hatName);
 					}
+					
+					Hats.proxy.playerWornHats.put(player.username, hatName);
+					
+					Hats.proxy.saveData(DimensionManager.getWorld(0));
+					
+					Hats.proxy.sendPlayerListOfWornHats(player, false);
 				}
 				else
 				{
+					readHatFromFile(file);
 					
+					Hats.proxy.tickHandlerClient.requestedHats.remove(hatName);
 				}
 			}
 		}
