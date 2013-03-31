@@ -44,6 +44,6 @@ public class ThreadReadHats extends Thread
 
 		proxy.postGetHats();
 		
-		Hats.console("Loaded " + Integer.toString(hatCount) + (hatCount == 1 ? " hat" : "hats"));
+		Hats.console("Loaded " + Integer.toString(hatCount) + (hatCount == 1 ? " hat" : " hats"));
 	}
 }
