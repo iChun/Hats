@@ -2,6 +2,7 @@ package hats.client.core;
 
 import hats.common.Hats;
 import hats.common.core.HatHandler;
+import hats.common.core.HatInfo;
 import hats.common.entity.EntityHat;
 
 import java.io.ByteArrayInputStream;
@@ -42,13 +43,19 @@ public class PacketHandlerClient
 					while(!name.equalsIgnoreCase("#endPacket"))
 					{
 						String hatName = stream.readUTF();
+						int r = stream.readInt();
+						int g = stream.readInt();
+						int b = stream.readInt();
 						
-						Hats.proxy.tickHandlerClient.playerWornHatsName.put(name, hatName);
+						Hats.proxy.tickHandlerClient.playerWornHats.put(name, new HatInfo(hatName, r, g, b));
 						
 						EntityHat hat = Hats.proxy.tickHandlerClient.hats.get(name);
 						if(hat != null)
 						{
 							hat.hatName = hatName;
+							hat.colourR = r;
+							hat.colourG = g;
+							hat.colourB = b;
 						}
 						
 						name = stream.readUTF();

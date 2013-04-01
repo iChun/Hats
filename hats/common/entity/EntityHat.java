@@ -1,5 +1,6 @@
 package hats.common.entity;
 
+import hats.common.core.HatInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.passive.EntityPig;
@@ -12,6 +13,9 @@ public class EntityHat extends Entity
 
 	public EntityPlayer player;
 	public String hatName;
+	public int colourR;
+	public int colourG;
+	public int colourB;
 	public long lastUpdate;
 	
 	public EntityHat(World par1World) 
@@ -19,17 +23,23 @@ public class EntityHat extends Entity
 		super(par1World);
 		setSize(0.1F, 0.1F);
 		hatName = "";
+		colourR = 0;
+		colourG = 0;
+		colourB = 0;
 		lastUpdate = par1World.getWorldTime();
 		ignoreFrustumCheck = true;
 		renderDistanceWeight = 10D;
 	}
 	
-	public EntityHat(World par1World, EntityPlayer ply, String name) 
+	public EntityHat(World par1World, EntityPlayer ply, HatInfo hatInfo) 
 	{
 		super(par1World);
 		setSize(0.1F, 0.1F);
 		player = ply;
-		hatName = name;
+		hatName = hatInfo.hatName;
+		colourR = hatInfo.colourR;
+		colourG = hatInfo.colourG;
+		colourB = hatInfo.colourB;
 		lastUpdate = par1World.getWorldTime();
 		ignoreFrustumCheck = true;
 		renderDistanceWeight = 10D;

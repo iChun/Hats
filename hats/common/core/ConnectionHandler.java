@@ -78,7 +78,7 @@ public class ConnectionHandler
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 		{
 			Hats.proxy.tickHandlerClient.hats.clear();
-			Hats.proxy.tickHandlerClient.playerWornHatsName.clear();
+			Hats.proxy.tickHandlerClient.playerWornHats.clear();
 		}
 	}
 
@@ -102,19 +102,22 @@ public class ConnectionHandler
 				stream.writeUTF(Hats.playerHatsMode == 1 ? "" : ""); // TODO Quest mode list of available player hats
 				
 				String hatName = Hats.proxy.saveData.getString(player.username + "_wornHat");
+				int r = Hats.proxy.saveData.getInteger(player.username + "_colourR");
+				int g = Hats.proxy.saveData.getInteger(player.username + "_colourG");
+				int b = Hats.proxy.saveData.getInteger(player.username + "_colourB");
 				
 				if(!HatHandler.hasHat(hatName))
 				{
 					HatHandler.requestHat(hatName, player);
 				}
 				
-				Hats.proxy.playerWornHats.put(player.username, hatName);
+				Hats.proxy.playerWornHats.put(player.username, new HatInfo(hatName, r, g, b));
 			}
 			else
 			{
 				stream.writeUTF("");
 				
-				Hats.proxy.playerWornHats.put(player.username, "");
+				Hats.proxy.playerWornHats.put(player.username, new HatInfo());
 			}
 			
 			PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);

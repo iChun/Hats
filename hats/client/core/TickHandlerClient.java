@@ -2,6 +2,7 @@ package hats.client.core;
 
 import hats.client.gui.GuiHatSelection;
 import hats.common.Hats;
+import hats.common.core.HatInfo;
 import hats.common.entity.EntityHat;
 
 import java.util.ArrayList;
@@ -86,7 +87,8 @@ public class TickHandlerClient
 				EntityHat hat = hats.get(player.username);
 				if(hat == null || hat.isDead)
 				{
-					hat = new EntityHat(world, player, serverHasMod ? getPlayerHat(player.username) : ((Hats.randomHat == 1 || Hats.randomHat == 2 && player != mc.thePlayer) ? Hats.proxy.getRandomHatName() : Hats.favouriteHat));
+					HatInfo hatInfo = (serverHasMod ? getPlayerHat(player.username) : ((Hats.randomHat == 1 || Hats.randomHat == 2 && player != mc.thePlayer) ? Hats.proxy.getRandomHat() : Hats.favouriteHatInfo));
+					hat = new EntityHat(world, player, hatInfo);
 					hats.put(player.username, hat);
 					world.spawnEntityInWorld(hat);
 				}
@@ -165,17 +167,17 @@ public class TickHandlerClient
 	{
 	}
 	
-	public String getPlayerHat(String s)
+	public HatInfo getPlayerHat(String s)
 	{
-		String name = playerWornHatsName.get(s);
+		HatInfo name = playerWornHats.get(s);
 		if(name == null)
 		{
-			return "";
+			return new HatInfo();
 		}
 		return name;
 	}
 	
-	public HashMap<String, String> playerWornHatsName = new HashMap<String, String>();
+	public HashMap<String, HatInfo> playerWornHats = new HashMap<String, HatInfo>();
 	public HashMap<String, EntityHat> hats = new HashMap<String, EntityHat>();
 	
 	public ArrayList<String> availableHats = new ArrayList<String>();

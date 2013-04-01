@@ -144,6 +144,8 @@ public class GuiHatSelection extends GuiScreen
 		{
     		Hats.favouriteHat = hat.hatName;
     		
+    		//write new favourite colourizer values
+    		
     		Hats.handleConfig();
 		}
 		else
@@ -154,6 +156,9 @@ public class GuiHatSelection extends GuiScreen
 	        try
 	        {
 	        	stream.writeUTF(hat.hatName);
+	        	stream.writeInt(0); //R
+	        	stream.writeInt(0); //G
+	        	stream.writeInt(0); //B
 	        	
 	        	PacketDispatcher.sendPacketToServer(new Packet131MapData((short)Hats.getNetId(), (short)0, bytes.toByteArray()));
 	        }

@@ -58,7 +58,7 @@ public class CommonProxy
 		HatHandler.hatNames.put(file, hatName);
 	}
 	
-	public String getRandomHatName()
+	public HatInfo getRandomHat()
 	{
 		ArrayList<String> hatNameList = new ArrayList<String>();
 		
@@ -71,10 +71,10 @@ public class CommonProxy
 		
 		if(hatNameList.size() <= 0)
 		{
-			return "";
+			return new HatInfo();
 		}
 		
-		return hatNameList.get((new Random()).nextInt(hatNameList.size()));
+		return new HatInfo(hatNameList.get((new Random()).nextInt(hatNameList.size())), 255, 255, 255);
 	}
 	
     public void loadData(WorldServer world)
@@ -126,9 +126,13 @@ public class CommonProxy
     {
     	if(saveData != null)
     	{
-    		for(Map.Entry<String, String> e : playerWornHats.entrySet())
+    		for(Map.Entry<String, HatInfo> e : playerWornHats.entrySet())
     		{
-    			saveData.setString(e.getKey() + "_wornHat", e.getValue());
+    			HatInfo hat = e.getValue();
+    			saveData.setString(e.getKey() + "_wornHat", hat.hatName);
+    			saveData.setInteger(e.getKey() + "_colourR", hat.colourR);
+    			saveData.setInteger(e.getKey() + "_colourG", hat.colourG);
+    			saveData.setInteger(e.getKey() + "_colourB", hat.colourB);
     		}
     		
             try
@@ -181,14 +185,19 @@ public class CommonProxy
 			
 			if(sendAllPlayerHatInfo)
 			{
-				Iterator<Entry<String, String>> ite = Hats.proxy.playerWornHats.entrySet().iterator();
+				Iterator<Entry<String, HatInfo>> ite = Hats.proxy.playerWornHats.entrySet().iterator();
 				
 				while(ite.hasNext())
 				{
-					Entry<String, String> e = ite.next();
+					Entry<String, HatInfo> e = ite.next();
+					
+					HatInfo hat = e.getValue();
 					
 					stream.writeUTF(e.getKey());
-					stream.writeUTF(e.getValue());
+					stream.writeUTF(hat.hatName);
+					stream.writeInt(hat.colourR);
+					stream.writeInt(hat.colourG);
+					stream.writeInt(hat.colourB);
 					
 					if(bytes.toByteArray().length > 32000)
 					{
@@ -207,14 +216,17 @@ public class CommonProxy
 			}
 			else
 			{
-				String hat = playerWornHats.get(player.username);
+				HatInfo hat = playerWornHats.get(player.username);
 				if(hat == null)
 				{
-					hat = "";
+					hat = new HatInfo();
 				}
 				
 				stream.writeUTF(player.username);
-				stream.writeUTF(hat);
+				stream.writeUTF(hat.hatName);
+				stream.writeInt(hat.colourR);
+				stream.writeInt(hat.colourG);
+				stream.writeInt(hat.colourB);
 
 				Packet250CustomPayload packet = new Packet250CustomPayload("Hats", bytes.toByteArray());
 				
@@ -240,7 +252,7 @@ public class CommonProxy
 	public static NBTTagCompound saveData = null;
 	
 	public static HashMap<String, ArrayList> playerAvailableHats = new HashMap<String, ArrayList>();
-	public static HashMap<String, String> playerWornHats = new HashMap<String, String>();
+	public static HashMap<String, HatInfo> playerWornHats = new HashMap<String, HatInfo>();
 	
 	public static TickHandlerClient tickHandlerClient;
 	

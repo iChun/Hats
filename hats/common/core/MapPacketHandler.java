@@ -43,11 +43,14 @@ public class MapPacketHandler
 				case 0:
 				{
 					String hatName = stream.readUTF();
+					int r = stream.readInt();
+					int g = stream.readInt();
+					int b = stream.readInt();
+					
+					Hats.proxy.playerWornHats.put(player.username, new HatInfo(hatName, r, g, b));
 					
 					if(HatHandler.hasHat(hatName))
 					{
-						Hats.proxy.playerWornHats.put(player.username, hatName);
-						
 						Hats.proxy.saveData(DimensionManager.getWorld(0));
 						
 						Hats.proxy.sendPlayerListOfWornHats(player, false);

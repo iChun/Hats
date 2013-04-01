@@ -191,8 +191,6 @@ public class HatHandler
 							}
 						}
 						
-						Hats.proxy.playerWornHats.put(player.username, hatName.toLowerCase());
-						
 						Hats.proxy.saveData(DimensionManager.getWorld(0));
 						
 						Hats.proxy.sendPlayerListOfWornHats(player, false);

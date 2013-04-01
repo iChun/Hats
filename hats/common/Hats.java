@@ -5,6 +5,7 @@ import hats.client.core.PacketHandlerClient;
 import hats.common.core.CommonProxy;
 import hats.common.core.ConnectionHandler;
 import hats.common.core.HatHandler;
+import hats.common.core.HatInfo;
 import hats.common.core.LoggerHelper;
 import hats.common.core.MapPacketHandler;
 import hats.common.core.PacketHandlerServer;
@@ -74,7 +75,10 @@ public class Hats
 	public static int shouldOtherPlayersHaveHats = 1;
 	public static int randomHat = 1;
 	public static String favouriteHat = "Top Hat";
+	public static String favouriteHatColourizer = "#ffffff";
 	public static int guiKeyBind = Keyboard.KEY_H;
+	
+	public static HatInfo favouriteHatInfo = new HatInfo();
 	
 	public static File configFile;
 	public static boolean firstConfigLoad = true;
@@ -110,6 +114,9 @@ public class Hats
 			shouldOtherPlayersHaveHats = addCommentAndReturnInt(config, "clientOnly", "shouldOtherPlayersHaveHats", "Do other players have hats? Only when enableInServersWithoutMod = 1", shouldOtherPlayersHaveHats);
 			randomHat = addCommentAndReturnInt(config, "clientOnly", "randomHat", "Should each player have a random hat?\n0 = No\n1 = Yes\n2 = Yes, but not the player!\nOnly when enableInServersWithoutMod = 1", randomHat);
 			favouriteHat = addCommentAndReturnString(config, "clientOnly", "favouriteHat", "What hat do you want to use on servers without the mod? Only when randomHat = 0", favouriteHat).toLowerCase();
+			favouriteHatColourizer = addCommentAndReturnString(config, "clientOnly", "favouriteHatColourizer", "Do you want to apply a colourizer to your favourite hat?\nIf no, leave as #ffffff\n(Google \"hex color codes\" if you don\'t understand)\nFormat: #<colour index> or 0x<colour index>\nEg: #ffffff or 0xffffff for white", favouriteHatColourizer).toLowerCase();
+			
+			favouriteHatInfo = getHatInfoFromConfig();
 			
 			guiKeyBind = addCommentAndReturnInt(config, "clientOnly", "guiKeyBind", "What key code do you want to use to open the Hat Selection GUI?\nMouse binds are posible, starting from -100 and higher.\nFor info on Key codes, check here: http://www.minecraftwiki.net/wiki/Key_codes", guiKeyBind);
 			
@@ -121,6 +128,44 @@ public class Hats
 		{
 			firstConfigLoad = false;
 		}
+	}
+	
+	public static HatInfo getHatInfoFromConfig()
+	{
+		String index = favouriteHatColourizer;
+		if(index.length() < 7)
+		{
+			Hats.console("Invalid colourizer length!");
+			return new HatInfo(favouriteHat);
+		}
+		int hex1 = index.indexOf("#");
+		int hex2 = index.indexOf("0x");
+		
+		if(hex1 == -1 && hex2 == -2)
+		{
+			Hats.console("Invalid colourizer string!");
+			return new HatInfo(favouriteHat);
+		}
+		
+		index = index.substring(Math.max(hex1, hex2) + 1, index.length());
+		
+		int r = 255;
+		int g = 255;
+		int b = 255;
+		
+		try
+		{
+			r = Integer.decode("0x" + index.substring(0, 2));
+			g = Integer.decode("0x" + index.substring(2, 4));
+			b = Integer.decode("0x" + index.substring(4, 6));
+		}
+		catch(NumberFormatException e)
+		{
+			Hats.console("Failed to decode colourizer string!");
+			e.printStackTrace();
+		}
+		
+		return new HatInfo(favouriteHat, r, g, b);
 	}
 	
 	@PreInit
