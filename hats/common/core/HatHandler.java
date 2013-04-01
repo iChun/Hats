@@ -323,6 +323,19 @@ public class HatHandler
 		return false;
 	}
 	
+	public static String getHatStartingWith(String name)
+	{
+		for(Entry<File, String> e : hatNames.entrySet())
+		{
+			if(e.getValue().toLowerCase().startsWith(name.toLowerCase()))
+			{
+				return e.getValue();
+			}
+		}
+		return name;
+	}
+
+	
 	public static File hatsFolder;
 	
 	public static HashMap<String, ArrayList<String>> queuedHats = new HashMap<String, ArrayList<String>>();

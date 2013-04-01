@@ -60,7 +60,7 @@ public class CommandHats extends CommandBase {
 					sb.append(astring[i]);
 					sb.append(" ");
 				}
-				String hatName = sb.toString().trim();
+				String hatName = HatHandler.getHatStartingWith(sb.toString().trim());
 				EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(playerName);
 				if(player == null)
 				{
