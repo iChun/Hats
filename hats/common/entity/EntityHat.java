@@ -1,6 +1,7 @@
 package hats.common.entity;
 
 import hats.common.core.HatInfo;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.passive.EntityPig;
@@ -13,9 +14,17 @@ public class EntityHat extends Entity
 
 	public EntityPlayer player;
 	public String hatName;
-	public int colourR;
-	public int colourG;
-	public int colourB;
+	
+	public int reColour;
+	
+	public int prevR;
+	public int prevG;
+	public int prevB;
+	
+	private int colourR;
+	private int colourG;
+	private int colourB;
+	
 	public long lastUpdate;
 	
 	public EntityHat(World par1World) 
@@ -23,6 +32,13 @@ public class EntityHat extends Entity
 		super(par1World);
 		setSize(0.1F, 0.1F);
 		hatName = "";
+		
+		reColour = 0;
+		
+		prevR = 0;
+		prevG = 0;
+		prevB = 0;
+		
 		colourR = 0;
 		colourG = 0;
 		colourB = 0;
@@ -37,6 +53,13 @@ public class EntityHat extends Entity
 		setSize(0.1F, 0.1F);
 		player = ply;
 		hatName = hatInfo.hatName;
+		
+		reColour = 0;
+		
+		prevR = 0;
+		prevG = 0;
+		prevB = 0;
+
 		colourR = hatInfo.colourR;
 		colourG = hatInfo.colourG;
 		colourB = hatInfo.colourB;
@@ -50,6 +73,12 @@ public class EntityHat extends Entity
 	public void onUpdate()
 	{
 		ticksExisted++;
+		
+		if(reColour > 0)
+		{
+			reColour--;
+		}
+		
 		if(player == null || !player.isEntityAlive())
 		{
 			setDead();
@@ -97,6 +126,39 @@ public class EntityHat extends Entity
 		}
 		
 //		worldObj.spawnParticle("smoke", posX, posY, posZ, 1.0D, 0.0D, 0.0D);
+	}
+	
+	public void setR(int i)
+	{
+		prevR = colourR;
+		colourR = i;
+	}
+	
+	public void setG(int i)
+	{
+		prevG = colourG;
+		colourG = i;
+	}
+	
+	public void setB(int i)
+	{
+		prevB = colourB;
+		colourB = i;
+	}
+	
+	public int getR()
+	{
+		return colourR;
+	}
+	
+	public int getG()
+	{
+		return colourG;
+	}
+	
+	public int getB()
+	{
+		return colourB;
 	}
 
 	@Override

@@ -1,18 +1,27 @@
 package hats.common.core;
 
+import hats.client.gui.GuiHatSelection;
 import hats.common.Hats;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Set;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.NetClientHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetServerHandler;
 import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet131MapData;
 import net.minecraftforge.common.DimensionManager;
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.ITinyPacketHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.network.Player;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -70,6 +79,20 @@ public class MapPacketHandler
 					
 					break;
 				}
+				case 2:
+				{
+			        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			        DataOutputStream stream1 = new DataOutputStream(bytes);
+
+			        try
+			        {
+			        	stream1.writeBoolean(FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().areCommandsAllowed(player.username.toLowerCase().trim()));
+			        	
+			        	PacketDispatcher.sendPacketToPlayer(new Packet131MapData((short)Hats.getNetId(), (short)0, bytes.toByteArray()), (Player)player);
+			        }
+			        catch(IOException e)
+			        {}
+				}
 			}
 		}
 		catch(IOException e)
@@ -87,12 +110,27 @@ public class MapPacketHandler
 		{
 			switch(id)
 			{
+				case 0:
+				{
+					if(stream.readBoolean())
+					{
+						FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiHatSelection(Minecraft.getMinecraft().thePlayer));
+					}
+					else
+					{
+						Minecraft.getMinecraft().thePlayer.addChatMessage("Server has hats set to Command Giver Mode. You can not give commands!");
+					}
+				}
 				case 1:
 				{
 					String hatName = stream.readUTF();
 					
 					HatHandler.sendHat(hatName, null);
 					
+					break;
+				}
+				case 2:
+				{
 					break;
 				}
 			}

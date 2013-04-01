@@ -102,7 +102,7 @@ public class Hats
 		allowReceivingOfHats = addCommentAndReturnInt(config, "globalOptions", "allowReceivingOfHats", "Enable receiving of model files from the server/client?", allowReceivingOfHats);
 		
 		config.addCustomCategoryComment("serverOptions", "These settings affect only the server that loads the mod.");
-		playerHatsMode = addCommentAndReturnInt(config, "serverOptions", "playerHatsMode", "Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = NOT AVAILABLE YET! Quest Mode, hats are rewarded by achieving certain tasks. NOT AVAILABLE YET!", playerHatsMode);
+		playerHatsMode = addCommentAndReturnInt(config, "serverOptions", "playerHatsMode", "Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = NOT AVAILABLE YET! Quest Mode, hats are rewarded by achieving certain tasks. NOT AVAILABLE YET!\n3 = Command Giver Mode, what hat you wear is chosen by people who can use commands.", playerHatsMode);
 		defaultHat = addCommentAndReturnString(config, "serverOptions", "defaultHat", "All players are given this hat by default, even in Quest Mode.\nLeave blank for no hat.", defaultHat).toLowerCase();
 		
 		if(isClient)
@@ -245,6 +245,7 @@ public class Hats
 	@ServerStarting
 	public void serverStarting(FMLServerStartingEvent event)
 	{
+		proxy.initCommands(event.getServer());
 	}
 	
 	@ServerStarted

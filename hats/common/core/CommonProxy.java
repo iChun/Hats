@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import net.minecraft.command.CommandHandler;
+import net.minecraft.command.ICommandManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,6 +34,12 @@ public class CommonProxy
 {
 	public void initCommands(MinecraftServer server)
 	{
+		ICommandManager manager = server.getCommandManager();
+		if(manager instanceof CommandHandler)
+		{
+			CommandHandler handler = (CommandHandler)manager;
+			handler.registerCommand(new CommandHats());
+		}
 	}
 	
 	public void initMod()
@@ -174,7 +182,12 @@ public class CommonProxy
     	}
     }
     
-    public void sendPlayerListOfWornHats(EntityPlayer player, boolean sendAllPlayerHatInfo) //if false send the only player's info to all players
+    public void sendPlayerListOfWornHats(EntityPlayer player, boolean sendAllPlayerHatInfo)
+    {
+    	this.sendPlayerListOfWornHats(player, sendAllPlayerHatInfo, true);
+    }
+    
+    public void sendPlayerListOfWornHats(EntityPlayer player, boolean sendAllPlayerHatInfo, boolean ignorePlayer) //if false send the only player's info to all players
     {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         DataOutputStream stream = new DataOutputStream(bytes);
@@ -234,7 +247,7 @@ public class CommonProxy
 				{
 					EntityPlayer player1 = (EntityPlayer)FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList.get(i);
 					
-					if(player.username.equalsIgnoreCase(player1.username))
+					if(player.username.equalsIgnoreCase(player1.username) && ignorePlayer)
 					{
 						continue;
 					}

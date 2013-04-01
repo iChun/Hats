@@ -1,6 +1,7 @@
 package hats.client.gui;
 
 import hats.common.Hats;
+import hats.common.core.HatInfo;
 import hats.common.entity.EntityHat;
 
 import java.io.ByteArrayOutputStream;
@@ -8,10 +9,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
@@ -24,6 +27,7 @@ import com.google.common.collect.ImmutableList;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiHatSelection extends GuiScreen 
+	implements ISlider
 {
 
 	public EntityPlayer player;
@@ -40,13 +44,22 @@ public class GuiHatSelection extends GuiScreen
 	protected int guiTop;
 	
 	public int pageNumber;
+	public int colourR;
+	public int colourG;
+	public int colourB;
+	
+	public int view;
 	
 	public GuiHatSelection(EntityPlayer ply)
 	{
 		player = ply;
 		hat = Hats.proxy.tickHandlerClient.hats.get(player.username);
 		availableHats = ImmutableList.copyOf(Hats.proxy.tickHandlerClient.availableHats);
+		colourR = hat.getR();
+		colourG = hat.getG();
+		colourB = hat.getB();
 		pageNumber = 0;
+		view = 0;
 	}
 	
 	@Override
@@ -60,6 +73,10 @@ public class GuiHatSelection extends GuiScreen
         buttonList.add(new GuiButton(1, width / 2 - 6, height / 2 + 54, 20, 20, "<"));
         buttonList.add(new GuiButton(2, width / 2 + 62, height / 2 + 54, 20, 20, ">"));
         buttonList.add(new GuiButton(3, width / 2 + 16, height / 2 + 54, 44, 20, "Done"));
+        
+        //4, 5, 6, 7 = taken.
+        
+        buttonList.add(new GuiButton(8, width / 2 + 89, height / 2 - 85, 20, 20, "C"));
         
         pageNumber = 0;
         
@@ -109,7 +126,7 @@ public class GuiHatSelection extends GuiScreen
     		}
     		updateButtonList();
     	}
-    	if(guibutton.id == 2)
+    	else if(guibutton.id == 2)
     	{
     		pageNumber++;
     		if(pageNumber * 6 >= availableHats.size())
@@ -118,19 +135,31 @@ public class GuiHatSelection extends GuiScreen
     		}
     		updateButtonList();
     	}
-    	if(guibutton.id == 3)
+    	else if(guibutton.id == 3)
     	{
     		exitAndUpdate();
     	}
-    	if(guibutton.id == 5)
+    	else if(guibutton.id == 4)
     	{
     		hat.hatName = "";
     		
     		updateButtonList();
     	}
-    	if(guibutton.id >= 10)
+    	else if(guibutton.id == 8)
+    	{
+    		view = view == 1 ? 0 : 1;
+    		guibutton.displayString = view == 1 ? "H" : "C";
+    		
+    		updateButtonList();
+    	}
+    	else if(guibutton.id >= 10)
     	{
     		hat.hatName = guibutton.displayString.toLowerCase();
+    		
+    		colourR = colourG = colourB = 255;
+    		hat.setR(255);
+    		hat.setG(255);
+    		hat.setB(255);
     		
     		updateButtonList();
     	}
@@ -144,11 +173,32 @@ public class GuiHatSelection extends GuiScreen
 		{
     		Hats.favouriteHat = hat.hatName;
     		
-    		//write new favourite colourizer values
+    		String r = Integer.toHexString(colourR);
+    		String b = Integer.toHexString(colourG);
+    		String g = Integer.toHexString(colourB);
+    		
+    		if(r.length() < 2)
+    		{
+    			r = "0" + r;
+    		}
+    		if(g.length() < 2)
+    		{
+    			g = "0" + g;
+    		}
+    		if(b.length() < 2)
+    		{
+    			b = "0" + b;
+    		}
+    		
+    		String name = "#" + r + g + b; 
+    		
+    		Hats.favouriteHatColourizer = name;
+    		
+    		Hats.favouriteHatInfo = new HatInfo(hat.hatName, colourR, colourG, colourB);
     		
     		Hats.handleConfig();
 		}
-		else
+		else if(!(player == null || player.isDead || player.isEntityAlive()))
 		{
 	        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 	        DataOutputStream stream = new DataOutputStream(bytes);
@@ -156,9 +206,9 @@ public class GuiHatSelection extends GuiScreen
 	        try
 	        {
 	        	stream.writeUTF(hat.hatName);
-	        	stream.writeInt(0); //R
-	        	stream.writeInt(0); //G
-	        	stream.writeInt(0); //B
+	        	stream.writeInt(colourR); //R
+	        	stream.writeInt(colourG); //G
+	        	stream.writeInt(colourB); //B
 	        	
 	        	PacketDispatcher.sendPacketToServer(new Packet131MapData((short)Hats.getNetId(), (short)0, bytes.toByteArray()));
 	        }
@@ -173,13 +223,13 @@ public class GuiHatSelection extends GuiScreen
         {
             GuiButton guibutton = (GuiButton)this.buttonList.get(k1);
             
-            if(guibutton.id >= 10 || guibutton.id == 5)
+            if(guibutton.id >= 10 || guibutton.id >= 4 && guibutton.id <=6)
             {
             	buttonList.remove(k1);
             }
             if(guibutton.id == 1)
             {
-	            if(pageNumber == 0)
+	            if(pageNumber == 0 || view == 1)
 	            {
 	            	guibutton.enabled = false;
 	            }
@@ -190,7 +240,7 @@ public class GuiHatSelection extends GuiScreen
             }
             if(guibutton.id == 2)
             {
-        		if((pageNumber + 1) * 6 >= availableHats.size())
+        		if((pageNumber + 1) * 6 >= availableHats.size() || view == 1)
         		{
         			guibutton.enabled = false;
         		}
@@ -200,44 +250,58 @@ public class GuiHatSelection extends GuiScreen
 	            }
             }
         }
-    	
-    	
-    	int button = 0;
 
-        for(int i = pageNumber * 6; i < (availableHats.size() + 1) && i < (pageNumber + 1) * 6; i++)
-        {
-        	GuiButton btn;
-        	if(i == availableHats.size())
-        	{
-            	btn = new GuiButton(5, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, "None");
-            	
-            	if(hat.hatName.equalsIgnoreCase(""))
-            	{
-            		btn.enabled = false;
-            	}
+    	if(view == 0)
+    	{
+	    	int button = 0;
 	
-        	}
-        	else
-        	{
-	        	String hatName = (String)availableHats.get(i);
-	        	
-	        	btn = new GuiButton(10 + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
-	        	
-	        	if(hatName.toLowerCase().equalsIgnoreCase(hat.hatName))
+	        for(int i = pageNumber * 6; i < (availableHats.size() + 1) && i < (pageNumber + 1) * 6; i++)
+	        {
+	        	GuiButton btn;
+	        	if(i == availableHats.size())
 	        	{
-	        		btn.enabled = false;
+	            	btn = new GuiButton(4, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, "None");
+	            	
+	            	if(hat.hatName.equalsIgnoreCase(""))
+	            	{
+	            		btn.enabled = false;
+	            	}
+		
 	        	}
-        	}
-        
-        	buttonList.add(btn);
-        	
-        	button++;
-        	if(button == 6)
-        	{
-        		button = 0;
-        		break;
-        	}
-        }
+	        	else
+	        	{
+		        	String hatName = (String)availableHats.get(i);
+		        	
+		        	btn = new GuiButton(10 + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
+		        	
+		        	if(hatName.toLowerCase().equalsIgnoreCase(hat.hatName))
+		        	{
+		        		btn.enabled = false;
+		        	}
+	        	}
+	        
+	        	buttonList.add(btn);
+	        	
+	        	button++;
+	        	if(button == 6)
+	        	{
+	        		button = 0;
+	        		break;
+	        	}
+	        }
+    	}
+    	else if(view == 1)
+    	{
+    		int button = 0;
+    		
+    		for(int i = 0; i < 3; i++)
+    		{
+    			GuiButton btn = new GuiSlider(5 + i, width / 2 - 6, height / 2 - 78 + (22 * button), i == 0 ? "Red: " : i == 1 ? "Green: " : "Blue: ", 0, 255, i == 0 ? colourR : i == 1 ? colourG : colourB, this);
+    			buttonList.add(btn);
+    			
+    			button++;
+    		}
+    	}
     }
 
     @Override
@@ -272,7 +336,22 @@ public class GuiHatSelection extends GuiScreen
             }
             guibutton.drawButton(this.mc, par1, par2);
             
-            guibutton.displayString = disp;
+            if(!(guibutton instanceof GuiSlider))
+            {
+            	guibutton.displayString = disp;
+            }
+            
+            if(guibutton.id == 8)
+            {
+            	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	            GL11.glEnable(GL11.GL_BLEND);
+	            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+            	Minecraft.getMinecraft().renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
+            	drawTexturedModalRect(guibutton.xPosition + 2, guibutton.yPosition + 2, (view == 0 ? 16 : 0), 0, 16, 16);
+
+            	GL11.glDisable(GL11.GL_BLEND);
+            }
         }
     	
         this.mouseX = (float)par1;
@@ -281,7 +360,6 @@ public class GuiHatSelection extends GuiScreen
         drawPlayerOnGui(k + 42, l + 155, 55, (float)(k + 42) - (float)mouseX, (float)(l + 155 - 92) - (float)mouseY);
 
     }
-
     
     public void drawPlayerOnGui(int par1, int par2, int par3, float par4, float par5)
     {
@@ -341,5 +419,25 @@ public class GuiHatSelection extends GuiScreen
 	        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     	}
     }
+
+	@Override
+	public void onChangeSliderValue(GuiSlider slider)
+	{
+		if(slider.id == 5)
+		{
+			colourR = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
+			hat.setR(colourR);
+		}
+		else if(slider.id == 6)
+		{
+			colourG = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
+			hat.setG(colourG);
+		}
+		else if(slider.id == 7)
+		{
+			colourB = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
+			hat.setB(colourB);
+		}
+	}
 
 }

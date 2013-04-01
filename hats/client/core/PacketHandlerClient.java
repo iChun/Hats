@@ -52,10 +52,14 @@ public class PacketHandlerClient
 						EntityHat hat = Hats.proxy.tickHandlerClient.hats.get(name);
 						if(hat != null)
 						{
+							if(hatName.equalsIgnoreCase(hat.hatName))
+							{
+								hat.reColour = 20;
+							}
 							hat.hatName = hatName;
-							hat.colourR = r;
-							hat.colourG = g;
-							hat.colourB = b;
+							hat.setR(r);
+							hat.setG(g);
+							hat.setB(b);
 						}
 						
 						name = stream.readUTF();

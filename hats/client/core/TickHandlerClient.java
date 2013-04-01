@@ -5,6 +5,9 @@ import hats.common.Hats;
 import hats.common.core.HatInfo;
 import hats.common.entity.EntityHat;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -17,10 +20,12 @@ import org.lwjgl.input.Mouse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.world.World;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class TickHandlerClient
 	implements ITickHandler
@@ -87,6 +92,15 @@ public class TickHandlerClient
 				EntityHat hat = hats.get(player.username);
 				if(hat == null || hat.isDead)
 				{
+					if(player.username.equalsIgnoreCase(mc.thePlayer.username))
+					{
+						//Assume respawn
+						for(Entry<String, EntityHat> e : hats.entrySet())
+						{
+							e.getValue().setDead();
+						}
+					}
+					
 					HatInfo hatInfo = (serverHasMod ? getPlayerHat(player.username) : ((Hats.randomHat == 1 || Hats.randomHat == 2 && player != mc.thePlayer) ? Hats.proxy.getRandomHat() : Hats.favouriteHatInfo));
 					hat = new EntityHat(world, player, hatInfo);
 					hats.put(player.username, hat);
@@ -111,7 +125,23 @@ public class TickHandlerClient
 		{
 			if(!guiKeyDown && isPressed(Hats.guiKeyBind))
 			{
-				FMLClientHandler.instance().displayGuiScreen(mc.thePlayer, new GuiHatSelection(mc.thePlayer));
+				if(Hats.playerHatsMode == 3)
+				{
+			        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			        DataOutputStream stream = new DataOutputStream(bytes);
+
+			        try
+			        {
+			        	stream.writeByte(0);
+			        	PacketDispatcher.sendPacketToServer(new Packet131MapData((short)Hats.getNetId(), (short)2, bytes.toByteArray()));
+			        }
+			        catch(IOException e)
+			        {}
+				}
+				else
+				{
+					FMLClientHandler.instance().displayGuiScreen(mc.thePlayer, new GuiHatSelection(mc.thePlayer));
+				}
 			}
 		}
 		

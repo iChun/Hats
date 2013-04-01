@@ -48,7 +48,28 @@ public class RenderHat extends Render
 			        
 			        GL11.glRotatef(hat.rotationPitch, -1.0F, 0.0F, 0.0F);
 			        
-			        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			        if(hat.reColour > 0)
+			        {
+			        	float diffR = hat.getR() - hat.prevR;
+			        	float diffG = hat.getG() - hat.prevG;
+			        	float diffB = hat.getB() - hat.prevB;
+			        	
+			        	float rendTick = par9;
+			        	if(rendTick > 1.0F)
+			        	{
+			        		rendTick = 1.0F;
+			        	}
+			        	
+			        	diffR *= (float)(hat.reColour - rendTick) / 20F;
+			        	diffG *= (float)(hat.reColour - rendTick) / 20F;
+			        	diffB *= (float)(hat.reColour - rendTick) / 20F;
+			        	
+			        	GL11.glColor4f((float)(hat.getR() - diffR) / 255.0F, (float)(hat.getG() - diffG) / 255.0F, (float)(hat.getB() - diffB) / 255.0F, 1.0F);
+			        }
+			        else
+			        {
+			        	GL11.glColor4f((float)hat.getR() / 255.0F, (float)hat.getG() / 255.0F, (float)hat.getB() / 255.0F, 1.0F);
+			        }
 			        
 			        BufferedImage image = ClientProxy.bufferedImages.get(hat.hatName);
 			        
