@@ -36,6 +36,7 @@ public class HatHandler
 		{
 //			file.
 			boolean hasTexture = false;
+			boolean isSafe = true;
 			try
 			{
 				ZipFile zipFile = new ZipFile(file);
@@ -49,6 +50,10 @@ public class HatHandler
 						if(entry.getName().endsWith(".png"))
 						{
 							hasTexture = true;
+						}
+						else if(!entry.getName().endsWith(".xml"))
+						{
+							isSafe = false;
 						}
 					}
 				}
@@ -68,6 +73,12 @@ public class HatHandler
 			{
 				Hats.console("Failed to load: " + file.getName() + " threw a generic exception!", true);
 				e1.printStackTrace();
+			}
+			
+			if(Hats.safeLoad == 1 && !isSafe)
+			{
+				Hats.console("Rejecting " + file.getName() + "! It contains files which are not XML or PNG files!", true);
+				return false;
 			}
 			
 			if(hasTexture)
@@ -107,6 +118,10 @@ public class HatHandler
 	
 	public static void receiveHatData(DataInputStream stream, EntityPlayer player, boolean isServer)
 	{
+		if(Hats.allowReceivingOfHats != 1)
+		{
+			return;
+		}
 		try
 		{
 			String hatName = stream.readUTF();
@@ -158,46 +173,55 @@ public class HatHandler
 				
 				fis.close();
 				
-				readHatFromFile(file);
-
-				if(isServer)
+				if(readHatFromFile(file))
 				{
-					ArrayList<String> queuedLists = queuedHats.get(hatName);
-					if(queuedLists != null)
+					if(isServer)
 					{
-						queuedHats.remove(hatName);
-						for(String name : queuedLists)
+						ArrayList<String> queuedLists = queuedHats.get(hatName);
+						if(queuedLists != null)
 						{
-							EntityPlayer player1 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
-							if(player1 != null)
+							queuedHats.remove(hatName);
+							for(String name : queuedLists)
 							{
-								sendHat(hatName, player);
+								EntityPlayer player1 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
+								if(player1 != null)
+								{
+									sendHat(hatName, player);
+								}
 							}
 						}
+						
+						Hats.proxy.playerWornHats.put(player.username, hatName.toLowerCase());
+						
+						Hats.proxy.saveData(DimensionManager.getWorld(0));
+						
+						Hats.proxy.sendPlayerListOfWornHats(player, false);
+						
+						Hats.console("Received " + file.getName() + " from " + player.username);
 					}
-					
-					Hats.proxy.playerWornHats.put(player.username, hatName.toLowerCase());
-					
-					Hats.proxy.saveData(DimensionManager.getWorld(0));
-					
-					Hats.proxy.sendPlayerListOfWornHats(player, false);
-					
-					Hats.console("Received " + file.getName() + " from " + player.username);
+					else
+					{
+						Hats.proxy.tickHandlerClient.requestedHats.remove(hatName.toLowerCase());
+						
+						Hats.console("Received " + file.getName() + " from server.");
+						
+						Hats.proxy.tickHandlerClient.availableHats.clear();
+						Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+						while(ite.hasNext())
+						{
+							Entry<File, String> e = ite.next();
+							Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
+						}
+						Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+					}
 				}
 				else
 				{
-					Hats.proxy.tickHandlerClient.requestedHats.remove(hatName.toLowerCase());
-					
-					Hats.console("Received " + file.getName() + " from server.");
-					
-					Hats.proxy.tickHandlerClient.availableHats.clear();
-					Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-					while(ite.hasNext())
+					Hats.console("Deleting " + file.getName() + " from " + (isServer ? "server" : player.username) + "! SafeLoad is on, and the Model file contains files which are not XML or PNG files.", true);
+					if(!file.delete())
 					{
-						Entry<File, String> e = ite.next();
-						Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
+						Hats.console("Failed to delete file! We're doomed!", true);
 					}
-					Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
 				}
 			}
 		}
@@ -208,6 +232,11 @@ public class HatHandler
 	
 	public static void sendHat(String hatName, EntityPlayer player)
 	{
+		if(Hats.allowSendingOfHats != 1)
+		{
+			return;
+		}
+
 		File file = null;
 		
 		for(Entry<File, String> e : hatNames.entrySet())

@@ -59,6 +59,11 @@ public class Hats
 	//Texture editing time
 	public static final String version = "1.0.0";
 	
+	//Global Options
+	public static int safeLoad = 1;
+	public static int allowSendingOfHats = 1;
+	public static int allowReceivingOfHats = 1;
+	
 	//Server Options
 	public static int playerHatsMode = 1;
 	public static String defaultHat = "Top Hat";
@@ -87,6 +92,12 @@ public class Hats
 		Configuration config = new Configuration(configFile);
 		config.load();
 		
+		config.addCustomCategoryComment("globalOptions", "These settings affect both servers and clients that loads the mod.");
+		safeLoad = addCommentAndReturnInt(config, "globalOptions", "safeLoad", "Enable safe load?\nSafe load forces the mod to reject Techne Model Files that have files other than xml and png files.", safeLoad);
+		allowSendingOfHats = addCommentAndReturnInt(config, "globalOptions", "allowSendingOfHats", "Enable sending of model files to the server/client?.", allowSendingOfHats);
+		allowReceivingOfHats = addCommentAndReturnInt(config, "globalOptions", "allowReceivingOfHats", "Enable receiving of model files from the server/client?", allowReceivingOfHats);
+		
+		config.addCustomCategoryComment("serverOptions", "These settings affect only the server that loads the mod.");
 		playerHatsMode = addCommentAndReturnInt(config, "serverOptions", "playerHatsMode", "Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = NOT AVAILABLE YET! Quest Mode, hats are rewarded by achieving certain tasks. NOT AVAILABLE YET!", playerHatsMode);
 		defaultHat = addCommentAndReturnString(config, "serverOptions", "defaultHat", "All players are given this hat by default, even in Quest Mode.\nLeave blank for no hat.", defaultHat).toLowerCase();
 		
