@@ -198,7 +198,7 @@ public class GuiHatSelection extends GuiScreen
     		
     		Hats.handleConfig();
 		}
-		else if(!(player == null || player.isDead || player.isEntityAlive()))
+		else if(!(player == null || player.isDead || !player.isEntityAlive()))
 		{
 	        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 	        DataOutputStream stream = new DataOutputStream(bytes);
@@ -223,7 +223,7 @@ public class GuiHatSelection extends GuiScreen
         {
             GuiButton guibutton = (GuiButton)this.buttonList.get(k1);
             
-            if(guibutton.id >= 10 || guibutton.id >= 4 && guibutton.id <=6)
+            if(guibutton.id >= 10 || guibutton.id >= 4 && guibutton.id <= 7)
             {
             	buttonList.remove(k1);
             }
