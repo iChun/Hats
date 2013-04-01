@@ -400,7 +400,7 @@ public class GuiHatSelection extends GuiScreen
 	        RenderManager.instance.renderEntityWithPosYaw(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
 	        GL11.glTranslatef(0.0F, -0.22F, 0.0F);
 	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 255.0F * 0.8F, 255.0F * 0.8F);
-	        RenderManager.instance.renderEntityWithPosYaw(hat, 0.0D, 0.0D, 0.0D, hat.rotationYaw, hat.rotationPitch);
+	        RenderManager.instance.renderEntityWithPosYaw(hat, 0.0D, 0.0D, 0.0D, hat.rotationYaw, 1.0F);
 	        
 	        player.renderYawOffset = f2;
 	        player.rotationYaw = f3;

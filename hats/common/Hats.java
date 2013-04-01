@@ -173,7 +173,7 @@ public class Hats
 	{
 		LoggerHelper.init();
 		
-		HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/mods/hats");
+		HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/hats");
 		
 		if(!HatHandler.hatsFolder.exists())
 		{
