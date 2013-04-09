@@ -57,7 +57,20 @@ public class CommonProxy
 	
 	public void getHats()
 	{
-		((Thread)new ThreadReadHats(HatHandler.hatsFolder, this)).start();
+		((Thread)new ThreadReadHats(HatHandler.hatsFolder, this, false)).start();
+	}
+	
+	public void getHatsAndOpenGui()
+	{
+	}
+	
+	public void clearAllHats()
+	{
+		HatHandler.hatNames.clear();
+	}
+	
+	public void openHatsGui()
+	{
 	}
 	
 	public void loadHatFile(File file)

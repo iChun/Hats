@@ -140,7 +140,7 @@ public class TickHandlerClient
 				}
 				else
 				{
-					FMLClientHandler.instance().displayGuiScreen(mc.thePlayer, new GuiHatSelection(mc.thePlayer));
+					Hats.proxy.openHatsGui();
 				}
 			}
 		}

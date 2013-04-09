@@ -42,6 +42,7 @@ public class GuiHatSelection extends GuiScreen
 	private final int ID_CLOSE = 9;
 	private final int ID_RANDOM = 10;
 	private final int ID_HELP = 11;
+	private final int ID_RELOAD_HATS = 12;
 	
 	private final int ID_HAT_START_ID = 20;
 	
@@ -112,7 +113,8 @@ public class GuiHatSelection extends GuiScreen
 	        buttonList.add(new GuiButton(ID_NONE, width / 2 + 89, height / 2 - 85, 20, 20, "N"));
 	        buttonList.add(new GuiButton(ID_HAT_COLOUR_SWAP, width / 2 + 89, height / 2 - 85 + (1 * 22), 20, 20, "C"));
 	        buttonList.add(new GuiButton(ID_RANDOM, width / 2 + 89, height / 2 - 85 + (2 * 22), 20, 20, ""));
-	        buttonList.add(new GuiButton(ID_HELP, width / 2 + 89, height / 2 - 85 + (3 * 22), 20, 20, ""));
+	        buttonList.add(new GuiButton(ID_RELOAD_HATS, width / 2 + 89, height / 2 - 85 + (4 * 22), 20, 20, ""));
+	        buttonList.add(new GuiButton(ID_HELP, width / 2 + 89, height / 2 - 85 + (4 * 22), 20, 20, ""));
 	        
 	        buttonList.add(new GuiButton(ID_CLOSE, width - 22, 2, 20, 20, "X"));
 	        
@@ -236,6 +238,19 @@ public class GuiHatSelection extends GuiScreen
     				}
     			}
     		}
+    	}
+    	else if(btn.id == ID_RELOAD_HATS)
+    	{
+			for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
+			{
+				GuiButton btn1 = (GuiButton)this.buttonList.get(k1);
+				if((btn1 instanceof GuiSlider) || btn1.id == ID_CLOSE)
+				{
+					continue;
+				}
+				btn1.enabled = false;
+			}    		
+    		Hats.proxy.getHatsAndOpenGui();
     	}
     	else if(btn.id >= ID_HAT_START_ID)
     	{

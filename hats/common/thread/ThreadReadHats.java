@@ -1,11 +1,14 @@
 package hats.common.thread;
 
+import hats.client.gui.GuiHatSelection;
 import hats.client.model.ModelHat;
 import hats.common.Hats;
 import hats.common.core.CommonProxy;
 import hats.common.core.HatHandler;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,7 +23,12 @@ import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import net.minecraft.network.packet.Packet131MapData;
+
 import org.w3c.dom.Document;
+
+import cpw.mods.fml.client.FMLClientHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class ThreadReadHats extends Thread 
 {
@@ -28,14 +36,18 @@ public class ThreadReadHats extends Thread
 	public File hatsFolder;
 	
 	public CommonProxy proxy;
+	
+	public boolean loadGuiOnEnd;
 
-	public ThreadReadHats(File dir, CommonProxy prox)
+	public ThreadReadHats(File dir, CommonProxy prox, boolean gui)
 	{
 		setName("Hats Mod Hat Hunting Thread");
 		setDaemon(true);
 		
 		hatsFolder = dir;
 		proxy = prox;
+		
+		loadGuiOnEnd = gui;
 	}
 	
 	@Override
@@ -44,6 +56,11 @@ public class ThreadReadHats extends Thread
 		if(!hatsFolder.exists())
 		{
 			return;
+		}
+		
+		if(loadGuiOnEnd)
+		{
+			Hats.proxy.clearAllHats();
 		}
 		
 		try
@@ -101,6 +118,27 @@ public class ThreadReadHats extends Thread
 			}
 		}
 
-		Hats.console("Loaded " + Integer.toString(hatCount) + (hatCount == 1 ? " hat" : " hats"));
+		Hats.console((loadGuiOnEnd ? "Reloaded " : "Loaded ") + Integer.toString(hatCount) + (hatCount == 1 ? " hat" : " hats"));
+		
+		if(loadGuiOnEnd)
+		{
+			if(Hats.playerHatsMode == 3)
+			{
+		        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		        DataOutputStream stream = new DataOutputStream(bytes);
+
+		        try
+		        {
+		        	stream.writeByte(0);
+		        	PacketDispatcher.sendPacketToServer(new Packet131MapData((short)Hats.getNetId(), (short)2, bytes.toByteArray()));
+		        }
+		        catch(IOException e)
+		        {}
+			}
+			else
+			{
+				Hats.proxy.openHatsGui();
+			}
+		}
 	}
 }

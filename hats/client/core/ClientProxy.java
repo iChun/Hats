@@ -1,9 +1,12 @@
 package hats.client.core;
 
+import hats.client.gui.GuiHatSelection;
 import hats.client.model.ModelHat;
 import hats.client.render.RenderHat;
 import hats.common.core.CommonProxy;
+import hats.common.core.HatHandler;
 import hats.common.entity.EntityHat;
+import hats.common.thread.ThreadReadHats;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -17,8 +20,11 @@ import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import net.minecraft.client.Minecraft;
+
 import org.w3c.dom.Document;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.registry.TickRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -37,6 +43,27 @@ public class ClientProxy extends CommonProxy
 	{
 		tickHandlerClient = new TickHandlerClient();
 		TickRegistry.registerTickHandler(tickHandlerClient, Side.CLIENT);
+	}
+	
+	@Override
+	public void getHatsAndOpenGui()
+	{
+		((Thread)new ThreadReadHats(HatHandler.hatsFolder, this, true)).start();
+	}
+
+	@Override
+	public void clearAllHats()
+	{
+		super.clearAllHats();
+		models.clear();
+		bufferedImageID.clear();
+		bufferedImages.clear();
+	}
+	
+	@Override
+	public void openHatsGui()
+	{
+		FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiHatSelection(Minecraft.getMinecraft().thePlayer));
 	}
 
 	@Override
