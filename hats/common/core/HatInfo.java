@@ -20,9 +20,9 @@ public class HatInfo
 	public HatInfo(String name)
 	{
 		hatName = name;
-		colourR = 0;
-		colourG = 0;
-		colourB = 0;
+		colourR = 255;
+		colourG = 255;
+		colourB = 255;
 	}
 	
 	public HatInfo(String name, int r, int g, int b)
