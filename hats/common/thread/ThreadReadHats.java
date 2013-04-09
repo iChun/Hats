@@ -49,34 +49,37 @@ public class ThreadReadHats extends Thread
 		try
 		{
 			ZipInputStream zipStream = new ZipInputStream(Hats.class.getResourceAsStream("/hats.zip"));
-			ZipEntry entry = null;
-			
-			int extractCount = 0;
-			
-			while((entry = zipStream.getNextEntry()) != null)
+			if(zipStream != null)
 			{
-				File file = new File(hatsFolder, entry.getName());
-				if(file.exists() && file.length() > 3L)
-				{
-					continue;
-				}
-				FileOutputStream out = new FileOutputStream(file);
+				ZipEntry entry = null;
 				
-				byte[] buffer = new byte[8192];
-				int len;
-				while((len = zipStream.read(buffer)) != -1)
-				{
-					out.write(buffer, 0, len);
-				}
-				out.close();
+				int extractCount = 0;
 				
-				extractCount++;
-			}
-			zipStream.close();
-			
-			if(extractCount > 0)
-			{
-				Hats.console("Extracted " + Integer.toString(extractCount) + (extractCount == 1 ? " hat" : " hats" + " from mod zip."));
+				while((entry = zipStream.getNextEntry()) != null)
+				{
+					File file = new File(hatsFolder, entry.getName());
+					if(file.exists() && file.length() > 3L)
+					{
+						continue;
+					}
+					FileOutputStream out = new FileOutputStream(file);
+					
+					byte[] buffer = new byte[8192];
+					int len;
+					while((len = zipStream.read(buffer)) != -1)
+					{
+						out.write(buffer, 0, len);
+					}
+					out.close();
+					
+					extractCount++;
+				}
+				zipStream.close();
+				
+				if(extractCount > 0)
+				{
+					Hats.console("Extracted " + Integer.toString(extractCount) + (extractCount == 1 ? " hat" : " hats" + " from mod zip."));
+				}
 			}
 		}
 		catch(Exception e)
