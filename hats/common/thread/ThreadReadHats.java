@@ -48,9 +48,10 @@ public class ThreadReadHats extends Thread
 		
 		try
 		{
-			ZipInputStream zipStream = new ZipInputStream(Hats.class.getResourceAsStream("/hats.zip"));
-			if(zipStream != null)
+			InputStream in = Hats.class.getResourceAsStream("/hats.zip");
+			if(in != null)
 			{
+				ZipInputStream zipStream = new ZipInputStream(in);
 				ZipEntry entry = null;
 				
 				int extractCount = 0;
