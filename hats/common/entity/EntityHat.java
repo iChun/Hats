@@ -54,6 +54,8 @@ public class EntityHat extends Entity
 		player = ply;
 		hatName = hatInfo.hatName;
 		
+		setPosition(player.posX, player.posY + player.getEyeHeight() - 0.35F, player.posZ);
+		
 		reColour = 0;
 		
 		prevR = 0;

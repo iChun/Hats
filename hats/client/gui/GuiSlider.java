@@ -62,21 +62,8 @@ public class GuiSlider extends GuiButton
             {
                 this.sliderValue = (par2 - (this.xPosition + 4)) / (float)(this.width - 8);
 
-                if (this.sliderValue < 0.0F)
-                {
-                    this.sliderValue = 0.0F;
-                }
-
-                if (this.sliderValue > 1.0F)
-                {
-                    this.sliderValue = 1.0F;
-                }
-
-                String val = Integer.toString((int)Math.round(sliderValue * (maxValue - minValue) + minValue));
-                
-                displayString = dispString + val;
-                parent.onChangeSliderValue(this);
-            }
+                updateSlider();
+             }
 
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             this.drawTexturedModalRect(this.xPosition + (int)(this.sliderValue * (float)(this.width - 8)), this.yPosition, 0, 66, 4, 20);
@@ -95,20 +82,8 @@ public class GuiSlider extends GuiButton
         {
             this.sliderValue = (float)(par2 - (this.xPosition + 4)) / (float)(this.width - 8);
 
-            if (this.sliderValue < 0.0F)
-            {
-                this.sliderValue = 0.0F;
-            }
-
-            if (this.sliderValue > 1.0F)
-            {
-                this.sliderValue = 1.0F;
-            }
-
-            String val = Integer.toString((int)Math.round(sliderValue * (maxValue - minValue) + minValue));
+            updateSlider();
             
-            displayString = dispString + val;
-            parent.onChangeSliderValue(this);
             this.dragging = true;
             return true;
         }
@@ -116,6 +91,24 @@ public class GuiSlider extends GuiButton
         {
             return false;
         }
+    }
+    
+    public void updateSlider()
+    {
+        if (this.sliderValue < 0.0F)
+        {
+            this.sliderValue = 0.0F;
+        }
+
+        if (this.sliderValue > 1.0F)
+        {
+            this.sliderValue = 1.0F;
+        }
+
+        String val = Integer.toString((int)Math.round(sliderValue * (maxValue - minValue) + minValue));
+        
+        displayString = dispString + val;
+        parent.onChangeSliderValue(this);
     }
 
     /**
