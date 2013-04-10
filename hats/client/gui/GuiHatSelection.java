@@ -1,6 +1,7 @@
 package hats.client.gui;
 
 import hats.common.Hats;
+import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
 import hats.common.entity.EntityHat;
 
@@ -13,6 +14,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
@@ -23,6 +25,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
 
@@ -48,12 +51,21 @@ public class GuiHatSelection extends GuiScreen
 	private final int ID_RANDOM = 10;
 	private final int ID_HELP = 11;
 	private final int ID_RELOAD_HATS = 12;
+	private final int ID_FAVOURITES = 13;
+	private final int ID_CATEGORIES = 14;
+	private final int ID_PERSONALIZE = 15;
 	
-	private final int ID_HAT_START_ID = 20;
+	private final int ID_CATEGORIES_START = 20;
+	
+	private final int ID_HAT_START_ID = 500;
 	
 	private final int VIEW_HATS = 0;
 	private final int VIEW_COLOURIZER = 1;
+	private final int VIEW_CATEGORIES = 2;
+	private final int VIEW_CATEGORY = 3;
 	
+	private String category = "";
+	private String currentDisplay;
 	private GuiTextField searchBar;
 	private boolean hasClicked = false;
 	private boolean confirmed = false;
@@ -62,6 +74,8 @@ public class GuiHatSelection extends GuiScreen
 	public EntityHat hat;
 	public List<String> availableHats;
 	public List<String> hatsToShow;
+	public List<String> categories;
+	public List<String> categoryHats = new ArrayList<String>();
 	
 	protected int xSize = 176;
 	protected int ySize = 170;
@@ -93,6 +107,18 @@ public class GuiHatSelection extends GuiScreen
 		availableHats = ImmutableList.copyOf(Hats.proxy.tickHandlerClient.availableHats);
 		hatsToShow = new ArrayList<String>(availableHats);
 		Collections.sort(hatsToShow);
+		
+		categories = new ArrayList<String>();
+		categories.add("All Hats");
+		for(Map.Entry<String, ArrayList<String>> e : HatHandler.categories.entrySet())
+		{
+			if(!e.getKey().equalsIgnoreCase("Favourites"))
+			{
+				categories.add(e.getKey());
+			}
+		}
+		Collections.sort(categories);
+		
 		prevHatName = hat.hatName;
 		prevColourR = colourR = hat.getR();
 		prevColourG = colourG = hat.getG();
@@ -125,10 +151,13 @@ public class GuiHatSelection extends GuiScreen
 	        //4, 5, 6, 7 = taken.
 	        
 	        buttonList.add(new GuiButton(ID_NONE, width / 2 + 89, height / 2 - 85, 20, 20, "N"));
-	        buttonList.add(new GuiButton(ID_HAT_COLOUR_SWAP, width / 2 + 89, height / 2 - 85 + (1 * 22), 20, 20, "C"));
-	        buttonList.add(new GuiButton(ID_RANDOM, width / 2 + 89, height / 2 - 85 + (2 * 22), 20, 20, ""));
-	        buttonList.add(new GuiButton(ID_RELOAD_HATS, width / 2 + 89, height / 2 - 85 + (3 * 22), 20, 20, ""));
-	        buttonList.add(new GuiButton(ID_HELP, width / 2 + 89, height / 2 - 85 + (4 * 22), 20, 20, ""));
+	        buttonList.add(new GuiButton(ID_HAT_COLOUR_SWAP, width / 2 + 89, height / 2 - 85 + (1 * 21), 20, 20, "C"));
+	        buttonList.add(new GuiButton(ID_RANDOM, width / 2 + 89, height / 2 - 85 + (2 * 21), 20, 20, ""));
+	        buttonList.add(new GuiButton(ID_FAVOURITES, width / 2 + 89, height / 2 - 85 + (3 * 21), 20, 20, ""));
+	        buttonList.add(new GuiButton(ID_CATEGORIES, width / 2 + 89, height / 2 - 85 + (4 * 21), 20, 20, ""));
+	        buttonList.add(new GuiButton(ID_PERSONALIZE, width / 2 + 89, height / 2 - 85 + (5 * 21), 20, 20, ""));
+	        buttonList.add(new GuiButton(ID_RELOAD_HATS, width / 2 + 89, height / 2 - 85 + (6 * 21), 20, 20, ""));
+	        buttonList.add(new GuiButton(ID_HELP, width / 2 + 89, height / 2 - 85 + (7 * 21), 20, 20, ""));
 	        
 	        buttonList.add(new GuiButton(ID_CLOSE, width - 22, 2, 20, 20, "X"));
 	        
@@ -192,15 +221,47 @@ public class GuiHatSelection extends GuiScreen
         	
             this.mc.setIngameFocus();
         }
-        else if(i == Keyboard.KEY_R && !searchBar.isFocused())
+        else if(!searchBar.isFocused())
         {
-        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-        	randomize();
-        }
-        else if((i == Keyboard.KEY_TAB || i == Minecraft.getMinecraft().gameSettings.keyBindChat.keyCode) && !searchBar.isFocused())
-        {
-        	searchBar.setFocused(true);
-        	onSearchBarInteract();
+        	GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
+	        if(i == Keyboard.KEY_R)
+	        {
+	        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+	        	randomize();
+	        }
+	        else if(i == Keyboard.KEY_TAB || i == gameSettings.keyBindChat.keyCode)
+	        {
+	        	searchBar.setFocused(true);
+	        	onSearchBarInteract();
+	        }
+	        else if(i == Keyboard.KEY_H && !(hat.hatName.equalsIgnoreCase("") && view == VIEW_HATS))
+	        {
+	        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+	        	toggleHatsColourizer();
+	        }
+	        else if(i == Keyboard.KEY_N && !hat.hatName.equalsIgnoreCase(""))
+	        {
+	        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+	        	removeHat();
+	        }
+	        else if(i == Keyboard.KEY_C)
+	        {
+	        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+	        	showCategories();
+	        }
+	        if(view == VIEW_HATS)
+	        {
+		        if((i == gameSettings.keyBindLeft.keyCode || i == Keyboard.KEY_LEFT) && pageNumber > 0)
+		        {
+		        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+		        	switchPage(true);
+		        }
+		        else if((i == gameSettings.keyBindRight.keyCode || i == Keyboard.KEY_RIGHT) && !((pageNumber + 1) * 6 >= hatsToShow.size()))
+		        {
+		        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+		        	switchPage(false);
+		        }
+	        }
         }
     }
     
@@ -224,13 +285,13 @@ public class GuiHatSelection extends GuiScreen
     	if(searchBar.getText().equalsIgnoreCase("") || !hasClicked && searchBar.getText().equalsIgnoreCase("Search"))
     	{
     		searchBar.setTextColor(14737632);
-    		hatsToShow = new ArrayList<String>(availableHats);
+   			hatsToShow = new ArrayList<String>(view == VIEW_HATS ? availableHats : view == VIEW_CATEGORY ? categoryHats : categories);
     	}
     	else
     	{
     		String query = searchBar.getText();
     		ArrayList<String> matches = new ArrayList<String>();
-    		for(String s : availableHats)
+    		for(String s : (view == VIEW_HATS ? availableHats : view == VIEW_CATEGORY ? categoryHats : categories))
     		{
     			if(s.toLowerCase().startsWith(query.toLowerCase()))
     			{
@@ -258,7 +319,8 @@ public class GuiHatSelection extends GuiScreen
     		if(matches.size() == 0)
     		{
     			searchBar.setTextColor(0xFF5555);
-        		hatsToShow = new ArrayList<String>(availableHats);		
+        		hatsToShow = new ArrayList<String>(view == VIEW_HATS ? availableHats : view == VIEW_CATEGORY ? categoryHats : categories);
+        		Collections.sort(hatsToShow);
     		}
     		else
     		{
@@ -301,21 +363,11 @@ public class GuiHatSelection extends GuiScreen
     {
     	if(btn.id == ID_PAGE_LEFT)
     	{
-    		pageNumber--;
-    		if(pageNumber < 0)
-    		{
-    			pageNumber = 0;
-    		}
-    		updateButtonList();
+    		switchPage(true);
     	}
     	else if(btn.id == ID_PAGE_RIGHT)
     	{
-    		pageNumber++;
-    		if(pageNumber * 6 >= hatsToShow.size())
-    		{
-    			pageNumber--;
-    		}
-    		updateButtonList();
+    		switchPage(false);
     	}
     	else if(btn.id == ID_DONE_SELECT)
     	{
@@ -323,16 +375,11 @@ public class GuiHatSelection extends GuiScreen
     	}
     	else if(btn.id == ID_NONE)
     	{
-    		hat.hatName = "";
-    		
-    		updateButtonList();
+    		removeHat();
     	}
     	else if(btn.id == ID_HAT_COLOUR_SWAP)
     	{
-    		view = view == VIEW_COLOURIZER ? VIEW_HATS : VIEW_COLOURIZER;
-    		btn.displayString = view == VIEW_COLOURIZER ? "H" : "C";
-    		
-    		updateButtonList();
+    		toggleHatsColourizer();
     	}
     	else if(btn.id == ID_CLOSE)
     	{
@@ -363,6 +410,10 @@ public class GuiHatSelection extends GuiScreen
     			helpPage = 0;
     		}
     	}
+    	else if(btn.id == ID_CATEGORIES)
+    	{
+    		showCategories();
+    	}
     	else if(btn.id >= ID_HAT_START_ID)
     	{
     		hat.hatName = btn.displayString.toLowerCase();
@@ -373,6 +424,10 @@ public class GuiHatSelection extends GuiScreen
     		hat.setB(255);
     		
     		updateButtonList();
+    	}
+    	else if(btn.id >= ID_CATEGORIES_START)
+    	{
+    		showCategory(btn.displayString);
     	}
     }
     
@@ -440,84 +495,13 @@ public class GuiHatSelection extends GuiScreen
 		hat.setB(prevColourB);
     }
     
-    public void randomize()
-    {
-		if(view == VIEW_HATS)
-		{
-			int randVal = rand.nextInt(hatsToShow.size());
-        	String hatName = (String)hatsToShow.get(randVal);
-        	
-        	hat.hatName = hatName.toLowerCase();
-        	
-    		colourR = colourG = colourB = 255;
-    		hat.setR(255);
-    		hat.setG(255);
-    		hat.setB(255);
-        	
-    		pageNumber = randVal / 6;
-    		
-    		if(isShiftKeyDown())
-    		{
-    			view = VIEW_COLOURIZER;
-    			
-    			updateButtonList();
-    			
-    			randomizeColour();
-    			
-    			view = VIEW_HATS;
-    		}
-    		
-    		updateButtonList();
-		}
-		else if(view == VIEW_COLOURIZER)
-		{
-			if(isShiftKeyDown())
-			{
-	    		colourR = colourG = colourB = 255;
-	    		hat.setR(255);
-	    		hat.setG(255);
-	    		hat.setB(255);
-
-	    		updateButtonList();
-			}
-			else
-			{
-				randomizeColour();
-			}
-		}
-    }
-    
-    public void randomizeColour()
-    {
-		for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
-		{
-			GuiButton btn1 = (GuiButton)this.buttonList.get(k1);
-			if(btn1 instanceof GuiSlider)
-			{
-				GuiSlider slider = (GuiSlider)btn1;
-				if(slider.id >= 5 && slider.id <= 7)
-				{
-					if(hat.hatName.equalsIgnoreCase(""))
-					{
-						slider.sliderValue = 0.0F;
-					}
-					else
-					{
-						slider.sliderValue = rand.nextFloat();
-					}
-					slider.updateSlider();
-				}
-			}
-		}
-    }
-    
     public void updateButtonList()
     {
         for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
         {
             GuiButton btn = (GuiButton)this.buttonList.get(k1);
             
-            if(btn.id >= ID_HAT_START_ID || btn.id >= 5 && btn.id <= 7)
+            if(btn.id >= 5 && btn.id <= 7 || btn.id >= ID_CATEGORIES_START)
             {
             	buttonList.remove(k1);
             }
@@ -565,9 +549,20 @@ public class GuiHatSelection extends GuiScreen
             		btn.enabled = true;
             	}
             }
+            else if(btn.id == ID_CATEGORIES)
+            {
+            	if(view == VIEW_CATEGORIES)
+            	{
+            		btn.enabled = false;
+            	}
+            	else
+            	{
+            		btn.enabled = true;
+            	}
+            }
         }
         
-    	if(view == VIEW_HATS)
+    	if(view == VIEW_HATS || view == VIEW_CATEGORIES || view == VIEW_CATEGORY)
     	{
 	    	int button = 0;
 	
@@ -576,9 +571,9 @@ public class GuiHatSelection extends GuiScreen
 	        	GuiButton btn;
 	        	String hatName = (String)hatsToShow.get(i);
 	        	
-	        	btn = new GuiButton(ID_HAT_START_ID + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
+	        	btn = new GuiButton((view == VIEW_HATS || view == VIEW_CATEGORY ? ID_HAT_START_ID + i : ID_CATEGORIES_START), width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
 	        	
-	        	if(hatName.toLowerCase().equalsIgnoreCase(hat.hatName))
+	        	if((view == VIEW_HATS || view == VIEW_CATEGORY) && hatName.toLowerCase().equalsIgnoreCase(hat.hatName))
 	        	{
 	        		btn.enabled = false;
 	        	}
@@ -592,6 +587,8 @@ public class GuiHatSelection extends GuiScreen
 	        		break;
 	        	}
 	        }
+	        
+	        currentDisplay = (view == VIEW_HATS ? "All Hats" : view == VIEW_CATEGORY ? "Category - " + category : "Categories") + " (" + (pageNumber + 1) + "/" + (int)Math.ceil((float)hatsToShow.size() / 6F) + ")";
     	}
     	else if(view == VIEW_COLOURIZER)
     	{
@@ -604,6 +601,185 @@ public class GuiHatSelection extends GuiScreen
     			
     			button++;
     		}
+    		
+    		currentDisplay = "Colourizer";
+    	}
+    }
+    
+    public void removeHat()
+    {
+		hat.hatName = "";
+		
+		updateButtonList();
+    }
+    
+    public void switchPage(boolean left)
+    {
+    	if(left)
+    	{
+    		pageNumber--;
+    		if(pageNumber < 0)
+    		{
+    			pageNumber = 0;
+    		}
+    		updateButtonList();
+    	}
+    	else
+    	{
+    		pageNumber++;
+    		if(pageNumber * 6 >= hatsToShow.size())
+    		{
+    			pageNumber--;
+    		}
+    		updateButtonList();
+    	}
+    }
+    
+    public void toggleHatsColourizer()
+    {
+    	if(view == VIEW_COLOURIZER && !isShiftKeyDown() && !category.equalsIgnoreCase(""))
+    	{
+    		view = VIEW_CATEGORY;
+    	}
+    	else if(view == VIEW_CATEGORY && !isShiftKeyDown())
+    	{
+    		view = VIEW_COLOURIZER;
+    	}
+    	else
+    	{
+    		view = view > VIEW_HATS ? VIEW_HATS : VIEW_COLOURIZER;
+    	}
+		
+		hatsToShow = new ArrayList<String>(view == VIEW_HATS ? availableHats : categoryHats);
+		Collections.sort(hatsToShow);
+
+		searchBar.setText("");
+		onSearchBarInteract();
+
+		updateButtonList();
+    }
+    
+    public void showCategory(String s)
+    {
+    	if(s.equalsIgnoreCase("All Hats"))
+    	{
+    		view = VIEW_COLOURIZER;
+    		category = "";
+    		
+    		toggleHatsColourizer();
+    	}
+    	else
+    	{
+	    	view = VIEW_CATEGORY;
+	    	
+	    	category = s;
+	    	
+	    	ArrayList<String> hatsList = HatHandler.categories.get(s);
+	    	if(hatsList == null)
+	    	{
+	    		hatsList = new ArrayList<String>();
+	    	}
+	    	
+	    	categoryHats = new ArrayList<String>(hatsList);
+	    	
+	    	hatsToShow = new ArrayList<String>(hatsList);
+	    	Collections.sort(hatsToShow);
+	    	
+	    	updateButtonList();
+    	}
+    }
+    
+    public void randomize()
+    {
+		if(view == VIEW_HATS || view == VIEW_CATEGORY)
+		{
+			int randVal = rand.nextInt(hatsToShow.size());
+        	String hatName = (String)hatsToShow.get(randVal);
+        	
+        	hat.hatName = hatName.toLowerCase();
+        	
+    		colourR = colourG = colourB = 255;
+    		hat.setR(255);
+    		hat.setG(255);
+    		hat.setB(255);
+        	
+    		pageNumber = randVal / 6;
+    		
+    		if(isShiftKeyDown())
+    		{
+    			view = VIEW_COLOURIZER;
+    			
+    			updateButtonList();
+    			
+    			randomizeColour();
+    			
+    			view = VIEW_HATS;
+    		}
+    		
+    		updateButtonList();
+		}
+		else if(view == VIEW_COLOURIZER)
+		{
+			if(isShiftKeyDown())
+			{
+	    		colourR = colourG = colourB = 255;
+	    		hat.setR(255);
+	    		hat.setG(255);
+	    		hat.setB(255);
+
+	    		updateButtonList();
+			}
+			else
+			{
+				randomizeColour();
+			}
+		}
+		else if(view == VIEW_CATEGORIES)
+		{
+			int randVal = rand.nextInt(hatsToShow.size());
+			String categoryName = (String)hatsToShow.get(randVal);
+			showCategory(categoryName);
+		}
+    }
+    
+    public void randomizeColour()
+    {
+		for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
+		{
+			GuiButton btn1 = (GuiButton)this.buttonList.get(k1);
+			if(btn1 instanceof GuiSlider)
+			{
+				GuiSlider slider = (GuiSlider)btn1;
+				if(slider.id >= 5 && slider.id <= 7)
+				{
+					if(hat.hatName.equalsIgnoreCase(""))
+					{
+						slider.sliderValue = 0.0F;
+					}
+					else
+					{
+						slider.sliderValue = rand.nextFloat();
+					}
+					slider.updateSlider();
+				}
+			}
+		}
+    }
+    
+    public void showCategories()
+    {
+    	if(view != VIEW_CATEGORIES)
+    	{
+	    	view = VIEW_CATEGORIES;
+	    	pageNumber = 0;
+	    	
+			searchBar.setText("");
+			onSearchBarInteract();
+	    	
+	    	hatsToShow = new ArrayList<String>(categories);
+	    	Collections.sort(hatsToShow);
+	    	
+	    	updateButtonList();
     	}
     }
 
@@ -624,9 +800,9 @@ public class GuiHatSelection extends GuiScreen
             
             String disp = btn.displayString;
             
-            if(btn.id >= ID_HAT_START_ID)
+            if(btn.id >= ID_CATEGORIES_START)
             {
-            	int id = btn.id - ID_HAT_START_ID;
+            	int id = btn.id >= ID_HAT_START_ID ? btn.id - ID_HAT_START_ID : btn.id - ID_CATEGORIES_START; 
             	if(!((pageNumber) * 6 <= id && (pageNumber + 1) * 6 > id))
             	{
             		continue;
@@ -644,7 +820,7 @@ public class GuiHatSelection extends GuiScreen
             	btn.displayString = disp;
             }
             
-            if(btn.id == ID_HAT_COLOUR_SWAP || btn.id == ID_NONE || btn.id == ID_RANDOM || btn.id == ID_HELP || btn.id == ID_RELOAD_HATS)
+            if(btn.id == ID_HAT_COLOUR_SWAP || btn.id == ID_NONE || btn.id == ID_RANDOM || btn.id == ID_HELP || btn.id == ID_RELOAD_HATS || btn.id == ID_FAVOURITES || btn.id == ID_CATEGORIES || btn.id == ID_PERSONALIZE)
             {
             	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	            GL11.glEnable(GL11.GL_BLEND);
@@ -653,7 +829,7 @@ public class GuiHatSelection extends GuiScreen
             	Minecraft.getMinecraft().renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
             	if(btn.id == ID_HAT_COLOUR_SWAP)
             	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, (view == VIEW_HATS ? 16 : 0), 0, 16, 16);
+            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, (view == VIEW_HATS || view == VIEW_CATEGORY ? 16 : 0), 0, 16, 16);
             	}
             	else if(btn.id == ID_NONE)
             	{
@@ -671,10 +847,24 @@ public class GuiHatSelection extends GuiScreen
             	{
             		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 48, 0, 16, 16);
             	}
+            	else if(btn.id == ID_FAVOURITES)
+            	{
+            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 64, 0, 16, 16);
+            	}
+            	else if(btn.id == ID_CATEGORIES)
+            	{
+            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 112, 0, 16, 16);
+            	}
+            	else if(btn.id == ID_PERSONALIZE)
+            	{
+            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 176, 0, 16, 16);
+            	}
 
             	GL11.glDisable(GL11.GL_BLEND);
             }
         }
+        
+        drawString(fontRenderer, "Viewing: " + currentDisplay, this.guiLeft, this.guiTop - 9, 0xffffff);
     	
         this.mouseX = (float)par1;
         this.mouseY = (float)par2;
@@ -703,31 +893,35 @@ public class GuiHatSelection extends GuiScreen
 	            }
 	            else if(btn.id == ID_NONE)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Remove hat"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {"Remove hat (N)"}), par1, par2);
 	            }
 	            else if(btn.id == ID_HAT_COLOUR_SWAP)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? "Colourizer" : "Hats List")}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS || view == VIEW_CATEGORY ? "Colourizer (H)" : "Hats List (H)")}), par1, par2);
 	            }
 	            else if(btn.id == ID_RANDOM)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? "Random Hat (R)" : isShiftKeyDown() ? "Reset Colour (R)" : "Random Colour (R)")}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS || view == VIEW_CATEGORY ? "Random Hat (R)" : view == VIEW_CATEGORIES ? "Random Category (R)" : isShiftKeyDown() ? "Reset Colour (R)" : "Random Colour (R)")}), par1, par2);
 	            }
 	            else if(btn.id == ID_HELP)
 	            {
 	            	drawTooltip(getCurrentHelpText(), par1, par2);
 	            }
-	            else if(btn.id == ID_PAGE_LEFT && btn.enabled)
-	            {
-	            	drawTooltip(Arrays.asList(new String[] {Integer.toString(pageNumber)}), par1, par2);
-	            }
-	            else if(btn.id == ID_PAGE_RIGHT && btn.enabled)
-	            {
-	            	drawTooltip(Arrays.asList(new String[] {Integer.toString(pageNumber + 2)}), par1, par2);
-	            }
 	            else if(btn.id == ID_RELOAD_HATS)
 	            {
 	            	drawTooltip(Arrays.asList(new String[] {"Reload all hats?"}), par1, par2);
+	            }
+	            else if(btn.id == ID_FAVOURITES)
+	            {
+	            	drawTooltip(Arrays.asList(new String[] {"Favourites (F)"}), par1, par2);
+	            }
+	            else if(btn.id == ID_CATEGORIES)
+	            {
+	            	drawTooltip(Arrays.asList(new String[] {"Categories (C)"}), par1, par2);
+	            }
+	            else if(btn.id == ID_PERSONALIZE)
+	            {
+	            	drawTooltip(Arrays.asList(new String[] {"Personalize (P)"}), par1, par2);
 	            }
             }
         }
@@ -903,15 +1097,17 @@ public class GuiHatSelection extends GuiScreen
 	private static int helpPage = 0;
 	private static final ArrayList<String[]> help = new ArrayList<String[]>();
 	private static final String[] helpInfo1 = new String[] {"Shift click on the Hat", "button for more options!"};
-	private static final String[] helpInfo2 = new String[] {"If you're on a server that doesn't have", "the mod, another player with the", "mod won't be able to see your hat"};
-	private static final String[] helpInfo3 = new String[] {"Did you know you can always get more hats?", "Techne Online has a bunch of", "community made hats that you", "can download and install"};
+	private static final String[] helpInfo2 = new String[] {"If you're on a server that doesn't have", "the mod, another player with the", "mod won't be able to see your hat."};
+	private static final String[] helpInfo3 = new String[] {"Did you know you can always get more hats?", "Techne Online has a bunch of", "community made hats that you", "can download and install."};
 	private static final String[] helpInfo4 = new String[] {"You can also make your own hat!", "You need Techne and you make a hat with it.", "A \"head\" model is placed in the middle", "of the wood block. It's size is", "8 x 8 x 8. Make your hat on it!"};
 	private static final String[] helpInfo5 = new String[] {"Did you know that if your friend doesn't", "have the hat you're wearing, you send the hat", "to the server, and it gets sent to your friend.", "(Only on servers with the mod)"};
 	private static final String[] helpInfo6 = new String[] {"Shift clicking the Random Hat button gives you", "a random hat AND colour!"};
-	private static final String[] helpInfo7 = new String[] {"Shift clicking the Random Colour button resets", "all colours"};
-	private static final String[] helpInfo8 = new String[] {"You can hit TAB or T to quickly select", "the search bar"};
-	private static final String[] helpInfo9 = new String[] {"Did you know that this mod was initially", "made for a 96 hour modding marathon", "called ModJam?", "", "It won second place and was made and is", "currently maintained by iChun"};
+	private static final String[] helpInfo7 = new String[] {"Shift clicking the Random Colour button resets", "all colours."};
+	private static final String[] helpInfo8 = new String[] {"You can hit TAB or T to quickly select", "the search bar".};
+	private static final String[] helpInfo9 = new String[] {"Did you know that this mod was initially", "made for a 96 hour modding marathon", "called ModJam?", "", "It won second place and was made and is", "currently maintained by iChun."};
 	private static final String[] helpInfo10 = new String[] {"The player hats added by the mod are the", "names of some people who made a significant", "contribution to the mod, in terms", "of development, testing, model contribution", "and support.", "", "Direwolf20 is just a bonus however."};
+	private static final String[] helpInfo11 = new String[] {"Shift Clicking on the Hats List will take", "you out of a category and back to all", "the hats."};
+	private static final String[] helpInfo12 = new String[] {"Did you know you can make your own categories?", "Hit the Categories button (or C, on your keyboard)", "and hit the \"New Category\" button."};
 	
 	static
 	{
@@ -925,6 +1121,8 @@ public class GuiHatSelection extends GuiScreen
 		help.add(helpInfo8);
 		help.add(helpInfo9);
 		help.add(helpInfo10);
+		help.add(helpInfo11);
+		help.add(helpInfo12);
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
