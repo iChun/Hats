@@ -1103,7 +1103,7 @@ public class GuiHatSelection extends GuiScreen
 	private static final String[] helpInfo5 = new String[] {"Did you know that if your friend doesn't", "have the hat you're wearing, you send the hat", "to the server, and it gets sent to your friend.", "(Only on servers with the mod)"};
 	private static final String[] helpInfo6 = new String[] {"Shift clicking the Random Hat button gives you", "a random hat AND colour!"};
 	private static final String[] helpInfo7 = new String[] {"Shift clicking the Random Colour button resets", "all colours."};
-	private static final String[] helpInfo8 = new String[] {"You can hit TAB or T to quickly select", "the search bar".};
+	private static final String[] helpInfo8 = new String[] {"You can hit TAB or T to quickly select", "the search bar."};
 	private static final String[] helpInfo9 = new String[] {"Did you know that this mod was initially", "made for a 96 hour modding marathon", "called ModJam?", "", "It won second place and was made and is", "currently maintained by iChun."};
 	private static final String[] helpInfo10 = new String[] {"The player hats added by the mod are the", "names of some people who made a significant", "contribution to the mod, in terms", "of development, testing, model contribution", "and support.", "", "Direwolf20 is just a bonus however."};
 	private static final String[] helpInfo11 = new String[] {"Shift Clicking on the Hats List will take", "you out of a category and back to all", "the hats."};
