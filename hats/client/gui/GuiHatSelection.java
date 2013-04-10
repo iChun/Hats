@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -16,6 +17,7 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -23,6 +25,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -50,9 +53,13 @@ public class GuiHatSelection extends GuiScreen
 	private final int VIEW_HATS = 0;
 	private final int VIEW_COLOURIZER = 1;
 	
+	private GuiTextField searchBar;
+	private boolean hasClicked = false;
+	
 	public EntityPlayer player;
 	public EntityHat hat;
-	public List availableHats;
+	public List<String> availableHats;
+	public List<String> hatsToShow;
 	
 	protected int xSize = 176;
 	protected int ySize = 170;
@@ -82,6 +89,8 @@ public class GuiHatSelection extends GuiScreen
 		player = ply;
 		hat = Hats.proxy.tickHandlerClient.hats.get(player.username);
 		availableHats = ImmutableList.copyOf(Hats.proxy.tickHandlerClient.availableHats);
+		hatsToShow = new ArrayList<String>(availableHats);
+		Collections.sort(hatsToShow);
 		prevHatName = hat.hatName;
 		prevColourR = colourR = hat.getR();
 		prevColourG = colourG = hat.getG();
@@ -100,6 +109,8 @@ public class GuiHatSelection extends GuiScreen
 		}
 		else
 		{
+	        Keyboard.enableRepeatEvents(true);
+
 			buttonList.clear();
 			
 	        this.guiLeft = (this.width - this.xSize) / 2;
@@ -114,24 +125,18 @@ public class GuiHatSelection extends GuiScreen
 	        buttonList.add(new GuiButton(ID_NONE, width / 2 + 89, height / 2 - 85, 20, 20, "N"));
 	        buttonList.add(new GuiButton(ID_HAT_COLOUR_SWAP, width / 2 + 89, height / 2 - 85 + (1 * 22), 20, 20, "C"));
 	        buttonList.add(new GuiButton(ID_RANDOM, width / 2 + 89, height / 2 - 85 + (2 * 22), 20, 20, ""));
-	        buttonList.add(new GuiButton(ID_RELOAD_HATS, width / 2 + 89, height / 2 - 85 + (3 * 22), 20, 20, "R"));
+	        buttonList.add(new GuiButton(ID_RELOAD_HATS, width / 2 + 89, height / 2 - 85 + (3 * 22), 20, 20, ""));
 	        buttonList.add(new GuiButton(ID_HELP, width / 2 + 89, height / 2 - 85 + (4 * 22), 20, 20, ""));
 	        
 	        buttonList.add(new GuiButton(ID_CLOSE, width - 22, 2, 20, 20, "X"));
 	        
 	        pageNumber = 0;
 	        
-	        if(hat.hatName.equalsIgnoreCase(""))
+	        if(!hat.hatName.equalsIgnoreCase(""))
 	        {
-	        	int i = availableHats.size();
-	    		i -= i % 6;
-	    		pageNumber = i / 6;
-	        }
-	        else
-	        {
-		        for(int i = 0; i < availableHats.size(); i++)
+	        	for(int i = 0; i < hatsToShow.size(); i++)
 		        {
-		        	String hatName = (String)availableHats.get(i);
+		        	String hatName = (String)hatsToShow.get(i);
 		        	if(hatName.equalsIgnoreCase(hat.hatName))
 		        	{
 		        		i -= i % 6;
@@ -142,24 +147,144 @@ public class GuiHatSelection extends GuiScreen
 	        }
 	        
 	        updateButtonList();
+	        
+			searchBar = new GuiTextField(this.fontRenderer, this.width / 2 - 65, height - 24, 150, 20);
+			searchBar.setMaxStringLength(255);
+			searchBar.setText("Search");
+			searchBar.setTextColor(0xAAAAAA);
 		}
 	}
 	
 	@Override
+    public void updateScreen()
+    {
+        searchBar.updateCursorCounter();
+    }
+	
+	@Override
 	public void onGuiClosed() 
 	{
-		exitWithoutUpdate();
+		hat.hatName = prevHatName;
+		hat.setR(prevColourR);
+		hat.setG(prevColourG);
+		hat.setB(prevColourB);
+		
+        Keyboard.enableRepeatEvents(false);
+
 	}
 	
     @Override
     protected void keyTyped(char c, int i)
     {
+    	searchBar.textboxKeyTyped(c, i);
+    	if(searchBar.isFocused())
+    	{
+    		onSearch();
+    	}
         if (i == 1)
         {
         	exitWithoutUpdate();
         	
             this.mc.setIngameFocus();
         }
+        else if(i == Keyboard.KEY_R && !searchBar.isFocused())
+        {
+        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+        	randomize();
+        }
+        else if((i == Keyboard.KEY_TAB || i == Minecraft.getMinecraft().gameSettings.keyBindChat.keyCode) && !searchBar.isFocused())
+        {
+        	searchBar.setFocused(true);
+        	onSearchBarInteract();
+        }
+    }
+    
+    @Override
+    protected void mouseClicked(int par1, int par2, int par3)
+    {
+        super.mouseClicked(par1, par2, par3);
+        searchBar.mouseClicked(par1, par2, par3);
+        
+        boolean flag = par1 >= (this.width / 2 - 65) && par1 < (this.width / 2 - 65) + this.width && par2 >= (height - 24) && par2 < (height - 24) + this.height;
+        if(par3 == 1 && flag)
+        {
+        	searchBar.setText("");
+        	onSearch();
+        }
+        onSearchBarInteract();
+    }
+    
+    public void onSearch()
+    {
+    	if(searchBar.getText().equalsIgnoreCase("") || !hasClicked && searchBar.getText().equalsIgnoreCase("Search"))
+    	{
+    		searchBar.setTextColor(0xFF5555);
+    		hatsToShow = new ArrayList<String>(availableHats);
+    	}
+    	else
+    	{
+    		String query = searchBar.getText();
+    		ArrayList<String> matches = new ArrayList<String>();
+    		for(String s : availableHats)
+    		{
+    			if(s.toLowerCase().startsWith(query.toLowerCase()))
+    			{
+    			}
+    			else
+    			{
+	    			String[] split = s.split(" ");
+	    			for(String s1 : split)
+	    			{
+	    				if(s1.toLowerCase().startsWith(query.toLowerCase()))
+	    				{
+	    					if(!matches.contains(s))
+	    					{
+	    						matches.add(s);
+	    					}
+	    					break;
+	    				}
+	    			}
+    			}
+    		}
+    		if(matches.size() == 0)
+    		{
+    			searchBar.setTextColor(0xFF5555);
+        		hatsToShow = new ArrayList<String>(availableHats);		
+    		}
+    		else
+    		{
+    			searchBar.setTextColor(14737632);
+    			pageNumber = 0;
+    			hatsToShow = new ArrayList<String>(matches);
+    			Collections.sort(hatsToShow);
+    		}
+    		
+    	}
+    	
+    	updateButtonList();
+    }
+    
+    public void onSearchBarInteract()
+    {
+        if(searchBar.isFocused())
+        {
+        	searchBar.setTextColor(14737632);
+        	if(!hasClicked && searchBar.getText().equalsIgnoreCase("Search"))
+        	{
+        		hasClicked = true;
+        		searchBar.setText("");
+        		onSearch();
+        	}
+        }
+        else
+        {
+        	searchBar.setTextColor(0xAAAAAA);
+        	if(searchBar.getText().equalsIgnoreCase(""))
+        	{
+        		hasClicked = false;
+        		searchBar.setText("Search");
+        	}
+        }    	
     }
     
     @Override
@@ -177,7 +302,7 @@ public class GuiHatSelection extends GuiScreen
     	else if(btn.id == ID_PAGE_RIGHT)
     	{
     		pageNumber++;
-    		if(pageNumber * 6 >= availableHats.size())
+    		if(pageNumber * 6 >= hatsToShow.size())
     		{
     			pageNumber--;
     		}
@@ -206,45 +331,7 @@ public class GuiHatSelection extends GuiScreen
     	}
     	else if(btn.id == ID_RANDOM)
     	{
-    		if(view == VIEW_HATS)
-    		{
-    			int randVal = rand.nextInt(availableHats.size());
-	        	String hatName = (String)availableHats.get(randVal);
-	        	
-	        	hat.hatName = hatName.toLowerCase();
-	        	
-	    		colourR = colourG = colourB = 255;
-	    		hat.setR(255);
-	    		hat.setG(255);
-	    		hat.setB(255);
-	        	
-        		pageNumber = randVal / 6;
-        		
-        		updateButtonList();
-    		}
-    		else if(view == VIEW_COLOURIZER)
-    		{
-    			for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
-    			{
-    				GuiButton btn1 = (GuiButton)this.buttonList.get(k1);
-    				if(btn1 instanceof GuiSlider)
-    				{
-    					GuiSlider slider = (GuiSlider)btn1;
-    					if(slider.id >= 5 && slider.id <= 7)
-    					{
-    						if(hat.hatName.equalsIgnoreCase(""))
-    						{
-    							slider.sliderValue = 0.0F;
-    						}
-    						else
-    						{
-    							slider.sliderValue = rand.nextFloat();
-    						}
-    						slider.updateSlider();
-    					}
-    				}
-    			}
-    		}
+    		randomize();
     	}
     	else if(btn.id == ID_RELOAD_HATS)
     	{
@@ -342,6 +429,49 @@ public class GuiHatSelection extends GuiScreen
 		hat.setB(prevColourB);
     }
     
+    public void randomize()
+    {
+		if(view == VIEW_HATS)
+		{
+			int randVal = rand.nextInt(hatsToShow.size());
+        	String hatName = (String)hatsToShow.get(randVal);
+        	
+        	hat.hatName = hatName.toLowerCase();
+        	
+    		colourR = colourG = colourB = 255;
+    		hat.setR(255);
+    		hat.setG(255);
+    		hat.setB(255);
+        	
+    		pageNumber = randVal / 6;
+    		
+    		updateButtonList();
+		}
+		else if(view == VIEW_COLOURIZER)
+		{
+			for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
+			{
+				GuiButton btn1 = (GuiButton)this.buttonList.get(k1);
+				if(btn1 instanceof GuiSlider)
+				{
+					GuiSlider slider = (GuiSlider)btn1;
+					if(slider.id >= 5 && slider.id <= 7)
+					{
+						if(hat.hatName.equalsIgnoreCase(""))
+						{
+							slider.sliderValue = 0.0F;
+						}
+						else
+						{
+							slider.sliderValue = rand.nextFloat();
+						}
+						slider.updateSlider();
+					}
+				}
+			}
+		}
+    }
+    
     public void updateButtonList()
     {
         for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
@@ -365,7 +495,7 @@ public class GuiHatSelection extends GuiScreen
             }
             else if(btn.id == ID_PAGE_RIGHT)
             {
-        		if((pageNumber + 1) * 6 >= availableHats.size() || view == VIEW_COLOURIZER)
+        		if((pageNumber + 1) * 6 >= hatsToShow.size() || view == VIEW_COLOURIZER)
         		{
         			btn.enabled = false;
         		}
@@ -402,10 +532,10 @@ public class GuiHatSelection extends GuiScreen
     	{
 	    	int button = 0;
 	
-	        for(int i = pageNumber * 6; i < availableHats.size() && i < (pageNumber + 1) * 6; i++)
+	        for(int i = pageNumber * 6; i < hatsToShow.size() && i < (pageNumber + 1) * 6; i++)
 	        {
 	        	GuiButton btn;
-	        	String hatName = (String)availableHats.get(i);
+	        	String hatName = (String)hatsToShow.get(i);
 	        	
 	        	btn = new GuiButton(ID_HAT_START_ID + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
 	        	
@@ -510,6 +640,8 @@ public class GuiHatSelection extends GuiScreen
         this.mouseX = (float)par1;
         this.mouseY = (float)par2;
 
+        drawSearchBar();
+        
         drawPlayerOnGui(k + 42, l + 155, 55, (float)(k + 42) - (float)mouseX, (float)(l + 155 - 92) - (float)mouseY);
 
         drawForeground(par1, par2, par3);
@@ -540,7 +672,7 @@ public class GuiHatSelection extends GuiScreen
 	            }
 	            else if(btn.id == ID_RANDOM)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? "Random Hat" : "Random Colour")}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? "Random Hat (R)" : "Random Colour (R)")}), par1, par2);
 	            }
 	            else if(btn.id == ID_HELP)
 	            {
@@ -694,6 +826,20 @@ public class GuiHatSelection extends GuiScreen
 	        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     	}
     }
+    
+    public void drawSearchBar()
+    {
+    	searchBar.drawTextBox();
+    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+    	Minecraft.getMinecraft().renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
+    	
+    	drawTexturedModalRect(this.width / 2 - 85, height - 22, 128, 0, 16, 16);
+    	
+    	GL11.glDisable(GL11.GL_BLEND);
+    }
 
 	@Override
 	public void onChangeSliderValue(GuiSlider slider)
@@ -718,14 +864,16 @@ public class GuiHatSelection extends GuiScreen
 	private static int helpPage = 0;
 	private static final ArrayList<String[]> help = new ArrayList<String[]>();
 	private static final String[] helpInfo1 = new String[] {"Shift click on the Hat", "button for more options!"};
-	private static final String[] helpInfo2 = new String[] {"If you're on a server that doesn't have", "the mod, another player with the", "mod won't be able to see", "your hat"};
+	private static final String[] helpInfo2 = new String[] {"If you're on a server that doesn't have", "the mod, another player with the", "mod won't be able to see your hat"};
 	private static final String[] helpInfo3 = new String[] {"Did you know you can always get more hats?", "Techne Online has a bunch of", "community made hats that you", "can download and install"};
+	private static final String[] helpInfo4 = new String[] {"You can also make your own hat!", "You need Techne and you make your hat in there.", "A \"head\" model is placed in the middle", "of the wood block. It's size is", "8 x 8 x 8. Make your hat on it!"};
 	
 	static
 	{
 		help.add(helpInfo1);
 		help.add(helpInfo2);
 		help.add(helpInfo3);
+		help.add(helpInfo4);
 	}
 	
 	private static String getHelpHeader()
