@@ -867,6 +867,7 @@ public class GuiHatSelection extends GuiScreen
 	private static final String[] helpInfo2 = new String[] {"If you're on a server that doesn't have", "the mod, another player with the", "mod won't be able to see your hat"};
 	private static final String[] helpInfo3 = new String[] {"Did you know you can always get more hats?", "Techne Online has a bunch of", "community made hats that you", "can download and install"};
 	private static final String[] helpInfo4 = new String[] {"You can also make your own hat!", "You need Techne and you make your hat in there.", "A \"head\" model is placed in the middle", "of the wood block. It's size is", "8 x 8 x 8. Make your hat on it!"};
+	private static final String[] helpInfo5 = new String[] {"Did you know that if your friend doesn't", "have the hat you're wearing, you send the hat", "to the server, and it gets sent to your friend.", "(Only on servers with the mod)"};
 	
 	static
 	{
@@ -874,6 +875,7 @@ public class GuiHatSelection extends GuiScreen
 		help.add(helpInfo2);
 		help.add(helpInfo3);
 		help.add(helpInfo4);
+		help.add(helpInfo5);
 	}
 	
 	private static String getHelpHeader()
