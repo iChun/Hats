@@ -14,7 +14,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -60,6 +63,7 @@ public class ThreadReadHats extends Thread
 		
 		if(loadGuiOnEnd)
 		{
+			HatHandler.reloadingHats = true;
 			Hats.proxy.clearAllHats();
 		}
 		
@@ -122,6 +126,15 @@ public class ThreadReadHats extends Thread
 		
 		if(loadGuiOnEnd)
 		{
+			Hats.proxy.tickHandlerClient.availableHats.clear();
+			Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+			while(ite.hasNext())
+			{
+				Entry<File, String> e = ite.next();
+				Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
+			}
+			Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+			
 			if(Hats.playerHatsMode == 3)
 			{
 		        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -139,6 +152,8 @@ public class ThreadReadHats extends Thread
 			{
 				Hats.proxy.openHatsGui();
 			}
+			
+			HatHandler.reloadingHats = false;
 		}
 	}
 }

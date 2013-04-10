@@ -92,7 +92,7 @@ public class RenderHat extends Render
 			        
 			        GL11.glPopMatrix();
 		    	}
-		    	else
+		    	else if(!HatHandler.reloadingHats)
 		    	{
 		    		if(!Hats.proxy.tickHandlerClient.requestedHats.contains(hat.hatName))
 		    		{

@@ -252,7 +252,7 @@ public class HatHandler
 				
 				int fileSize = (int)file.length();
 				
-				if(fileSize > 100000)
+				if(fileSize > 150000)
 				{
 					Hats.console("Unable to send " + file.getName() + ". It is above the size limit!", true);
 				}
@@ -335,6 +335,8 @@ public class HatHandler
 		return name;
 	}
 
+	
+	public static boolean reloadingHats;
 	
 	public static File hatsFolder;
 	

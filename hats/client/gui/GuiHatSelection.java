@@ -7,6 +7,7 @@ import hats.common.entity.EntityHat;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -113,7 +114,7 @@ public class GuiHatSelection extends GuiScreen
 	        buttonList.add(new GuiButton(ID_NONE, width / 2 + 89, height / 2 - 85, 20, 20, "N"));
 	        buttonList.add(new GuiButton(ID_HAT_COLOUR_SWAP, width / 2 + 89, height / 2 - 85 + (1 * 22), 20, 20, "C"));
 	        buttonList.add(new GuiButton(ID_RANDOM, width / 2 + 89, height / 2 - 85 + (2 * 22), 20, 20, ""));
-	        buttonList.add(new GuiButton(ID_RELOAD_HATS, width / 2 + 89, height / 2 - 85 + (3 * 22), 20, 20, ""));
+	        buttonList.add(new GuiButton(ID_RELOAD_HATS, width / 2 + 89, height / 2 - 85 + (3 * 22), 20, 20, "R"));
 	        buttonList.add(new GuiButton(ID_HELP, width / 2 + 89, height / 2 - 85 + (4 * 22), 20, 20, ""));
 	        
 	        buttonList.add(new GuiButton(ID_CLOSE, width - 22, 2, 20, 20, "X"));
@@ -142,6 +143,12 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        updateButtonList();
 		}
+	}
+	
+	@Override
+	public void onGuiClosed() 
+	{
+		exitWithoutUpdate();
 	}
 	
     @Override
@@ -251,6 +258,14 @@ public class GuiHatSelection extends GuiScreen
 				btn1.enabled = false;
 			}    		
     		Hats.proxy.getHatsAndOpenGui();
+    	}
+    	else if(btn.id == ID_HELP)
+    	{
+    		helpPage++;
+    		if(helpPage >= help.size())
+    		{
+    			helpPage = 0;
+    		}
     	}
     	else if(btn.id >= ID_HAT_START_ID)
     	{
@@ -460,7 +475,7 @@ public class GuiHatSelection extends GuiScreen
             	btn.displayString = disp;
             }
             
-            if(btn.id == ID_HAT_COLOUR_SWAP || btn.id == ID_NONE || btn.id == ID_RANDOM || btn.id == ID_HELP)
+            if(btn.id == ID_HAT_COLOUR_SWAP || btn.id == ID_NONE || btn.id == ID_RANDOM || btn.id == ID_HELP || btn.id == ID_RELOAD_HATS)
             {
             	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	            GL11.glEnable(GL11.GL_BLEND);
@@ -482,6 +497,10 @@ public class GuiHatSelection extends GuiScreen
             	else if(btn.id == ID_HELP)
             	{
             		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 96, 0, 16, 16);
+            	}
+            	else if(btn.id == ID_RELOAD_HATS)
+            	{
+            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 48, 0, 16, 16);
             	}
 
             	GL11.glDisable(GL11.GL_BLEND);
@@ -525,7 +544,7 @@ public class GuiHatSelection extends GuiScreen
 	            }
 	            else if(btn.id == ID_HELP)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"HELP!", "", "Shift click on the Hat button for more options!"}), par1, par2);
+	            	drawTooltip(getCurrentHelpText(), par1, par2);
 	            }
 	            else if(btn.id == ID_PAGE_LEFT && btn.enabled)
 	            {
@@ -534,6 +553,10 @@ public class GuiHatSelection extends GuiScreen
 	            else if(btn.id == ID_PAGE_RIGHT && btn.enabled)
 	            {
 	            	drawTooltip(Arrays.asList(new String[] {Integer.toString(pageNumber + 2)}), par1, par2);
+	            }
+	            else if(btn.id == ID_RELOAD_HATS)
+	            {
+	            	drawTooltip(Arrays.asList(new String[] {"Reload all hats?"}), par1, par2);
 	            }
             }
         }
@@ -692,4 +715,36 @@ public class GuiHatSelection extends GuiScreen
 		}
 	}
 
+	private static int helpPage = 0;
+	private static final ArrayList<String[]> help = new ArrayList<String[]>();
+	private static final String[] helpInfo1 = new String[] {"Shift click on the Hat", "button for more options!"};
+	private static final String[] helpInfo2 = new String[] {"If you're on a server that doesn't have", "the mod, another player with the", "mod won't be able to see", "your hat"};
+	private static final String[] helpInfo3 = new String[] {"Did you know you can always get more hats?", "Techne Online has a bunch of", "community made hats that you", "can download and install"};
+	
+	static
+	{
+		help.add(helpInfo1);
+		help.add(helpInfo2);
+		help.add(helpInfo3);
+	}
+	
+	private static String getHelpHeader()
+	{
+		return "\u00a7c" + "Help? (" + Integer.toString(helpPage + 1) + "/" + Integer.toString(help.size()) + ")";
+	}
+	
+	private static List getCurrentHelpText()
+	{
+		ArrayList<String> list = new ArrayList<String>();
+		list.add(getHelpHeader());
+		list.add("");
+		
+		String[] str = help.get(helpPage);
+		for(int i = 0; i < str.length; i++)
+		{
+			list.add(str[i]);
+		}
+		
+		return list;
+	}
 }
