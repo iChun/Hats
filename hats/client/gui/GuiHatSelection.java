@@ -9,6 +9,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -55,6 +56,7 @@ public class GuiHatSelection extends GuiScreen
 	
 	private GuiTextField searchBar;
 	private boolean hasClicked = false;
+	private boolean confirmed = false;
 	
 	public EntityPlayer player;
 	public EntityHat hat;
@@ -164,10 +166,13 @@ public class GuiHatSelection extends GuiScreen
 	@Override
 	public void onGuiClosed() 
 	{
-		hat.hatName = prevHatName;
-		hat.setR(prevColourR);
-		hat.setG(prevColourG);
-		hat.setB(prevColourB);
+		if(!confirmed)
+		{
+			hat.hatName = prevHatName;
+			hat.setR(prevColourR);
+			hat.setG(prevColourG);
+			hat.setB(prevColourB);
+		}
 		
         Keyboard.enableRepeatEvents(false);
 
@@ -218,7 +223,7 @@ public class GuiHatSelection extends GuiScreen
     {
     	if(searchBar.getText().equalsIgnoreCase("") || !hasClicked && searchBar.getText().equalsIgnoreCase("Search"))
     	{
-    		searchBar.setTextColor(0xFF5555);
+    		searchBar.setTextColor(14737632);
     		hatsToShow = new ArrayList<String>(availableHats);
     	}
     	else
@@ -229,6 +234,10 @@ public class GuiHatSelection extends GuiScreen
     		{
     			if(s.toLowerCase().startsWith(query.toLowerCase()))
     			{
+					if(!matches.contains(s))
+					{
+						matches.add(s);
+					}
     			}
     			else
     			{
@@ -369,6 +378,8 @@ public class GuiHatSelection extends GuiScreen
     
     public void exitAndUpdate()
     {
+    	confirmed = true;
+    	
 		mc.displayGuiScreen(null);
 		
 		if(!Hats.proxy.tickHandlerClient.serverHasMod)
@@ -445,28 +456,56 @@ public class GuiHatSelection extends GuiScreen
         	
     		pageNumber = randVal / 6;
     		
+    		if(isShiftKeyDown())
+    		{
+    			view = VIEW_COLOURIZER;
+    			
+    			updateButtonList();
+    			
+    			randomizeColour();
+    			
+    			view = VIEW_HATS;
+    		}
+    		
     		updateButtonList();
 		}
 		else if(view == VIEW_COLOURIZER)
 		{
-			for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
+			if(isShiftKeyDown())
 			{
-				GuiButton btn1 = (GuiButton)this.buttonList.get(k1);
-				if(btn1 instanceof GuiSlider)
+	    		colourR = colourG = colourB = 255;
+	    		hat.setR(255);
+	    		hat.setG(255);
+	    		hat.setB(255);
+
+	    		updateButtonList();
+			}
+			else
+			{
+				randomizeColour();
+			}
+		}
+    }
+    
+    public void randomizeColour()
+    {
+		for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
+		{
+			GuiButton btn1 = (GuiButton)this.buttonList.get(k1);
+			if(btn1 instanceof GuiSlider)
+			{
+				GuiSlider slider = (GuiSlider)btn1;
+				if(slider.id >= 5 && slider.id <= 7)
 				{
-					GuiSlider slider = (GuiSlider)btn1;
-					if(slider.id >= 5 && slider.id <= 7)
+					if(hat.hatName.equalsIgnoreCase(""))
 					{
-						if(hat.hatName.equalsIgnoreCase(""))
-						{
-							slider.sliderValue = 0.0F;
-						}
-						else
-						{
-							slider.sliderValue = rand.nextFloat();
-						}
-						slider.updateSlider();
+						slider.sliderValue = 0.0F;
 					}
+					else
+					{
+						slider.sliderValue = rand.nextFloat();
+					}
+					slider.updateSlider();
 				}
 			}
 		}
@@ -672,7 +711,7 @@ public class GuiHatSelection extends GuiScreen
 	            }
 	            else if(btn.id == ID_RANDOM)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? "Random Hat (R)" : "Random Colour (R)")}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? "Random Hat (R)" : isShiftKeyDown() ? "Reset Colour (R)" : "Random Colour (R)")}), par1, par2);
 	            }
 	            else if(btn.id == ID_HELP)
 	            {
@@ -866,8 +905,12 @@ public class GuiHatSelection extends GuiScreen
 	private static final String[] helpInfo1 = new String[] {"Shift click on the Hat", "button for more options!"};
 	private static final String[] helpInfo2 = new String[] {"If you're on a server that doesn't have", "the mod, another player with the", "mod won't be able to see your hat"};
 	private static final String[] helpInfo3 = new String[] {"Did you know you can always get more hats?", "Techne Online has a bunch of", "community made hats that you", "can download and install"};
-	private static final String[] helpInfo4 = new String[] {"You can also make your own hat!", "You need Techne and you make your hat in there.", "A \"head\" model is placed in the middle", "of the wood block. It's size is", "8 x 8 x 8. Make your hat on it!"};
+	private static final String[] helpInfo4 = new String[] {"You can also make your own hat!", "You need Techne and you make a hat with it.", "A \"head\" model is placed in the middle", "of the wood block. It's size is", "8 x 8 x 8. Make your hat on it!"};
 	private static final String[] helpInfo5 = new String[] {"Did you know that if your friend doesn't", "have the hat you're wearing, you send the hat", "to the server, and it gets sent to your friend.", "(Only on servers with the mod)"};
+	private static final String[] helpInfo6 = new String[] {"Shift clicking the Random Hat button gives you", "a random hat AND colour!"};
+	private static final String[] helpInfo7 = new String[] {"Shift clicking the Random Colour button resets", "all colours"};
+	private static final String[] helpInfo8 = new String[] {"You can hit TAB or T to quickly select", "the search bar"};
+	private static final String[] helpInfo9 = new String[] {"Did you know that this mod was initially", "made for a 96 hour modding marathon", "called ModJam?", "", "It won second place and was made and is", "currently maintained by iChun"};
 	
 	static
 	{
@@ -876,11 +919,19 @@ public class GuiHatSelection extends GuiScreen
 		help.add(helpInfo3);
 		help.add(helpInfo4);
 		help.add(helpInfo5);
+		help.add(helpInfo6);
+		help.add(helpInfo7);
+		help.add(helpInfo8);
+		help.add(helpInfo9);
+		
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(System.currentTimeMillis());
+		helpPage = calendar.get(5) % help.size();
 	}
 	
 	private static String getHelpHeader()
 	{
-		return "\u00a7c" + "Help? (" + Integer.toString(helpPage + 1) + "/" + Integer.toString(help.size()) + ")";
+		return "\u00a7c" + "Protip! (" + Integer.toString(helpPage + 1) + "/" + Integer.toString(help.size()) + ")";
 	}
 	
 	private static List getCurrentHelpText()

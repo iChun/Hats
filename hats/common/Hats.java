@@ -58,7 +58,7 @@ import cpw.mods.fml.relauncher.Side;
 public class Hats 
 {
 	//Texture editing time
-	public static final String version = "1.0.0";
+	public static final String version = "1.1.0";
 	
 	//Global Options
 	public static int safeLoad = 1;
