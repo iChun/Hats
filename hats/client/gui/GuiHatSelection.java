@@ -113,7 +113,7 @@ public class GuiHatSelection extends GuiScreen
 	        buttonList.add(new GuiButton(ID_NONE, width / 2 + 89, height / 2 - 85, 20, 20, "N"));
 	        buttonList.add(new GuiButton(ID_HAT_COLOUR_SWAP, width / 2 + 89, height / 2 - 85 + (1 * 22), 20, 20, "C"));
 	        buttonList.add(new GuiButton(ID_RANDOM, width / 2 + 89, height / 2 - 85 + (2 * 22), 20, 20, ""));
-	        buttonList.add(new GuiButton(ID_RELOAD_HATS, width / 2 + 89, height / 2 - 85 + (4 * 22), 20, 20, ""));
+	        buttonList.add(new GuiButton(ID_RELOAD_HATS, width / 2 + 89, height / 2 - 85 + (3 * 22), 20, 20, ""));
 	        buttonList.add(new GuiButton(ID_HELP, width / 2 + 89, height / 2 - 85 + (4 * 22), 20, 20, ""));
 	        
 	        buttonList.add(new GuiButton(ID_CLOSE, width - 22, 2, 20, 20, "X"));
