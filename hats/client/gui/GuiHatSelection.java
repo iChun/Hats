@@ -911,6 +911,7 @@ public class GuiHatSelection extends GuiScreen
 	private static final String[] helpInfo7 = new String[] {"Shift clicking the Random Colour button resets", "all colours"};
 	private static final String[] helpInfo8 = new String[] {"You can hit TAB or T to quickly select", "the search bar"};
 	private static final String[] helpInfo9 = new String[] {"Did you know that this mod was initially", "made for a 96 hour modding marathon", "called ModJam?", "", "It won second place and was made and is", "currently maintained by iChun"};
+	private static final String[] helpInfo10 = new String[] {"The player hats added by the mod are the", "names of some people who made a significant", "contribution to the mod, in terms", "of development, testing, model contribution", "and support.", "", "Direwolf20 is just a bonus however."};
 	
 	static
 	{
@@ -923,6 +924,7 @@ public class GuiHatSelection extends GuiScreen
 		help.add(helpInfo7);
 		help.add(helpInfo8);
 		help.add(helpInfo9);
+		help.add(helpInfo10);
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());

@@ -109,16 +109,22 @@ public class ThreadReadHats extends Thread
 			e.printStackTrace();
 		}
 		
-		
-		
 		int hatCount = 0;
 		
 		File[] files = hatsFolder.listFiles();
 		for(File file : files)
 		{
-			if(HatHandler.readHatFromFile(file))
+			if(!file.isDirectory() && HatHandler.readHatFromFile(file))
 			{
 				hatCount++;	
+			}
+		}
+		
+		for(File file : files)
+		{
+			if(file.isDirectory() && !file.getName().equalsIgnoreCase("Disabled"))
+			{
+				hatCount += HatHandler.loadCategory(file);	
 			}
 		}
 
@@ -151,6 +157,15 @@ public class ThreadReadHats extends Thread
 			else
 			{
 				Hats.proxy.openHatsGui();
+			}
+			
+			try
+			{
+				sleep(5000);
+			}
+			catch(Exception e)
+			{
+				
 			}
 			
 			HatHandler.reloadingHats = false;

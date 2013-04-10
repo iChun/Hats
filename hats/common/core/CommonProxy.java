@@ -11,6 +11,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.security.DigestInputStream;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -67,6 +70,7 @@ public class CommonProxy
 	public void clearAllHats()
 	{
 		HatHandler.hatNames.clear();
+		HatHandler.checksums.clear();
 	}
 	
 	public void openHatsGui()
@@ -77,6 +81,23 @@ public class CommonProxy
 	{
 		String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
 		HatHandler.hatNames.put(file, hatName);
+	}
+	
+	public void remap(String duplicate, String original)
+	{
+		File file = null;
+		for(Map.Entry<File, String> e : HatHandler.hatNames.entrySet())
+		{
+			if(e.getValue().equalsIgnoreCase(original))
+			{
+				file = e.getKey();
+				break;
+			}
+		}
+		if(file != null)
+		{
+			HatHandler.hatNames.put(file, duplicate);
+		}
 	}
 	
 	public HatInfo getRandomHat()

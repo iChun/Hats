@@ -73,6 +73,11 @@ public class RenderHat extends Render
 			        
 			        BufferedImage image = ClientProxy.bufferedImages.get(hat.hatName);
 			        
+			    	if(Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("ohaiiChun") && hat.player.username.equalsIgnoreCase("Notch"))
+			    	{
+			    		//debug
+			    	}
+			        
 			        if (image != null)
 			        {
 			            if (ClientProxy.bufferedImageID.get(image) == -1)

@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -32,9 +33,28 @@ public class HatHandler
 
 	public static boolean readHatFromFile(File file)
 	{
+		return readHatFromFile(file, false);
+	}
+	
+	public static boolean readHatFromFile(File file, boolean category)
+	{
+		String md5 = MD5Checksum.getMD5Checksum(file);
+		
+		if(HatHandler.checksums.get(md5) == null)
+		{
+			HatHandler.checksums.put(md5, file);
+		}
+		else
+		{
+			if(!category)
+			{
+				Hats.console("Rejecting " + file.getName() + "! Identical to " + HatHandler.checksums.get(md5).getName(), true);
+			}
+			return true;
+		}
+
 		if(file.getName().endsWith(".tcn"))
 		{
-//			file.
 			boolean hasTexture = false;
 			boolean isSafe = true;
 			try
@@ -64,15 +84,18 @@ public class HatHandler
 			catch(EOFException e1)
 			{
 				Hats.console("Failed to load: " + file.getName() + " is corrupted!", true);
+				return false;
 			}
 			catch(IOException e1)
 			{
 				Hats.console("Failed to load: " + file.getName() + " cannot be read!", true);
+				return false;
 			} 
 			catch (Exception e1) 
 			{
 				Hats.console("Failed to load: " + file.getName() + " threw a generic exception!", true);
 				e1.printStackTrace();
+				return false;
 			}
 			
 			if(Hats.safeLoad == 1 && !isSafe)
@@ -92,6 +115,46 @@ public class HatHandler
 			}
 		}
 		return false;
+	}
+	
+	public static int loadCategory(File dir)
+	{
+		int hatCount = 0;
+		if(dir.isDirectory())
+		{
+			ArrayList<String> hatsToLoad = new ArrayList<String>();
+			ArrayList<String> categoryHats = new ArrayList<String>();
+			File[] files = dir.listFiles();
+			for(File file : files)
+			{
+				if(file.getName().endsWith(".tcn"))
+				{
+					String hatName = file.getName().substring(0, file.getName().length() - 4);
+					hatsToLoad.add(hatName.toLowerCase());
+					categoryHats.add(hatName);
+					for(Map.Entry<File, String> e : HatHandler.hatNames.entrySet())
+					{
+						String hatEntryName = e.getValue();
+						for(int i = hatsToLoad.size() - 1; i >= 0; i--)
+						{
+							String hatCategoryEntryName = hatsToLoad.get(i);
+							if(hatCategoryEntryName.equalsIgnoreCase(hatEntryName))
+							{
+								hatsToLoad.remove(i);
+								break;
+							}
+						}
+					}
+					if(!file.isDirectory() && HatHandler.readHatFromFile(file, true))
+					{
+						hatCount++;	
+					}
+				}
+			}
+			
+			categories.put(dir.getName(), categoryHats);
+		}
+		return hatCount;
 	}
 	
 	public static void requestHat(String name, EntityPlayer player)
@@ -163,6 +226,12 @@ public class HatHandler
 			{
 				File file = new File(hatsFolder, hatName + ".tcn");
 				
+				if(file.exists())
+				{
+					Hats.console(file.getName() + " already exists! Will not save.");
+					return;
+				}
+				
 				FileOutputStream fis = new FileOutputStream(file);
 				
 				for(int i = 0; i < byteArray.size(); i++)
@@ -172,6 +241,10 @@ public class HatHandler
 				}
 				
 				fis.close();
+				
+				String md5 = MD5Checksum.getMD5Checksum(file);
+				
+				boolean newHat = HatHandler.checksums.get(md5) == null;
 				
 				if(readHatFromFile(file))
 				{
@@ -191,31 +264,58 @@ public class HatHandler
 							}
 						}
 						
+						if(newHat)
+						{
+							Hats.console("Received " + file.getName() + " from " + player.username);
+						}
+						else
+						{
+							Hats.proxy.remap(file.getName().substring(0, file.getName().length() - 4).toLowerCase(), HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase());
+							Hats.console("Deleting " + file.getName() + " from " + (isServer ? player.username : "server") + "! Duplicate hat file with different name. Remapping hat to original file.", true);
+							if(!file.delete())
+							{
+								Hats.console("Failed to delete file! We're doomed!", true);
+							}
+							
+							HatInfo info = Hats.proxy.playerWornHats.get(player.username);
+							Hats.proxy.playerWornHats.put(player.username, new HatInfo(HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase(), info.colourR, info.colourG, info.colourB));
+						}
+						
 						Hats.proxy.saveData(DimensionManager.getWorld(0));
 						
 						Hats.proxy.sendPlayerListOfWornHats(player, false);
-						
-						Hats.console("Received " + file.getName() + " from " + player.username);
 					}
 					else
 					{
 						Hats.proxy.tickHandlerClient.requestedHats.remove(hatName.toLowerCase());
 						
-						Hats.console("Received " + file.getName() + " from server.");
-						
-						Hats.proxy.tickHandlerClient.availableHats.clear();
-						Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-						while(ite.hasNext())
-						{
-							Entry<File, String> e = ite.next();
-							Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
+						if(newHat)
+						{				
+							Hats.console("Received " + file.getName() + " from server.");
+							
+							Hats.proxy.tickHandlerClient.availableHats.clear();
+							Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+							while(ite.hasNext())
+							{
+								Entry<File, String> e = ite.next();
+								Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
+							}
+							Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
 						}
-						Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+						else
+						{
+							Hats.proxy.remap(file.getName().substring(0, file.getName().length() - 4).toLowerCase(), HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase());
+							Hats.console("Deleting " + file.getName() + " from " + (isServer ? player.username : "server") + "! Duplicate hat file with different name. Remapping hat to original file.", true);
+							if(!file.delete())
+							{
+								Hats.console("Failed to delete file! We're doomed!", true);
+							}
+						}
 					}
 				}
 				else
 				{
-					Hats.console("Deleting " + file.getName() + " from " + (isServer ? "server" : player.username) + "! SafeLoad is on, and the Model file contains files which are not XML or PNG files.", true);
+					Hats.console("Deleting " + file.getName() + " from " + (isServer ? player.username : "server") + "! SafeLoad is on, and the Model file contains files which are not XML or PNG files.", true);
 					if(!file.delete())
 					{
 						Hats.console("Failed to delete file! We're doomed!", true);
@@ -345,5 +445,9 @@ public class HatHandler
 	public static HashMap<String, ArrayList<byte[]>> hatParts = new HashMap<String, ArrayList<byte[]>>();
 	
 	public static HashMap<File, String> hatNames = new HashMap<File, String>();
+	
+	public static HashMap<String, File> checksums = new HashMap<String, File>();
+	
+	public static HashMap<String, ArrayList<String>> categories = new HashMap<String, ArrayList<String>>();
 
 }

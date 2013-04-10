@@ -56,8 +56,16 @@ public class ClientProxy extends CommonProxy
 	{
 		super.clearAllHats();
 		models.clear();
-		bufferedImageID.clear();
 		bufferedImages.clear();
+		bufferedImageID.clear();
+	}
+	
+	@Override
+	public void remap(String duplicate, String original)
+	{
+		super.remap(duplicate, original);
+		models.put(duplicate, models.get(original));
+		bufferedImages.put(duplicate, bufferedImages.get(original));
 	}
 	
 	@Override
@@ -113,8 +121,8 @@ public class ClientProxy extends CommonProxy
 		}
 	}
 	
-	public static HashMap<BufferedImage, Integer> bufferedImageID = new HashMap<BufferedImage, Integer>();
 	public static HashMap<String, BufferedImage> bufferedImages = new HashMap<String, BufferedImage>();
+	public static HashMap<BufferedImage, Integer> bufferedImageID = new HashMap<BufferedImage, Integer>();
 	public static HashMap<String, ModelHat> models = new HashMap<String, ModelHat>();
 	
 }
