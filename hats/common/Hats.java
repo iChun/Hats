@@ -46,7 +46,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Hats", name = "Hats",
-			version = "1.0.5"
+			version = "1.1.0"
 				)
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
@@ -58,7 +58,7 @@ import cpw.mods.fml.relauncher.Side;
 public class Hats 
 {
 	//Texture editing time
-	public static final String version = "1.0.5";
+	public static final String version = "1.1.0";
 	
 	//Global Options
 	public static int safeLoad = 1;
@@ -77,6 +77,7 @@ public class Hats
 	public static String favouriteHat = "Top Hat";
 	public static String favouriteHatColourizer = "#ffffff";
 	public static int guiKeyBind = Keyboard.KEY_H;
+	public static String enabled = "1 2 3 4 5 6 7 8 9";
 	
 	public static HatInfo favouriteHatInfo = new HatInfo();
 	
@@ -119,7 +120,7 @@ public class Hats
 			favouriteHatInfo = getHatInfoFromConfig();
 			
 			guiKeyBind = addCommentAndReturnInt(config, "clientOnly", "guiKeyBind", "What key code do you want to use to open the Hat Selection GUI?\nMouse binds are posible, starting from -100 and higher.\nFor info on Key codes, check here: http://www.minecraftwiki.net/wiki/Key_codes", guiKeyBind);
-			
+			enabled = addCommentAndReturnString(config, "clientOnly", "personalizeEnabled", "DO NOT CHANGE THIS. PERIOD.\nI'M NOT JOKING.", enabled);
 		}
 		
 		config.save();

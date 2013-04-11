@@ -31,6 +31,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -45,21 +46,26 @@ public class GuiHatSelection extends GuiScreen
 	private final int ID_PAGE_LEFT = 1;
 	private final int ID_DONE_SELECT = 2;
 	private final int ID_PAGE_RIGHT = 3;
-	private final int ID_NONE = 4;
+	private final int ID_CLOSE = 4;
 	// 5 6 7 are slider IDs
-	private final int ID_HAT_COLOUR_SWAP = 8;
-	private final int ID_CLOSE = 9;
+
+	private final int ID_NONE = 8;
+	private final int ID_HAT_COLOUR_SWAP = 9;
 	private final int ID_RANDOM = 10;
-	private final int ID_HELP = 11;
-	private final int ID_RELOAD_HATS = 12;
-	private final int ID_FAVOURITES = 13;
-	private final int ID_CATEGORIES = 14;
-	private final int ID_PERSONALIZE = 15;
-	private final int ID_ADD = 16;
-	private final int ID_CANCEL = 17;
-	private final int ID_RENAME = 18;
-	private final int ID_DELETE = 19;
-	private final int ID_FAVOURITE = 20;
+	private final int ID_FAVOURITES = 11;
+	private final int ID_CATEGORIES = 12;
+	private final int ID_PERSONALIZE = 13;
+	private final int ID_RELOAD_HATS = 14;
+	private final int ID_HELP = 15;
+	private final int ID_SEARCH = 16;
+	
+	private final int ID_ADD = 17;
+	private final int ID_CANCEL = 18;
+	private final int ID_RENAME = 19;
+	private final int ID_DELETE = 20;
+	private final int ID_FAVOURITE = 21;
+	
+	private final int ID_SET_KEY = 22;
 	
 	private final int ID_CATEGORIES_START = 30;
 	
@@ -74,6 +80,8 @@ public class GuiHatSelection extends GuiScreen
 	private String currentDisplay;
 	private GuiTextField searchBar;
 	private String selectedButtonName = "";
+	private int favourite;
+	
 	private boolean hasClicked = false;
 	private boolean confirmed = false;
 	private boolean adding = false;
@@ -83,6 +91,9 @@ public class GuiHatSelection extends GuiScreen
 	private boolean renaming = false;
 	private boolean addingToCategory = false;
 	private boolean personalizing = false;
+	private boolean settingKey = false;
+	
+	private boolean enabledSearchBar = false;
 	
 	public EntityPlayer player;
 	public EntityHat hat;
@@ -90,6 +101,7 @@ public class GuiHatSelection extends GuiScreen
 	public List<String> hatsToShow;
 	public List<String> categories;
 	public List<String> categoryHats = new ArrayList<String>();
+	public List<String> enabledButtons = new ArrayList<String>();
 	
 	protected int xSize = 176;
 	protected int ySize = 170;
@@ -152,6 +164,21 @@ public class GuiHatSelection extends GuiScreen
 		{
 	        Keyboard.enableRepeatEvents(true);
 
+	        String[] enabledBtn = Hats.enabled.split(" ");
+        	enabledButtons.clear();
+	        for(int i = 0; i < enabledBtn.length; i++)
+	        {
+	        	if(enabledBtn[i].equalsIgnoreCase("9"))
+	        	{
+	        		enabledSearchBar = true;
+	        	}
+	        	else if(!enabledButtons.contains(enabledBtn[i]))
+	        	{
+	        		enabledButtons.add(enabledBtn[i]);
+	        	}
+	        }
+	        
+	        
 			buttonList.clear();
 			
 	        this.guiLeft = (this.width - this.xSize) / 2;
@@ -163,14 +190,14 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        //4, 5, 6, 7 = taken.
 	        
-	        buttonList.add(new GuiButton(ID_NONE, width / 2 + 89, height / 2 - 85, 20, 20, "N"));
-	        buttonList.add(new GuiButton(ID_HAT_COLOUR_SWAP, width / 2 + 89, height / 2 - 85 + (1 * 21), 20, 20, "C"));
-	        buttonList.add(new GuiButton(ID_RANDOM, width / 2 + 89, height / 2 - 85 + (2 * 21), 20, 20, ""));
-	        buttonList.add(new GuiButton(ID_FAVOURITES, width / 2 + 89, height / 2 - 85 + (3 * 21), 20, 20, ""));
-	        buttonList.add(new GuiButton(ID_CATEGORIES, width / 2 + 89, height / 2 - 85 + (4 * 21), 20, 20, ""));
-	        buttonList.add(new GuiButton(ID_PERSONALIZE, width / 2 + 89, height / 2 - 85 + (5 * 21), 20, 20, ""));
-	        buttonList.add(new GuiButton(ID_RELOAD_HATS, width / 2 + 89, height / 2 - 85 + (6 * 21), 20, 20, ""));
-	        buttonList.add(new GuiButton(ID_HELP, width / 2 + 89, height / 2 - 85 + (7 * 21), 20, 20, ""));
+	        addToolButton(ID_NONE);
+	        addToolButton(ID_HAT_COLOUR_SWAP);
+	        addToolButton(ID_RANDOM);
+	        addToolButton(ID_FAVOURITES);
+	        addToolButton(ID_CATEGORIES);
+	        addToolButton(ID_PERSONALIZE);
+	        addToolButton(ID_RELOAD_HATS);
+	        addToolButton(ID_HELP);
 	        
 	        buttonList.add(new GuiButton(ID_CLOSE, width - 22, 2, 20, 20, "X"));
 	        
@@ -196,6 +223,27 @@ public class GuiHatSelection extends GuiScreen
 			searchBar.setMaxStringLength(255);
 			searchBar.setText("Search");
 			searchBar.setTextColor(0xAAAAAA);
+			searchBar.setVisible(enabledSearchBar);
+		}
+	}
+	
+	public void addToolButton(int id)
+	{
+		boolean enabled = false;
+		for(int i = 0; i < enabledButtons.size(); i++)
+		{
+			if(enabledButtons.get(i).equalsIgnoreCase(Integer.toString(id - (ID_NONE - 1))))
+			{
+				buttonList.add(new GuiButton(id, width / 2 + 89, height / 2 - 85 + (i * 21), 20, 20, ""));
+				enabled = true;
+				break;
+			}
+		}
+		if(!enabled)
+		{
+			GuiButton btn = new GuiButton(id, width - 24, height / 2 - 93 + ((id - 8) * 21), 20, 20, "");
+			btn.drawButton = false;
+			buttonList.add(btn);
 		}
 	}
 	
@@ -203,6 +251,18 @@ public class GuiHatSelection extends GuiScreen
     public void updateScreen()
     {
         searchBar.updateCursorCounter();
+        if(searchBar.isFocused())
+        {
+        	searchBar.setVisible(true);
+        }
+        else
+        {
+        	searchBar.setVisible(enabledSearchBar);
+        }
+        if(favourite > 0)
+        {
+        	favourite--;
+        }
     }
 	
 	@Override
@@ -221,92 +281,185 @@ public class GuiHatSelection extends GuiScreen
     @Override
     protected void keyTyped(char c, int i)
     {
-    	searchBar.textboxKeyTyped(c, i);
-    	if(searchBar.isFocused())
+    	if(settingKey)
     	{
-    		onSearch();
-    	}
-        if (i == 1)
-        {
-        	exitWithoutUpdate();
-        	
-            this.mc.setIngameFocus();
-        }
-        if(!searchBar.isFocused())
-        {
-        	GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
-	        if(i == Keyboard.KEY_R)
-	        {
-	        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-	        	randomize();
-	        }
-	        else if(i == Keyboard.KEY_TAB || i == gameSettings.keyBindChat.keyCode)
-	        {
-	        	searchBar.setFocused(true);
-	        	onSearchBarInteract();
-	        }
-	        else if(i == Keyboard.KEY_H && !(hat.hatName.equalsIgnoreCase("") && view == VIEW_HATS))
-	        {
-	        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-	        	toggleHatsColourizer();
-	        }
-	        else if(i == Keyboard.KEY_N && !hat.hatName.equalsIgnoreCase(""))
-	        {
-	        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-	        	removeHat();
-	        }
-	        else if(i == Keyboard.KEY_C)
-	        {
-	        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-	        	showCategories();
-	        }
-	        else if(i == Keyboard.KEY_F)
-	        {
-	        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-	        	showCategory("Favourites");
-	        }
-	        if(view == VIEW_HATS)
-	        {
-		        if((i == gameSettings.keyBindLeft.keyCode || i == Keyboard.KEY_LEFT) && pageNumber > 0)
-		        {
-		        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-		        	switchPage(true);
-		        }
-		        else if((i == gameSettings.keyBindRight.keyCode || i == Keyboard.KEY_RIGHT) && !((pageNumber + 1) * 6 >= hatsToShow.size()))
-		        {
-		        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
-		        	switchPage(false);
-		        }
-	        }
-        }
-        else
-        {
-        	if(i == Keyboard.KEY_RETURN && (adding || renaming) && view == VIEW_CATEGORIES && !invalidFolderName)
-        	{
-    			if(adding && addCategory(searchBar.getText().trim()) || renaming && renameCategory(selectedButtonName, searchBar.getText().trim()))
+    		Hats.guiKeyBind = i;
+    		for(int i1 = 0; i1 < buttonList.size(); i1++)
+    		{
+    			GuiButton btn = (GuiButton)buttonList.get(i1);
+    			if(btn.id == ID_SET_KEY)
     			{
-    				searchBar.setText("");
-    				onSearchBarInteract();
-    				
-    				updateButtonList();
+    				btn.displayString = "GUI: " + Keyboard.getKeyName(i);
+    				break;
     			}
-        	}
-        }
+    		}
+    		settingKey = false;
+    		Hats.handleConfig();
+    	}
+    	else if(!personalizing)
+    	{
+	    	searchBar.textboxKeyTyped(c, i);
+	    	if(searchBar.isFocused())
+	    	{
+	    		onSearch();
+	    	}
+	        if (i == 1)
+	        {
+		    	if(searchBar.isFocused())
+		    	{
+		    		searchBar.setText("");
+		    		searchBar.setFocused(false);
+		    		onSearchBarInteract();
+		    	}
+		    	else
+		    	{
+		        	exitWithoutUpdate();
+		        	
+		            this.mc.setIngameFocus();
+		    	}
+	        }
+	        if(!searchBar.isFocused())
+	        {
+	        	GameSettings gameSettings = Minecraft.getMinecraft().gameSettings;
+		        if(i == Keyboard.KEY_R)
+		        {
+		        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+		        	randomize();
+		        }
+		        else if(i == Keyboard.KEY_TAB || i == gameSettings.keyBindChat.keyCode)
+		        {
+		        	searchBar.setFocused(true);
+		        	onSearchBarInteract();
+		        }
+		        else if(i == Keyboard.KEY_H && !(hat.hatName.equalsIgnoreCase("") && view == VIEW_HATS))
+		        {
+		        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+		        	toggleHatsColourizer();
+		        }
+		        else if(i == Keyboard.KEY_N && !hat.hatName.equalsIgnoreCase(""))
+		        {
+		        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+		        	removeHat();
+		        }
+		        else if(i == Keyboard.KEY_C)
+		        {
+		        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+		        	showCategories();
+		        }
+		        else if(i == Keyboard.KEY_F)
+		        {
+		        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+		        	if((view == VIEW_HATS || view == VIEW_CATEGORY) && isShiftKeyDown())
+		        	{
+		        		String s = "";
+		        		
+		    	        for(String hat1 : availableHats)
+		    	        {
+		    	        	if(hat1.toLowerCase().equalsIgnoreCase(hat.hatName))
+		    	        	{
+		    	        		s = hat1;
+		    	        	}
+		    	        }
+	
+		    	        if(!s.equalsIgnoreCase(""))
+		    	        {
+				    		if(HatHandler.isInFavourites(s))
+				    		{
+				    			HatHandler.removeFromCategory(s, "Favourites");
+				    		}
+				    		else
+				    		{
+				    			HatHandler.addToCategory(s, "Favourites");
+				    		}
+				    		
+			    			if(view == VIEW_CATEGORY && category.equalsIgnoreCase("Favourites"))
+			    			{
+			    				showCategory("Favourites");
+			    			}
+				    		favourite = 6;
+		    	        }
+		        	}
+		        	else
+		        	{
+		        		showCategory("Favourites");
+		        	}
+		        }
+		        else if(i == Keyboard.KEY_P)
+		        {
+		        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+		        	personalize();
+		        }
+		        if(view == VIEW_HATS)
+		        {
+			        if((i == gameSettings.keyBindLeft.keyCode || i == Keyboard.KEY_LEFT) && pageNumber > 0)
+			        {
+			        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+			        	switchPage(true);
+			        }
+			        else if((i == gameSettings.keyBindRight.keyCode || i == Keyboard.KEY_RIGHT) && !((pageNumber + 1) * 6 >= hatsToShow.size()))
+			        {
+			        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+			        	switchPage(false);
+			        }
+		        }
+	        }
+	        else
+	        {
+	        	if(i == Keyboard.KEY_RETURN && (adding || renaming) && view == VIEW_CATEGORIES && !invalidFolderName)
+	        	{
+	    			if(adding && addCategory(searchBar.getText().trim()) || renaming && renameCategory(selectedButtonName, searchBar.getText().trim()))
+	    			{
+	    				searchBar.setText("");
+	    				onSearchBarInteract();
+	    				
+	    				updateButtonList();
+	    			}
+	        	}
+	        }
+    	}
     }
     
     @Override
     protected void mouseClicked(int par1, int par2, int par3)
     {
-        super.mouseClicked(par1, par2, par3);
-        searchBar.mouseClicked(par1, par2, par3);
-        
-        boolean flag = par1 >= (this.width / 2 - 65) && par1 < (this.width / 2 - 65) + this.width && par2 >= (height - 24) && par2 < (height - 24) + this.height;
-        if(par3 == 1 && flag)
-        {
-        	searchBar.setText("");
-        	onSearch();
-        }
-        onSearchBarInteract();
+    	if(settingKey)
+    	{
+    		Hats.guiKeyBind = par3 - 100;
+    		for(int i = 0; i < buttonList.size(); i++)
+    		{
+    			GuiButton btn = (GuiButton)buttonList.get(i);
+    			if(btn.id == ID_SET_KEY)
+    			{
+    				btn.displayString = "GUI: " + Mouse.getButtonName(par3);
+    				break;
+    			}
+    		}
+    		settingKey = false;
+    		Hats.handleConfig();
+    	}
+    	else
+    	{
+	        super.mouseClicked(par1, par2, par3);
+	        boolean flag = par1 >= (this.width / 2 - 65) && par1 < (this.width / 2 - 65) + this.width && par2 >= (height - 24) && par2 < (height - 24) + this.height;
+	        if(enabledSearchBar)
+	        {
+		        if(!personalizing)
+		        {
+		        	searchBar.mouseClicked(par1, par2, par3);
+		        	
+			        if(par3 == 1 && flag)
+			        {
+			        	searchBar.setText("");
+			        	onSearch();
+			        }
+		        	onSearchBarInteract();
+		        }
+		        else if(flag)
+		        {
+		        	toggleSearchBar();
+		        }
+	        }
+    	}
     }
     
     @Override
@@ -467,267 +620,230 @@ public class GuiHatSelection extends GuiScreen
     @Override
     protected void actionPerformed(GuiButton btn)
     {
-    	if(btn.id == ID_PAGE_LEFT)
+    	if(btn.id == ID_DONE_SELECT)
     	{
-    		switchPage(true);
-    	}
-    	else if(btn.id == ID_PAGE_RIGHT)
-    	{
-    		switchPage(false);
-    	}
-    	else if(btn.id == ID_DONE_SELECT)
-    	{
-    		exitAndUpdate();
-    	}
-    	else if(btn.id == ID_NONE)
-    	{
-    		removeHat();
-    	}
-    	else if(btn.id == ID_HAT_COLOUR_SWAP)
-    	{
-    		toggleHatsColourizer();
-    	}
-    	else if(btn.id == ID_CLOSE)
-    	{
-    		exitWithoutUpdate();
-    	}
-    	else if(btn.id == ID_RANDOM)
-    	{
-    		randomize();
-    	}
-    	else if(btn.id == ID_RELOAD_HATS)
-    	{
-    		reloadHatsAndReopenGUI();
-    	}
-    	else if(btn.id == ID_HELP)
-    	{
-    		helpPage++;
-    		if(helpPage >= help.size())
+    		if(personalizing)
     		{
-    			helpPage = 0;
+    			personalize();
+    		}
+    		else
+    		{
+    			exitAndUpdate();
     		}
     	}
-    	else if(btn.id == ID_FAVOURITES)
+    	if(personalizing)
     	{
-    		showCategory("Favourites");
-    	}
-    	else if(btn.id == ID_CATEGORIES)
-    	{
-    		showCategories();
-    	}
-    	else if(btn.id == ID_CANCEL)
-    	{
-    		if((adding || renaming) && view == VIEW_CATEGORIES && searchBar.isFocused())
+    		if(btn.id >= ID_NONE && btn.id <= ID_SEARCH && !justClickedButton)
     		{
-				searchBar.setText("");
-				onSearchBarInteract();
-
-    			updateButtonList();
-    		}
-    		else if(!justClickedButton && !selectedButtonName.equalsIgnoreCase(""))
-    		{
-    			selectedButtonName = "";
-    			updateButtonList();
-    		}
-    	}
-    	else if(btn.id == ID_ADD)
-    	{
-    		if(!justClickedButton)
-    		{
-    			if(view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites"))
-    			{
-    				HatHandler.removeFromCategory(selectedButtonName, category);
-    				
-    				showCategory(category);
-    			}
-    			else if(view == VIEW_HATS || view == VIEW_CATEGORY)
-    			{
-    				addingToCategory = true;
-    				
-    				showCategories();
-    			}
-    			else
-    			{
-		    		if((adding || renaming) && view == VIEW_CATEGORIES && searchBar.isFocused())
-		    		{
-		    			if(adding && addCategory(searchBar.getText().trim()) || renaming && renameCategory(selectedButtonName, searchBar.getText().trim()))
-		    			{
-		    				searchBar.setText("");
-		    				onSearchBarInteract();
-		    				
-		    				updateButtonList();
-		    			}
-		    		}
-    			}
-    		}
-    	}
-    	else if(btn.id == ID_DELETE)
-    	{
-    		if(!justClickedButton && !selectedButtonName.equalsIgnoreCase(""))
-    		{
-    			if(!deleting)
-    			{
-    				deleting = true;
-    			}
-    			else
-    			{
-    				deleting = false;
-    				
-    				try
-    				{
-    					if(view == VIEW_CATEGORIES)
-    					{
-	    					File dir = new File(HatHandler.hatsFolder, "/" + selectedButtonName);
-	    					if(dir.exists() && dir.isDirectory())
-	    					{
-	    						File[] files = dir.listFiles();
-	    						for(File file: files)
-	    						{
-	    							File hat = new File(HatHandler.hatsFolder, file.getName());
-	    							if(!hat.isDirectory() && hat.getName().endsWith(".tcn"))
-	    							{
-		    							if(!hat.exists())
-		    							{
-		    								file.renameTo(hat);
-		    							}
-		    							file.delete();
-	    							}
-	    						}
-	    						if(!dir.delete())
-	    						{
-	    							Hats.console("Cannot delete category \"" + selectedButtonName + "\", directory is not empty!", true);
-	    						}
-	    					}
-    					}
-    					if(view == VIEW_HATS || view == VIEW_CATEGORY)
-    					{
-    						HatHandler.deleteHat(selectedButtonName, isShiftKeyDown());
-    					}
-    				}
-    				catch(Exception e)
-    				{
-    					Hats.console("Failed to delete " + (view == VIEW_CATEGORIES ? "category" : "hat") +": " + selectedButtonName, true);
-    				}
-    				
-    				selectedButtonName = "";
-    				updateButtonList();
-    				
-    				reloadHatsAndReopenGUI();
-    			}
-    		}
-    	}
-    	else if(btn.id == ID_RENAME)
-    	{
-    		if(!justClickedButton && !selectedButtonName.equalsIgnoreCase(""))
-    		{
-    			renaming = true;
+    			justClickedButton = true;
+    			toggleVisibility(btn);
     			
-    			for(int i = buttonList.size() - 1; i >= 0; i--)
+    			if(btn.id == ID_SEARCH)
     			{
-    				GuiButton button = (GuiButton)buttonList.get(i);
-    				if(button.id == ID_RENAME || button.id == ID_DELETE || button.id == ID_CANCEL)
-    				{
-    					buttonList.remove(i);
-    				}
+    				buttonList.remove(btn);
     			}
-    			
-    			buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 16 - 7, btn.yPosition, 20, 20, ""));
-    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 52 - 7, btn.yPosition, 20, 20, ""));
-
-    			searchBar.setText(selectedButtonName);
     		}
+	    	else if(btn.id == ID_SET_KEY)
+	    	{
+	    		settingKey = true;
+	    		btn.displayString = "GUI: >???<";
+	    	}
     	}
-    	else if(btn.id == ID_FAVOURITE)
+    	else
     	{
-    		if(!justClickedButton)
-    		{
-	    		if(!selectedButtonName.equalsIgnoreCase("") && HatHandler.isInFavourites(selectedButtonName))
+	    	if(btn.id == ID_PAGE_LEFT)
+	    	{
+	    		switchPage(true);
+	    	}
+	    	else if(btn.id == ID_PAGE_RIGHT)
+	    	{
+	    		switchPage(false);
+	    	}
+	    	else if(btn.id == ID_CLOSE)
+	    	{
+	    		exitWithoutUpdate();
+	    	}
+	    	else if(btn.id == ID_NONE)
+	    	{
+	    		removeHat();
+	    	}
+	    	else if(btn.id == ID_HAT_COLOUR_SWAP)
+	    	{
+	    		toggleHatsColourizer();
+	    	}
+	    	else if(btn.id == ID_RANDOM)
+	    	{
+	    		randomize();
+	    	}
+	    	else if(btn.id == ID_RELOAD_HATS)
+	    	{
+	    		reloadHatsAndReopenGUI();
+	    	}
+	    	else if(btn.id == ID_FAVOURITES)
+	    	{
+	    		showCategory("Favourites");
+	    	}
+	    	else if(btn.id == ID_CATEGORIES)
+	    	{
+	    		showCategories();
+	    	}
+	    	else if(btn.id == ID_PERSONALIZE)
+	    	{
+	    		personalize();
+	    	}
+	    	else if(btn.id == ID_HELP)
+	    	{
+	    		helpPage++;
+	    		if(helpPage >= help.size())
 	    		{
-	    			HatHandler.removeFromCategory(selectedButtonName, "Favourites");
-	    			
-	    			if(view == VIEW_CATEGORY && category.equalsIgnoreCase("Favourites"))
+	    			helpPage = 0;
+	    		}
+	    	}
+	    	else if(btn.id == ID_CANCEL)
+	    	{
+	    		if((adding || renaming) && view == VIEW_CATEGORIES && searchBar.isFocused())
+	    		{
+					searchBar.setText("");
+					onSearchBarInteract();
+	
+	    			updateButtonList();
+	    		}
+	    		else if(!justClickedButton && !selectedButtonName.equalsIgnoreCase(""))
+	    		{
+	    			selectedButtonName = "";
+	    			updateButtonList();
+	    		}
+	    	}
+	    	else if(btn.id == ID_ADD)
+	    	{
+	    		if(!justClickedButton)
+	    		{
+	    			if(view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites"))
 	    			{
-	    				showCategory("Favourites");
+	    				HatHandler.removeFromCategory(selectedButtonName, category);
+	    				
+	    				showCategory(category);
+	    			}
+	    			else if(view == VIEW_HATS || view == VIEW_CATEGORY)
+	    			{
+	    				addingToCategory = true;
+	    				
+	    				showCategories();
+	    			}
+	    			else
+	    			{
+			    		if((adding || renaming) && view == VIEW_CATEGORIES && searchBar.isFocused())
+			    		{
+			    			if(adding && addCategory(searchBar.getText().trim()) || renaming && renameCategory(selectedButtonName, searchBar.getText().trim()))
+			    			{
+			    				searchBar.setText("");
+			    				onSearchBarInteract();
+			    				
+			    				updateButtonList();
+			    			}
+			    		}
 	    			}
 	    		}
-	    		else
+	    	}
+	    	else if(btn.id == ID_DELETE)
+	    	{
+	    		if(!justClickedButton && !selectedButtonName.equalsIgnoreCase(""))
 	    		{
-	    			HatHandler.addToCategory(selectedButtonName, "Favourites");
+	    			if(!deleting)
+	    			{
+	    				deleting = true;
+	    			}
+	    			else
+	    			{
+	    				deleting = false;
+	    				
+	    				try
+	    				{
+	    					if(view == VIEW_CATEGORIES)
+	    					{
+		    					File dir = new File(HatHandler.hatsFolder, "/" + selectedButtonName);
+		    					if(dir.exists() && dir.isDirectory())
+		    					{
+		    						File[] files = dir.listFiles();
+		    						for(File file: files)
+		    						{
+		    							File hat = new File(HatHandler.hatsFolder, file.getName());
+		    							if(!hat.isDirectory() && hat.getName().endsWith(".tcn"))
+		    							{
+			    							if(!hat.exists())
+			    							{
+			    								file.renameTo(hat);
+			    							}
+			    							file.delete();
+		    							}
+		    						}
+		    						if(!dir.delete())
+		    						{
+		    							Hats.console("Cannot delete category \"" + selectedButtonName + "\", directory is not empty!", true);
+		    						}
+		    					}
+	    					}
+	    					if(view == VIEW_HATS || view == VIEW_CATEGORY)
+	    					{
+	    						HatHandler.deleteHat(selectedButtonName, isShiftKeyDown());
+	    					}
+	    				}
+	    				catch(Exception e)
+	    				{
+	    					Hats.console("Failed to delete " + (view == VIEW_CATEGORIES ? "category" : "hat") +": " + selectedButtonName, true);
+	    				}
+	    				
+	    				selectedButtonName = "";
+	    				updateButtonList();
+	    				
+	    				reloadHatsAndReopenGUI();
+	    			}
 	    		}
-    		}
-    	}
-    	else if(btn.id >= ID_HAT_START_ID)
-    	{
-    		justClickedButton = true;
-    		if(isShiftKeyDown())
-    		{
-    			updateButtonList();
-    			
-    			selectedButtonName = btn.displayString;
-    			
-    			for(int i = buttonList.size() - 1; i >= 0 ; i--)
-    			{
-    				GuiButton button = (GuiButton)buttonList.get(i);
-    				if(button.id == btn.id)
-    				{
-    					buttonList.remove(button);
-    					break;
-    				}
-    			}
-    			
-    			buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 1, btn.yPosition, 20, 20, ""));
-    			buttonList.add(new GuiButton(ID_FAVOURITE, btn.xPosition + 23, btn.yPosition, 20, 20, ""));
-    			buttonList.add(new GuiButton(ID_DELETE, btn.xPosition + 45, btn.yPosition, 20, 20, ""));
-    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 67, btn.yPosition, 20, 20, ""));
-    		}
-    		else
-    		{
-	    		hat.hatName = btn.displayString.toLowerCase();
-	    		
-	    		colourR = colourG = colourB = 255;
-	    		hat.setR(255);
-	    		hat.setG(255);
-	    		hat.setB(255);
-	    		
-	    		updateButtonList();
-    		}
-    	}
-    	else if(btn.id >= ID_CATEGORIES_START)
-    	{
-    		justClickedButton = true;
-    		if(addingToCategory)
-    		{
-    			HatHandler.addToCategory(selectedButtonName, btn.displayString);
-    			
-    			view = VIEW_COLOURIZER;
-    			category = "";
-    			
-    			toggleHatsColourizer();
-    		}
-    		else
-    		{
-	    		if(btn.displayString.equalsIgnoreCase("Add New"))
+	    	}
+	    	else if(btn.id == ID_RENAME)
+	    	{
+	    		if(!justClickedButton && !selectedButtonName.equalsIgnoreCase(""))
 	    		{
-	    			updateButtonList();
-	
-	    			for(int i = buttonList.size() - 1; i >= 0 ; i--)
+	    			renaming = true;
+	    			
+	    			for(int i = buttonList.size() - 1; i >= 0; i--)
 	    			{
 	    				GuiButton button = (GuiButton)buttonList.get(i);
-	    				if(button.id == btn.id)
+	    				if(button.id == ID_RENAME || button.id == ID_DELETE || button.id == ID_CANCEL)
 	    				{
-	    					buttonList.remove(button);
-	    					break;
+	    					buttonList.remove(i);
 	    				}
 	    			}
 	    			
-	    			buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 16, btn.yPosition, 20, 20, ""));
-	    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 52, btn.yPosition, 20, 20, ""));
-	    			
-	    			adding = true;
-	    			
-	    			searchBar.setText("");
+	    			buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 16 - 7, btn.yPosition, 20, 20, ""));
+	    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 52 - 7, btn.yPosition, 20, 20, ""));
+	
+	    			searchBar.setText(selectedButtonName);
 	    		}
-	    		else if(isShiftKeyDown() && !btn.displayString.equalsIgnoreCase("All Hats"))
+	    	}
+	    	else if(btn.id == ID_FAVOURITE)
+	    	{
+	    		if(!justClickedButton)
+	    		{
+		    		if(!selectedButtonName.equalsIgnoreCase("") && HatHandler.isInFavourites(selectedButtonName))
+		    		{
+		    			HatHandler.removeFromCategory(selectedButtonName, "Favourites");
+		    			
+		    			if(view == VIEW_CATEGORY && category.equalsIgnoreCase("Favourites"))
+		    			{
+		    				showCategory("Favourites");
+		    			}
+		    		}
+		    		else
+		    		{
+		    			HatHandler.addToCategory(selectedButtonName, "Favourites");
+		    		}
+	    		}
+	    	}
+	    	else if(btn.id >= ID_HAT_START_ID)
+	    	{
+	    		justClickedButton = true;
+	    		if(isShiftKeyDown())
 	    		{
 	    			updateButtonList();
 	    			
@@ -743,14 +859,83 @@ public class GuiHatSelection extends GuiScreen
 	    				}
 	    			}
 	    			
-	    			buttonList.add(new GuiButton(ID_RENAME, btn.xPosition + 7, btn.yPosition, 20, 20, ""));
-	    			buttonList.add(new GuiButton(ID_DELETE, btn.xPosition + 34, btn.yPosition, 20, 20, ""));
-	    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 61, btn.yPosition, 20, 20, ""));
+	    			buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 1, btn.yPosition, 20, 20, ""));
+	    			buttonList.add(new GuiButton(ID_FAVOURITE, btn.xPosition + 23, btn.yPosition, 20, 20, ""));
+	    			buttonList.add(new GuiButton(ID_DELETE, btn.xPosition + 45, btn.yPosition, 20, 20, ""));
+	    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 67, btn.yPosition, 20, 20, ""));
 	    		}
 	    		else
 	    		{
-	    			showCategory(btn.displayString);
+		    		hat.hatName = btn.displayString.toLowerCase();
+		    		
+		    		colourR = colourG = colourB = 255;
+		    		hat.setR(255);
+		    		hat.setG(255);
+		    		hat.setB(255);
+		    		
+		    		updateButtonList();
 	    		}
+	    	}
+	    	else if(btn.id >= ID_CATEGORIES_START)
+	    	{
+	    		justClickedButton = true;
+	    		if(addingToCategory)
+	    		{
+	    			HatHandler.addToCategory(selectedButtonName, btn.displayString);
+	    			
+	    			view = VIEW_COLOURIZER;
+	    			category = "";
+	    			
+	    			toggleHatsColourizer();
+	    		}
+	    		else
+	    		{
+		    		if(btn.displayString.equalsIgnoreCase("Add New"))
+		    		{
+		    			updateButtonList();
+		
+		    			for(int i = buttonList.size() - 1; i >= 0 ; i--)
+		    			{
+		    				GuiButton button = (GuiButton)buttonList.get(i);
+		    				if(button.id == btn.id)
+		    				{
+		    					buttonList.remove(button);
+		    					break;
+		    				}
+		    			}
+		    			
+		    			buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 16, btn.yPosition, 20, 20, ""));
+		    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 52, btn.yPosition, 20, 20, ""));
+		    			
+		    			adding = true;
+		    			
+		    			searchBar.setText("");
+		    		}
+		    		else if(isShiftKeyDown() && !btn.displayString.equalsIgnoreCase("All Hats"))
+		    		{
+		    			updateButtonList();
+		    			
+		    			selectedButtonName = btn.displayString;
+		    			
+		    			for(int i = buttonList.size() - 1; i >= 0 ; i--)
+		    			{
+		    				GuiButton button = (GuiButton)buttonList.get(i);
+		    				if(button.id == btn.id)
+		    				{
+		    					buttonList.remove(button);
+		    					break;
+		    				}
+		    			}
+		    			
+		    			buttonList.add(new GuiButton(ID_RENAME, btn.xPosition + 7, btn.yPosition, 20, 20, ""));
+		    			buttonList.add(new GuiButton(ID_DELETE, btn.xPosition + 34, btn.yPosition, 20, 20, ""));
+		    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 61, btn.yPosition, 20, 20, ""));
+		    		}
+		    		else
+		    		{
+		    			showCategory(btn.displayString);
+		    		}
+		    	}
 	    	}
     	}
     }
@@ -839,7 +1024,7 @@ public class GuiHatSelection extends GuiScreen
             }
             else if(btn.id == ID_PAGE_LEFT)
             {
-	            if(pageNumber == 0 || view == VIEW_COLOURIZER)
+	            if(pageNumber == 0 || view == VIEW_COLOURIZER || personalizing)
 	            {
 	            	btn.enabled = false;
 	            }
@@ -850,7 +1035,7 @@ public class GuiHatSelection extends GuiScreen
             }
             else if(btn.id == ID_PAGE_RIGHT)
             {
-        		if((pageNumber + 1) * 6 >= hatsToShow.size() || view == VIEW_COLOURIZER)
+        		if((pageNumber + 1) * 6 >= hatsToShow.size() || view == VIEW_COLOURIZER || personalizing)
         		{
         			btn.enabled = false;
         		}
@@ -905,53 +1090,61 @@ public class GuiHatSelection extends GuiScreen
             }
         }
         
-    	if(view == VIEW_HATS || view == VIEW_CATEGORIES || view == VIEW_CATEGORY)
-    	{
-	    	int button = 0;
-	
-	        for(int i = pageNumber * 6; i < hatsToShow.size() && i < (pageNumber + 1) * 6; i++)
-	        {
-	        	GuiButton btn;
-	        	String hatName = (String)hatsToShow.get(i);
-	        	
-	        	btn = new GuiButton((view == VIEW_HATS || view == VIEW_CATEGORY ? ID_HAT_START_ID + i : ID_CATEGORIES_START + i), width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
-	        	
-	        	if((view == VIEW_HATS || view == VIEW_CATEGORY) && hatName.toLowerCase().equalsIgnoreCase(hat.hatName))
-	        	{
-	        		btn.enabled = false;
-	        	}
-	        
-	        	buttonList.add(btn);
-	        	
-	        	button++;
-	        	if(button == 6)
-	        	{
-	        		button = 0;
-	        		break;
-	        	}
-	        }
-	        
-	        int pageCount = (int)Math.ceil((float)hatsToShow.size() / 6F);
-	        if(pageCount <= 0)
-	        {
-	        	pageCount = 1;
-	        }
-	        currentDisplay = (view == VIEW_HATS ? "All Hats" : view == VIEW_CATEGORY ? "Category - " + category : "Categories") + " (" + (pageNumber + 1) + "/" + (pageCount) + ")";
-    	}
-    	else if(view == VIEW_COLOURIZER)
-    	{
-    		int button = 0;
-    		
-    		for(int i = 0; i < 3; i++)
-    		{
-    			GuiButton btn = new GuiSlider(5 + i, width / 2 - 6, height / 2 - 78 + (22 * button), i == 0 ? "Red: " : i == 1 ? "Green: " : "Blue: ", 0, 255, i == 0 ? colourR : i == 1 ? colourG : colourB, this);
-    			buttonList.add(btn);
-    			
-    			button++;
-    		}
-    		
-    		currentDisplay = "Colourizer";
-    	}
+        if(!personalizing)
+        {
+	    	if(view == VIEW_HATS || view == VIEW_CATEGORIES || view == VIEW_CATEGORY)
+	    	{
+		    	int button = 0;
+		
+		        for(int i = pageNumber * 6; i < hatsToShow.size() && i < (pageNumber + 1) * 6; i++)
+		        {
+		        	GuiButton btn;
+		        	String hatName = (String)hatsToShow.get(i);
+		        	
+		        	btn = new GuiButton((view == VIEW_HATS || view == VIEW_CATEGORY ? ID_HAT_START_ID + i : ID_CATEGORIES_START + i), width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
+		        	
+		        	if((view == VIEW_HATS || view == VIEW_CATEGORY) && hatName.toLowerCase().equalsIgnoreCase(hat.hatName))
+		        	{
+		        		btn.enabled = false;
+		        	}
+		        
+		        	buttonList.add(btn);
+		        	
+		        	button++;
+		        	if(button == 6)
+		        	{
+		        		button = 0;
+		        		break;
+		        	}
+		        }
+		        
+		        int pageCount = (int)Math.ceil((float)hatsToShow.size() / 6F);
+		        if(pageCount <= 0)
+		        {
+		        	pageCount = 1;
+		        }
+		        currentDisplay = (view == VIEW_HATS ? "All Hats" : view == VIEW_CATEGORY ? "Category - " + category : "Categories") + " (" + (pageNumber + 1) + "/" + (pageCount) + ")";
+	    	}
+	    	else if(view == VIEW_COLOURIZER)
+	    	{
+	    		int button = 0;
+	    		
+	    		for(int i = 0; i < 3; i++)
+	    		{
+	    			GuiButton btn = new GuiSlider(5 + i, width / 2 - 6, height / 2 - 78 + (22 * button), i == 0 ? "Red: " : i == 1 ? "Green: " : "Blue: ", 0, 255, i == 0 ? colourR : i == 1 ? colourG : colourB, this);
+	    			buttonList.add(btn);
+	    			
+	    			button++;
+	    		}
+	    		
+	    		currentDisplay = "Colourizer";
+	    	}
+        }
+        else
+        {
+        	buttonList.add(new GuiButton(ID_SET_KEY, width / 2 - 6, height / 2 - 78, 88, 20, "GUI: " + (Hats.guiKeyBind < 0 ? Mouse.getButtonName(Hats.guiKeyBind + 100) : Keyboard.getKeyName(Hats.guiKeyBind))));
+        	currentDisplay = "Personalize";
+        }
     }
     
     public void removeHat()
@@ -1116,55 +1309,58 @@ public class GuiHatSelection extends GuiScreen
     
     public void randomize()
     {
-		if(view == VIEW_HATS || view == VIEW_CATEGORY)
-		{
-			int randVal = rand.nextInt(hatsToShow.size());
-        	String hatName = (String)hatsToShow.get(randVal);
-        	
-        	hat.hatName = hatName.toLowerCase();
-        	
-    		colourR = colourG = colourB = 255;
-    		hat.setR(255);
-    		hat.setG(255);
-    		hat.setB(255);
-        	
-    		pageNumber = randVal / 6;
-    		
-    		if(isShiftKeyDown())
-    		{
-    			view = VIEW_COLOURIZER;
-    			
-    			updateButtonList();
-    			
-    			randomizeColour();
-    			
-    			view = VIEW_HATS;
-    		}
-    		
-    		updateButtonList();
-		}
-		else if(view == VIEW_COLOURIZER)
-		{
-			if(isShiftKeyDown())
+    	if(hatsToShow.size() > 0)
+    	{
+			if(view == VIEW_HATS || view == VIEW_CATEGORY)
 			{
+				int randVal = rand.nextInt(hatsToShow.size());
+	        	String hatName = (String)hatsToShow.get(randVal);
+	        	
+	        	hat.hatName = hatName.toLowerCase();
+	        	
 	    		colourR = colourG = colourB = 255;
 	    		hat.setR(255);
 	    		hat.setG(255);
 	    		hat.setB(255);
-
+	        	
+	    		pageNumber = randVal / 6;
+	    		
+	    		if(isShiftKeyDown())
+	    		{
+	    			view = VIEW_COLOURIZER;
+	    			
+	    			updateButtonList();
+	    			
+	    			randomizeColour();
+	    			
+	    			view = VIEW_HATS;
+	    		}
+	    		
 	    		updateButtonList();
 			}
-			else
+			else if(view == VIEW_COLOURIZER)
 			{
-				randomizeColour();
+				if(isShiftKeyDown())
+				{
+		    		colourR = colourG = colourB = 255;
+		    		hat.setR(255);
+		    		hat.setG(255);
+		    		hat.setB(255);
+	
+		    		updateButtonList();
+				}
+				else
+				{
+					randomizeColour();
+				}
 			}
-		}
-		else if(view == VIEW_CATEGORIES)
-		{
-			int randVal = rand.nextInt(hatsToShow.size());
-			String categoryName = (String)hatsToShow.get(randVal);
-			showCategory(categoryName);
-		}
+			else if(view == VIEW_CATEGORIES)
+			{
+				int randVal = rand.nextInt(hatsToShow.size());
+				String categoryName = (String)hatsToShow.get(randVal);
+				showCategory(categoryName);
+			}
+    	}
     }
     
     public void randomizeColour()
@@ -1212,6 +1408,131 @@ public class GuiHatSelection extends GuiScreen
 	    	updateButtonList();
     	}
     }
+    
+    public void personalize()
+    {
+		showCategory("All Hats");
+
+    	if(!personalizing)
+    	{
+    		personalizing = true;
+    		
+    		for(int i = buttonList.size() - 1; i >= 0 ; i--)
+    		{
+    			GuiButton btn = (GuiButton)buttonList.get(i);
+    			
+    			if(btn.id >= ID_NONE && btn.id <= ID_HELP)
+    			{
+    				btn.drawButton = true;
+    			}
+    			if(btn.id == ID_SEARCH)
+    			{
+    				buttonList.remove(i);
+    			}
+    		}
+    		
+    		if(!enabledSearchBar)
+    		{
+				GuiButton btn = new GuiButton(ID_SEARCH, width - 24, height / 2 - 93 + (8 * 21), 20, 20, "");
+				buttonList.add(btn);
+    		}
+    		updateButtonList();
+    	}
+    	else
+    	{
+    		personalizing = false;
+    		
+    		for(int i = buttonList.size() - 1; i >= 0 ; i--)
+    		{
+    			GuiButton btn = (GuiButton)buttonList.get(i);
+    			
+    			if(btn.id >= ID_NONE && btn.id <= ID_HELP)
+    			{
+    				if(!enabledButtons.contains(Integer.toString(btn.id - (ID_NONE - 1))))
+    				{
+    					btn.drawButton = false;
+    				}
+    			}
+    			if(btn.id == ID_SET_KEY || btn.id == ID_SEARCH)
+    			{
+    				buttonList.remove(i);
+    			}
+    		}
+    		
+    		StringBuilder sb = new StringBuilder();
+    		for(int i = 0; i < enabledButtons.size(); i++)
+    		{
+    			sb.append(enabledButtons.get(i));
+    			sb.append(" ");
+    		}
+    		if(enabledSearchBar)
+    		{
+    			sb.append("9");
+    		}
+    		
+    		Hats.enabled = sb.toString().trim();
+    		
+    		Hats.handleConfig();
+    		
+    		updateButtonList();
+    	}
+    }
+    
+    public void toggleSearchBar()
+    {
+    	if(enabledSearchBar)
+    	{
+    		enabledSearchBar = false;
+    		searchBar.setVisible(false);
+    		
+			GuiButton btn = new GuiButton(ID_SEARCH, width - 24, height / 2 - 93 + (8 * 21), 20, 20, "");
+			buttonList.add(btn);
+    	}
+    	else
+    	{
+    		enabledSearchBar = true;
+    		searchBar.setVisible(true);
+    	}
+    }
+    
+    public void toggleVisibility(GuiButton btn)
+    {
+    	if(btn.id == ID_SEARCH)
+    	{
+    		toggleSearchBar();
+    	}
+    	else if(enabledButtons.contains(Integer.toString(btn.id - (ID_NONE - 1))))
+    	{
+    		enabledButtons.remove(Integer.toString(btn.id - (ID_NONE - 1)));
+    		btn.xPosition = width - 24;
+    		btn.yPosition = height / 2 - 93 + ((btn.id - ID_NONE) * 21);
+    		for(int i = 0; i < buttonList.size(); i++)
+    		{
+    			GuiButton btn1 = (GuiButton)buttonList.get(i);
+    			if(enabledButtons.contains(Integer.toString(btn1.id - (ID_NONE - 1))))
+    			{
+    				for(int i1 = 0; i1 < enabledButtons.size(); i1++)
+    				{
+    					if(Integer.toString(btn1.id - (ID_NONE - 1)).equalsIgnoreCase(enabledButtons.get(i1)))
+    					{
+		    				btn1.xPosition = width / 2 + 89;
+		    				btn1.yPosition = height / 2 - 85 + (i1 * 21);
+		    				break;
+    					}
+    				}
+    			}
+    		}
+    	}
+    	else
+    	{
+    		if(!enabledButtons.contains(Integer.toString(btn.id - (ID_NONE - 1))))
+    		{
+    			enabledButtons.add(Integer.toString(btn.id - (ID_NONE - 1)));
+    			btn.xPosition = width / 2 + 89;
+    			btn.yPosition = height / 2 - 85 + ((enabledButtons.size() - 1) * 21);
+    		}
+    	}
+    }
 
     @Override
     public void drawScreen(int par1, int par2, float par3)
@@ -1223,6 +1544,17 @@ public class GuiHatSelection extends GuiScreen
         int k = this.guiLeft;
         int l = this.guiTop;
         this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
+        
+        this.mc.renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
+
+        if(personalizing)
+        {
+        	for(int l1 = 0; l1 < 8; l1++)
+        	{
+        		this.drawTexturedModalRect(k + 176, l - 1 + (l1 * 21), 190, 16, 22, 22);
+        	}
+        	this.drawTexturedModalRect(k - 1, height - 29, 0, 16, 190, 29);
+        }
         
         for (int k1 = 0; k1 < this.buttonList.size(); ++k1)
         {
@@ -1250,72 +1582,80 @@ public class GuiHatSelection extends GuiScreen
             	btn.displayString = disp;
             }
             
-            if(btn.id == ID_HAT_COLOUR_SWAP || btn.id == ID_NONE || btn.id == ID_RANDOM || btn.id == ID_HELP || btn.id == ID_RELOAD_HATS || btn.id == ID_FAVOURITES || btn.id == ID_CATEGORIES || btn.id == ID_PERSONALIZE || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE || btn.id == ID_FAVOURITE)
+            if(btn.id == ID_HAT_COLOUR_SWAP || btn.id == ID_NONE || btn.id == ID_RANDOM || btn.id == ID_HELP || btn.id == ID_RELOAD_HATS || btn.id == ID_FAVOURITES || btn.id == ID_CATEGORIES || btn.id == ID_PERSONALIZE || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE || btn.id == ID_FAVOURITE || btn.id == ID_SEARCH)
             {
             	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	            GL11.glEnable(GL11.GL_BLEND);
 	            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	            
+	            this.mc.renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
 
-            	Minecraft.getMinecraft().renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
-            	if(btn.id == ID_HAT_COLOUR_SWAP)
-            	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, (view == VIEW_HATS || view == VIEW_CATEGORY ? 16 : 0), 0, 16, 16);
-            	}
-            	else if(btn.id == ID_NONE || btn.id == ID_CANCEL)
-            	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 32, 0, 16, 16);
-            	}
-            	else if(btn.id == ID_RANDOM)
-            	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 80, 0, 16, 16);
-            	}
-            	else if(btn.id == ID_HELP)
-            	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 96, 0, 16, 16);
-            	}
-            	else if(btn.id == ID_RELOAD_HATS)
-            	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 48, 0, 16, 16);
-            	}
-            	else if(btn.id == ID_FAVOURITES)
-            	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 64, 0, 16, 16);
-            	}
-            	else if(btn.id == ID_CATEGORIES)
-            	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 112, 0, 16, 16);
-            	}
-            	else if(btn.id == ID_PERSONALIZE)
-            	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 176, 0, 16, 16);
-            	}
-            	else if(btn.id == ID_ADD)
-            	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") ? 224 : 160, 0, 16, 16);
-            	}
-            	else if(btn.id == ID_RENAME)
-            	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 192, 0, 16, 16);
-            	}
-            	else if(btn.id == ID_DELETE)
-            	{
-            		if((view == VIEW_CATEGORY || view == VIEW_HATS) && isShiftKeyDown())
-            		{
-            			drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 208, 0, 16, 16);
-            		}
-            		else
-            		{
-            			drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 144, 0, 16, 16);
-            		}
-            	}
-            	else if(btn.id == ID_FAVOURITE)
-            	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 64, 0, 16, 16);
-	            	if(!selectedButtonName.equalsIgnoreCase("") && HatHandler.isInFavourites(selectedButtonName))
+	            if(btn.drawButton)
+	            {
+	            	if(btn.id == ID_HAT_COLOUR_SWAP)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, (view == VIEW_HATS || view == VIEW_CATEGORY ? 16 : 0), 0, 16, 16);
+	            	}
+	            	else if(btn.id == ID_NONE || btn.id == ID_CANCEL)
 	            	{
 	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 32, 0, 16, 16);
 	            	}
-            	}
+	            	else if(btn.id == ID_RANDOM)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 80, 0, 16, 16);
+	            	}
+	            	else if(btn.id == ID_HELP)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 96, 0, 16, 16);
+	            	}
+	            	else if(btn.id == ID_RELOAD_HATS)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 48, 0, 16, 16);
+	            	}
+	            	else if(btn.id == ID_FAVOURITES)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2 - (favourite > 3 ? 6 - favourite : favourite), 64, 0, 16, 16);
+	            	}
+	            	else if(btn.id == ID_CATEGORIES)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 112, 0, 16, 16);
+	            	}
+	            	else if(btn.id == ID_PERSONALIZE)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 176, 0, 16, 16);
+	            	}
+	            	else if(btn.id == ID_ADD)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") ? 224 : 160, 0, 16, 16);
+	            	}
+	            	else if(btn.id == ID_RENAME)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 192, 0, 16, 16);
+	            	}
+	            	else if(btn.id == ID_DELETE)
+	            	{
+	            		if((view == VIEW_CATEGORY || view == VIEW_HATS) && isShiftKeyDown())
+	            		{
+	            			drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 208, 0, 16, 16);
+	            		}
+	            		else
+	            		{
+	            			drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 144, 0, 16, 16);
+	            		}
+	            	}
+	            	else if(btn.id == ID_FAVOURITE)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 64, 0, 16, 16);
+		            	if(!selectedButtonName.equalsIgnoreCase("") && HatHandler.isInFavourites(selectedButtonName))
+		            	{
+		            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 32, 0, 16, 16);
+		            	}
+	            	}
+	            	else if(btn.id == ID_SEARCH)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 128, 0, 16, 16);
+	            	}
+	            }
 
             	GL11.glDisable(GL11.GL_BLEND);
             }
@@ -1338,7 +1678,7 @@ public class GuiHatSelection extends GuiScreen
         for (int k1 = 0; k1 < this.buttonList.size(); ++k1)
         {
             GuiButton btn = (GuiButton)this.buttonList.get(k1);
-            if(btn.func_82252_a())
+            if(btn.func_82252_a() && !personalizing)
             {
 	            if(btn.id >= ID_CATEGORIES_START && btn.displayString.length() > 16)
 	            {
@@ -1366,7 +1706,7 @@ public class GuiHatSelection extends GuiScreen
 	            }
 	            else if(btn.id == ID_RELOAD_HATS)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Reload all hats?"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {"Reload all hats?", "This will discard all changes."}), par1, par2);
 	            }
 	            else if(btn.id == ID_FAVOURITES)
 	            {
@@ -1564,20 +1904,23 @@ public class GuiHatSelection extends GuiScreen
     
     public void drawSearchBar()
     {
-    	searchBar.drawTextBox();
-    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-    	Minecraft.getMinecraft().renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
-    	
-    	drawTexturedModalRect(this.width / 2 - 85, height - 22, (adding || renaming) ? 112 : 128, 0, 16, 16);
-    	
-    	GL11.glDisable(GL11.GL_BLEND);
-    	
-    	if((adding || renaming) && searchBar.getText().equalsIgnoreCase(""))
+    	if(searchBar.getVisible())
     	{
-    		fontRenderer.drawString("Category Name?", this.width / 2 - 61, height - 18, 0xAAAAAA);
+	    	searchBar.drawTextBox();
+	    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	        GL11.glEnable(GL11.GL_BLEND);
+	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	
+	    	Minecraft.getMinecraft().renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
+	    	
+	    	drawTexturedModalRect(this.width / 2 - 85, height - 22, (adding || renaming) ? 112 : 128, 0, 16, 16);
+	    	
+	    	GL11.glDisable(GL11.GL_BLEND);
+	    	
+	    	if((adding || renaming) && searchBar.getText().equalsIgnoreCase(""))
+	    	{
+	    		fontRenderer.drawString("Category Name?", this.width / 2 - 61, height - 18, 0xAAAAAA);
+	    	}
     	}
     }
 
@@ -1605,7 +1948,7 @@ public class GuiHatSelection extends GuiScreen
 	
 	private static int helpPage = 0;
 	private static final ArrayList<String[]> help = new ArrayList<String[]>();
-	private static final String[] helpInfo1 = new String[] {"Shift click on the Hat", "button for more options!"};
+	private static final String[] helpInfo1 = new String[] {"Shift click on the Hat", "button for more options!", "You can't shift click on", "the hat you're wearing", "however."};
 	private static final String[] helpInfo2 = new String[] {"If you're on a server that doesn't have", "the mod, another player with the", "mod won't be able to see your hat."};
 	private static final String[] helpInfo3 = new String[] {"Did you know you can always get more hats?", "Techne Online has a bunch of", "community made hats that you", "can download and install."};
 	private static final String[] helpInfo4 = new String[] {"You can also make your own hat!", "You need Techne and you make a hat with it.", "A \"head\" model is placed in the middle", "of the wood block. It's size is", "8 x 8 x 8. Make your hat on it!"};
@@ -1619,6 +1962,8 @@ public class GuiHatSelection extends GuiScreen
 	private static final String[] helpInfo12 = new String[] {"Did you know you can make your own categories?", "Hit the Categories button (or C, on your keyboard)", "and hit the \"Add New\" button."};
 	private static final String[] helpInfo13 = new String[] {"You can right click the Search bar", "to clear it."};
 	private static final String[] helpInfo14 = new String[] {"You can disable hats rather than deleting", "them. Just hold shift when deleting."};
+	private static final String[] helpInfo15 = new String[] {"Hitting Shift-F will favourite", "or unfavourite the hat you", "are currently wearing."};
+	private static final String[] helpInfo16 = new String[] {"The hot key for \"Personalize\" is", "\"P\", in case you accidentally", "disabled the button."};
 	
 	static
 	{
@@ -1636,6 +1981,8 @@ public class GuiHatSelection extends GuiScreen
 		help.add(helpInfo12);
 		help.add(helpInfo13);
 		help.add(helpInfo14);
+		help.add(helpInfo15);
+		help.add(helpInfo16);
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());

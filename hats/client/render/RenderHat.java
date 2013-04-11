@@ -46,7 +46,7 @@ public class RenderHat extends Render
 			        GL11.glTranslatef((float)par2, (float)par4 + (Minecraft.getMinecraft().renderViewEntity != hat.player ? -0.06F : 0.0F ) + (hat.player != null && hat.player.isSneaking() ? Minecraft.getMinecraft().renderViewEntity != hat.player ? -0.17F : -0.05F : 0.015F), (float)par6);
 			        GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 			        
-			        GL11.glRotatef(hat.rotationPitch, -1.0F, 0.0F, 0.0F);
+			        GL11.glRotatef(hat.player.prevRotationPitch + (hat.player.rotationPitch - hat.player.prevRotationPitch) * par9, -1.0F, 0.0F, 0.0F);
 			        
 			        if(hat.reColour > 0)
 			        {
