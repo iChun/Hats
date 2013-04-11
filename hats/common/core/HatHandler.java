@@ -10,6 +10,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -49,6 +51,10 @@ public class HatHandler
 			if(!category)
 			{
 				Hats.console("Rejecting " + file.getName() + "! Identical to " + HatHandler.checksums.get(md5).getName(), true);
+			}
+			else
+			{
+				return false;
 			}
 			return true;
 		}
@@ -145,7 +151,7 @@ public class HatHandler
 							}
 						}
 					}
-					if(!file.isDirectory() && HatHandler.readHatFromFile(file, true))
+					if(!file.isDirectory() && HatHandler.readHatFromFile(file, true) && !dir.getName().equalsIgnoreCase("Favourites"))
 					{
 						hatCount++;	
 					}
@@ -155,6 +161,162 @@ public class HatHandler
 			categories.put(dir.getName(), categoryHats);
 		}
 		return hatCount;
+	}
+	
+	public static void deleteHat(String hatName, boolean disable)
+	{
+		deleteHat(hatsFolder, hatName, disable);
+	}
+	
+	public static void deleteHat(File dir, String hatName, boolean disable)
+	{
+		File[] files = dir.listFiles();
+		for(File file : files)
+		{
+			if(!file.isDirectory() && file.getName().equalsIgnoreCase(hatName + ".tcn"))
+			{
+				if(disable)
+				{
+					File disabledDir = new File(dir, "/Disabled");
+					if(!disabledDir.exists())
+					{
+						disabledDir.mkdirs();
+					}
+					File disabledName = new File(disabledDir, hatName + ".tcn");
+					if(disabledName.exists())
+					{
+						disabledName.delete();
+					}
+					if(!file.renameTo(disabledName))
+					{
+						Hats.console("Failed to disable hat: " + file.getName());
+					}
+				}
+				else
+				{
+					if(!file.delete())
+					{
+						Hats.console("Failed to delete hat: " + file.getName());
+					}
+				}
+				break;
+			}
+		}
+		files = dir.listFiles();
+		for(File file : files)
+		{
+			if(file.isDirectory() && !file.getName().equalsIgnoreCase("Disabled"))
+			{
+				deleteHat(file, hatName, disable);
+			}
+		}
+	}
+	
+	public static boolean isInFavourites(String hatName)
+	{
+		return isInCategory(hatName, "Favourites");
+	}
+	
+	public static boolean isInCategory(String hatName, String category)
+	{
+		ArrayList<String> favs = categories.get(category);
+		if(favs != null)
+		{
+			for(String s : favs)
+			{
+				if(s.equalsIgnoreCase(hatName))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public static void addToCategory(String hatName, String category)
+	{
+		ArrayList<String> favs = categories.get(category);
+		if(favs != null)
+		{
+			boolean contained = false;
+			for(int i = favs.size() - 1; i >= 0; i--)
+			{
+				String fav = favs.get(i);
+				if(fav.equalsIgnoreCase(hatName))
+				{
+					contained = true;
+					break;
+				}
+			}
+			if(!contained)
+			{
+				for(Map.Entry<File, String> e : hatNames.entrySet())
+				{
+					if(hatName.toLowerCase().equalsIgnoreCase(e.getValue()))
+					{
+						File favFile = new File(hatsFolder, "/" + category + "/" + hatName + ".tcn");
+						
+				    	InputStream inStream = null;
+				    	OutputStream outStream = null;
+	
+				    	try
+				    	{
+				    		inStream = new FileInputStream(e.getKey());
+				    		outStream = new FileOutputStream(favFile);
+				    		
+				    		byte[] buffer = new byte[1024];
+				    		
+				    		int length;
+				    		
+				    		while ((length = inStream.read(buffer)) > 0)
+				    		{
+				    	    	outStream.write(buffer, 0, length);
+				    	    }
+				    	}
+				    	catch(Exception e1){}
+				    	
+				    	try
+				    	{
+					    	if(inStream != null)
+					    	{
+					    		inStream.close();
+					    	}
+				    	}
+				    	catch(IOException e1){}
+				    	try
+				    	{
+				    		if(outStream != null)
+				    		{
+				    			outStream.close();
+				    		}
+				    	}
+				    	catch(IOException e1){}
+	
+						favs.add(hatName);
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	public static void removeFromCategory(String hatName, String category)
+	{
+		ArrayList<String> favs = categories.get(category);
+		if(favs != null)
+		{
+			for(int i = favs.size() - 1; i >= 0; i--)
+			{
+				String fav = favs.get(i);
+				if(fav.equalsIgnoreCase(hatName))
+				{
+					File favFile = new File(hatsFolder, "/" + category +"/" + hatName + ".tcn");
+					favFile.delete();
+					favs.remove(i);
+					break;
+				}
+			}
+		}
 	}
 	
 	public static void requestHat(String name, EntityPlayer player)

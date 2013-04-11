@@ -59,6 +59,7 @@ public class GuiHatSelection extends GuiScreen
 	private final int ID_CANCEL = 17;
 	private final int ID_RENAME = 18;
 	private final int ID_DELETE = 19;
+	private final int ID_FAVOURITE = 20;
 	
 	private final int ID_CATEGORIES_START = 30;
 	
@@ -80,6 +81,8 @@ public class GuiHatSelection extends GuiScreen
 	private boolean deleting = false;
 	private boolean justClickedButton = false;
 	private boolean renaming = false;
+	private boolean addingToCategory = false;
+	private boolean personalizing = false;
 	
 	public EntityPlayer player;
 	public EntityHat hat;
@@ -256,6 +259,11 @@ public class GuiHatSelection extends GuiScreen
 	        {
 	        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
 	        	showCategories();
+	        }
+	        else if(i == Keyboard.KEY_F)
+	        {
+	        	this.mc.sndManager.playSoundFX("random.click", 1.0F, 1.0F);
+	        	showCategory("Favourites");
 	        }
 	        if(view == VIEW_HATS)
 	        {
@@ -499,6 +507,10 @@ public class GuiHatSelection extends GuiScreen
     			helpPage = 0;
     		}
     	}
+    	else if(btn.id == ID_FAVOURITES)
+    	{
+    		showCategory("Favourites");
+    	}
     	else if(btn.id == ID_CATEGORIES)
     	{
     		showCategories();
@@ -520,14 +532,32 @@ public class GuiHatSelection extends GuiScreen
     	}
     	else if(btn.id == ID_ADD)
     	{
-    		if((adding || renaming) && view == VIEW_CATEGORIES && searchBar.isFocused())
+    		if(!justClickedButton)
     		{
-    			if(adding && addCategory(searchBar.getText().trim()) || renaming && renameCategory(selectedButtonName, searchBar.getText().trim()))
+    			if(view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites"))
     			{
-    				searchBar.setText("");
-    				onSearchBarInteract();
+    				HatHandler.removeFromCategory(selectedButtonName, category);
     				
-    				updateButtonList();
+    				showCategory(category);
+    			}
+    			else if(view == VIEW_HATS || view == VIEW_CATEGORY)
+    			{
+    				addingToCategory = true;
+    				
+    				showCategories();
+    			}
+    			else
+    			{
+		    		if((adding || renaming) && view == VIEW_CATEGORIES && searchBar.isFocused())
+		    		{
+		    			if(adding && addCategory(searchBar.getText().trim()) || renaming && renameCategory(selectedButtonName, searchBar.getText().trim()))
+		    			{
+		    				searchBar.setText("");
+		    				onSearchBarInteract();
+		    				
+		    				updateButtonList();
+		    			}
+		    		}
     			}
     		}
     	}
@@ -569,10 +599,14 @@ public class GuiHatSelection extends GuiScreen
 	    						}
 	    					}
     					}
+    					if(view == VIEW_HATS || view == VIEW_CATEGORY)
+    					{
+    						HatHandler.deleteHat(selectedButtonName, isShiftKeyDown());
+    					}
     				}
     				catch(Exception e)
     				{
-    					Hats.console("Failed to delete category: " + selectedButtonName, true);
+    					Hats.console("Failed to delete " + (view == VIEW_CATEGORIES ? "category" : "hat") +": " + selectedButtonName, true);
     				}
     				
     				selectedButtonName = "";
@@ -603,46 +637,121 @@ public class GuiHatSelection extends GuiScreen
     			searchBar.setText(selectedButtonName);
     		}
     	}
+    	else if(btn.id == ID_FAVOURITE)
+    	{
+    		if(!justClickedButton)
+    		{
+	    		if(!selectedButtonName.equalsIgnoreCase("") && HatHandler.isInFavourites(selectedButtonName))
+	    		{
+	    			HatHandler.removeFromCategory(selectedButtonName, "Favourites");
+	    			
+	    			if(view == VIEW_CATEGORY && category.equalsIgnoreCase("Favourites"))
+	    			{
+	    				showCategory("Favourites");
+	    			}
+	    		}
+	    		else
+	    		{
+	    			HatHandler.addToCategory(selectedButtonName, "Favourites");
+	    		}
+    		}
+    	}
     	else if(btn.id >= ID_HAT_START_ID)
     	{
     		justClickedButton = true;
-    		hat.hatName = btn.displayString.toLowerCase();
-    		
-    		colourR = colourG = colourB = 255;
-    		hat.setR(255);
-    		hat.setG(255);
-    		hat.setB(255);
-    		
-    		updateButtonList();
+    		if(isShiftKeyDown())
+    		{
+    			updateButtonList();
+    			
+    			selectedButtonName = btn.displayString;
+    			
+    			for(int i = buttonList.size() - 1; i >= 0 ; i--)
+    			{
+    				GuiButton button = (GuiButton)buttonList.get(i);
+    				if(button.id == btn.id)
+    				{
+    					buttonList.remove(button);
+    					break;
+    				}
+    			}
+    			
+    			buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 1, btn.yPosition, 20, 20, ""));
+    			buttonList.add(new GuiButton(ID_FAVOURITE, btn.xPosition + 23, btn.yPosition, 20, 20, ""));
+    			buttonList.add(new GuiButton(ID_DELETE, btn.xPosition + 45, btn.yPosition, 20, 20, ""));
+    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 67, btn.yPosition, 20, 20, ""));
+    		}
+    		else
+    		{
+	    		hat.hatName = btn.displayString.toLowerCase();
+	    		
+	    		colourR = colourG = colourB = 255;
+	    		hat.setR(255);
+	    		hat.setG(255);
+	    		hat.setB(255);
+	    		
+	    		updateButtonList();
+    		}
     	}
     	else if(btn.id >= ID_CATEGORIES_START)
     	{
     		justClickedButton = true;
-    		if(btn.displayString.equalsIgnoreCase("Add New"))
+    		if(addingToCategory)
     		{
-    			buttonList.remove(btn); //length = 88 - 60 = 28 / 4 = 7
+    			HatHandler.addToCategory(selectedButtonName, btn.displayString);
     			
-    			buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 16, btn.yPosition, 20, 20, ""));
-    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 52, btn.yPosition, 20, 20, ""));
+    			view = VIEW_COLOURIZER;
+    			category = "";
     			
-    			adding = true;
-    			
-    			searchBar.setText("");
-    		}
-    		else if(isShiftKeyDown())
-    		{
-    			selectedButtonName = btn.displayString;
-    			
-    			buttonList.remove(btn);
-    			
-    			buttonList.add(new GuiButton(ID_RENAME, btn.xPosition + 7, btn.yPosition, 20, 20, ""));
-    			buttonList.add(new GuiButton(ID_DELETE, btn.xPosition + 34, btn.yPosition, 20, 20, ""));
-    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 61, btn.yPosition, 20, 20, ""));
+    			toggleHatsColourizer();
     		}
     		else
     		{
-    			showCategory(btn.displayString);
-    		}
+	    		if(btn.displayString.equalsIgnoreCase("Add New"))
+	    		{
+	    			updateButtonList();
+	
+	    			for(int i = buttonList.size() - 1; i >= 0 ; i--)
+	    			{
+	    				GuiButton button = (GuiButton)buttonList.get(i);
+	    				if(button.id == btn.id)
+	    				{
+	    					buttonList.remove(button);
+	    					break;
+	    				}
+	    			}
+	    			
+	    			buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 16, btn.yPosition, 20, 20, ""));
+	    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 52, btn.yPosition, 20, 20, ""));
+	    			
+	    			adding = true;
+	    			
+	    			searchBar.setText("");
+	    		}
+	    		else if(isShiftKeyDown() && !btn.displayString.equalsIgnoreCase("All Hats"))
+	    		{
+	    			updateButtonList();
+	    			
+	    			selectedButtonName = btn.displayString;
+	    			
+	    			for(int i = buttonList.size() - 1; i >= 0 ; i--)
+	    			{
+	    				GuiButton button = (GuiButton)buttonList.get(i);
+	    				if(button.id == btn.id)
+	    				{
+	    					buttonList.remove(button);
+	    					break;
+	    				}
+	    			}
+	    			
+	    			buttonList.add(new GuiButton(ID_RENAME, btn.xPosition + 7, btn.yPosition, 20, 20, ""));
+	    			buttonList.add(new GuiButton(ID_DELETE, btn.xPosition + 34, btn.yPosition, 20, 20, ""));
+	    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 61, btn.yPosition, 20, 20, ""));
+	    		}
+	    		else
+	    		{
+	    			showCategory(btn.displayString);
+	    		}
+	    	}
     	}
     }
     
@@ -715,12 +824,16 @@ public class GuiHatSelection extends GuiScreen
     	adding = false;
     	deleting = false;
     	renaming = false;
+    	if(view != VIEW_CATEGORIES)
+    	{
+    		addingToCategory = false;
+    	}
     	
         for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
         {
             GuiButton btn = (GuiButton)this.buttonList.get(k1);
             
-            if(btn.id >= 5 && btn.id <= 7 || btn.id >= ID_CATEGORIES_START || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE)
+            if(btn.id >= 5 && btn.id <= 7 || btn.id >= ID_CATEGORIES_START || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE || btn.id == ID_FAVOURITE)
             {
             	buttonList.remove(k1);
             }
@@ -771,6 +884,17 @@ public class GuiHatSelection extends GuiScreen
             else if(btn.id == ID_CATEGORIES)
             {
             	if(view == VIEW_CATEGORIES)
+            	{
+            		btn.enabled = false;
+            	}
+            	else
+            	{
+            		btn.enabled = true;
+            	}
+            }
+            else if(btn.id == ID_FAVOURITES)
+            {
+            	if(view == VIEW_CATEGORY && category.equalsIgnoreCase("Favourites"))
             	{
             		btn.enabled = false;
             	}
@@ -946,18 +1070,9 @@ public class GuiHatSelection extends GuiScreen
     		{
     			return false;
     		}
-    		
-    		categories.add(newName);
-    		categories.remove(oriName);
-    		Collections.sort(categories);
-    		HatHandler.categories.put(newName, HatHandler.categories.get(oriName));
-    		HatHandler.categories.remove(oriName);
-    		
-	    	hatsToShow = new ArrayList<String>(categories);
-	    	Collections.sort(hatsToShow);
-			hatsToShow.add(0, "All Hats");
-			hatsToShow.add("Add New");
-
+ 
+    		reloadHatsAndReopenGUI();
+ 
     		return true;
     	}
     	catch(Exception e)
@@ -978,6 +1093,8 @@ public class GuiHatSelection extends GuiScreen
     	}
     	else
     	{
+    		pageNumber = 0;
+    		
 	    	view = VIEW_CATEGORY;
 	    	
 	    	category = s;
@@ -1086,8 +1203,11 @@ public class GuiHatSelection extends GuiScreen
 	    	
 	    	hatsToShow = new ArrayList<String>(categories);
 	    	Collections.sort(hatsToShow);
-			hatsToShow.add(0, "All Hats");
-			hatsToShow.add("Add New");
+	    	if(!addingToCategory)
+	    	{
+				hatsToShow.add(0, "All Hats");
+				hatsToShow.add("Add New");
+	    	}
 
 	    	updateButtonList();
     	}
@@ -1130,7 +1250,7 @@ public class GuiHatSelection extends GuiScreen
             	btn.displayString = disp;
             }
             
-            if(btn.id == ID_HAT_COLOUR_SWAP || btn.id == ID_NONE || btn.id == ID_RANDOM || btn.id == ID_HELP || btn.id == ID_RELOAD_HATS || btn.id == ID_FAVOURITES || btn.id == ID_CATEGORIES || btn.id == ID_PERSONALIZE || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE)
+            if(btn.id == ID_HAT_COLOUR_SWAP || btn.id == ID_NONE || btn.id == ID_RANDOM || btn.id == ID_HELP || btn.id == ID_RELOAD_HATS || btn.id == ID_FAVOURITES || btn.id == ID_CATEGORIES || btn.id == ID_PERSONALIZE || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE || btn.id == ID_FAVOURITE)
             {
             	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	            GL11.glEnable(GL11.GL_BLEND);
@@ -1171,7 +1291,7 @@ public class GuiHatSelection extends GuiScreen
             	}
             	else if(btn.id == ID_ADD)
             	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 160, 0, 16, 16);
+            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") ? 224 : 160, 0, 16, 16);
             	}
             	else if(btn.id == ID_RENAME)
             	{
@@ -1179,7 +1299,22 @@ public class GuiHatSelection extends GuiScreen
             	}
             	else if(btn.id == ID_DELETE)
             	{
-            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 144, 0, 16, 16);
+            		if((view == VIEW_CATEGORY || view == VIEW_HATS) && isShiftKeyDown())
+            		{
+            			drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 208, 0, 16, 16);
+            		}
+            		else
+            		{
+            			drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 144, 0, 16, 16);
+            		}
+            	}
+            	else if(btn.id == ID_FAVOURITE)
+            	{
+            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 64, 0, 16, 16);
+	            	if(!selectedButtonName.equalsIgnoreCase("") && HatHandler.isInFavourites(selectedButtonName))
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 32, 0, 16, 16);
+	            	}
             	}
 
             	GL11.glDisable(GL11.GL_BLEND);
@@ -1247,7 +1382,7 @@ public class GuiHatSelection extends GuiScreen
 	            }
 	            else if(btn.id == ID_ADD)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {adding || renaming ? invalidFolderName ? "\u00a7cInvalid Name!" : "Add Category" : "Add"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {adding || renaming ? invalidFolderName ? "\u00a7cInvalid Name!" : "Add Category" : (view == VIEW_HATS || view == VIEW_CATEGORY && category.equalsIgnoreCase("Favourites")) ? "Add to category" : "Remove from category"}), par1, par2);
 	            }
 	            else if(btn.id == ID_CANCEL)
 	            {
@@ -1261,12 +1396,34 @@ public class GuiHatSelection extends GuiScreen
 	            	}
 	            	else if(view == VIEW_CATEGORIES)
 	            	{
-	            		drawTooltip(Arrays.asList(new String[] {"Delete category?", "", "This will remove all hats", "in this category and reload", "the GUI.", "Double click to confirm"}), par1, par2);
+	            		drawTooltip(Arrays.asList(new String[] {"Delete category?", "", "This will remove all hats", "in this category and reload", "the GUI.", "", "Double click to confirm"}), par1, par2);
+	            	}
+	            	else
+	            	{
+	            		if(isShiftKeyDown())
+	            		{
+	            			drawTooltip(Arrays.asList(new String[] {"Disable hat?", "", "This will disable this hat from", "all categories and reload", "the GUI. This will not", "delete the file.", "", "Double click to confirm"}), par1, par2);
+	            		}
+	            		else
+	            		{
+	            			drawTooltip(Arrays.asList(new String[] {"Delete hat?", "", "This will remove this hat from", "all categories and reload", "the GUI.", "", "Double click to confirm"}), par1, par2);
+	            		}
 	            	}
 	            }
 	            else if(btn.id == ID_RENAME)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Rename Category?"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {"Rename Category?", "", "This will reload the GUI!"}), par1, par2);
+	            }
+	            else if(btn.id == ID_FAVOURITE)
+	            {
+	            	if(!selectedButtonName.equalsIgnoreCase("") && HatHandler.isInFavourites(selectedButtonName))
+	            	{
+	            		drawTooltip(Arrays.asList(new String[] {"Remove from Favourites"}), par1, par2);
+	            	}
+	            	else
+	            	{
+	            		drawTooltip(Arrays.asList(new String[] {"Add to Favourites"}), par1, par2);
+	            	}
 	            }
             }
         }
@@ -1461,6 +1618,7 @@ public class GuiHatSelection extends GuiScreen
 	private static final String[] helpInfo11 = new String[] {"Shift Clicking on the Hats List will take", "you out of a category and back to all", "the hats."};
 	private static final String[] helpInfo12 = new String[] {"Did you know you can make your own categories?", "Hit the Categories button (or C, on your keyboard)", "and hit the \"Add New\" button."};
 	private static final String[] helpInfo13 = new String[] {"You can right click the Search bar", "to clear it."};
+	private static final String[] helpInfo14 = new String[] {"You can disable hats rather than deleting", "them. Just hold shift when deleting."};
 	
 	static
 	{
@@ -1477,6 +1635,7 @@ public class GuiHatSelection extends GuiScreen
 		help.add(helpInfo11);
 		help.add(helpInfo12);
 		help.add(helpInfo13);
+		help.add(helpInfo14);
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());

@@ -43,7 +43,7 @@ public class ModelHat extends ModelBase
 			{
 				Node attribute = node.getAttributes().item(j);
 
-				if(attribute.getNodeName().equalsIgnoreCase("type") && attribute.getNodeValue().equalsIgnoreCase("d9e621f7-957f-4b77-b1ae-20dcd0da7751"))
+				if(attribute.getNodeName().equalsIgnoreCase("type") && (attribute.getNodeValue().equalsIgnoreCase("d9e621f7-957f-4b77-b1ae-20dcd0da7751") || attribute.getNodeValue().equalsIgnoreCase("de81aa14-bd60-4228-8d8d-5238bcd3caaa")))
 				{
 					try
 					{

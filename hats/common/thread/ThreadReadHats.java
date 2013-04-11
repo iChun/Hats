@@ -11,9 +11,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -110,6 +112,59 @@ public class ThreadReadHats extends Thread
 		}
 		
 		int hatCount = 0;
+		
+		File fav = new File(hatsFolder, "/Favourites");
+		if(!fav.exists())
+		{
+			fav.mkdirs();
+		}
+		File[] favs = fav.listFiles();
+		for(File file : favs)
+		{
+			if(!file.isDirectory() && file.getName().endsWith(".tcn"))
+			{
+				File hat = new File(hatsFolder, file.getName());
+				if(!hat.exists())
+				{
+					//Copy hats to the main folder. We don't want to read the hats in the Favourites, we just want the file name reference.
+			    	InputStream inStream = null;
+			    	OutputStream outStream = null;
+
+			    	try
+			    	{
+			    		inStream = new FileInputStream(file);
+			    		outStream = new FileOutputStream(hat);
+			    		
+			    		byte[] buffer = new byte[1024];
+			    		
+			    		int length;
+			    		
+			    		while ((length = inStream.read(buffer)) > 0)
+			    		{
+			    	    	outStream.write(buffer, 0, length);
+			    	    }
+			    	}
+			    	catch(Exception e){}
+			    	
+			    	try
+			    	{
+				    	if(inStream != null)
+				    	{
+				    		inStream.close();
+				    	}
+			    	}
+			    	catch(IOException e){}
+			    	try
+			    	{
+			    		if(outStream != null)
+			    		{
+			    			outStream.close();
+			    		}
+			    	}
+			    	catch(IOException e){}
+				}
+			}
+		}
 		
 		File[] files = hatsFolder.listFiles();
 		for(File file : files)
