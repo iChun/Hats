@@ -71,6 +71,7 @@ public class CommonProxy
 	{
 		HatHandler.hatNames.clear();
 		HatHandler.checksums.clear();
+		HatHandler.categories.clear();
 	}
 	
 	public void openHatsGui()
