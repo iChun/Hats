@@ -1309,10 +1309,10 @@ public class GuiHatSelection extends GuiScreen
     
     public void randomize()
     {
-    	if(hatsToShow.size() > 0)
-    	{
-			if(view == VIEW_HATS || view == VIEW_CATEGORY)
-			{
+		if(view == VIEW_HATS || view == VIEW_CATEGORY)
+		{
+	    	if(hatsToShow.size() > 0)
+	    	{
 				int randVal = rand.nextInt(hatsToShow.size());
 	        	String hatName = (String)hatsToShow.get(randVal);
 	        	
@@ -1337,30 +1337,33 @@ public class GuiHatSelection extends GuiScreen
 	    		}
 	    		
 	    		updateButtonList();
-			}
-			else if(view == VIEW_COLOURIZER)
+	    	}
+		}
+		else if(view == VIEW_COLOURIZER)
+		{
+			if(isShiftKeyDown())
 			{
-				if(isShiftKeyDown())
-				{
-		    		colourR = colourG = colourB = 255;
-		    		hat.setR(255);
-		    		hat.setG(255);
-		    		hat.setB(255);
-	
-		    		updateButtonList();
-				}
-				else
-				{
-					randomizeColour();
-				}
+	    		colourR = colourG = colourB = 255;
+	    		hat.setR(255);
+	    		hat.setG(255);
+	    		hat.setB(255);
+
+	    		updateButtonList();
 			}
-			else if(view == VIEW_CATEGORIES)
+			else
 			{
+				randomizeColour();
+			}
+		}
+		else if(view == VIEW_CATEGORIES)
+		{
+	    	if(hatsToShow.size() > 0)
+	    	{
 				int randVal = rand.nextInt(hatsToShow.size());
 				String categoryName = (String)hatsToShow.get(randVal);
 				showCategory(categoryName);
-			}
-    	}
+	    	}
+		}
     }
     
     public void randomizeColour()
