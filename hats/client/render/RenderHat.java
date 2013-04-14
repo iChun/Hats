@@ -28,7 +28,7 @@ public class RenderHat extends Render
 	
     public void renderHat(EntityHat hat, double par2, double par4, double par6, float par8, float par9)
     {
-    	if(!hat.hatName.equalsIgnoreCase("") && hat.player != null)
+    	if(!hat.hatName.equalsIgnoreCase("") && hat.player != null && !hat.player.isPlayerSleeping())
     	{
     		boolean firstPerson = (hat.player == Minecraft.getMinecraft().renderViewEntity && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !((Minecraft.getMinecraft().currentScreen instanceof GuiInventory || Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative || Minecraft.getMinecraft().currentScreen instanceof GuiHatSelection) && RenderManager.instance.playerViewY == 180.0F));
     		

@@ -7,6 +7,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityHat extends Entity 
@@ -14,6 +15,8 @@ public class EntityHat extends Entity
 
 	public EntityPlayer player;
 	public String hatName;
+	
+	public boolean gui;
 	
 	public int reColour;
 	
@@ -31,6 +34,9 @@ public class EntityHat extends Entity
 	{
 		super(par1World);
 		setSize(0.1F, 0.1F);
+		
+		gui = false;
+		
 		hatName = "";
 		
 		reColour = 0;
@@ -162,6 +168,29 @@ public class EntityHat extends Entity
 	{
 		return colourB;
 	}
+	
+	@Override
+    public float getBrightness(float par1)
+    {
+		if(gui)
+		{
+			return 1.0F;
+		}
+		
+        int i = MathHelper.floor_double(this.posX);
+        int j = MathHelper.floor_double(this.posZ);
+
+        if (this.worldObj.blockExists(i, 0, j))
+        {
+            double d0 = (this.boundingBox.maxY - this.boundingBox.minY) * 0.66D;
+            int k = MathHelper.floor_double(this.posY - (double)this.yOffset + d0);
+            return this.worldObj.getLightBrightness(i, k, j);
+        }
+        else
+        {
+            return 0.0F;
+        }
+    }
 
 	@Override
 	protected void entityInit() 
