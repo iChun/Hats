@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 public class ItemHatStand extends ItemBlock 
 {
@@ -64,7 +65,7 @@ public class ItemHatStand extends ItemBlock
 	    			break;
 	    		}
 	    	}
-	    	if(!world.isBlockNormalCube(ii, jj, kk))
+	    	if(!world.isBlockSolidOnSide(ii, jj, kk, ForgeDirection.getOrientation(side), false))
 	    	{
 	    		return false;
 	    	}
@@ -109,7 +110,7 @@ public class ItemHatStand extends ItemBlock
 					}
 				}
 				
-				stand.isOnFloor = side == 1;
+				stand.hasStand = stand.isOnFloor = side == 1;
 				stand.orientation = orientation;
 				stand.sideOn = side;
 			}

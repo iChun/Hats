@@ -15,6 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeDirection;
 
 public class BlockHatStand extends Block 
 	implements ITileEntityProvider
@@ -186,7 +187,7 @@ public class BlockHatStand extends Block
 	    			break;
 	    		}
 	    	}
-	    	if(!world.isBlockNormalCube(ii, jj, kk))
+	    	if(!world.isBlockSolidOnSide(ii, jj, kk, ForgeDirection.getOrientation(stand.sideOn), false))
 	    	{
 	    		world.setBlockToAir(i, j, k);
 	    		dropBlockAsItem_do(world, i, j, k, new ItemStack(HatStand.blockHatStand, 1));

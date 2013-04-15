@@ -1885,9 +1885,7 @@ public class GuiHatSelection extends GuiScreen
 	        GL11.glTranslatef(0.0F, -0.22F, 0.0F);
 	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 255.0F * 0.8F, 255.0F * 0.8F);
 	        Tessellator.instance.setBrightness(240);
-	        hat.gui = true;
 	        RenderManager.instance.renderEntityWithPosYaw(hat, 0.0D, 0.0D, 0.0D, hat.rotationYaw, 1.0F);
-	        hat.gui = false;
 	        
 	        player.renderYawOffset = f2;
 	        player.rotationYaw = f3;

@@ -837,7 +837,7 @@ public class GuiHatSelection extends GuiScreen
 
         drawSearchBar();
         
-        drawPlayerOnGui(k + 42, l + 155, 55);
+        drawPlayerOnGui(k + 42, l + 155, 55, (float)(k + 42) - (float)mouseX, (float)(l + 155 - 42) - (float)mouseY);
 
         drawForeground(par1, par2, par3);
     }
@@ -946,7 +946,7 @@ public class GuiHatSelection extends GuiScreen
     }
 
     
-    public void drawPlayerOnGui(int par1, int par2, int par3)
+    public void drawPlayerOnGui(int par1, int par2, int par3, float par4, float par5)
     {
     	if(stand != null)
     	{
@@ -957,20 +957,21 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        GL11.glTranslatef((float)par1, (float)par2, 50.0F);
 	        
-	        GL11.glTranslatef(20F, -20.0F, 0.0F);
+	        GL11.glTranslatef(23F, -20.0F, 0.0F);
 	        GL11.glScalef((float)(-par3), (float)par3, (float)par3);
 	        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
 	        
 	        GL11.glRotatef(-80.0F, 0.0F, 1.0F, 0.0F);
 	        GL11.glRotatef(-10.0F, 0.0F, 0.0F, 1.0F);
-	        RenderHelper.enableStandardItemLighting();
-//	        GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-	        GL11.glRotatef(-((float)Math.atan((double)(0.0F / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
-	        
+//	        GL11.glRotatef(-((float)Math.atan((double)(0.0F / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
 	        
 	        RenderManager.instance.playerViewY = 180.0F;
 	        
 	        GL11.glTranslated(0.5D, 0.5D, 0.5D);
+	        GL11.glTranslated(0.0D, -0.5D, 0.0D);
+	        GL11.glRotatef(-((float)Math.atan((double)(par4 / 40.0F))) * 20.0F, 0.0F, 1.0F, 0.0F);
+	        GL11.glRotatef(-((float)Math.atan((double)(par5 / 40.0F))) * 20.0F, 0.0F, 0.0F, -1.0F);
+	        GL11.glTranslated(0.0D, 0.5D, 0.0D);
 	        if(stand.orientation == 0)
 	        {
 	        	GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
@@ -983,13 +984,19 @@ public class GuiHatSelection extends GuiScreen
 	        {
 	        	GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
 	        }
+	        
+	        TileRendererHatStand.renderBlocks.blockAccess = stand.worldObj;
+	        Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
+	        BlockRenderHatStand.instance.renderInventoryBlockWithTileEntity((BlockHatStand)HatStand.blockHatStand, stand, TileRendererHatStand.renderBlocks);
+//	        GL11.glTranslated(stand.xCoord, stand.yCoord, stand.zCoord);
+	        
 	        GL11.glTranslated(-0.5D, -0.5D, -0.5D);
+	        
 	        TileRendererHatStand.renderer.renderHatStand(stand, 0, 0, 0, 1.0F);
 
 	        GL11.glEnable(GL11.GL_ALPHA_TEST);
 	        
 	        GL11.glPopMatrix();
-	        RenderHelper.disableStandardItemLighting();
 	        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 	        OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 	        GL11.glDisable(GL11.GL_TEXTURE_2D);

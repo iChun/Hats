@@ -89,6 +89,70 @@ public class BlockRenderHatStand
 		}
 
 	}
+	
+	public void renderInventoryBlockWithTileEntity(BlockHatStand stand, TileEntityHatStand standTE, RenderBlocks renderer)
+	{
+		Tessellator tessellator = Tessellator.instance;
+		
+		stand.setBlockBoundsForBase(null, standTE);
+		renderer.setRenderBoundsFromBlock(stand);
+
+        GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, -1.0F, 0.0F);
+        renderer.renderBottomFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 0));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 1.0F, 0.0F);
+        renderer.renderTopFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 1));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, -1.0F);
+        renderer.renderEastFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 2));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, 1.0F);
+        renderer.renderWestFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 3));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+        renderer.renderNorthFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 4));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(1.0F, 0.0F, 0.0F);
+        renderer.renderSouthFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 5));
+        tessellator.draw();
+		
+		
+		stand.setBlockBoundsForStand(null, standTE);
+		renderer.setRenderBoundsFromBlock(stand);
+		
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, -1.0F, 0.0F);
+        renderer.renderBottomFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 0));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 1.0F, 0.0F);
+        renderer.renderTopFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 1));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, -1.0F);
+        renderer.renderEastFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 2));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(0.0F, 0.0F, 1.0F);
+        renderer.renderWestFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 3));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(-1.0F, 0.0F, 0.0F);
+        renderer.renderNorthFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 4));
+        tessellator.draw();
+        tessellator.startDrawingQuads();
+        tessellator.setNormal(1.0F, 0.0F, 0.0F);
+        renderer.renderSouthFace(stand, 0.0D, 0.0D, 0.0D, renderer.getBlockIconFromSide(stand, 5));
+        tessellator.draw();
+        GL11.glTranslatef(0.5F, 0.5F, 0.5F);
+	}
 
 	@Override
 	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) 
