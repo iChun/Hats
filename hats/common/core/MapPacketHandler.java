@@ -92,6 +92,7 @@ public class MapPacketHandler
 			        }
 			        catch(IOException e)
 			        {}
+			        break;
 				}
 			}
 		}
@@ -120,6 +121,7 @@ public class MapPacketHandler
 					{
 						Minecraft.getMinecraft().thePlayer.addChatMessage("Server has hats set to Command Giver Mode. You can not give commands!");
 					}
+					break;
 				}
 				case 1:
 				{

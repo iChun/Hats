@@ -412,7 +412,7 @@ public class HatHandler
 				{
 					if(isServer)
 					{
-						ArrayList<String> queuedLists = queuedHats.get(hatName);
+						ArrayList<String> queuedLists = queuedHats.get(hatName.toLowerCase());
 						if(queuedLists != null)
 						{
 							queuedHats.remove(hatName);
@@ -563,7 +563,7 @@ public class HatHandler
 		}
 		else if(player != null)
 		{
-			ArrayList<String> queuedLists = queuedHats.get(hatName);
+			ArrayList<String> queuedLists = queuedHats.get(hatName.toLowerCase());
 			if(queuedLists == null)
 			{
 				queuedLists = new ArrayList<String>();

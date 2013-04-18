@@ -46,7 +46,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Hats", name = "Hats",
-			version = "1.1.0"
+			version = "1.1.1"
 				)
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
@@ -57,7 +57,7 @@ import cpw.mods.fml.relauncher.Side;
 				)
 public class Hats 
 {
-	public static final String version = "1.1.0";
+	public static final String version = "1.1.1";
 	
 	//Global Options
 	public static int safeLoad = 1;
