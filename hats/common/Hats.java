@@ -46,18 +46,19 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Hats", name = "Hats",
-			version = "1.1.1"
+			version = "1.2.0"
 				)
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
 			connectionHandler = ConnectionHandler.class,
 			tinyPacketHandler = MapPacketHandler.class,
 			clientPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerClient.class),
-			serverPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerServer.class)
+			serverPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerServer.class),
+			versionBounds = "[1.2.0,1.3.0)"
 				)
 public class Hats 
 {
-	public static final String version = "1.1.1";
+	public static final String version = "1.2.0";
 	
 	//Global Options
 	public static int safeLoad = 1;

@@ -89,7 +89,7 @@ public class ThreadGetContributors extends Thread
             var13.printStackTrace();
         }
         
-        hatCount += HatHandler.loadCategory(contribFolder);;
+        hatCount += HatHandler.loadCategory(contribFolder);
         
         Hats.console("Loaded " + Integer.toString(hatCount) + " contributor" + (hatCount == 1 ? " hat" : " hats"));
         
