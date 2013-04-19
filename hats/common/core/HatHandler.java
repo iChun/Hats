@@ -29,6 +29,8 @@ import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class HatHandler 
 {
@@ -219,6 +221,10 @@ public class HatHandler
 	
 	public static boolean isInCategory(String hatName, String category)
 	{
+		if(category.equalsIgnoreCase("Contributors"))
+		{
+			return false;
+		}
 		ArrayList<String> favs = categories.get(category);
 		if(favs != null)
 		{
@@ -596,7 +602,41 @@ public class HatHandler
 		}
 		return name;
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void reloadAndOpenGui()
+	{
+		Hats.proxy.tickHandlerClient.availableHats.clear();
+		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+		while(ite.hasNext())
+		{
+			Entry<File, String> e = ite.next();
+			Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
+		}
+		Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+		
+		if(Hats.playerHatsMode == 3)
+		{
+	        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+	        DataOutputStream stream = new DataOutputStream(bytes);
 
+	        try
+	        {
+	        	stream.writeByte(0);
+	        	PacketDispatcher.sendPacketToServer(new Packet131MapData((short)Hats.getNetId(), (short)2, bytes.toByteArray()));
+	        }
+	        catch(IOException e)
+	        {}
+		}
+		else
+		{
+			Hats.proxy.openHatsGui();
+		}
+	}
+
+	
+	public static boolean threadLoadComplete = true;
+	public static boolean threadContribComplete = true;
 	
 	public static boolean reloadingHats;
 	

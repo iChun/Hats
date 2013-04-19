@@ -953,7 +953,7 @@ public class GuiHatSelection extends GuiScreen
 	        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
 	        GL11.glPushMatrix();
 	        
-	        GL11.glDisable(GL11.GL_ALPHA_TEST);
+//	        GL11.glDisable(GL11.GL_ALPHA_TEST);
 	        
 	        GL11.glTranslatef((float)par1, (float)par2, 50.0F);
 	        
@@ -994,7 +994,7 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        TileRendererHatStand.renderer.renderHatStand(stand, 0, 0, 0, 1.0F);
 
-	        GL11.glEnable(GL11.GL_ALPHA_TEST);
+//	        GL11.glEnable(GL11.GL_ALPHA_TEST);
 	        
 	        GL11.glPopMatrix();
 	        GL11.glDisable(GL12.GL_RESCALE_NORMAL);

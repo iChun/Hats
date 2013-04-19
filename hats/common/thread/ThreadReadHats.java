@@ -58,6 +58,9 @@ public class ThreadReadHats extends Thread
 	@Override
 	public void run()
 	{
+		HatHandler.threadLoadComplete = false;
+    	HatHandler.threadContribComplete = false;
+		
 		if(!hatsFolder.exists())
 		{
 			return;
@@ -177,41 +180,23 @@ public class ThreadReadHats extends Thread
 		
 		for(File file : files)
 		{
-			if(file.isDirectory() && !file.getName().equalsIgnoreCase("Disabled"))
+			if(file.isDirectory() && !file.getName().equalsIgnoreCase("Disabled") && !file.getName().equalsIgnoreCase("Contributors"))
 			{
 				hatCount += HatHandler.loadCategory(file);	
 			}
 		}
+		
+		((Thread)new ThreadGetContributors(loadGuiOnEnd)).start();
 
 		Hats.console((loadGuiOnEnd ? "Reloaded " : "Loaded ") + Integer.toString(hatCount) + (hatCount == 1 ? " hat" : " hats"));
 		
+		HatHandler.threadLoadComplete = true;
+		
 		if(loadGuiOnEnd)
 		{
-			Hats.proxy.tickHandlerClient.availableHats.clear();
-			Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-			while(ite.hasNext())
+			if(HatHandler.threadContribComplete)
 			{
-				Entry<File, String> e = ite.next();
-				Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
-			}
-			Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
-			
-			if(Hats.playerHatsMode == 3)
-			{
-		        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-		        DataOutputStream stream = new DataOutputStream(bytes);
-
-		        try
-		        {
-		        	stream.writeByte(0);
-		        	PacketDispatcher.sendPacketToServer(new Packet131MapData((short)Hats.getNetId(), (short)2, bytes.toByteArray()));
-		        }
-		        catch(IOException e)
-		        {}
-			}
-			else
-			{
-				Hats.proxy.openHatsGui();
+				HatHandler.reloadAndOpenGui();
 			}
 			
 			try
@@ -223,7 +208,10 @@ public class ThreadReadHats extends Thread
 				
 			}
 			
-			HatHandler.reloadingHats = false;
+			if(HatHandler.threadContribComplete)
+			{
+				HatHandler.reloadingHats = false;
+			}
 		}
 	}
 }

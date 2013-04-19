@@ -911,7 +911,7 @@ public class GuiHatSelection extends GuiScreen
 		    			
 		    			searchBar.setText("");
 		    		}
-		    		else if(isShiftKeyDown() && !btn.displayString.equalsIgnoreCase("All Hats"))
+		    		else if(isShiftKeyDown() && !btn.displayString.equalsIgnoreCase("All Hats") && !btn.displayString.equalsIgnoreCase("Contributors"))
 		    		{
 		    			updateButtonList();
 		    			
@@ -1406,6 +1406,10 @@ public class GuiHatSelection extends GuiScreen
 	    	{
 				hatsToShow.add(0, "All Hats");
 				hatsToShow.add("Add New");
+	    	}
+	    	else
+	    	{
+	    		hatsToShow.remove("Contributors");
 	    	}
 
 	    	updateButtonList();

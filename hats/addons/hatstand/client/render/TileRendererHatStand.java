@@ -77,7 +77,6 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 			{
 				GL11.glTranslated(0.0D, -0.05D, 0.0D);
 			}
-			GL11.glDisable(GL11.GL_CULL_FACE);
 			
 			ModelSkeletonHead head = head32;
 
@@ -121,7 +120,6 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 			
 	        float f4 = 0.0625F;
 	        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-	        GL11.glEnable(GL11.GL_ALPHA_TEST);
 	        head.render((Entity)null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, f4);
 		}
 		else
@@ -132,6 +130,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 		ModelHat model = ClientProxy.models.get(stand.hatName);
 		if(model != null)
 		{
+			GL11.glPushMatrix();
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             
@@ -155,6 +154,8 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 	        model.render((Entity)null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 	        
 	        GL11.glDisable(GL11.GL_BLEND);
+	        
+	        GL11.glPopMatrix();
 
 		}
     	else if(!HatHandler.reloadingHats)
