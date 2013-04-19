@@ -239,6 +239,22 @@ public class HatHandler
 		return false;
 	}
 	
+	public static boolean isContributor(String hatName)
+	{
+		ArrayList<String> favs = categories.get("Contributors");
+		if(favs != null)
+		{
+			for(String s : favs)
+			{
+				if(s.equalsIgnoreCase(hatName))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	public static void addToCategory(String hatName, String category)
 	{
 		ArrayList<String> favs = categories.get(category);
@@ -317,7 +333,15 @@ public class HatHandler
 				if(fav.equalsIgnoreCase(hatName))
 				{
 					File favFile = new File(hatsFolder, "/" + category +"/" + hatName + ".tcn");
-					favFile.delete();
+					File hatFile = new File(hatsFolder, hatName + ".tcn");
+					if(!hatFile.exists())
+					{
+						favFile.renameTo(hatFile);
+					}
+					else
+					{
+						favFile.delete();
+					}
 					favs.remove(i);
 					break;
 				}

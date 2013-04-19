@@ -724,7 +724,7 @@ public class GuiHatSelection extends GuiScreen
 	    	{
 	    		if(!justClickedButton)
 	    		{
-	    			if(view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites"))
+	    			if(view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") && !category.equalsIgnoreCase("Contributors"))
 	    			{
 	    				HatHandler.removeFromCategory(selectedButtonName, category);
 	    				
@@ -867,7 +867,12 @@ public class GuiHatSelection extends GuiScreen
 	    			
 	    			buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 1, btn.yPosition, 20, 20, ""));
 	    			buttonList.add(new GuiButton(ID_FAVOURITE, btn.xPosition + 23, btn.yPosition, 20, 20, ""));
-	    			buttonList.add(new GuiButton(ID_DELETE, btn.xPosition + 45, btn.yPosition, 20, 20, ""));
+	    			GuiButton btn1 = new GuiButton(ID_DELETE, btn.xPosition + 45, btn.yPosition, 20, 20, "");
+	    			if(HatHandler.isContributor(selectedButtonName))
+	    			{
+	    				btn1.enabled = false;
+	    			}
+	    			buttonList.add(btn1);
 	    			buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 67, btn.yPosition, 20, 20, ""));
 	    		}
 	    		else
@@ -1641,7 +1646,7 @@ public class GuiHatSelection extends GuiScreen
 	            	}
 	            	else if(btn.id == ID_ADD)
 	            	{
-	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") ? 224 : 160, 0, 16, 16);
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") && !category.equalsIgnoreCase("Contributors") ? 224 : 160, 0, 16, 16);
 	            	}
 	            	else if(btn.id == ID_RENAME)
 	            	{
@@ -1737,7 +1742,7 @@ public class GuiHatSelection extends GuiScreen
 	            }
 	            else if(btn.id == ID_ADD)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {adding || renaming ? invalidFolderName ? "\u00a7cInvalid Name!" : "Add Category" : (view == VIEW_HATS || view == VIEW_CATEGORY && category.equalsIgnoreCase("Favourites")) ? "Add to category" : "Remove from category"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {adding || renaming ? invalidFolderName ? "\u00a7cInvalid Name!" : "Add Category" : (view == VIEW_HATS || view == VIEW_CATEGORY && (category.equalsIgnoreCase("Favourites") || category.equalsIgnoreCase("Contributors"))) ? "Add to category" : "Remove from category"}), par1, par2);
 	            }
 	            else if(btn.id == ID_CANCEL)
 	            {
@@ -1979,6 +1984,8 @@ public class GuiHatSelection extends GuiScreen
 	private static final String[] helpInfo14 = new String[] {"You can disable hats rather than deleting", "them. Just hold shift when deleting."};
 	private static final String[] helpInfo15 = new String[] {"Hitting Shift-F will favourite", "or unfavourite the hat you", "are currently wearing."};
 	private static final String[] helpInfo16 = new String[] {"The hot key for \"Personalize\" is", "\"P\", in case you accidentally", "disabled the button."};
+	private static final String[] helpInfo17 = new String[] {"You can get your own custom", "hat added to the mod if", "you give us a donation!", "", "Check the mod page for info."};
+	private static final String[] helpInfo18 = new String[] {"The (C) in the name of the hat", "represents a hat added as a thank", "you for a donation!"};
 	
 	static
 	{
@@ -1998,6 +2005,8 @@ public class GuiHatSelection extends GuiScreen
 		help.add(helpInfo14);
 		help.add(helpInfo15);
 		help.add(helpInfo16);
+		help.add(helpInfo17);
+		help.add(helpInfo18);
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
