@@ -1,11 +1,15 @@
 package hats.common.core;
 
 import hats.common.Hats;
-import cpw.mods.fml.common.FMLCommonHandler;
+
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
+import cpw.mods.fml.common.FMLCommonHandler;
 
 public class CommandHats extends CommandBase {
 
@@ -19,6 +23,12 @@ public class CommandHats extends CommandBase {
     public String getCommandUsage(ICommandSender par1ICommandSender)
     {
         return "/" + this.getCommandName() + "           type /hats for full list.";
+    }
+	
+	@Override
+    public List getCommandAliases()
+    {
+		return Arrays.asList(new String[] {"hat"});
     }
 
 	@Override

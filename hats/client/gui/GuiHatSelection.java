@@ -66,6 +66,7 @@ public class GuiHatSelection extends GuiScreen
 	private final int ID_FAVOURITE = 21;
 	
 	private final int ID_SET_KEY = 22;
+	private final int ID_SET_FP = 23;
 	
 	private final int ID_CATEGORIES_START = 30;
 	
@@ -648,6 +649,11 @@ public class GuiHatSelection extends GuiScreen
 	    		settingKey = true;
 	    		btn.displayString = "GUI: >???<";
 	    	}
+	    	else if(btn.id == ID_SET_FP)
+	    	{
+	    		Hats.renderInFirstPerson = (Hats.renderInFirstPerson == 1 ? 0 : 1);
+	    		btn.displayString = "First Person: " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No");
+	    	}
     	}
     	else
     	{
@@ -1143,6 +1149,8 @@ public class GuiHatSelection extends GuiScreen
         else
         {
         	buttonList.add(new GuiButton(ID_SET_KEY, width / 2 - 6, height / 2 - 78, 88, 20, "GUI: " + (Hats.guiKeyBind < 0 ? Mouse.getButtonName(Hats.guiKeyBind + 100) : Keyboard.getKeyName(Hats.guiKeyBind))));
+        	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, "First Person: " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No")));
+        	
         	currentDisplay = "Personalize";
         }
     }
@@ -1460,7 +1468,7 @@ public class GuiHatSelection extends GuiScreen
     					btn.drawButton = false;
     				}
     			}
-    			if(btn.id == ID_SET_KEY || btn.id == ID_SEARCH)
+    			if(btn.id == ID_SET_KEY || btn.id == ID_SET_FP || btn.id == ID_SEARCH)
     			{
     				buttonList.remove(i);
     			}

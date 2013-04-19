@@ -25,7 +25,7 @@ public class TileEntityHatStand extends TileEntity
 	public int colourG;
 	public int colourB;
 	
-	public static final String[] headNames = new String[] { "None", "Skeleton", "W. Skele", "Zombie", "Player", "Steve", "Creeper" };
+	public static final String[] headNames = new String[] { "None", "Skeleton", "W. Skele", "Zombie", "Player", "Steve", "Creeper", "Wither", "Wither (I)", "Pigman", "Blaze", "Invisible" };
 	
 	public TileEntityHatStand()
 	{

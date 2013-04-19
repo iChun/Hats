@@ -116,7 +116,26 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
             	break;
             case 6:
                 this.bindTextureByName("/mob/creeper.png");
+                break;
+            case 7:
+            	this.bindTextureByName("/mob/wither.png");
+            	head = head64;
+            	break;
+            case 8:
+            	this.bindTextureByName("/mob/wither_invul.png");
+            	head = head64;
+            	break;
+            case 9:
+                this.bindTextureByName("/mob/pigman.png");
+                break;
+            case 10:
+                this.bindTextureByName("/mob/fire.png");
+                break;
+            case 11:
+                this.bindTextureByName("/mob/spider_eyes.png");
+                break;
 			}
+			
 			
 	        float f4 = 0.0625F;
 	        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
