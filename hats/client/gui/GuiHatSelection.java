@@ -67,6 +67,7 @@ public class GuiHatSelection extends GuiScreen
 	
 	private final int ID_SET_KEY = 22;
 	private final int ID_SET_FP = 23;
+	private final int ID_RESET_SIDE = 24;
 	
 	private final int ID_CATEGORIES_START = 30;
 	
@@ -654,6 +655,37 @@ public class GuiHatSelection extends GuiScreen
 	    		Hats.renderInFirstPerson = (Hats.renderInFirstPerson == 1 ? 0 : 1);
 	    		btn.displayString = "First Person: " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No");
 	    	}
+	    	else if(btn.id == ID_RESET_SIDE)
+	    	{
+	    		//TODO reset side
+	    		
+	    		enabledSearchBar = false;
+	    		toggleSearchBar();
+	    		
+	    		enabledButtons.clear();
+	    		enabledButtons.add("1");
+	    		enabledButtons.add("2");
+	    		enabledButtons.add("3");
+	    		enabledButtons.add("4");
+	    		enabledButtons.add("5");
+	    		enabledButtons.add("6");
+	    		enabledButtons.add("7");
+	    		enabledButtons.add("8");
+	    		
+	    		for(int i = buttonList.size() - 1; i >= 0; i--)
+	    		{
+	    			GuiButton btn1 = (GuiButton)buttonList.get(i);
+	    			if(btn1.id >= ID_NONE && btn1.id <= (ID_SEARCH - 1))
+	    			{
+		    			btn1.xPosition = width / 2 + 89;
+		    			btn1.yPosition = height / 2 - 85 + ((btn1.id - ID_NONE) * 21);
+	    			}
+	    			else if(btn1.id == ID_SEARCH)
+	    			{
+	    				buttonList.remove(i);
+	    			}
+	    		}
+	    	}
     	}
     	else
     	{
@@ -1155,6 +1187,7 @@ public class GuiHatSelection extends GuiScreen
         {
         	buttonList.add(new GuiButton(ID_SET_KEY, width / 2 - 6, height / 2 - 78, 88, 20, "GUI: " + (Hats.guiKeyBind < 0 ? Mouse.getButtonName(Hats.guiKeyBind + 100) : Keyboard.getKeyName(Hats.guiKeyBind))));
         	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, "First Person: " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No")));
+        	buttonList.add(new GuiButton(ID_RESET_SIDE, width / 2 - 6, height / 2 - 78 + (22 * 5), 88, 20, "Reset Side?"));
         	
         	currentDisplay = "Personalize";
         }
@@ -1473,7 +1506,7 @@ public class GuiHatSelection extends GuiScreen
     					btn.drawButton = false;
     				}
     			}
-    			if(btn.id == ID_SET_KEY || btn.id == ID_SET_FP || btn.id == ID_SEARCH)
+    			if(btn.id >= ID_SET_KEY && btn.id <= ID_RESET_SIDE || btn.id == ID_SEARCH)
     			{
     				buttonList.remove(i);
     			}
@@ -1784,6 +1817,10 @@ public class GuiHatSelection extends GuiScreen
 	            	{
 	            		drawTooltip(Arrays.asList(new String[] {"Add to Favourites"}), par1, par2);
 	            	}
+	            }
+	            else if(btn.id == ID_RESET_SIDE)
+	            {
+	            	drawTooltip(Arrays.asList(new String[] {"Reset buttons on side of GUI?"}), par1, par2);
 	            }
             }
         }
