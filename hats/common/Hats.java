@@ -73,7 +73,7 @@ public class Hats
 	public static int renderInFirstPerson = 0;
 	public static int enableInServersWithoutMod = 1;
 	public static int shouldOtherPlayersHaveHats = 1;
-	public static int randomHat = 1;
+	public static int randomHat = 2;
 	public static String favouriteHat = "Top Hat";
 	public static String favouriteHatColourizer = "#ffffff";
 	public static int guiKeyBind = Keyboard.KEY_H;
