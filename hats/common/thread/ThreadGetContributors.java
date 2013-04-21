@@ -74,11 +74,6 @@ public class ThreadGetContributors extends Thread
                         {
                         	url = url.replaceAll(" ", "%20");
                             this.downloadResource(new URL(url), new File(contribFolder, var10), var11);
-
-                            if (getIsClosing())
-                            {
-                                return;
-                            }
                         }
                     }
                 }
@@ -153,25 +148,5 @@ public class ThreadGetContributors extends Thread
 
             var7.write(var5, 0, var9);
         }
-    }
-    
-    public boolean getIsClosing()
-    {
-    	boolean closing = false;
-    	net.minecraft.util.ThreadDownloadResources thread = null;
-    	try
-    	{
-			thread = (net.minecraft.util.ThreadDownloadResources)ObfuscationReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), new String[] { "X", "field_71430_V", "downloadResourcesThread"}); 
-			if(thread != null)
-			{
-				closing = (Boolean)ObfuscationReflectionHelper.getPrivateValue(net.minecraft.util.ThreadDownloadResources.class, thread, new String[] { "c", "field_74578_c", "closing"				});
-			}
-    	}
-    	catch(Exception e)
-    	{
-			Hats.console("Forgot to update obfuscation!", true);
-			e.printStackTrace();
-    	}
-    	return closing;
     }
 }
