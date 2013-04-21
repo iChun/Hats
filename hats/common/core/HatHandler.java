@@ -18,6 +18,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
 import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -625,6 +626,25 @@ public class HatHandler
 			}
 		}
 		return name;
+	}
+	
+	public static HatInfo getRandomHat()
+	{
+		ArrayList<String> hatNameList = new ArrayList<String>();
+		
+		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+		while(ite.hasNext())
+		{
+			Entry<File, String> e = ite.next();
+			hatNameList.add(e.getValue());
+		}
+		
+		if(hatNameList.size() <= 0)
+		{
+			return new HatInfo();
+		}
+		
+		return new HatInfo(hatNameList.get((new Random()).nextInt(hatNameList.size())), 255, 255, 255);
 	}
 	
 	@SideOnly(Side.CLIENT)

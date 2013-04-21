@@ -101,23 +101,11 @@ public class CommonProxy
 		}
 	}
 	
+	//Left for backwards compatibility. Will be removed next MC version.
+	@Deprecated
 	public HatInfo getRandomHat()
 	{
-		ArrayList<String> hatNameList = new ArrayList<String>();
-		
-		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-		while(ite.hasNext())
-		{
-			Entry<File, String> e = ite.next();
-			hatNameList.add(e.getValue());
-		}
-		
-		if(hatNameList.size() <= 0)
-		{
-			return new HatInfo();
-		}
-		
-		return new HatInfo(hatNameList.get((new Random()).nextInt(hatNameList.size())), 255, 255, 255);
+		return HatHandler.getRandomHat();
 	}
 	
     public void loadData(WorldServer world)

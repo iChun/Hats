@@ -2,6 +2,7 @@ package hats.client.core;
 
 import hats.client.gui.GuiHatSelection;
 import hats.common.Hats;
+import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
 import hats.common.entity.EntityHat;
 
@@ -101,7 +102,7 @@ public class TickHandlerClient
 						}
 					}
 					
-					HatInfo hatInfo = (serverHasMod ? getPlayerHat(player.username) : ((Hats.randomHat == 1 || Hats.randomHat == 2 && player != mc.thePlayer) ? Hats.proxy.getRandomHat() : Hats.favouriteHatInfo));
+					HatInfo hatInfo = (serverHasMod ? getPlayerHat(player.username) : ((Hats.randomHat == 1 || Hats.randomHat == 2 && player != mc.thePlayer) ? HatHandler.getRandomHat() : Hats.favouriteHatInfo));
 					hat = new EntityHat(world, player, hatInfo);
 					hats.put(player.username, hat);
 					world.spawnEntityInWorld(hat);
