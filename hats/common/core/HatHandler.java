@@ -734,18 +734,19 @@ public class HatHandler
 		{
 			 return (float)(Minecraft.getMinecraft().renderViewEntity != ent ? -0.06F : 0.0F ) + (ent != null && ent.isSneaking() ? Minecraft.getMinecraft().renderViewEntity != ent ? -0.17F : -0.05F : 0.015F);
 		}
-		else if(ent instanceof EntityPigZombie || ent instanceof EntityEnderman)
+		else if(ent instanceof EntityPigZombie)
 		{
-			if(ent instanceof EntityPigZombie)
+			return 0.025F;
+		}
+		else if(ent instanceof EntityEnderman)
+		{
+			if(((EntityEnderman)ent).isScreaming())
 			{
-				return 0.025F;
+				return 0.27F;
 			}
-			if(ent instanceof EntityEnderman)
+			else
 			{
-				if(((EntityEnderman)ent).isScreaming())
-				{
-					return 0.27F;
-				}
+				return -0.06F;
 			}
 		}
 		else if(ent instanceof EntityPig)
