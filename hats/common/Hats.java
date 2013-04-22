@@ -78,6 +78,8 @@ public class Hats
 	public static String favouriteHatColourizer = "#ffffff";
 	public static int guiKeyBind = Keyboard.KEY_H;
 	public static String enabled = "1 2 3 4 5 6 7 8 9";
+	public static int randomMobHat = 0;
+	public static int useRandomContributorHats = 0;
 	
 	public static HatInfo favouriteHatInfo = new HatInfo();
 	
@@ -116,6 +118,8 @@ public class Hats
 			randomHat = addCommentAndReturnInt(config, "clientOnly", "randomHat", "Should each player have a random hat?\nThey randomly change from time to time.\n0 = No\n1 = Yes\n2 = Yes, but not the player!\nOnly when enableInServersWithoutMod = 1", randomHat);
 			favouriteHat = addCommentAndReturnString(config, "clientOnly", "favouriteHat", "What hat do you want to use on servers without the mod? Only when randomHat = 0", favouriteHat).toLowerCase();
 			favouriteHatColourizer = addCommentAndReturnString(config, "clientOnly", "favouriteHatColourizer", "Do you want to apply a colourizer to your favourite hat?\nIf no, leave as #ffffff\n(Google \"hex color codes\" if you don\'t understand)\nFormat: #<colour index> or 0x<colour index>\nEg: #ffffff or 0xffffff for white", favouriteHatColourizer).toLowerCase();
+			randomMobHat = Math.min(100, Math.max(addCommentAndReturnInt(config, "clientOnly", "randomMobHat", "Do mobs have a random chance of having a hat?\n0 = Disabled (0%)\n100 = All mobs (100%)\nThis follows the randomHat setting, meaning if randomHat is 0, all mobs will wear the favouriteHat setting", randomMobHat), 0));
+			useRandomContributorHats = addCommentAndReturnInt(config, "clientOnly", "useRandomContributorHats", "Allow the use of contributor hats when getting a random hat?\n0 = No\n1 = Yes", useRandomContributorHats);
 			
 			favouriteHatInfo = getHatInfoFromConfig();
 			

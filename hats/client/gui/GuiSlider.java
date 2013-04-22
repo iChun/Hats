@@ -16,6 +16,8 @@ public class GuiSlider extends GuiButton
     public double sliderValue = 1.0F;
     
     public String dispString = "";
+    
+    public String suffix = "";
 
     /** Is this slider control being dragged. */
     public boolean dragging = false;
@@ -37,7 +39,16 @@ public class GuiSlider extends GuiButton
         String val = Integer.toString((int)Math.round(sliderValue * (maxValue - minValue) + minValue));
         
         displayString = dispString + val;
-        
+    }
+    
+    public GuiSlider(int id, int xPos, int yPos, String displayStr, double minVal, double maxVal, double currentVal, ISlider par, String suf)
+    {
+    	this(id, xPos, yPos, displayStr, minVal, maxVal, currentVal, par);
+    	suffix = suf;
+    	
+    	String val = Integer.toString((int)Math.round(sliderValue * (maxValue - minValue) + minValue));
+    	
+    	displayString = dispString + val + suffix;
     }
 
     /**
@@ -107,7 +118,7 @@ public class GuiSlider extends GuiButton
 
         String val = Integer.toString((int)Math.round(sliderValue * (maxValue - minValue) + minValue));
         
-        displayString = dispString + val;
+        displayString = dispString + val + suffix;
         parent.onChangeSliderValue(this);
     }
 

@@ -14,6 +14,7 @@ import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 
 import org.lwjgl.opengl.GL11;
@@ -28,11 +29,11 @@ public class RenderHat extends Render
 	
     public void renderHat(EntityHat hat, double par2, double par4, double par6, float par8, float par9)
     {
-    	if(!hat.hatName.equalsIgnoreCase("") && hat.player != null && !hat.player.isPlayerSleeping())
+    	if(!hat.hatName.equalsIgnoreCase("") && hat.parent != null && !hat.parent.isPlayerSleeping() && hat.parent.isEntityAlive())
     	{
-    		boolean firstPerson = (hat.player == Minecraft.getMinecraft().renderViewEntity && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !((Minecraft.getMinecraft().currentScreen instanceof GuiInventory || Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative || Minecraft.getMinecraft().currentScreen instanceof GuiHatSelection) && RenderManager.instance.playerViewY == 180.0F));
+    		boolean firstPerson = (hat.parent == Minecraft.getMinecraft().renderViewEntity && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !((Minecraft.getMinecraft().currentScreen instanceof GuiInventory || Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative || Minecraft.getMinecraft().currentScreen instanceof GuiHatSelection) && RenderManager.instance.playerViewY == 180.0F));
     		
-    		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && !hat.player.getHasActivePotion())
+    		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && !hat.parent.getHasActivePotion())
     		{
 		    	ModelHat model = ClientProxy.models.get(hat.hatName);
 		    	
@@ -43,10 +44,10 @@ public class RenderHat extends Render
 		            GL11.glEnable(GL11.GL_BLEND);
 		            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			        
-			        GL11.glTranslatef((float)par2, (float)par4 + (Minecraft.getMinecraft().renderViewEntity != hat.player ? -0.06F : 0.0F ) + (hat.player != null && hat.player.isSneaking() ? Minecraft.getMinecraft().renderViewEntity != hat.player ? -0.17F : -0.05F : 0.015F), (float)par6);
+			        GL11.glTranslatef((float)par2 - (float)(HatHandler.getHorizontalRenderOffset(hat.parent) * Math.sin(Math.toRadians(hat.parent.prevRotationYawHead + (hat.parent.rotationYawHead - hat.parent.prevRotationYawHead) * par9))), (float)par4 + HatHandler.getVerticalRenderOffset(hat.parent), (float)par6 + (float)(HatHandler.getHorizontalRenderOffset(hat.parent) * Math.cos(Math.toRadians(hat.parent.prevRotationYawHead + (hat.parent.rotationYawHead - hat.parent.prevRotationYawHead) * par9))));
 			        GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 			        
-			        GL11.glRotatef(hat.player.prevRotationPitch + (hat.player.rotationPitch - hat.player.prevRotationPitch) * par9, -1.0F, 0.0F, 0.0F);
+			        GL11.glRotatef(hat.parent.prevRotationPitch + (hat.parent.rotationPitch - hat.parent.prevRotationPitch) * par9, -1.0F, 0.0F, 0.0F);
 			        
 			        if(hat.reColour > 0)
 			        {
@@ -73,7 +74,7 @@ public class RenderHat extends Render
 			        
 			        BufferedImage image = ClientProxy.bufferedImages.get(hat.hatName);
 			        
-			    	if(Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("ohaiiChun") && hat.player.username.equalsIgnoreCase("Notch"))
+			    	if(Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("ohaiiChun") && hat.parent instanceof EntityPlayer && ((EntityPlayer)hat.parent).username.equalsIgnoreCase("Notch"))
 			    	{
 			    		//debug
 			    	}

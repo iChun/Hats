@@ -20,6 +20,14 @@ import org.lwjgl.input.Mouse;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityGiantZombie;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.world.World;
@@ -110,6 +118,29 @@ public class TickHandlerClient
 			}
 		}
 		
+		if(Hats.randomMobHat > 0)
+		{
+			for(int i = 0; i < world.loadedEntityList.size(); i++)
+			{
+				Entity ent = (Entity)world.loadedEntityList.get(i);
+				if(!(ent instanceof EntityLiving) || !(ent instanceof EntityZombie && !(ent instanceof EntityGiantZombie) || ent instanceof EntityCreeper || ent instanceof EntityEnderman || ent instanceof EntitySkeleton))
+				{
+					continue;
+				}
+				
+				EntityLiving living = (EntityLiving)ent;
+				
+				EntityHat hat = mobhats.get(living.entityId);
+				if(hat == null || hat.isDead)
+				{
+					HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.randomMobHat / 100F) ? (Hats.randomHat >= 1 ? HatHandler.getRandomHat() : Hats.favouriteHatInfo) : new HatInfo();
+					hat = new EntityHat(world, living, hatInfo);
+					mobhats.put(living.entityId, hat);
+					world.spawnEntityInWorld(hat);
+				}
+			}
+		}
+
 		Iterator<Entry<String, EntityHat>> ite = hats.entrySet().iterator();
 		
 		while(ite.hasNext())
@@ -119,6 +150,18 @@ public class TickHandlerClient
 			{
 				e.getValue().setDead();
 				ite.remove();
+			}
+		}
+		
+		Iterator<Entry<Integer, EntityHat>> ite1 = mobhats.entrySet().iterator();
+		
+		while(ite1.hasNext())
+		{
+			Entry<Integer, EntityHat> e = ite1.next();
+			if(e.getValue().worldObj.provider.dimensionId != world.provider.dimensionId || (world.getWorldTime() - e.getValue().lastUpdate) > 10L)
+			{
+				e.getValue().setDead();
+				ite1.remove();
 			}
 		}
 		
@@ -171,27 +214,43 @@ public class TickHandlerClient
 		while(iterator.hasNext())
 		{
 			Entry<String, EntityHat> e = iterator.next();
-			if(e.getValue().player != null)
+			if(e.getValue().parent != null)
 			{
 				EntityHat hat = e.getValue();
-				EntityPlayer player = hat.player;
 				
-				hat.prevPosX = player.prevPosX;
-				hat.prevPosY = player.prevPosY + player.getEyeHeight() - 0.35F;
-				hat.prevPosZ = player.prevPosZ;
-				
-				hat.posX = player.posX;
-				hat.posY = player.posY + player.getEyeHeight() - 0.35F;
-				hat.posZ = player.posZ;
-				
-				hat.prevRotationPitch = player.prevRotationPitch;
-				hat.rotationPitch = player.rotationPitch;
-				
-				hat.prevRotationYaw = player.prevRotationYawHead;
-				hat.rotationYaw = player.rotationYawHead;
-				
+				updateHatPosAndAngle(hat, hat.parent);
 			}
 		}
+		
+		Iterator<Entry<Integer, EntityHat>> iterator1 = mobhats.entrySet().iterator();
+		
+		while(iterator1.hasNext())
+		{
+			Entry<Integer, EntityHat> e = iterator1.next();
+			if(e.getValue().parent != null)
+			{
+				EntityHat hat = e.getValue();
+				
+				updateHatPosAndAngle(hat, hat.parent);
+			}
+		}
+	}
+	
+	public void updateHatPosAndAngle(EntityHat hat, EntityLiving parent)
+	{
+		hat.prevPosX = parent.prevPosX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(parent.prevRenderYawOffset));
+		hat.prevPosY = parent.prevPosY + HatHandler.getVerticalPosOffset(parent);
+		hat.prevPosZ = parent.prevPosZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(parent.prevRenderYawOffset));
+		
+		hat.posX = parent.posX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(parent.renderYawOffset));
+		hat.posY = parent.posY + HatHandler.getVerticalPosOffset(parent);
+		hat.posZ = parent.posZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(parent.renderYawOffset));
+		
+		hat.prevRotationPitch = parent.prevRotationPitch;
+		hat.rotationPitch = parent.rotationPitch;
+		
+		hat.prevRotationYaw = parent.prevRotationYawHead;
+		hat.rotationYaw = parent.rotationYawHead;
 	}
 	
 	public void renderTick(Minecraft mc, World world, float renderTick)
@@ -210,6 +269,7 @@ public class TickHandlerClient
 	
 	public HashMap<String, HatInfo> playerWornHats = new HashMap<String, HatInfo>();
 	public HashMap<String, EntityHat> hats = new HashMap<String, EntityHat>();
+	public HashMap<Integer, EntityHat> mobhats = new HashMap<Integer, EntityHat>();
 	
 	public ArrayList<String> availableHats = new ArrayList<String>();
 	public ArrayList<String> requestedHats = new ArrayList<String>();

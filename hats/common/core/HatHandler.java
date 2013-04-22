@@ -23,6 +23,15 @@ import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityGiantZombie;
+import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -636,6 +645,10 @@ public class HatHandler
 		while(ite.hasNext())
 		{
 			Entry<File, String> e = ite.next();
+			if(e.getValue().startsWith("(C)") && Hats.useRandomContributorHats != 1)
+			{
+				continue;
+			}
 			hatNameList.add(e.getValue());
 		}
 		
@@ -677,7 +690,86 @@ public class HatHandler
 			Hats.proxy.openHatsGui();
 		}
 	}
+	
+	
+	//Temp cause no hotcode replace in 151 -.-
+	public static double getVerticalPosOffset(EntityLiving ent)
+	{
+		if(ent instanceof EntityPlayer)
+		{
+			return ent.getEyeHeight() - 0.35F;
+		}
+		else if(ent instanceof EntityZombie || ent instanceof EntitySkeleton)
+		{
+			return 1.55F;
+		}
+		else if(ent instanceof EntityCreeper)
+		{
+			return 1.28F;
+		}
+		else if(ent instanceof EntityEnderman)
+		{
+			return 2.4F;
+		}
+		else if(ent instanceof EntityPig)
+		{
+			return 0.75D;
+		}
+		return 1.0D;
+	}
 
+	public static double getHorizontalPosOffset(EntityLiving ent)
+	{
+		if(ent instanceof EntityPig)
+		{
+			return 0.35D;
+		}
+		return 0.0D;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static float getVerticalRenderOffset(EntityLiving ent)
+	{
+		if(ent instanceof EntityPlayer)
+		{
+			 return (float)(Minecraft.getMinecraft().renderViewEntity != ent ? -0.06F : 0.0F ) + (ent != null && ent.isSneaking() ? Minecraft.getMinecraft().renderViewEntity != ent ? -0.17F : -0.05F : 0.015F);
+		}
+		else if(ent instanceof EntityPigZombie || ent instanceof EntityEnderman)
+		{
+			if(ent instanceof EntityPigZombie)
+			{
+				return 0.025F;
+			}
+			if(ent instanceof EntityEnderman)
+			{
+				if(((EntityEnderman)ent).isScreaming())
+				{
+					return 0.27F;
+				}
+			}
+		}
+		else if(ent instanceof EntityPig)
+		{
+			return 0.2F;
+		}
+		return 0.0F;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static float getHorizontalRenderOffset(EntityLiving ent)
+	{
+		if(ent instanceof EntityPig)
+		{
+			return 0.275F;
+		}
+		return 0.0F;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static float getRenderScale(EntityLiving ent)
+	{
+		return 0.0F;
+	}
 	
 	public static boolean threadLoadComplete = true;
 	public static boolean threadContribComplete = true;

@@ -1,8 +1,10 @@
 package hats.common.entity;
 
+import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,7 +15,7 @@ import net.minecraft.world.World;
 public class EntityHat extends Entity 
 {
 
-	public EntityPlayer player;
+	public EntityLiving parent;
 	public String hatName;
 	
 	public int reColour;
@@ -49,14 +51,14 @@ public class EntityHat extends Entity
 		renderDistanceWeight = 10D;
 	}
 	
-	public EntityHat(World par1World, EntityPlayer ply, HatInfo hatInfo) 
+	public EntityHat(World par1World, EntityLiving ent, HatInfo hatInfo) 
 	{
 		super(par1World);
 		setSize(0.1F, 0.1F);
-		player = ply;
+		parent = ent;
 		hatName = hatInfo.hatName;
 		
-		setPosition(player.posX, player.posY + player.getEyeHeight() - 0.35F, player.posZ);
+		setLocationAndAngles(parent.posX, parent.posY + parent.getEyeHeight() - 0.35F, parent.posZ, parent.rotationYaw, parent.rotationPitch);
 		
 		reColour = 0;
 		
@@ -83,7 +85,7 @@ public class EntityHat extends Entity
 			reColour--;
 		}
 		
-		if(player == null || !player.isEntityAlive())
+		if(parent == null || !parent.isEntityAlive())
 		{
 			setDead();
 			return;
@@ -91,28 +93,28 @@ public class EntityHat extends Entity
 		
 		lastUpdate = worldObj.getWorldTime();
 
-		lastTickPosX = prevPosX = player.prevPosX;
-		lastTickPosY = prevPosY = player.prevPosY + player.getEyeHeight() - 0.35F;
-		lastTickPosZ = prevPosZ = player.prevPosZ;
+		lastTickPosX = prevPosX = parent.prevPosX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(parent.prevRenderYawOffset));
+		lastTickPosY = prevPosY = parent.prevPosY + HatHandler.getVerticalPosOffset(parent);
+		lastTickPosZ = prevPosZ = parent.prevPosZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(parent.prevRenderYawOffset));
 		
 		setPosition(posX, posY, posZ);
-		posX = player.posX;
-		posY = player.posY + player.getEyeHeight() - 0.35F;
-		posZ = player.posZ;
+		posX = parent.posX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(parent.renderYawOffset));
+		posY = parent.posY + HatHandler.getVerticalPosOffset(parent);
+		posZ = parent.posZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(parent.renderYawOffset));
 		
-		prevRotationYaw = player.prevRotationYawHead;
-		rotationYaw = player.rotationYawHead;
+		prevRotationYaw = parent.prevRotationYawHead;
+		rotationYaw = parent.rotationYawHead;
 
 		motionX = posX - prevPosX;
 		motionY = posY - prevPosY;
 		motionZ = posZ - prevPosZ;
 		
 		
-		if(player.ridingEntity != null && !(player.ridingEntity instanceof EntityMinecart))
+		if(parent.ridingEntity != null && !(parent.ridingEntity instanceof EntityMinecart))
 		{
-			motionX = player.ridingEntity.posX - player.ridingEntity.prevPosX;
-			motionY = player.ridingEntity.posY - player.ridingEntity.prevPosY;
-			motionZ = player.ridingEntity.posZ - player.ridingEntity.prevPosZ;
+			motionX = parent.ridingEntity.posX - parent.ridingEntity.prevPosX;
+			motionY = parent.ridingEntity.posY - parent.ridingEntity.prevPosY;
+			motionZ = parent.ridingEntity.posZ - parent.ridingEntity.prevPosZ;
 			
 			lastTickPosX = prevPosX = prevPosX + motionX;
 			lastTickPosY = prevPosY = prevPosY + motionY;
@@ -122,14 +124,22 @@ public class EntityHat extends Entity
 			posY += motionY;
 			posZ += motionZ;
 			
-			if(player.ridingEntity instanceof EntityPig)
+			if(parent.ridingEntity instanceof EntityPig)
 			{
-				prevRotationYaw = ((EntityPig)player.ridingEntity).prevRenderYawOffset;
-				rotationYaw = ((EntityPig)player.ridingEntity).renderYawOffset;
+				prevRotationYaw = ((EntityPig)parent.ridingEntity).prevRenderYawOffset;
+				rotationYaw = ((EntityPig)parent.ridingEntity).renderYawOffset;
 			}
 		}
 		
-//		worldObj.spawnParticle("smoke", posX, posY, posZ, 1.0D, 0.0D, 0.0D);
+		if(!(parent instanceof EntityPlayer))
+		{
+			worldObj.spawnParticle("smoke", posX, posY, posZ, 1.0D, 0.0D, 0.0D);
+			worldObj.spawnParticle("smoke", posX, posY, posZ, -1.0D, 0.0D, 0.0D);
+			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 1.0D, 0.0D);
+			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, -1.0D, 0.0D);
+			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 0.0D, 1.0D);
+			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 0.0D, -1.0D);
+		}
 	}
 	
 	public void setR(int i)

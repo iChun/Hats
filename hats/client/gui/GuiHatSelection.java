@@ -68,6 +68,7 @@ public class GuiHatSelection extends GuiScreen
 	private final int ID_SET_KEY = 22;
 	private final int ID_SET_FP = 23;
 	private final int ID_RESET_SIDE = 24;
+	private final int ID_MOB_SLIDER = 25;
 	
 	private final int ID_CATEGORIES_START = 30;
 	
@@ -83,6 +84,8 @@ public class GuiHatSelection extends GuiScreen
 	private GuiTextField searchBar;
 	private String selectedButtonName = "";
 	private int favourite;
+	
+	private int randoMob;
 	
 	private boolean hasClicked = false;
 	private boolean confirmed = false;
@@ -657,8 +660,6 @@ public class GuiHatSelection extends GuiScreen
 	    	}
 	    	else if(btn.id == ID_RESET_SIDE)
 	    	{
-	    		//TODO reset side
-	    		
 	    		enabledSearchBar = false;
 	    		toggleSearchBar();
 	    		
@@ -1188,6 +1189,7 @@ public class GuiHatSelection extends GuiScreen
         	buttonList.add(new GuiButton(ID_SET_KEY, width / 2 - 6, height / 2 - 78, 88, 20, "GUI: " + (Hats.guiKeyBind < 0 ? Mouse.getButtonName(Hats.guiKeyBind + 100) : Keyboard.getKeyName(Hats.guiKeyBind))));
         	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, "First Person: " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No")));
         	buttonList.add(new GuiButton(ID_RESET_SIDE, width / 2 - 6, height / 2 - 78 + (22 * 5), 88, 20, "Reset Side?"));
+			buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 2), "RandoMobs: ", 0, 100, Hats.randomMobHat, this, "%"));
         	
         	currentDisplay = "Personalize";
         }
@@ -1506,7 +1508,7 @@ public class GuiHatSelection extends GuiScreen
     					btn.drawButton = false;
     				}
     			}
-    			if(btn.id >= ID_SET_KEY && btn.id <= ID_RESET_SIDE || btn.id == ID_SEARCH)
+    			if(btn.id >= ID_SET_KEY && btn.id <= ID_MOB_SLIDER || btn.id == ID_SEARCH)
     			{
     				buttonList.remove(i);
     			}
@@ -1524,6 +1526,7 @@ public class GuiHatSelection extends GuiScreen
     		}
     		
     		Hats.enabled = sb.toString().trim();
+    		Hats.randomMobHat = randoMob;
     		
     		Hats.handleConfig();
     		
@@ -1999,6 +2002,10 @@ public class GuiHatSelection extends GuiScreen
 			colourB = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
 			hat.setB(colourB);
 		}
+		else if(slider.id == ID_MOB_SLIDER)
+		{
+			randoMob = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
+		}
 	}
 
 	private static final String[] invalidChars = new String[] { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
@@ -2023,6 +2030,7 @@ public class GuiHatSelection extends GuiScreen
 	private static final String[] helpInfo16 = new String[] {"The hot key for \"Personalize\" is", "\"P\", in case you accidentally", "disabled the button."};
 	private static final String[] helpInfo17 = new String[] {"You can get your own custom", "hat added to the mod if", "you give us a donation!", "", "Check the mod page for info."};
 	private static final String[] helpInfo18 = new String[] {"The (C) in the name of the hat", "represents a hat added as a thank", "you for a donation!"};
+	private static final String[] helpInfo19 = new String[] {"Did you know you can customize", "if mobs have hats? Its in the", "\"Personalize\" tab"};
 	
 	static
 	{
@@ -2044,6 +2052,7 @@ public class GuiHatSelection extends GuiScreen
 		help.add(helpInfo16);
 		help.add(helpInfo17);
 		help.add(helpInfo18);
+		help.add(helpInfo19);
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());

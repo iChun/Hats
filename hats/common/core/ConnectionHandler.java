@@ -78,6 +78,7 @@ public class ConnectionHandler
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 		{
 			Hats.proxy.tickHandlerClient.hats.clear();
+			Hats.proxy.tickHandlerClient.mobhats.clear();
 			Hats.proxy.tickHandlerClient.playerWornHats.clear();
 			Hats.proxy.tickHandlerClient.requestedHats.clear();
 		}
