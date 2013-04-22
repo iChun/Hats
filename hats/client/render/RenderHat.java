@@ -44,10 +44,19 @@ public class RenderHat extends Render
 		            GL11.glEnable(GL11.GL_BLEND);
 		            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			        
-			        GL11.glTranslatef((float)par2 - (float)(HatHandler.getHorizontalRenderOffset(hat.parent) * Math.sin(Math.toRadians(hat.parent.prevRotationYawHead + (hat.parent.rotationYawHead - hat.parent.prevRotationYawHead) * par9))), (float)par4 + HatHandler.getVerticalRenderOffset(hat.parent), (float)par6 + (float)(HatHandler.getHorizontalRenderOffset(hat.parent) * Math.cos(Math.toRadians(hat.parent.prevRotationYawHead + (hat.parent.rotationYawHead - hat.parent.prevRotationYawHead) * par9))));
+		            float rotYawHead = interpolateRotation(hat.getPrevRotationYaw(), hat.getRotationYaw(), par9);
+		            
+			        GL11.glTranslatef((float)par2 - (float)(HatHandler.getHorizontalRenderOffset(hat.parent) * Math.sin(Math.toRadians(rotYawHead))), (float)par4 + HatHandler.getVerticalRenderOffset(hat.parent), (float)par6 + (float)(HatHandler.getHorizontalRenderOffset(hat.parent) * Math.cos(Math.toRadians(rotYawHead))));
 			        GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 			        
-			        GL11.glRotatef(hat.parent.prevRotationPitch + (hat.parent.rotationPitch - hat.parent.prevRotationPitch) * par9, -1.0F, 0.0F, 0.0F);
+			        GL11.glRotatef(interpolateRotation(hat.getPrevRotationPitch(), hat.getRotationPitch(), par9), -1.0F, 0.0F, 0.0F);
+			        
+			        GL11.glRotatef(180.0F - par8, 0.0F, -1.0F, 0.0F);
+			        GL11.glTranslatef((HatHandler.getHorizontalPostRotateOffset(hat.parent) * (float)Math.sin(Math.toRadians(rotYawHead))), HatHandler.getVerticalPostRotateOffset(hat.parent), -(HatHandler.getHorizontalPostRotateOffset(hat.parent) * (float)Math.cos(Math.toRadians(rotYawHead))));
+			        GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
+			        
+			        float scale = HatHandler.getRenderScale(hat.parent);
+			        GL11.glScalef(scale, scale, scale);
 			        
 			        if(hat.reColour > 0)
 			        {
@@ -74,9 +83,11 @@ public class RenderHat extends Render
 			        
 			        BufferedImage image = ClientProxy.bufferedImages.get(hat.hatName);
 			        
-			    	if(Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("ohaiiChun") && hat.parent instanceof EntityPlayer && ((EntityPlayer)hat.parent).username.equalsIgnoreCase("Notch"))
+			    	if(Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("Notch") && hat.parent instanceof EntityPlayer && ((EntityPlayer)hat.parent).username.equalsIgnoreCase("Notch"))
 			    	{
-			    		//debug
+//			    		System.out.println(par8);
+//			    		System.out.println((HatHandler.getHorizontalPostRotateOffset(hat.parent) * (float)Math.sin(Math.toRadians(rotYawHead))));
+//			    		System.out.println(rotYawHead);
 			    	}
 			        
 			        if (image != null)
@@ -114,6 +125,23 @@ public class RenderHat extends Render
     public void doRender(Entity par1Entity, double par2, double par4, double par6, float par8, float par9)
     {
         this.renderHat((EntityHat)par1Entity, par2, par4, par6, par8, par9);
+    }
+    
+    public float interpolateRotation(float par1, float par2, float par3)
+    {
+        float f3;
+
+        for (f3 = par2 - par1; f3 < -180.0F; f3 += 360.0F)
+        {
+            ;
+        }
+
+        while (f3 >= 180.0F)
+        {
+            f3 -= 360.0F;
+        }
+
+        return par1 + par3 * f3;
     }
 
 }

@@ -6,7 +6,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.monster.EntityGhast;
+import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
@@ -85,7 +88,7 @@ public class EntityHat extends Entity
 			reColour--;
 		}
 		
-		if(parent == null || !parent.isEntityAlive())
+		if(parent == null || !parent.isEntityAlive() || parent.isChild())
 		{
 			setDead();
 			return;
@@ -102,8 +105,11 @@ public class EntityHat extends Entity
 		posY = parent.posY + HatHandler.getVerticalPosOffset(parent);
 		posZ = parent.posZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(parent.renderYawOffset));
 		
-		prevRotationYaw = parent.prevRotationYawHead;
-		rotationYaw = parent.rotationYawHead;
+		prevRotationYaw = getPrevRotationYaw();
+		rotationYaw = getRotationYaw();
+		
+		prevRotationPitch = getPrevRotationPitch();
+		rotationPitch = getRotationPitch();
 
 		motionX = posX - prevPosX;
 		motionY = posY - prevPosY;
@@ -133,12 +139,12 @@ public class EntityHat extends Entity
 		
 		if(!(parent instanceof EntityPlayer))
 		{
-//			worldObj.spawnParticle("smoke", posX, posY, posZ, 1.0D, 0.0D, 0.0D);
-//			worldObj.spawnParticle("smoke", posX, posY, posZ, -1.0D, 0.0D, 0.0D);
-//			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 1.0D, 0.0D);
-//			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, -1.0D, 0.0D);
-//			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 0.0D, 1.0D);
-//			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 0.0D, -1.0D);
+			worldObj.spawnParticle("smoke", posX, posY, posZ, 1.0D, 0.0D, 0.0D);
+			worldObj.spawnParticle("smoke", posX, posY, posZ, -1.0D, 0.0D, 0.0D);
+			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 1.0D, 0.0D);
+			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, -1.0D, 0.0D);
+			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 0.0D, 1.0D);
+			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 0.0D, -1.0D);
 		}
 	}
 	
@@ -175,8 +181,61 @@ public class EntityHat extends Entity
 		return colourB;
 	}
 	
+	public float getPrevRotationYaw()
+	{
+		if(parent instanceof EntityGhast || parent instanceof EntitySilverfish)
+		{
+			return parent.prevRenderYawOffset;
+		}
+		else if(parent instanceof EntitySquid)
+		{
+			return ((EntitySquid)parent).prevRenderYawOffset;
+		}
+		return parent.prevRotationYawHead;
+	}
+
+	public float getRotationYaw()
+	{
+		if(parent instanceof EntityGhast || parent instanceof EntitySilverfish)
+		{
+			return parent.renderYawOffset;
+		}
+		else if(parent instanceof EntitySquid)
+		{
+			return ((EntitySquid)parent).renderYawOffset;
+		}
+		return parent.rotationYawHead;
+	}
+	
+	public float getPrevRotationPitch()
+	{
+		if(parent instanceof EntityGhast || parent instanceof EntitySilverfish)
+		{
+			return 0.0F;
+		}
+		else if(parent instanceof EntitySquid)
+		{
+			return -((EntitySquid)parent).field_70862_e;
+		}
+		return parent.prevRotationPitch;
+	}
+
+	public float getRotationPitch()
+	{
+		if(parent instanceof EntityGhast || parent instanceof EntitySilverfish)
+		{
+			return 0.0F;
+		}
+		else if(parent instanceof EntitySquid)
+		{
+			return -((EntitySquid)parent).field_70861_d;
+		}
+		return parent.rotationPitch;
+	}
+
+	
 	@Override
-	protected void entityInit() 
+	public void entityInit() 
 	{
 	}
 	
@@ -187,12 +246,12 @@ public class EntityHat extends Entity
     }
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) 
+	public void readEntityFromNBT(NBTTagCompound nbttagcompound) 
 	{
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) 
+	public void writeEntityToNBT(NBTTagCompound nbttagcompound) 
 	{
 	}
 

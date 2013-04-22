@@ -25,13 +25,19 @@ import java.util.zip.ZipFile;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityGiantZombie;
 import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySquid;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -701,32 +707,94 @@ public class HatHandler
 		}
 		else if(ent instanceof EntityZombie || ent instanceof EntitySkeleton)
 		{
-			return 1.55F;
+			if(ent instanceof EntitySkeleton && ((EntitySkeleton)ent).getSkeletonType() == 1)
+			{
+				return 1.8F;
+			}
+			return 1.55D;
 		}
 		else if(ent instanceof EntityCreeper)
 		{
-			return 1.28F;
+			return 1.28D;
 		}
 		else if(ent instanceof EntityEnderman)
 		{
 			return 2.4F;
 		}
+		else if(ent instanceof EntityVillager)
+		{
+			return 1.4F;
+		}
+		else if(ent instanceof EntityBlaze)
+		{
+			return 1.5D;
+		}
+		else if(ent instanceof EntitySquid)
+		{
+			return 0.5D;
+		}
 		else if(ent instanceof EntityPig)
 		{
 			return 0.75D;
 		}
-		return 1.0D;
+		else if(ent instanceof EntitySpider)
+		{
+			return 0.57D * ((EntitySpider)ent).spiderScaleAmount();
+		}
+		return 0.0D;
 	}
 
 	public static double getHorizontalPosOffset(EntityLiving ent)
 	{
 		if(ent instanceof EntityPig)
 		{
-			return 0.35D;
+			return 0.37D;
+		}
+		else if(ent instanceof EntitySpider)
+		{
+			return 0.18D * ((EntitySpider)ent).spiderScaleAmount();
 		}
 		return 0.0D;
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public static float getVerticalPostRotateOffset(EntityLiving ent)
+	{
+		if(ent instanceof EntityBlaze)
+		{
+			return -0.21F;
+		}
+		else if(ent instanceof EntitySquid)
+		{
+			return -0.39F;
+		}
+		else if(ent instanceof EntityPig)
+		{
+			return -0.205F;
+		}
+		else if(ent instanceof EntitySpider)
+		{
+//			ent.prevRenderYawOffset = ent.renderYawOffset = ent.prevRotationYawHead = ent.rotationYawHead = 0F;
+//			ent.prevRotationPitch = ent.rotationPitch = -90.0F;
+			return -0.21F * ((EntitySpider)ent).spiderScaleAmount();
+		}
+		return 0.0F;
+	}
 
+	@SideOnly(Side.CLIENT)
+	public static float getHorizontalPostRotateOffset(EntityLiving ent)
+	{
+		if(ent instanceof EntityPig)
+		{
+			return -0.25F;
+		}
+		else if(ent instanceof EntitySpider)
+		{
+			return -0.265F * ((EntitySpider)ent).spiderScaleAmount();
+		}
+		return 0F;
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public static float getVerticalRenderOffset(EntityLiving ent)
 	{
@@ -749,9 +817,13 @@ public class HatHandler
 				return -0.06F;
 			}
 		}
-		else if(ent instanceof EntityPig)
+		else if(ent instanceof EntityVillager)
 		{
-			return 0.2F;
+			return 0.12F;
+		}
+		else if(ent instanceof EntityGhast)
+		{
+			return -0.05F;
 		}
 		return 0.0F;
 	}
@@ -759,17 +831,40 @@ public class HatHandler
 	@SideOnly(Side.CLIENT)
 	public static float getHorizontalRenderOffset(EntityLiving ent)
 	{
-		if(ent instanceof EntityPig)
-		{
-			return 0.275F;
-		}
 		return 0.0F;
 	}
 
 	@SideOnly(Side.CLIENT)
 	public static float getRenderScale(EntityLiving ent)
 	{
-		return 0.0F;
+		if(ent instanceof EntitySkeleton && ((EntitySkeleton)ent).getSkeletonType() == 1)
+		{
+			return 1.2F;
+		}
+		else if(ent instanceof EntityGhast)
+		{
+			return 9.0F;
+		}
+		else if(ent instanceof EntitySilverfish)
+		{
+			return 0.7F;
+		}
+		else if(ent instanceof EntitySquid)
+		{
+			return 1.5F;
+		}
+		else if(ent instanceof EntitySpider)
+		{
+			return ((EntitySpider)ent).spiderScaleAmount();
+		}
+		return 1.0F;
+	}
+	
+	public static boolean canMobHat(EntityLiving ent)
+	{
+		return !ent.isChild() && (ent instanceof EntityZombie && !(ent instanceof EntityGiantZombie) || ent instanceof EntityCreeper || ent instanceof EntityEnderman
+				|| ent instanceof EntitySkeleton || ent instanceof EntityVillager || ent instanceof EntityGhast || ent instanceof EntityBlaze || ent instanceof EntitySquid
+				|| ent instanceof EntityPig || ent instanceof EntitySpider);
 	}
 	
 	public static boolean threadLoadComplete = true;

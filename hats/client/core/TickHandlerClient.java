@@ -108,6 +108,10 @@ public class TickHandlerClient
 						{
 							e.getValue().setDead();
 						}
+						for(Entry<Integer, EntityHat> e : mobhats.entrySet())
+						{
+							e.getValue().setDead();
+						}
 					}
 					
 					HatInfo hatInfo = (serverHasMod ? getPlayerHat(player.username) : ((Hats.randomHat == 1 || Hats.randomHat == 2 && player != mc.thePlayer) ? HatHandler.getRandomHat() : Hats.favouriteHatInfo));
@@ -123,7 +127,7 @@ public class TickHandlerClient
 			for(int i = 0; i < world.loadedEntityList.size(); i++)
 			{
 				Entity ent = (Entity)world.loadedEntityList.get(i);
-				if(!(ent instanceof EntityLiving) || !(ent instanceof EntityZombie && !(ent instanceof EntityGiantZombie) || ent instanceof EntityCreeper || ent instanceof EntityEnderman || ent instanceof EntitySkeleton))
+				if(!(ent instanceof EntityLiving) || !HatHandler.canMobHat((EntityLiving)ent))
 				{
 					continue;
 				}
@@ -246,11 +250,11 @@ public class TickHandlerClient
 		hat.posY = parent.posY + HatHandler.getVerticalPosOffset(parent);
 		hat.posZ = parent.posZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(parent.renderYawOffset));
 		
-		hat.prevRotationPitch = parent.prevRotationPitch;
-		hat.rotationPitch = parent.rotationPitch;
+		hat.prevRotationPitch = hat.getPrevRotationPitch();
+		hat.rotationPitch = hat.getRotationPitch();
 		
-		hat.prevRotationYaw = parent.prevRotationYawHead;
-		hat.rotationYaw = parent.rotationYawHead;
+		hat.prevRotationYaw = hat.getPrevRotationYaw();
+		hat.rotationYaw = hat.getRotationYaw();
 	}
 	
 	public void renderTick(Minecraft mc, World world, float renderTick)

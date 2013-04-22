@@ -46,7 +46,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Hats", name = "Hats",
-			version = "1.2.1"
+			version = "1.2.2"
 				)
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
@@ -58,7 +58,7 @@ import cpw.mods.fml.relauncher.Side;
 				)
 public class Hats 
 {
-	public static final String version = "1.2.1";
+	public static final String version = "1.2.2";
 	
 	//Global Options
 	public static int safeLoad = 1;
@@ -118,14 +118,16 @@ public class Hats
 			randomHat = addCommentAndReturnInt(config, "clientOnly", "randomHat", "Should each player have a random hat?\nThey randomly change from time to time.\n0 = No\n1 = Yes\n2 = Yes, but not the player!\nOnly when enableInServersWithoutMod = 1", randomHat);
 			favouriteHat = addCommentAndReturnString(config, "clientOnly", "favouriteHat", "What hat do you want to use on servers without the mod? Only when randomHat = 0", favouriteHat).toLowerCase();
 			favouriteHatColourizer = addCommentAndReturnString(config, "clientOnly", "favouriteHatColourizer", "Do you want to apply a colourizer to your favourite hat?\nIf no, leave as #ffffff\n(Google \"hex color codes\" if you don\'t understand)\nFormat: #<colour index> or 0x<colour index>\nEg: #ffffff or 0xffffff for white", favouriteHatColourizer).toLowerCase();
-			randomMobHat = Math.min(100, Math.max(addCommentAndReturnInt(config, "clientOnly", "randomMobHat", "Do mobs have a random chance of having a hat?\n0 = Disabled (0%)\n100 = All mobs (100%)\nThis follows the randomHat setting, meaning if randomHat is 0, all mobs will wear the favouriteHat setting", randomMobHat), 0));
-			useRandomContributorHats = addCommentAndReturnInt(config, "clientOnly", "useRandomContributorHats", "Allow the use of contributor hats when getting a random hat?\n0 = No\n1 = Yes", useRandomContributorHats);
 			
 			favouriteHatInfo = getHatInfoFromConfig();
 			
 			guiKeyBind = addCommentAndReturnInt(config, "clientOnly", "guiKeyBind", "What key code do you want to use to open the Hat Selection GUI?\nMouse binds are posible, starting from -100 and higher.\nFor info on Key codes, check here: http://www.minecraftwiki.net/wiki/Key_codes", guiKeyBind);
 			enabled = addCommentAndReturnString(config, "clientOnly", "personalizeEnabled", "DO NOT CHANGE THIS. PERIOD.\nI'M NOT JOKING.", enabled);
 		}
+		
+		config.addCustomCategoryComment("randoMobOptions", "These settings affect either the client on randoMob settings or Mob Hunting Mode.");
+		randomMobHat = Math.min(100, Math.max(addCommentAndReturnInt(config, "randoMobOptions", "randomMobHat", "Do mobs have a random chance of having a hat?\n0 = Disabled (0%)\n100 = All mobs (100%)\n(Client)This follows the randomHat setting, meaning if randomHat is 0, all mobs will wear the favouriteHat setting", randomMobHat), 0));
+		useRandomContributorHats = addCommentAndReturnInt(config, "randoMobOptions", "useRandomContributorHats", "Allow the use of contributor hats when getting a random hat?\n0 = No\n1 = Yes", useRandomContributorHats);
 		
 		config.save();
 		
