@@ -35,7 +35,10 @@ import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -500,15 +503,7 @@ public class HatHandler
 						if(newHat)
 						{				
 							Hats.console("Received " + file.getName() + " from server.");
-							
-							Hats.proxy.tickHandlerClient.availableHats.clear();
-							Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-							while(ite.hasNext())
-							{
-								Entry<File, String> e = ite.next();
-								Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
-							}
-							Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+							HatHandler.repopulateHatsList();
 						}
 						else
 						{
@@ -651,7 +646,7 @@ public class HatHandler
 		while(ite.hasNext())
 		{
 			Entry<File, String> e = ite.next();
-			if(e.getValue().startsWith("(C)") && Hats.useRandomContributorHats != 1)
+			if(e.getValue().startsWith("(C)".toLowerCase()) && Hats.useRandomContributorHats != 1)
 			{
 				continue;
 			}
@@ -669,15 +664,7 @@ public class HatHandler
 	@SideOnly(Side.CLIENT)
 	public static void reloadAndOpenGui()
 	{
-		Hats.proxy.tickHandlerClient.availableHats.clear();
-		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-		while(ite.hasNext())
-		{
-			Entry<File, String> e = ite.next();
-			Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
-		}
-		Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
-		
+		repopulateHatsList();
 		if(Hats.playerHatsMode == 3)
 		{
 	        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -697,6 +684,47 @@ public class HatHandler
 		}
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public static void repopulateHatsList()
+	{
+		Hats.proxy.tickHandlerClient.availableHats.clear();
+		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+		while(ite.hasNext())
+		{
+			Entry<File, String> e = ite.next();
+			Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
+		}
+		Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static void populateHatsList(String s)
+	{
+		Hats.proxy.tickHandlerClient.availableHats.clear();
+		
+		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+		while(ite.hasNext())
+		{
+			Entry<File, String> e = ite.next();
+			String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
+			if(name.startsWith("(C)".toLowerCase()) && name.contains(Minecraft.getMinecraft().thePlayer.username) || name.equalsIgnoreCase("(c) iChun") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("ohaiiChun"))
+			{
+				Hats.proxy.tickHandlerClient.availableHats.add(name);
+			}
+		}
+		
+		String[] split = s.split(":");
+		for(String name : split)
+		{
+			if(!name.trim().equalsIgnoreCase(""))
+			{
+				Hats.proxy.tickHandlerClient.availableHats.add(name.trim());
+			}
+		}
+		Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+		
+		Hats.proxy.tickHandlerClient.serverHats = new ArrayList<String>(Hats.proxy.tickHandlerClient.availableHats);
+	}
 	
 	//Temp cause no hotcode replace in 151 -.-
 	public static double getVerticalPosOffset(EntityLiving ent)
@@ -741,6 +769,18 @@ public class HatHandler
 		{
 			return 0.57D * ((EntitySpider)ent).spiderScaleAmount();
 		}
+		else if(ent instanceof EntitySheep)
+		{
+			return 1.1D;
+		}
+		else if(ent instanceof EntityCow)
+		{
+			return 1.25D;
+		}
+		else if(ent instanceof EntityChicken)
+		{
+			return 0.55D;
+		}
 		return 0.0D;
 	}
 
@@ -753,6 +793,18 @@ public class HatHandler
 		else if(ent instanceof EntitySpider)
 		{
 			return 0.18D * ((EntitySpider)ent).spiderScaleAmount();
+		}
+		else if(ent instanceof EntitySheep)
+		{
+			return 0.50D;
+		}
+		else if(ent instanceof EntityCow)
+		{
+			return 0.50D;
+		}
+		else if(ent instanceof EntityChicken)
+		{
+			return 0.25D;
 		}
 		return 0.0D;
 	}
@@ -774,9 +826,23 @@ public class HatHandler
 		}
 		else if(ent instanceof EntitySpider)
 		{
-//			ent.prevRenderYawOffset = ent.renderYawOffset = ent.prevRotationYawHead = ent.rotationYawHead = 0F;
-//			ent.prevRotationPitch = ent.rotationPitch = -90.0F;
 			return -0.21F * ((EntitySpider)ent).spiderScaleAmount();
+		}
+		else if(ent instanceof EntitySheep)
+		{
+			return -0.065F;
+		}
+		else if(ent instanceof EntityVillager)
+		{
+			return 0.13F;
+		}
+		else if(ent instanceof EntityCow)
+		{
+			return -0.21F;
+		}
+		else if(ent instanceof EntityChicken)
+		{
+			return 0.165F;
 		}
 		return 0.0F;
 	}
@@ -791,6 +857,18 @@ public class HatHandler
 		else if(ent instanceof EntitySpider)
 		{
 			return -0.265F * ((EntitySpider)ent).spiderScaleAmount();
+		}
+		else if(ent instanceof EntitySheep)
+		{
+			return -0.18F;
+		}
+		else if(ent instanceof EntityCow)
+		{
+			return -0.125F;
+		}
+		else if(ent instanceof EntityChicken)
+		{
+			return 0.0F;
 		}
 		return 0F;
 	}
@@ -816,10 +894,6 @@ public class HatHandler
 			{
 				return -0.06F;
 			}
-		}
-		else if(ent instanceof EntityVillager)
-		{
-			return 0.12F;
 		}
 		else if(ent instanceof EntityGhast)
 		{
@@ -857,14 +931,28 @@ public class HatHandler
 		{
 			return ((EntitySpider)ent).spiderScaleAmount();
 		}
+		else if(ent instanceof EntitySheep)
+		{
+			if(((EntitySheep) ent).func_70894_j(1.0F) != 0.0F)
+			{
+				return 0.0F;
+			}
+			return 0.75F;
+		}
+		else if(ent instanceof EntityChicken)
+		{
+			return 0.5F;
+		}
 		return 1.0F;
 	}
 	
 	public static boolean canMobHat(EntityLiving ent)
 	{
-		return !ent.isChild() && (ent instanceof EntityZombie && !(ent instanceof EntityGiantZombie) || ent instanceof EntityCreeper || ent instanceof EntityEnderman
-				|| ent instanceof EntitySkeleton || ent instanceof EntityVillager || ent instanceof EntityGhast || ent instanceof EntityBlaze || ent instanceof EntitySquid
-				|| ent instanceof EntityPig || ent instanceof EntitySpider);
+		return ent.isEntityAlive() && !ent.isChild() && (Hats.hatZombie == 1 && ent instanceof EntityZombie && !(ent instanceof EntityGiantZombie) || Hats.hatCreeper == 1 && ent instanceof EntityCreeper 
+				|| Hats.hatEnderman == 1 &&ent instanceof EntityEnderman || Hats.hatSkeleton == 1 && ent instanceof EntitySkeleton || Hats.hatVillager == 1 && ent instanceof EntityVillager 
+				|| Hats.hatGhast == 1 && ent instanceof EntityGhast || Hats.hatBlaze == 1 && ent instanceof EntityBlaze || Hats.hatSquid == 1 && ent instanceof EntitySquid 
+				|| Hats.hatPig == 1 && ent instanceof EntityPig || Hats.hatSpider == 1 && ent instanceof EntitySpider || Hats.hatSheep == 1 && ent instanceof EntitySheep 
+				|| Hats.hatCow == 1 && ent instanceof EntityCow || Hats.hatChicken == 1 && ent instanceof EntityChicken);
 	}
 	
 	public static boolean threadLoadComplete = true;

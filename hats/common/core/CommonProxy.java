@@ -32,6 +32,8 @@ import net.minecraft.world.WorldServer;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy 
 {
@@ -56,6 +58,8 @@ public class CommonProxy
 	
 	public void initTickHandlers() 
 	{
+		tickHandlerServer = new TickHandlerServer();
+		TickRegistry.registerTickHandler(tickHandlerServer, Side.SERVER);
 	}
 	
 	public void getHats()
@@ -291,5 +295,5 @@ public class CommonProxy
 	public static HashMap<String, HatInfo> playerWornHats = new HashMap<String, HatInfo>();
 	
 	public static TickHandlerClient tickHandlerClient;
-	
+	public static TickHandlerServer tickHandlerServer;
 }

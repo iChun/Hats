@@ -6,6 +6,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -44,15 +45,7 @@ public class ConnectionHandler
 	{
 		Hats.proxy.tickHandlerClient.serverHasMod = false;
 		
-		Hats.proxy.tickHandlerClient.availableHats.clear();
-		
-		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-		while(ite.hasNext())
-		{
-			Entry<File, String> e = ite.next();
-			Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
-		}
-		Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+		HatHandler.repopulateHatsList();
 	}
 
 	@Override
@@ -78,9 +71,10 @@ public class ConnectionHandler
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT)
 		{
 			Hats.proxy.tickHandlerClient.hats.clear();
-			Hats.proxy.tickHandlerClient.mobhats.clear();
+			Hats.proxy.tickHandlerClient.mobHats.clear();
 			Hats.proxy.tickHandlerClient.playerWornHats.clear();
 			Hats.proxy.tickHandlerClient.requestedHats.clear();
+			Hats.proxy.tickHandlerClient.worldInstance = null;
 		}
 	}
 
@@ -99,9 +93,30 @@ public class ConnectionHandler
 			
 			stream.writeByte((byte)Hats.playerHatsMode);
 			
+			stream.writeBoolean(Hats.proxy.saveData.getBoolean(player.username + "_hasVisited"));
+			
 			if(Hats.proxy.saveData != null)
 			{
-				stream.writeUTF(Hats.playerHatsMode == 1 ? "" : ""); // TODO Quest mode list of available player hats
+				String playerHats = Hats.proxy.saveData.getString(player.username + "_unlocked");
+				
+				stream.writeUTF(Hats.playerHatsMode == 1 ? "" : playerHats); // TODO Quest mode list of available player hats
+				
+				ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(player.username);
+				if(playerHatsList == null)
+				{
+					playerHatsList = new ArrayList<String>();
+					Hats.proxy.tickHandlerServer.playerHats.put(player.username, playerHatsList);
+				}
+				
+				playerHatsList.clear();
+				String[] hats = playerHats.split(":");
+				for(String hat : hats)
+				{
+					if(!hat.trim().equalsIgnoreCase(""))
+					{
+						playerHatsList.add(hat);
+					}
+				}
 				
 				String hatName = Hats.proxy.saveData.getString(player.username + "_wornHat");
 				int r = Hats.proxy.saveData.getInteger(player.username + "_colourR");
@@ -123,6 +138,8 @@ public class ConnectionHandler
 			}
 			
 			PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);
+			
+			Hats.proxy.saveData.setBoolean(player.username + "_hasVisited", true);
 		}
 		catch(IOException e)
 		{}

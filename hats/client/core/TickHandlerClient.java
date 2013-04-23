@@ -88,6 +88,18 @@ public class TickHandlerClient
 
 	public void worldTick(Minecraft mc, WorldClient world)
 	{
+		if(worldInstance != world)
+		{
+			worldInstance = world;
+			mobHats.clear();
+			hats.clear();
+			requestCooldown = 40;
+		}
+		if(showHatHuntingMode)
+		{
+			showHatHuntingMode = false;
+			mc.thePlayer.addChatMessage("[Hats] Server is on Hat Hunting Mode! Kill a mob with a hat to unlock it!");
+		}
 		if(Hats.enableInServersWithoutMod == 1 && !serverHasMod || serverHasMod)
 		{
 			for(int i = 0; i < world.playerEntities.size(); i++)
@@ -108,7 +120,7 @@ public class TickHandlerClient
 						{
 							e.getValue().setDead();
 						}
-						for(Entry<Integer, EntityHat> e : mobhats.entrySet())
+						for(Entry<Integer, EntityHat> e : mobHats.entrySet())
 						{
 							e.getValue().setDead();
 						}
@@ -122,25 +134,61 @@ public class TickHandlerClient
 			}
 		}
 		
-		if(Hats.randomMobHat > 0)
+		if(requestCooldown > 0)
+		{
+			requestCooldown++;
+		}
+		
+		if(world.getWorldTime() % 5L == 0L && requestCooldown <= 0)
+		{
+			if(requestedMobHats.size() > 0)
+			{
+		        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		        DataOutputStream stream = new DataOutputStream(bytes);
+	
+		        try
+		        {
+					for(int i = 0 ; i < requestedMobHats.size(); i++)
+					{
+			        	stream.writeBoolean(true); 
+			        	stream.writeInt(requestedMobHats.get(i)); 
+			        }
+					stream.writeBoolean(false);
+		        	
+		        	PacketDispatcher.sendPacketToServer(new Packet131MapData((short)Hats.getNetId(), (short)3, bytes.toByteArray()));
+				}
+		        catch(IOException e)
+		        {}
+				requestedMobHats.clear();
+			}
+		}
+		
+		if(Hats.randomMobHat > 0 && !serverHasMod || serverHatMode == 4)
 		{
 			for(int i = 0; i < world.loadedEntityList.size(); i++)
 			{
 				Entity ent = (Entity)world.loadedEntityList.get(i);
-				if(!(ent instanceof EntityLiving) || !HatHandler.canMobHat((EntityLiving)ent))
+				if(!(ent instanceof EntityLiving) || !HatHandler.canMobHat((EntityLiving)ent) && !serverHasMod)
 				{
 					continue;
 				}
 				
 				EntityLiving living = (EntityLiving)ent;
 				
-				EntityHat hat = mobhats.get(living.entityId);
+				EntityHat hat = mobHats.get(living.entityId);
 				if(hat == null || hat.isDead)
 				{
-					HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.randomMobHat / 100F) ? (Hats.randomHat >= 1 ? HatHandler.getRandomHat() : Hats.favouriteHatInfo) : new HatInfo();
-					hat = new EntityHat(world, living, hatInfo);
-					mobhats.put(living.entityId, hat);
-					world.spawnEntityInWorld(hat);
+					if(!serverHasMod)
+					{
+						HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.randomMobHat / 100F) ? (Hats.randomHat >= 1 ? HatHandler.getRandomHat() : Hats.favouriteHatInfo) : new HatInfo();
+						hat = new EntityHat(world, living, hatInfo);
+						mobHats.put(living.entityId, hat);
+						world.spawnEntityInWorld(hat);
+					}
+					else if(!requestedMobHats.contains(living.entityId))
+					{
+						requestedMobHats.add(living.entityId);
+					}
 				}
 			}
 		}
@@ -157,7 +205,7 @@ public class TickHandlerClient
 			}
 		}
 		
-		Iterator<Entry<Integer, EntityHat>> ite1 = mobhats.entrySet().iterator();
+		Iterator<Entry<Integer, EntityHat>> ite1 = mobHats.entrySet().iterator();
 		
 		while(ite1.hasNext())
 		{
@@ -213,6 +261,7 @@ public class TickHandlerClient
 	
 	public void preRenderTick(Minecraft mc, World world, float renderTick)
 	{
+		currentHatRenders = 0;
 		Iterator<Entry<String, EntityHat>> iterator = hats.entrySet().iterator();
 		
 		while(iterator.hasNext())
@@ -226,7 +275,7 @@ public class TickHandlerClient
 			}
 		}
 		
-		Iterator<Entry<Integer, EntityHat>> iterator1 = mobhats.entrySet().iterator();
+		Iterator<Entry<Integer, EntityHat>> iterator1 = mobHats.entrySet().iterator();
 		
 		while(iterator1.hasNext())
 		{
@@ -273,16 +322,22 @@ public class TickHandlerClient
 	
 	public HashMap<String, HatInfo> playerWornHats = new HashMap<String, HatInfo>();
 	public HashMap<String, EntityHat> hats = new HashMap<String, EntityHat>();
-	public HashMap<Integer, EntityHat> mobhats = new HashMap<Integer, EntityHat>();
+	public HashMap<Integer, EntityHat> mobHats = new HashMap<Integer, EntityHat>();
 	
 	public ArrayList<String> availableHats = new ArrayList<String>();
 	public ArrayList<String> requestedHats = new ArrayList<String>();
+	public ArrayList<String> serverHats = new ArrayList<String>();
+	public ArrayList<Integer> requestedMobHats = new ArrayList<Integer>();
 	
 	public int serverHatMode;
 	public String serverHat;
+	public World worldInstance;
 	
 	public boolean serverHasMod = false;
+	public boolean showHatHuntingMode = false;
 	
 	public boolean guiKeyDown;
 	public boolean hasScreen;
+	public int currentHatRenders;
+	public int requestCooldown;
 }

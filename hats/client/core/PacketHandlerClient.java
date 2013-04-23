@@ -10,6 +10,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import cpw.mods.fml.common.network.IPacketHandler;
@@ -33,8 +35,14 @@ public class PacketHandlerClient
 				{
 					Hats.proxy.tickHandlerClient.serverHasMod = true;
 					Hats.proxy.tickHandlerClient.serverHatMode = stream.readByte();
+					boolean hasVisited = !stream.readBoolean();
+					Hats.proxy.tickHandlerClient.showHatHuntingMode = Hats.proxy.tickHandlerClient.serverHatMode == 4 && hasVisited;
 					
 					String availHats = stream.readUTF(); //ignored on Free Mode
+					if(Hats.proxy.tickHandlerClient.serverHatMode == 4)
+					{
+						HatHandler.populateHatsList(availHats);
+					}
 					break;
 				}
 				case 1:
@@ -69,6 +77,28 @@ public class PacketHandlerClient
 				case 2:
 				{
 					HatHandler.receiveHatData(stream, null, false);
+					break;
+				}
+				case 3:
+				{
+					int idd = stream.readInt();
+					String name;
+					while(idd != -1)
+					{
+						name = stream.readUTF();
+						
+						System.out.println(idd);
+						Entity ent = mc.theWorld.getEntityByID(idd);
+						if(ent != null && ent instanceof EntityLiving)
+						{
+							HatInfo hatInfo = new HatInfo(name);
+							EntityHat hat = new EntityHat(ent.worldObj, (EntityLiving)ent, hatInfo);
+							Hats.proxy.tickHandlerClient.mobHats.put(ent.entityId, hat);
+							ent.worldObj.spawnEntityInWorld(hat);
+						}
+						
+						idd = stream.readInt();
+					}
 					break;
 				}
 			}

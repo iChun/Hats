@@ -133,6 +133,19 @@ public class GuiHatSelection extends GuiScreen
 	
 	public GuiHatSelection(EntityPlayer ply)
 	{
+		if(Hats.proxy.tickHandlerClient.serverHatMode == 4)
+		{
+			if(Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
+			{
+				HatHandler.repopulateHatsList();
+			}
+			else
+			{
+				Hats.proxy.tickHandlerClient.availableHats = new ArrayList<String>(Hats.proxy.tickHandlerClient.serverHats);
+				Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+			}
+		}
+		
 		player = ply;
 		hat = Hats.proxy.tickHandlerClient.hats.get(player.username);
 		availableHats = ImmutableList.copyOf(Hats.proxy.tickHandlerClient.availableHats);
@@ -1189,7 +1202,10 @@ public class GuiHatSelection extends GuiScreen
         	buttonList.add(new GuiButton(ID_SET_KEY, width / 2 - 6, height / 2 - 78, 88, 20, "GUI: " + (Hats.guiKeyBind < 0 ? Mouse.getButtonName(Hats.guiKeyBind + 100) : Keyboard.getKeyName(Hats.guiKeyBind))));
         	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, "First Person: " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No")));
         	buttonList.add(new GuiButton(ID_RESET_SIDE, width / 2 - 6, height / 2 - 78 + (22 * 5), 88, 20, "Reset Side?"));
-			buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 2), "RandoMobs: ", 0, 100, Hats.randomMobHat, this, "%"));
+        	if(Hats.proxy.tickHandlerClient.serverHatMode != 4)
+        	{
+        		buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 2), "RandoMobs: ", 0, 100, Hats.randomMobHat, this, "%"));
+        	}
         	
         	currentDisplay = "Personalize";
         }
@@ -1471,6 +1487,8 @@ public class GuiHatSelection extends GuiScreen
     	if(!personalizing)
     	{
     		personalizing = true;
+    		
+    		randoMob = Hats.randomMobHat;
     		
     		for(int i = buttonList.size() - 1; i >= 0 ; i--)
     		{
@@ -1942,7 +1960,9 @@ public class GuiHatSelection extends GuiScreen
 	        GL11.glTranslatef(0.0F, -0.22F, 0.0F);
 	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 255.0F * 0.8F, 255.0F * 0.8F);
 	        Tessellator.instance.setBrightness(240);
+	        GL11.glDisable(GL11.GL_LIGHTING);
 	        RenderManager.instance.renderEntityWithPosYaw(hat, 0.0D, 0.0D, 0.0D, hat.rotationYaw, 1.0F);
+	        GL11.glEnable(GL11.GL_LIGHTING);
 	        
 	        player.renderYawOffset = f2;
 	        player.rotationYaw = f3;
@@ -2031,6 +2051,7 @@ public class GuiHatSelection extends GuiScreen
 	private static final String[] helpInfo17 = new String[] {"You can get your own custom", "hat added to the mod if", "you give us a donation!", "", "Check the mod page for info."};
 	private static final String[] helpInfo18 = new String[] {"The (C) in the name of the hat", "represents a hat added as a thank", "you for a donation!"};
 	private static final String[] helpInfo19 = new String[] {"Did you know you can customize", "if mobs have hats? Its in the", "\"Personalize\" tab"};
+	private static final String[] helpInfo20 = new String[] {"If you have a contributor hat,", "you can use it in Hat", "Hunting Mode."};
 	
 	static
 	{
@@ -2053,6 +2074,7 @@ public class GuiHatSelection extends GuiScreen
 		help.add(helpInfo17);
 		help.add(helpInfo18);
 		help.add(helpInfo19);
+		help.add(helpInfo20);
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());

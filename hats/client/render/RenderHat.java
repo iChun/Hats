@@ -39,6 +39,11 @@ public class RenderHat extends Render
 		    	
 		    	if(model != null)
 		    	{
+		    		if(!(hat.parent instanceof EntityPlayer) &&  Hats.proxy.tickHandlerClient.currentHatRenders >= Hats.maxHatRenders)
+		    		{
+		    			return;
+		    		}
+		    		
 			        GL11.glPushMatrix();
 			        
 		            GL11.glEnable(GL11.GL_BLEND);
@@ -83,12 +88,12 @@ public class RenderHat extends Render
 			        
 			        BufferedImage image = ClientProxy.bufferedImages.get(hat.hatName);
 			        
-			    	if(Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("Notch") && hat.parent instanceof EntityPlayer && ((EntityPlayer)hat.parent).username.equalsIgnoreCase("Notch"))
-			    	{
-//			    		System.out.println(par8);
-//			    		System.out.println((HatHandler.getHorizontalPostRotateOffset(hat.parent) * (float)Math.sin(Math.toRadians(rotYawHead))));
-//			    		System.out.println(rotYawHead);
-			    	}
+//			    	if(Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("Notch") && hat.parent instanceof EntityPlayer && ((EntityPlayer)hat.parent).username.equalsIgnoreCase("Notch"))
+//			    	{
+////			    		System.out.println(par8);
+////			    		System.out.println((HatHandler.getHorizontalPostRotateOffset(hat.parent) * (float)Math.sin(Math.toRadians(rotYawHead))));
+////			    		System.out.println(rotYawHead);
+//			    	}
 			        
 			        if (image != null)
 			        {
@@ -108,6 +113,8 @@ public class RenderHat extends Render
 			        GL11.glDisable(GL11.GL_BLEND);
 			        
 			        GL11.glPopMatrix();
+			        
+			        Hats.proxy.tickHandlerClient.currentHatRenders++;
 		    	}
 		    	else if(!HatHandler.reloadingHats)
 		    	{

@@ -13,11 +13,13 @@ import hats.common.core.PacketHandlerServer;
 import java.io.File;
 import java.util.logging.Level;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.Property;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
 import org.lwjgl.input.Keyboard;
@@ -31,6 +33,7 @@ import cpw.mods.fml.common.Mod.PreInit;
 import cpw.mods.fml.common.Mod.ServerStarted;
 import cpw.mods.fml.common.Mod.ServerStarting;
 import cpw.mods.fml.common.Mod.ServerStopped;
+import cpw.mods.fml.common.Mod.ServerStopping;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -38,6 +41,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartedEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.FMLNetworkHandler;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
@@ -46,7 +50,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Hats", name = "Hats",
-			version = "1.2.2"
+			version = "1.2.3"
 				)
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
@@ -58,7 +62,7 @@ import cpw.mods.fml.relauncher.Side;
 				)
 public class Hats 
 {
-	public static final String version = "1.2.2";
+	public static final String version = "1.2.3";
 	
 	//Global Options
 	public static int safeLoad = 1;
@@ -66,8 +70,8 @@ public class Hats
 	public static int allowReceivingOfHats = 1;
 	
 	//Server Options
-	public static int playerHatsMode = 1;
-	public static String defaultHat = "Top Hat";
+	public static int playerHatsMode = 4;
+//	public static String defaultHat = "Top Hat";
 	
 	//Client Options
 	public static int renderInFirstPerson = 0;
@@ -78,8 +82,24 @@ public class Hats
 	public static String favouriteHatColourizer = "#ffffff";
 	public static int guiKeyBind = Keyboard.KEY_H;
 	public static String enabled = "1 2 3 4 5 6 7 8 9";
+	public static int maxHatRenders = 300;
+	
+	//RandoMob Options
 	public static int randomMobHat = 0;
 	public static int useRandomContributorHats = 0;
+	public static int hatZombie = 1;
+	public static int hatCreeper = 1;
+	public static int hatEnderman = 1;
+	public static int hatSkeleton = 1;
+	public static int hatVillager = 1;
+	public static int hatGhast = 1;
+	public static int hatBlaze = 1;
+	public static int hatSquid = 1;
+	public static int hatPig = 1;
+	public static int hatSpider = 1;
+	public static int hatSheep = 1;
+	public static int hatCow = 1;
+	public static int hatChicken = 1;
 	
 	public static HatInfo favouriteHatInfo = new HatInfo();
 	
@@ -105,8 +125,8 @@ public class Hats
 		allowReceivingOfHats = addCommentAndReturnInt(config, "globalOptions", "allowReceivingOfHats", "Enable receiving of model files from the server/client?", allowReceivingOfHats);
 		
 		config.addCustomCategoryComment("serverOptions", "These settings affect only the server that loads the mod.");
-		playerHatsMode = addCommentAndReturnInt(config, "serverOptions", "playerHatsMode", "Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = NOT AVAILABLE YET! Quest Mode, hats are rewarded by achieving certain tasks. NOT AVAILABLE YET!\n3 = Command Giver Mode, what hat you wear is chosen by people who can use commands.", playerHatsMode);
-		defaultHat = addCommentAndReturnString(config, "serverOptions", "defaultHat", "All players are given this hat by default, even in Quest Mode.\nLeave blank for no hat.", defaultHat).toLowerCase();
+		playerHatsMode = addCommentAndReturnInt(config, "serverOptions", "playerHatsMode", "Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = NOT AVAILABLE YET! Quest Mode, hats are rewarded by achieving certain tasks. NOT AVAILABLE YET!\n3 = Command Giver Mode, what hat you wear is chosen by people who can use commands.\n4 = Hat Hunting Mode, see a mob with a hat, kill it to unlock", playerHatsMode);
+//		defaultHat = addCommentAndReturnString(config, "serverOptions", "defaultHat", "All players are given this hat by default, even in Quest Mode.\nLeave blank for no hat.", defaultHat).toLowerCase();
 		
 		if(isClient)
 		{
@@ -123,11 +143,27 @@ public class Hats
 			
 			guiKeyBind = addCommentAndReturnInt(config, "clientOnly", "guiKeyBind", "What key code do you want to use to open the Hat Selection GUI?\nMouse binds are posible, starting from -100 and higher.\nFor info on Key codes, check here: http://www.minecraftwiki.net/wiki/Key_codes", guiKeyBind);
 			enabled = addCommentAndReturnString(config, "clientOnly", "personalizeEnabled", "DO NOT CHANGE THIS. PERIOD.\nI'M NOT JOKING.", enabled);
+			maxHatRenders = Math.max(addCommentAndReturnInt(config, "clientOnly", "maxHatRenders", "Max number of hats to render in one tick", maxHatRenders), 0);
 		}
 		
 		config.addCustomCategoryComment("randoMobOptions", "These settings affect either the client on randoMob settings or Mob Hunting Mode.");
+		randomMobHat = proxy instanceof ClientProxy ? 0 : 100;
 		randomMobHat = Math.min(100, Math.max(addCommentAndReturnInt(config, "randoMobOptions", "randomMobHat", "Do mobs have a random chance of having a hat?\n0 = Disabled (0%)\n100 = All mobs (100%)\n(Client)This follows the randomHat setting, meaning if randomHat is 0, all mobs will wear the favouriteHat setting", randomMobHat), 0));
 		useRandomContributorHats = addCommentAndReturnInt(config, "randoMobOptions", "useRandomContributorHats", "Allow the use of contributor hats when getting a random hat?\n0 = No\n1 = Yes", useRandomContributorHats);
+		
+		hatZombie = addCommentAndReturnInt(config, "randoMobOptions", "hatZombie", "", hatZombie);
+		hatCreeper = addCommentAndReturnInt(config, "randoMobOptions", "hatCreeper", "", hatCreeper);
+		hatEnderman = addCommentAndReturnInt(config, "randoMobOptions", "hatEnderman", "", hatEnderman);
+		hatSkeleton = addCommentAndReturnInt(config, "randoMobOptions", "hatSkeleton", "", hatSkeleton);
+		hatVillager = addCommentAndReturnInt(config, "randoMobOptions", "hatVillager", "", hatVillager);
+		hatGhast = addCommentAndReturnInt(config, "randoMobOptions", "hatGhast", "", hatGhast);
+		hatBlaze = addCommentAndReturnInt(config, "randoMobOptions", "hatBlaze", "", hatBlaze);
+		hatSquid = addCommentAndReturnInt(config, "randoMobOptions", "hatSquid", "", hatSquid);
+		hatPig = addCommentAndReturnInt(config, "randoMobOptions", "hatPig", "", hatPig);
+		hatSpider = addCommentAndReturnInt(config, "randoMobOptions", "hatSpider", "", hatSpider);
+		hatSheep = addCommentAndReturnInt(config, "randoMobOptions", "hatSheep", "", hatSheep);
+		hatCow = addCommentAndReturnInt(config, "randoMobOptions", "hatCow", "", hatCow);
+		hatChicken = addCommentAndReturnInt(config, "randoMobOptions", "hatChicken", "", hatChicken);
 		
 		config.save();
 		
@@ -231,6 +267,27 @@ public class Hats
 			proxy.loadData((WorldServer)event.world);
 		}
 	}
+	
+	@ForgeSubscribe
+	public void onWorldLoad(WorldEvent.Unload event)
+	{
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && event.world.provider.dimensionId == 0)
+		{
+			proxy.saveData((WorldServer)event.world);
+		}
+	}
+	
+	@ForgeSubscribe
+	public void onLivingDeath(LivingDeathEvent event)
+	{
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
+		{
+			if(!(event.entityLiving instanceof EntityPlayer) && event.source.getEntity() instanceof EntityPlayer)
+			{
+				proxy.tickHandlerServer.playerKilledEntity(event.entityLiving, (EntityPlayer)event.source.getEntity());
+			}
+		}
+	}
 
 	@ServerStarting
 	public void serverStarting(FMLServerStartingEvent event)
@@ -241,6 +298,12 @@ public class Hats
 	@ServerStarted
 	public void serverStarted(FMLServerStartedEvent event)
 	{
+	}
+	
+	@ServerStopping
+	public void serverStarted(FMLServerStoppingEvent event)
+	{
+		proxy.tickHandlerServer.mobHats.clear();
 	}
 	
 	@ServerStopped
