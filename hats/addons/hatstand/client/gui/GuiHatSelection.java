@@ -118,6 +118,19 @@ public class GuiHatSelection extends GuiScreen
 	
 	public GuiHatSelection(TileEntityHatStand hatStand)
 	{
+		
+		if(Hats.proxy.tickHandlerClient.serverHatMode == 4)
+		{
+			if(Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
+			{
+				HatHandler.repopulateHatsList();
+			}
+			else
+			{
+				Hats.proxy.tickHandlerClient.availableHats = new ArrayList<String>(Hats.proxy.tickHandlerClient.serverHats);
+				Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+			}
+		}
 		availableHats = ImmutableList.copyOf(Hats.proxy.tickHandlerClient.availableHats);
 		hatsToShow = new ArrayList<String>(availableHats);
 		Collections.sort(hatsToShow);

@@ -87,7 +87,6 @@ public class PacketHandlerClient
 					{
 						name = stream.readUTF();
 						
-						System.out.println(idd);
 						Entity ent = mc.theWorld.getEntityByID(idd);
 						if(ent != null && ent instanceof EntityLiving)
 						{

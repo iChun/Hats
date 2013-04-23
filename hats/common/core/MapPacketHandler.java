@@ -164,40 +164,46 @@ implements ITinyPacketHandler
 		{
 			switch(id)
 			{
-			case 0:
-			{
-				//Can show gui?
-				if(stream.readBoolean())
+				case 0:
 				{
-					FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiHatSelection(Minecraft.getMinecraft().thePlayer));
+					//Can show gui?
+					if(stream.readBoolean())
+					{
+						FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiHatSelection(Minecraft.getMinecraft().thePlayer));
+					}
+					else
+					{
+						Minecraft.getMinecraft().thePlayer.addChatMessage("Server has hats set to Command Giver Mode. You can not give commands!");
+					}
+					break;
 				}
-				else
+				case 1:
 				{
-					Minecraft.getMinecraft().thePlayer.addChatMessage("Server has hats set to Command Giver Mode. You can not give commands!");
+					//Received hat request
+					String hatName = stream.readUTF();
+	
+					HatHandler.sendHat(hatName, null);
+	
+					break;
 				}
-				break;
-			}
-			case 1:
-			{
-				//Received hat request
-				String hatName = stream.readUTF();
-
-				HatHandler.sendHat(hatName, null);
-
-				break;
-			}
-			case 2:
-			{
-				//Unlocked hat
-				String name = stream.readUTF();
-				if(!Hats.proxy.tickHandlerClient.serverHats.contains(name))
+				case 2:
 				{
-					Hats.proxy.tickHandlerClient.serverHats.add(name);
-					Collections.sort(Hats.proxy.tickHandlerClient.serverHats);
+					//Unlocked hat
+					String name = stream.readUTF();
+					if(!Hats.proxy.tickHandlerClient.serverHats.contains(name))
+					{
+						Hats.proxy.tickHandlerClient.serverHats.add(name);
+						Collections.sort(Hats.proxy.tickHandlerClient.serverHats);
+						Hats.proxy.tickHandlerClient.guiHatUnlocked.queueHatUnlocked(name);
+					}
+	
+					break;
 				}
-
-				break;
-			}
+				case 3:
+				{
+					HatHandler.populateHatsList("");
+					break;
+				}
 			}
 		}
 		catch(IOException e)

@@ -4,22 +4,27 @@ import hats.common.Hats;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.WeakHashMap;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet131MapData;
+import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -73,7 +78,7 @@ public class TickHandlerServer implements ITickHandler {
 		for(int i = 0; i < world.loadedEntityList.size(); i++)
 		{
 			Entity ent = (Entity)world.loadedEntityList.get(i);
-			if(!(ent instanceof EntityLiving) || !HatHandler.canMobHat((EntityLiving)ent))
+			if(!(ent instanceof EntityLiving) || !HatHandler.canMobHat((EntityLiving)ent) || mobHats.containsKey(ent))
 			{
 				continue;
 			}
@@ -83,7 +88,35 @@ public class TickHandlerServer implements ITickHandler {
 			String hat = mobHats.get(living);
 			if(hat == null)
 			{
-				HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.randomMobHat / 100F) ? HatHandler.getRandomHat() : new HatInfo();
+				boolean fromSpawner = false;
+				for(int k = 0; k < world.loadedTileEntityList.size(); k++)
+				{
+					TileEntity te = (TileEntity)world.loadedTileEntityList.get(k);
+					if(!(te instanceof TileEntityMobSpawner))
+					{
+						continue;
+					}
+					
+					TileEntityMobSpawner spawner = (TileEntityMobSpawner)te;
+					MobSpawnerBaseLogic logic = spawner.func_98049_a();
+					if(logic.canRun())
+					{
+						Entity entity = EntityList.createEntityByName(logic.func_98276_e(), logic.getSpawnerWorld());
+						if(entity != null)
+						{
+							if(living.getClass() == entity.getClass())
+							{
+								List list = logic.getSpawnerWorld().getEntitiesWithinAABB(entity.getClass(), AxisAlignedBB.getAABBPool().getAABB((double)logic.getSpawnerX(), (double)logic.getSpawnerY(), (double)logic.getSpawnerZ(), (double)(logic.getSpawnerX() + 1), (double)(logic.getSpawnerY() + 1), (double)(logic.getSpawnerZ() + 1)).expand((double)(4 * 2), 4.0D, (double)(4 * 2)));
+								if(list.contains(living))
+								{
+									fromSpawner = true;
+									break;
+								}
+							}
+						}
+					}
+				}
+				HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.randomMobHat / 100F) && !fromSpawner ? HatHandler.getRandomHat() : new HatInfo();
 				mobHats.put(living, hatInfo.hatName);
 			}
 		}
@@ -98,50 +131,33 @@ public class TickHandlerServer implements ITickHandler {
 		String hat = mobHats.get(living);
 		if(hat != null)
 		{
-			ArrayList<String> hats = playerHats.get(player.username);
-			if(!hats.contains(hat))
-			{
-				Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-				while(ite.hasNext())
-				{
-					Entry<File, String> e = ite.next();
-					String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
-					if(name.equalsIgnoreCase(hat))
-					{
-						hats.add(name);
-						
-						StringBuilder sb = new StringBuilder();
-						for(int i = 0; i < hats.size(); i++)
-						{
-							sb.append(hats.get(i));
-							if(i < hats.size() - 1)
-							{
-								sb.append(":");
-							}
-						}
-						
-						Hats.proxy.saveData.setString(player.username + "_unlocked", sb.toString());
-						Hats.proxy.saveData(DimensionManager.getWorld(0));
-						
-				        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-				        DataOutputStream stream1 = new DataOutputStream(bytes);
-
-				        try
-				        {
-				        	stream1.writeUTF(name);
-				        	
-				        	PacketDispatcher.sendPacketToPlayer(new Packet131MapData((short)Hats.getNetId(), (short)2, bytes.toByteArray()), (Player)player);
-				        }
-				        catch(IOException e1)
-				        {}
-						
-						break;
-					}
-				}
-			}
+			HatHandler.unlockHat(player, hat);
 		}
+		mobHats.remove(living);
 	}
 	
-	public HashMap<EntityLiving, String> mobHats = new HashMap<EntityLiving, String>();
+	public void playerDeath(EntityPlayer player)
+	{
+		Hats.proxy.saveData.setString(player.username + "_unlocked", "");
+		Hats.proxy.playerWornHats.put(player.username, new HatInfo());
+		
+		Hats.proxy.saveData(DimensionManager.getWorld(0));
+		
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream stream1 = new DataOutputStream(bytes);
+
+        try
+        {
+        	stream1.writeByte(0);
+        	
+        	PacketDispatcher.sendPacketToPlayer(new Packet131MapData((short)Hats.getNetId(), (short)3, bytes.toByteArray()), (Player)player);
+        }
+        catch(IOException e1)
+        {}
+
+        Hats.proxy.sendPlayerListOfWornHats(player, false, false);
+	}
+	
+	public WeakHashMap<EntityLiving, String> mobHats = new WeakHashMap<EntityLiving, String>();
 	public HashMap<String, ArrayList<String>> playerHats = new HashMap<String, ArrayList<String>>();
 }

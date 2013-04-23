@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
@@ -646,7 +647,7 @@ public class HatHandler
 		while(ite.hasNext())
 		{
 			Entry<File, String> e = ite.next();
-			if(e.getValue().startsWith("(C)".toLowerCase()) && Hats.useRandomContributorHats != 1)
+			if(e.getValue().startsWith("(C)".toLowerCase()) && rand.nextFloat() < ((float)Hats.useRandomContributorHats / 100F))
 			{
 				continue;
 			}
@@ -659,6 +660,71 @@ public class HatHandler
 		}
 		
 		return new HatInfo(hatNameList.get((new Random()).nextInt(hatNameList.size())), 255, 255, 255);
+	}
+	
+	public static String[] getAllHatsAsArray()
+	{
+		ArrayList<String> hatNameList = new ArrayList<String>();
+		
+		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+		while(ite.hasNext())
+		{
+			Entry<File, String> e = ite.next();
+			String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
+			hatNameList.add(name);
+		}
+		Collections.sort(hatNameList);
+		
+		String[] hatNameArray = new String[hatNameList.size()];
+		
+		hatNameList.toArray(hatNameArray);
+		
+		return hatNameArray;
+	}
+	
+	public static void unlockHat(EntityPlayer player, String hat) 
+	{
+		ArrayList<String> hats = Hats.proxy.tickHandlerServer.playerHats.get(player.username);
+		if(!hats.contains(hat))
+		{
+			Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+			while(ite.hasNext())
+			{
+				Entry<File, String> e = ite.next();
+				String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
+				if(name.equalsIgnoreCase(hat))
+				{
+					hats.add(name);
+					
+					StringBuilder sb = new StringBuilder();
+					for(int i = 0; i < hats.size(); i++)
+					{
+						sb.append(hats.get(i));
+						if(i < hats.size() - 1)
+						{
+							sb.append(":");
+						}
+					}
+					
+					Hats.proxy.saveData.setString(player.username + "_unlocked", sb.toString());
+					Hats.proxy.saveData(DimensionManager.getWorld(0));
+					
+			        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+			        DataOutputStream stream1 = new DataOutputStream(bytes);
+
+			        try
+			        {
+			        	stream1.writeUTF(name);
+			        	
+			        	PacketDispatcher.sendPacketToPlayer(new Packet131MapData((short)Hats.getNetId(), (short)2, bytes.toByteArray()), (Player)player);
+			        }
+			        catch(IOException e1)
+			        {}
+					
+					break;
+				}
+			}
+		}		
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -707,7 +773,7 @@ public class HatHandler
 		{
 			Entry<File, String> e = ite.next();
 			String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
-			if(name.startsWith("(C)".toLowerCase()) && name.contains(Minecraft.getMinecraft().thePlayer.username) || name.equalsIgnoreCase("(c) iChun") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("ohaiiChun"))
+			if(name.startsWith("(C)".toLowerCase()) && name.toLowerCase().contains(Minecraft.getMinecraft().thePlayer.username.toLowerCase()) || name.equalsIgnoreCase("(c) iChun") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("ohaiiChun") || name.equalsIgnoreCase("(c) Mr. Haz") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("damien95"))
 			{
 				Hats.proxy.tickHandlerClient.availableHats.add(name);
 			}
@@ -903,12 +969,6 @@ public class HatHandler
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static float getHorizontalRenderOffset(EntityLiving ent)
-	{
-		return 0.0F;
-	}
-
-	@SideOnly(Side.CLIENT)
 	public static float getRenderScale(EntityLiving ent)
 	{
 		if(ent instanceof EntitySkeleton && ((EntitySkeleton)ent).getSkeletonType() == 1)
@@ -971,5 +1031,7 @@ public class HatHandler
 	public static HashMap<String, File> checksums = new HashMap<String, File>();
 	
 	public static HashMap<String, ArrayList<String>> categories = new HashMap<String, ArrayList<String>>();
+	
+	public static Random rand = new Random();
 
 }

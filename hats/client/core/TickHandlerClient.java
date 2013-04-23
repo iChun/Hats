@@ -1,6 +1,7 @@
 package hats.client.core;
 
 import hats.client.gui.GuiHatSelection;
+import hats.client.gui.GuiHatUnlocked;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
@@ -93,6 +94,8 @@ public class TickHandlerClient
 			worldInstance = world;
 			mobHats.clear();
 			hats.clear();
+			requestMobHats.clear();
+			requestedMobHats.clear();
 			requestCooldown = 40;
 		}
 		if(showHatHuntingMode)
@@ -124,6 +127,7 @@ public class TickHandlerClient
 						{
 							e.getValue().setDead();
 						}
+						requestedMobHats.clear();
 					}
 					
 					HatInfo hatInfo = (serverHasMod ? getPlayerHat(player.username) : ((Hats.randomHat == 1 || Hats.randomHat == 2 && player != mc.thePlayer) ? HatHandler.getRandomHat() : Hats.favouriteHatInfo));
@@ -136,22 +140,22 @@ public class TickHandlerClient
 		
 		if(requestCooldown > 0)
 		{
-			requestCooldown++;
+			requestCooldown--;
 		}
 		
 		if(world.getWorldTime() % 5L == 0L && requestCooldown <= 0)
 		{
-			if(requestedMobHats.size() > 0)
+			if(requestMobHats.size() > 0)
 			{
 		        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		        DataOutputStream stream = new DataOutputStream(bytes);
 	
 		        try
 		        {
-					for(int i = 0 ; i < requestedMobHats.size(); i++)
+					for(int i = 0 ; i < requestMobHats.size(); i++)
 					{
 			        	stream.writeBoolean(true); 
-			        	stream.writeInt(requestedMobHats.get(i)); 
+			        	stream.writeInt(requestMobHats.get(i)); 
 			        }
 					stream.writeBoolean(false);
 		        	
@@ -159,7 +163,7 @@ public class TickHandlerClient
 				}
 		        catch(IOException e)
 		        {}
-				requestedMobHats.clear();
+				requestMobHats.clear();
 			}
 		}
 		
@@ -185,8 +189,9 @@ public class TickHandlerClient
 						mobHats.put(living.entityId, hat);
 						world.spawnEntityInWorld(hat);
 					}
-					else if(!requestedMobHats.contains(living.entityId))
+					else if(!requestMobHats.contains(living.entityId) && !requestedMobHats.contains(living.entityId))
 					{
+						requestMobHats.add(living.entityId);
 						requestedMobHats.add(living.entityId);
 					}
 				}
@@ -308,6 +313,11 @@ public class TickHandlerClient
 	
 	public void renderTick(Minecraft mc, World world, float renderTick)
 	{
+		if(guiHatUnlocked == null)
+		{
+			guiHatUnlocked = new GuiHatUnlocked(mc);
+		}
+		guiHatUnlocked.updateGui();
 	}
 	
 	public HatInfo getPlayerHat(String s)
@@ -327,6 +337,7 @@ public class TickHandlerClient
 	public ArrayList<String> availableHats = new ArrayList<String>();
 	public ArrayList<String> requestedHats = new ArrayList<String>();
 	public ArrayList<String> serverHats = new ArrayList<String>();
+	public ArrayList<Integer> requestMobHats = new ArrayList<Integer>();
 	public ArrayList<Integer> requestedMobHats = new ArrayList<Integer>();
 	
 	public int serverHatMode;
@@ -340,4 +351,6 @@ public class TickHandlerClient
 	public boolean hasScreen;
 	public int currentHatRenders;
 	public int requestCooldown;
+	
+	public GuiHatUnlocked guiHatUnlocked;
 }

@@ -163,7 +163,6 @@ public class ConnectionHandler
 	@Override
 	public void onPlayerRespawn(EntityPlayer player) 
 	{
-		System.out.println(FMLCommonHandler.instance().getEffectiveSide());
 	}
 
 }

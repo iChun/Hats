@@ -291,7 +291,6 @@ public class CommonProxy
     
 	public static NBTTagCompound saveData = null;
 	
-	public static HashMap<String, ArrayList> playerAvailableHats = new HashMap<String, ArrayList>();
 	public static HashMap<String, HatInfo> playerWornHats = new HashMap<String, HatInfo>();
 	
 	public static TickHandlerClient tickHandlerClient;

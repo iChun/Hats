@@ -22,17 +22,17 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkModHandler;
 
 @Mod(modid = "HatStand", name = "HatStand",
-			version = "1.1.0",
-			dependencies = "required-after:Hats@[1.1.0,)"
+			version = "1.2.0",
+			dependencies = "required-after:Hats@[1.3.0,)"
 				)
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
 			tinyPacketHandler = MapPacketHandler.class,
-			versionBounds = "[1.1.0,1.2.0)"
+			versionBounds = "[1.2.0,1.3.0)"
 				)
 public class HatStand 
 {
-	public static final String version = "1.1.0";
+	public static final String version = "1.2.0";
 	
 	public static Block blockHatStand;
 	

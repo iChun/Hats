@@ -39,7 +39,7 @@ public class RenderHat extends Render
 		    	
 		    	if(model != null)
 		    	{
-		    		if(!(hat.parent instanceof EntityPlayer) &&  Hats.proxy.tickHandlerClient.currentHatRenders >= Hats.maxHatRenders)
+		    		if(!(hat.parent instanceof EntityPlayer) &&  Hats.proxy.tickHandlerClient.currentHatRenders >= Hats.maxHatRenders && !firstPerson)
 		    		{
 		    			return;
 		    		}
@@ -51,7 +51,7 @@ public class RenderHat extends Render
 			        
 		            float rotYawHead = interpolateRotation(hat.getPrevRotationYaw(), hat.getRotationYaw(), par9);
 		            
-			        GL11.glTranslatef((float)par2 - (float)(HatHandler.getHorizontalRenderOffset(hat.parent) * Math.sin(Math.toRadians(rotYawHead))), (float)par4 + HatHandler.getVerticalRenderOffset(hat.parent), (float)par6 + (float)(HatHandler.getHorizontalRenderOffset(hat.parent) * Math.cos(Math.toRadians(rotYawHead))));
+			        GL11.glTranslatef((float)par2, (float)par4 + HatHandler.getVerticalRenderOffset(hat.parent), (float)par6);
 			        GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 			        
 			        GL11.glRotatef(interpolateRotation(hat.getPrevRotationPitch(), hat.getRotationPitch(), par9), -1.0F, 0.0F, 0.0F);

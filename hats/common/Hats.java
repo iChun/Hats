@@ -50,7 +50,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Hats", name = "Hats",
-			version = "1.2.3"
+			version = "1.3.0"
 				)
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
@@ -58,11 +58,11 @@ import cpw.mods.fml.relauncher.Side;
 			tinyPacketHandler = MapPacketHandler.class,
 			clientPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerClient.class),
 			serverPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerServer.class),
-			versionBounds = "[1.2.0,1.3.0)"
+			versionBounds = "[1.3.0,1.4.0)"
 				)
 public class Hats 
 {
-	public static final String version = "1.2.3";
+	public static final String version = "1.3.0";
 	
 	//Global Options
 	public static int safeLoad = 1;
@@ -86,7 +86,8 @@ public class Hats
 	
 	//RandoMob Options
 	public static int randomMobHat = 0;
-	public static int useRandomContributorHats = 0;
+	public static int useRandomContributorHats = 10;
+	public static int resetPlayerHatsOnDeath = 0;
 	public static int hatZombie = 1;
 	public static int hatCreeper = 1;
 	public static int hatEnderman = 1;
@@ -149,7 +150,8 @@ public class Hats
 		config.addCustomCategoryComment("randoMobOptions", "These settings affect either the client on randoMob settings or Mob Hunting Mode.");
 		randomMobHat = proxy instanceof ClientProxy ? 0 : 100;
 		randomMobHat = Math.min(100, Math.max(addCommentAndReturnInt(config, "randoMobOptions", "randomMobHat", "Do mobs have a random chance of having a hat?\n0 = Disabled (0%)\n100 = All mobs (100%)\n(Client)This follows the randomHat setting, meaning if randomHat is 0, all mobs will wear the favouriteHat setting", randomMobHat), 0));
-		useRandomContributorHats = addCommentAndReturnInt(config, "randoMobOptions", "useRandomContributorHats", "Allow the use of contributor hats when getting a random hat?\n0 = No\n1 = Yes", useRandomContributorHats);
+		useRandomContributorHats = Math.min(100, Math.max(addCommentAndReturnInt(config, "randoMobOptions", "useRandomContributorHats", "Allow the use of contributor hats when getting a random hat?\n0 - 100%", useRandomContributorHats), 0));
+		resetPlayerHatsOnDeath = addCommentAndReturnInt(config, "randoMobOptions", "resetPlayerHatsOnDeath", "Should player hats be reset when they die?\n0 = No\n1 = Yes", resetPlayerHatsOnDeath);
 		
 		hatZombie = addCommentAndReturnInt(config, "randoMobOptions", "hatZombie", "", hatZombie);
 		hatCreeper = addCommentAndReturnInt(config, "randoMobOptions", "hatCreeper", "", hatCreeper);
@@ -280,13 +282,18 @@ public class Hats
 	@ForgeSubscribe
 	public void onLivingDeath(LivingDeathEvent event)
 	{
-		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && playerHatsMode == 4)
 		{
-			if(!(event.entityLiving instanceof EntityPlayer) && event.source.getEntity() instanceof EntityPlayer)
+			if(!(event.entityLiving instanceof EntityPlayer) && event.source.getEntity() instanceof EntityPlayer && !((EntityPlayer)event.source.getEntity()).capabilities.isCreativeMode)
 			{
 				proxy.tickHandlerServer.playerKilledEntity(event.entityLiving, (EntityPlayer)event.source.getEntity());
 			}
+			else if(event.entityLiving instanceof EntityPlayer && resetPlayerHatsOnDeath == 1)
+			{
+				proxy.tickHandlerServer.playerDeath((EntityPlayer)event.entityLiving);
+			}
 		}
+		proxy.tickHandlerServer.mobHats.remove(event.entityLiving);
 	}
 
 	@ServerStarting
@@ -309,7 +316,7 @@ public class Hats
 	@ServerStopped
 	public void serverStopped(FMLServerStoppedEvent event)
 	{
-		proxy.playerAvailableHats.clear();
+		proxy.tickHandlerServer.playerHats.clear();
 		proxy.playerWornHats.clear();
 		proxy.saveData = null;
 	}
