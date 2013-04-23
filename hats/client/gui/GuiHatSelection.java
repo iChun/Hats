@@ -1362,9 +1362,23 @@ public class GuiHatSelection extends GuiScreen
 	    		hatsList = new ArrayList<String>();
 	    	}
 	    	
-	    	categoryHats = new ArrayList<String>(hatsList);
+	    	ArrayList<String> hatsCopy = new ArrayList<String>(hatsList);
 	    	
-	    	hatsToShow = new ArrayList<String>(hatsList);
+	    	if(Hats.proxy.tickHandlerClient.serverHatMode == 4 && !mc.thePlayer.capabilities.isCreativeMode)
+	    	{
+	    		for(int i = hatsCopy.size() - 1; i >= 0; i--)
+	    		{
+	    			String hatName = hatsCopy.get(i);
+	    			if(!Hats.proxy.tickHandlerClient.serverHats.contains(hatName))
+	    			{
+	    				hatsCopy.remove(i);
+	    			}
+	    		}
+	    	}
+	    	
+	    	categoryHats = new ArrayList<String>(hatsCopy);
+	    	
+	    	hatsToShow = new ArrayList<String>(hatsCopy);
 	    	Collections.sort(hatsToShow);
 	    	
 	    	updateButtonList();
