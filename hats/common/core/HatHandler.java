@@ -773,7 +773,10 @@ public class HatHandler
 		{
 			Entry<File, String> e = ite.next();
 			String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
-			if(name.startsWith("(C)".toLowerCase()) && name.toLowerCase().contains(Minecraft.getMinecraft().thePlayer.username.toLowerCase()) || name.equalsIgnoreCase("(c) iChun") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("ohaiiChun") || name.equalsIgnoreCase("(c) Mr. Haz") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("damien95"))
+			if(name.startsWith("(C)".toLowerCase()) && name.toLowerCase().contains(Minecraft.getMinecraft().thePlayer.username.toLowerCase()) 
+					|| name.equalsIgnoreCase("(C) iChun") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("ohaiiChun") //special casing for initial contrib hats.
+					|| name.equalsIgnoreCase("(C) Mr. Haz") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("damien95")
+					|| name.equalsIgnoreCase("(C) Fridgeboy") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("lacsap32"))
 			{
 				Hats.proxy.tickHandlerClient.availableHats.add(name);
 			}

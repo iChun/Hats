@@ -167,12 +167,12 @@ public class TickHandlerClient
 			}
 		}
 		
-		if(Hats.randomMobHat > 0 && !serverHasMod || serverHatMode == 4)
+		if(Hats.randomMobHat > 0 && !(serverHasMod && serverHatMode == 4) || serverHasMod && serverHatMode == 4)
 		{
 			for(int i = 0; i < world.loadedEntityList.size(); i++)
 			{
 				Entity ent = (Entity)world.loadedEntityList.get(i);
-				if(!(ent instanceof EntityLiving) || !HatHandler.canMobHat((EntityLiving)ent) && !serverHasMod)
+				if(!(ent instanceof EntityLiving) || !(serverHasMod && serverHatMode == 4) && !HatHandler.canMobHat((EntityLiving)ent))
 				{
 					continue;
 				}
@@ -182,7 +182,7 @@ public class TickHandlerClient
 				EntityHat hat = mobHats.get(living.entityId);
 				if(hat == null || hat.isDead)
 				{
-					if(!serverHasMod)
+					if(!serverHasMod || serverHatMode != 4)
 					{
 						HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.randomMobHat / 100F) ? (Hats.randomHat >= 1 ? HatHandler.getRandomHat() : Hats.favouriteHatInfo) : new HatInfo();
 						hat = new EntityHat(world, living, hatInfo);
