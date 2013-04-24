@@ -1,5 +1,8 @@
 package hats.common.entity;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
 import net.minecraft.client.Minecraft;
@@ -179,6 +182,17 @@ public class EntityHat extends Entity
 	public int getB()
 	{
 		return colourB;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void setDead()
+	{
+		super.setDead();
+		if(Hats.proxy.tickHandlerClient.serverHasMod && Hats.proxy.tickHandlerClient.serverHatMode == 4 && parent != null)
+		{
+			Hats.proxy.tickHandlerClient.requestedMobHats.remove((Object)parent.entityId);
+		}
 	}
 	
 	public float getPrevRotationYaw()
