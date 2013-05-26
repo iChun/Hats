@@ -33,7 +33,7 @@ public class RenderHat extends Render
     	{
     		boolean firstPerson = (hat.parent == Minecraft.getMinecraft().renderViewEntity && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !((Minecraft.getMinecraft().currentScreen instanceof GuiInventory || Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative || Minecraft.getMinecraft().currentScreen instanceof GuiHatSelection) && RenderManager.instance.playerViewY == 180.0F));
     		
-    		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && !hat.parent.getHasActivePotion())
+    		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && !hat.parent.isInvisible())
     		{
 		    	ModelHat model = ClientProxy.models.get(hat.hatName);
 		    	

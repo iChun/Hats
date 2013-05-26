@@ -229,7 +229,7 @@ public class EntityHat extends Entity
 		}
 		else if(parent instanceof EntitySquid)
 		{
-			return -((EntitySquid)parent).field_70862_e;
+			return -((EntitySquid)parent).prevSquidPitch;
 		}
 		return parent.prevRotationPitch;
 	}
@@ -242,7 +242,7 @@ public class EntityHat extends Entity
 		}
 		else if(parent instanceof EntitySquid)
 		{
-			return -((EntitySquid)parent).field_70861_d;
+			return -((EntitySquid)parent).squidPitch;
 		}
 		return parent.rotationPitch;
 	}

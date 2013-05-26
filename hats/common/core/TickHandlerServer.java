@@ -101,7 +101,7 @@ public class TickHandlerServer implements ITickHandler {
 					MobSpawnerBaseLogic logic = spawner.func_98049_a();
 					if(logic.canRun())
 					{
-						Entity entity = EntityList.createEntityByName(logic.func_98276_e(), logic.getSpawnerWorld());
+						Entity entity = EntityList.createEntityByName(logic.getEntityNameToSpawn(), logic.getSpawnerWorld());
 						if(entity != null)
 						{
 							if(living.getClass() == entity.getClass())
