@@ -1057,6 +1057,8 @@ public class GuiHatSelection extends GuiScreen
 	        	stream.writeInt(colourG); //G
 	        	stream.writeInt(colourB); //B
 	        	
+	        	Hats.proxy.tickHandlerClient.playerWornHats.put(player.username, new HatInfo(hat.hatName, colourR, colourG, colourB));
+	        	
 	        	PacketDispatcher.sendPacketToServer(new Packet131MapData((short)Hats.getNetId(), (short)0, bytes.toByteArray()));
 	        }
 	        catch(IOException e)

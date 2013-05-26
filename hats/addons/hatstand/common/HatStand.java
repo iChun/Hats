@@ -22,7 +22,7 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkModHandler;
 
 @Mod(modid = "HatStand", name = "HatStand",
-			version = "1.2.0",
+			version = "1.2.1",
 			dependencies = "required-after:Hats@[1.3.0,)"
 				)
 @NetworkMod(clientSideRequired = true,
