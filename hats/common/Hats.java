@@ -154,7 +154,7 @@ public class Hats
 		config.addCustomCategoryComment("randoMobOptions", "These settings affect either the client on randoMob settings or Mob Hunting Mode.");
 		if(firstConfigLoad)
 		{
-			randomMobHat = playerHatsMode != 4 && isClient ? 0 : 100;
+			randomMobHat = playerHatsMode != 4 && isClient ? 0 : 10;
 		}
 		randomMobHat = Math.min(100, Math.max(addCommentAndReturnInt(config, "randoMobOptions", "randomMobHat", "Do mobs have a random chance of having a hat?\n0 = Disabled (0%)\n100 = All mobs (100%)\n(Client)This follows the randomHat setting, meaning if randomHat is 0, all mobs will wear the favouriteHat setting", randomMobHat), 0));
 		useRandomContributorHats = Math.min(100, Math.max(addCommentAndReturnInt(config, "randoMobOptions", "useRandomContributorHats", "Allow the use of contributor hats when getting a random hat?\n0 - 100%", useRandomContributorHats), 0));
