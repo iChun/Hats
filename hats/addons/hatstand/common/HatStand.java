@@ -57,6 +57,8 @@ public class HatStand
 		
 		config.addCustomCategoryComment("globalOptions", "These settings affect both servers and clients that loads the mod.");
 		blockHatStandID = addCommentAndReturnBlock(config, "globalOptions", "blockHatStandID", "Block ID for the HatStand", blockHatStandID);
+		
+		config.save();
 	}
 	
 	@PreInit

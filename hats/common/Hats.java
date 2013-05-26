@@ -83,6 +83,7 @@ public class Hats
 	public static int guiKeyBind = Keyboard.KEY_H;
 	public static String enabled = "1 2 3 4 5 6 7 8 9";
 	public static int maxHatRenders = 300;
+	public static int allowContributorHats = 1;
 	
 	//RandoMob Options
 	public static int randomMobHat = 0;
@@ -145,6 +146,9 @@ public class Hats
 			guiKeyBind = addCommentAndReturnInt(config, "clientOnly", "guiKeyBind", "What key code do you want to use to open the Hat Selection GUI?\nMouse binds are posible, starting from -100 and higher.\nFor info on Key codes, check here: http://www.minecraftwiki.net/wiki/Key_codes", guiKeyBind);
 			enabled = addCommentAndReturnString(config, "clientOnly", "personalizeEnabled", "DO NOT CHANGE THIS. PERIOD.\nI'M NOT JOKING.", enabled);
 			maxHatRenders = Math.max(addCommentAndReturnInt(config, "clientOnly", "maxHatRenders", "Max number of hats to render in one tick", maxHatRenders), 0);
+			
+			allowContributorHats = addCommentAndReturnInt(config, "clientOnly", "allowContributorHats", "Show Contributor Hats in the GUI?", allowContributorHats);
+			
 		}
 		
 		config.addCustomCategoryComment("randoMobOptions", "These settings affect either the client on randoMob settings or Mob Hunting Mode.");

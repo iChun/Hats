@@ -148,7 +148,17 @@ public class GuiHatSelection extends GuiScreen
 		
 		player = ply;
 		hat = Hats.proxy.tickHandlerClient.hats.get(player.username);
-		availableHats = ImmutableList.copyOf(Hats.proxy.tickHandlerClient.availableHats);
+		ArrayList<String> list = new ArrayList<String>(Hats.proxy.tickHandlerClient.availableHats);
+		
+		for(int i = list.size() - 1; i >= 0; i--)
+		{
+			if(Hats.allowContributorHats == 0 && list.get(i).startsWith("(C) "))
+			{
+				list.remove(i);
+			}
+		}
+		
+		availableHats = ImmutableList.copyOf(list);
 		hatsToShow = new ArrayList<String>(availableHats);
 		Collections.sort(hatsToShow);
 		
@@ -162,10 +172,13 @@ public class GuiHatSelection extends GuiScreen
 		}
 		Collections.sort(categories);
 		
-		prevHatName = hat.hatName;
-		prevColourR = colourR = hat.getR();
-		prevColourG = colourG = hat.getG();
-		prevColourB = colourB = hat.getB();
+		if(hat != null)
+		{
+			prevHatName = hat.hatName;
+			prevColourR = colourR = hat.getR();
+			prevColourG = colourG = hat.getG();
+			prevColourB = colourB = hat.getB();
+		}
 		pageNumber = 0;
 		view = VIEW_HATS;
 		rand = new Random();
