@@ -50,7 +50,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Hats", name = "Hats",
-			version = "1.3.2"
+			version = "1.3.3"
 				)
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
@@ -62,7 +62,7 @@ import cpw.mods.fml.relauncher.Side;
 				)
 public class Hats 
 {
-	public static final String version = "1.3.2";
+	public static final String version = "1.3.3";
 	
 	//Global Options
 	public static int safeLoad = 1;
@@ -84,6 +84,7 @@ public class Hats
 	public static String enabled = "1 2 3 4 5 6 7 8 9";
 	public static int maxHatRenders = 300;
 	public static int allowContributorHats = 1;
+	public static int renderHats = 1;
 	
 	//RandoMob Options
 	public static int randomMobHat = 0;
@@ -148,6 +149,8 @@ public class Hats
 			maxHatRenders = Math.max(addCommentAndReturnInt(config, "clientOnly", "maxHatRenders", "Max number of hats to render in one tick", maxHatRenders), 0);
 			
 			allowContributorHats = addCommentAndReturnInt(config, "clientOnly", "allowContributorHats", "Show Contributor Hats in the GUI?", allowContributorHats);
+			
+			renderHats = addCommentAndReturnInt(config, "clientOnly", "renderHats", "Render hats?", renderHats);
 			
 		}
 		
@@ -278,7 +281,7 @@ public class Hats
 	}
 	
 	@ForgeSubscribe
-	public void onWorldLoad(WorldEvent.Unload event)
+	public void onWorldUnload(WorldEvent.Unload event)
 	{
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && event.world.provider.dimensionId == 0)
 		{

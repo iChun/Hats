@@ -114,7 +114,19 @@ public class ConnectionHandler
 				{
 					if(!hat.trim().equalsIgnoreCase(""))
 					{
-						playerHatsList.add(hat);
+						boolean has = false;
+						for(String s : playerHatsList)
+						{
+							if(s.equalsIgnoreCase(hat))
+							{
+								has = true;
+								break;
+							}
+						}
+						if(!has)
+						{
+							playerHatsList.add(hat);
+						}
 					}
 				}
 				

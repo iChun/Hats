@@ -32,7 +32,7 @@ import cpw.mods.fml.common.network.NetworkModHandler;
 				)
 public class HatStand 
 {
-	public static final String version = "1.2.0";
+	public static final String version = "1.2.1";
 	
 	public static Block blockHatStand;
 	

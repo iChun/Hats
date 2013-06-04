@@ -684,9 +684,21 @@ public class HatHandler
 	
 	public static void unlockHat(EntityPlayer player, String hat) 
 	{
-		ArrayList<String> hats = Hats.proxy.tickHandlerServer.playerHats.get(player.username);
-		if(hats != null && !hats.contains(hat))
+		if(player == null)
 		{
+			return;
+		}
+		ArrayList<String> hats = Hats.proxy.tickHandlerServer.playerHats.get(player.username);
+		if(hats != null)
+		{
+			for(String s : hats)
+			{
+				if(s.equalsIgnoreCase(hat))
+				{
+					return;
+				}
+			}
+			
 			Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
 			while(ite.hasNext())
 			{

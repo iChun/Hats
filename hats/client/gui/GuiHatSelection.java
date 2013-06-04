@@ -69,6 +69,7 @@ public class GuiHatSelection extends GuiScreen
 	private final int ID_SET_FP = 23;
 	private final int ID_RESET_SIDE = 24;
 	private final int ID_MOB_SLIDER = 25;
+	private final int ID_SHOW_HATS = 26;
 	
 	private final int ID_CATEGORIES_START = 30;
 	
@@ -684,6 +685,11 @@ public class GuiHatSelection extends GuiScreen
 	    		Hats.renderInFirstPerson = (Hats.renderInFirstPerson == 1 ? 0 : 1);
 	    		btn.displayString = "First Person: " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No");
 	    	}
+	    	else if(btn.id == ID_SHOW_HATS)
+	    	{
+	    		Hats.renderHats = (Hats.renderHats == 1 ? 0 : 1);
+	    		btn.displayString = "Show Hats: " + (Hats.renderHats == 1 ? "Yes" : "No");
+	    	}
 	    	else if(btn.id == ID_RESET_SIDE)
 	    	{
 	    		enabledSearchBar = false;
@@ -1216,10 +1222,11 @@ public class GuiHatSelection extends GuiScreen
         {
         	buttonList.add(new GuiButton(ID_SET_KEY, width / 2 - 6, height / 2 - 78, 88, 20, "GUI: " + (Hats.guiKeyBind < 0 ? Mouse.getButtonName(Hats.guiKeyBind + 100) : Keyboard.getKeyName(Hats.guiKeyBind))));
         	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, "First Person: " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No")));
+        	buttonList.add(new GuiButton(ID_SHOW_HATS, width / 2 - 6, height / 2 - 78 + (22 * 2), 88, 20, "Show Hats: " + (Hats.renderHats == 1 ? "Yes" : "No")));
         	buttonList.add(new GuiButton(ID_RESET_SIDE, width / 2 - 6, height / 2 - 78 + (22 * 5), 88, 20, "Reset Side?"));
         	if(Hats.proxy.tickHandlerClient.serverHatMode != 4)
         	{
-        		buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 2), "RandoMobs: ", 0, 100, Hats.randomMobHat, this, "%"));
+        		buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 3), "RandoMobs: ", 0, 100, Hats.randomMobHat, this, "%"));
         	}
         	
         	currentDisplay = "Personalize";
@@ -1990,7 +1997,10 @@ public class GuiHatSelection extends GuiScreen
 	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 255.0F * 0.8F, 255.0F * 0.8F);
 	        Tessellator.instance.setBrightness(240);
 	        GL11.glDisable(GL11.GL_LIGHTING);
+	        int rend = Hats.renderHats;
+	        Hats.renderHats = 1;
 	        RenderManager.instance.renderEntityWithPosYaw(hat, 0.0D, 0.0D, 0.0D, hat.rotationYaw, 1.0F);
+	        Hats.renderHats = rend;
 	        GL11.glEnable(GL11.GL_LIGHTING);
 	        
 	        player.renderYawOffset = f2;
