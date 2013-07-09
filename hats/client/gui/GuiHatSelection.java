@@ -1647,6 +1647,11 @@ public class GuiHatSelection extends GuiScreen
     @Override
     public void drawScreen(int par1, int par2, float par3)
     {
+    	if(mc == null)
+    	{
+    		mc = Minecraft.getMinecraft();
+    		fontRenderer = mc.fontRenderer;
+    	}
     	drawDefaultBackground();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

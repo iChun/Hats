@@ -471,7 +471,7 @@ public class HatHandler
 								EntityPlayer player1 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
 								if(player1 != null)
 								{
-									sendHat(hatName, player);
+									sendHat(hatName, player1);
 								}
 							}
 						}
