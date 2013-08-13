@@ -9,14 +9,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.NetClientHandler;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetServerHandler;
 import net.minecraft.network.packet.NetHandler;
@@ -116,9 +113,9 @@ implements ITinyPacketHandler
 							idd = stream.readInt();
 		
 							Entity ent = player.worldObj.getEntityByID(idd);
-							if(ent instanceof EntityLiving)
+							if(ent instanceof EntityLivingBase)
 							{
-								String hatName = Hats.proxy.tickHandlerServer.mobHats.get((EntityLiving)ent);
+								String hatName = Hats.proxy.tickHandlerServer.mobHats.get((EntityLivingBase)ent);
 								if(hatName != null)
 								{
 									stream1.writeInt(new Integer(idd));

@@ -33,6 +33,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
@@ -49,7 +50,6 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 public class GuiHatSelection extends GuiScreen 
 	implements ISlider
 {
-
 	private final int ID_PAGE_LEFT = 1;
 	private final int ID_DONE_SELECT = 2;
 	private final int ID_PAGE_RIGHT = 3;
@@ -655,7 +655,6 @@ public class GuiHatSelection extends GuiScreen
 			
 			button++;
     		
-    		
     		currentDisplay = "Personalize";
     	}
     }
@@ -782,12 +781,12 @@ public class GuiHatSelection extends GuiScreen
     	drawDefaultBackground();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture("/mods/hats/textures/gui/hatchooser.png");
+        this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texChooser);
         int k = this.guiLeft;
         int l = this.guiTop;
         this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
         
-        this.mc.renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
+        this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texIcons);
 
         for (int k1 = 0; k1 < this.buttonList.size(); ++k1)
         {
@@ -821,7 +820,7 @@ public class GuiHatSelection extends GuiScreen
 	            GL11.glEnable(GL11.GL_BLEND);
 	            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	            
-	            this.mc.renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
+	            this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texIcons);
 
 	            if(btn.drawButton)
 	            {
@@ -999,7 +998,7 @@ public class GuiHatSelection extends GuiScreen
 	        }
 	        
 	        TileRendererHatStand.renderBlocks.blockAccess = stand.worldObj;
-	        Minecraft.getMinecraft().renderEngine.bindTexture("/terrain.png");
+	        this.mc.func_110434_K().func_110577_a(TextureMap.field_110575_b);
 	        BlockRenderHatStand.instance.renderInventoryBlockWithTileEntity((BlockHatStand)HatStand.blockHatStand, stand, TileRendererHatStand.renderBlocks);
 //	        GL11.glTranslated(stand.xCoord, stand.yCoord, stand.zCoord);
 	        
@@ -1026,7 +1025,7 @@ public class GuiHatSelection extends GuiScreen
 	        GL11.glEnable(GL11.GL_BLEND);
 	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	
-	    	Minecraft.getMinecraft().renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
+	        this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texIcons);
 	    	
 	    	drawTexturedModalRect(this.width / 2 - 85, height - 22, 128, 0, 16, 16);
 	    	

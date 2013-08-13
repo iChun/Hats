@@ -1,6 +1,5 @@
 package hats.client.core;
 
-import hats.client.gui.GuiHatSelection;
 import hats.client.gui.GuiHatUnlocked;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
@@ -16,23 +15,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGiantZombie;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.world.World;
-import cpw.mods.fml.client.FMLClientHandler;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -172,12 +165,12 @@ public class TickHandlerClient
 			for(int i = 0; i < world.loadedEntityList.size(); i++)
 			{
 				Entity ent = (Entity)world.loadedEntityList.get(i);
-				if(!(ent instanceof EntityLiving) || !(serverHasMod && serverHatMode == 4) && !HatHandler.canMobHat((EntityLiving)ent))
+				if(!(ent instanceof EntityLivingBase) || !(serverHasMod && serverHatMode == 4) && !HatHandler.canMobHat((EntityLivingBase)ent))
 				{
 					continue;
 				}
 				
-				EntityLiving living = (EntityLiving)ent;
+				EntityLivingBase living = (EntityLivingBase)ent;
 				
 				EntityHat hat = mobHats.get(living.entityId);
 				if(hat == null || hat.isDead)
@@ -294,7 +287,7 @@ public class TickHandlerClient
 		}
 	}
 	
-	public void updateHatPosAndAngle(EntityHat hat, EntityLiving parent)
+	public void updateHatPosAndAngle(EntityHat hat, EntityLivingBase parent)
 	{
 		hat.prevPosX = parent.prevPosX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(parent.prevRenderYawOffset));
 		hat.prevPosY = parent.prevPosY + HatHandler.getVerticalPosOffset(parent);

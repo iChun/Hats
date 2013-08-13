@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PreInit;
@@ -22,17 +23,17 @@ import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkModHandler;
 
 @Mod(modid = "HatStand", name = "HatStand",
-			version = "1.2.1",
-			dependencies = "required-after:Hats@[1.3.0,)"
+			version = "2.0.0",
+			dependencies = "required-after:Hats@[2.0.0,)"
 				)
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
 			tinyPacketHandler = MapPacketHandler.class,
-			versionBounds = "[1.2.0,1.3.0)"
+			versionBounds = "[2.0.0,2.1.0)"
 				)
 public class HatStand 
 {
-	public static final String version = "1.2.1";
+	public static final String version = "2.0.0";
 	
 	public static Block blockHatStand;
 	
@@ -61,7 +62,7 @@ public class HatStand
 		config.save();
 	}
 	
-	@PreInit
+	@EventHandler
 	public void preLoad(FMLPreInitializationEvent event)
 	{
 		configFile = event.getSuggestedConfigurationFile();
@@ -69,7 +70,7 @@ public class HatStand
 		handleConfig();
 	}
 
-	@Init
+	@EventHandler
 	public void load(FMLInitializationEvent event)
 	{
 		proxy.initMod();

@@ -11,6 +11,7 @@ import hats.common.core.MapPacketHandler;
 import hats.common.core.PacketHandlerServer;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.logging.Level;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +27,7 @@ import org.lwjgl.input.Keyboard;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
@@ -50,7 +52,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 
 @Mod(modid = "Hats", name = "Hats",
-			version = "1.3.3"
+			version = "2.0.0"
 				)
 @NetworkMod(clientSideRequired = true,
 			serverSideRequired = false,
@@ -58,11 +60,11 @@ import cpw.mods.fml.relauncher.Side;
 			tinyPacketHandler = MapPacketHandler.class,
 			clientPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerClient.class),
 			serverPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerServer.class),
-			versionBounds = "[1.3.0,1.4.0)"
+			versionBounds = "[2.0.0,2.1.0)"
 				)
 public class Hats 
 {
-	public static final String version = "1.3.3";
+	public static final String version = "2.0.0";
 	
 	//Global Options
 	public static int safeLoad = 1;
@@ -206,7 +208,7 @@ public class Hats
 		}
 	}
 	
-	@PreInit
+	@EventHandler
 	public void preLoad(FMLPreInitializationEvent event)
 	{
 		LoggerHelper.init();
@@ -222,9 +224,26 @@ public class Hats
 		
 		handleConfig();
 		
+		
+        try
+        {
+            Field[] fields = Class.forName("net.minecraft.world.World").getDeclaredFields();
+            for(Field f : fields)
+            {
+            	f.setAccessible(true);
+            	if(f.getName().equalsIgnoreCase("loadedEntityList"))
+            	{
+            		HatHandler.obfuscation = false;
+            		return;
+            	}
+            }
+        }
+        catch (Exception e)
+        {
+        }
 	}
 	
-	@Init
+	@EventHandler
 	public void load(FMLInitializationEvent event)
 	{
 		proxy.initMod();
@@ -238,7 +257,7 @@ public class Hats
 		
 	}
 	
-	@PostInit
+	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
 	}
@@ -306,24 +325,24 @@ public class Hats
 		proxy.tickHandlerServer.mobHats.remove(event.entityLiving);
 	}
 
-	@ServerStarting
+	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event)
 	{
 		proxy.initCommands(event.getServer());
 	}
 	
-	@ServerStarted
+	@EventHandler
 	public void serverStarted(FMLServerStartedEvent event)
 	{
 	}
 	
-	@ServerStopping
+	@EventHandler
 	public void serverStarted(FMLServerStoppingEvent event)
 	{
 		proxy.tickHandlerServer.mobHats.clear();
 	}
 	
-	@ServerStopped
+	@EventHandler
 	public void serverStopped(FMLServerStoppedEvent event)
 	{
 		proxy.tickHandlerServer.playerHats.clear();

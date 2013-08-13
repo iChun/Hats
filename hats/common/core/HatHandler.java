@@ -12,20 +12,25 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.RendererLivingEntity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
@@ -46,6 +51,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.common.DimensionManager;
+
+import org.lwjgl.opengl.GL11;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -785,7 +793,7 @@ public class HatHandler
 		{
 			Entry<File, String> e = ite.next();
 			String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
-			if(name.startsWith("(C)".toLowerCase()) && name.toLowerCase().contains(Minecraft.getMinecraft().thePlayer.username.toLowerCase()) 
+			if(name.startsWith("(C)") && name.toLowerCase().contains(Minecraft.getMinecraft().thePlayer.username.toLowerCase()) 
 					|| name.equalsIgnoreCase("(C) iChun") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("ohaiiChun") //special casing for initial contrib hats.
 					|| name.equalsIgnoreCase("(C) Mr. Haz") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("damien95")
 					|| name.equalsIgnoreCase("(C) Fridgeboy") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("lacsap32"))
@@ -806,9 +814,9 @@ public class HatHandler
 		
 		Hats.proxy.tickHandlerClient.serverHats = new ArrayList<String>(Hats.proxy.tickHandlerClient.availableHats);
 	}
-	
-	//Temp cause no hotcode replace in 151 -.-
-	public static double getVerticalPosOffset(EntityLiving ent)
+
+	@SideOnly(Side.CLIENT)
+	public static double getVerticalPosOffset(EntityLivingBase ent)
 	{
 		if(ent instanceof EntityPlayer)
 		{
@@ -848,7 +856,7 @@ public class HatHandler
 		}
 		else if(ent instanceof EntitySpider)
 		{
-			return 0.57D * ((EntitySpider)ent).spiderScaleAmount();
+			return 0.57D * getSpiderScale((EntitySpider)ent);
 		}
 		else if(ent instanceof EntitySheep)
 		{
@@ -865,7 +873,8 @@ public class HatHandler
 		return 0.0D;
 	}
 
-	public static double getHorizontalPosOffset(EntityLiving ent)
+	@SideOnly(Side.CLIENT)
+	public static double getHorizontalPosOffset(EntityLivingBase ent)
 	{
 		if(ent instanceof EntityPig)
 		{
@@ -873,7 +882,7 @@ public class HatHandler
 		}
 		else if(ent instanceof EntitySpider)
 		{
-			return 0.18D * ((EntitySpider)ent).spiderScaleAmount();
+			return 0.18D * getSpiderScale((EntitySpider)ent);
 		}
 		else if(ent instanceof EntitySheep)
 		{
@@ -891,7 +900,7 @@ public class HatHandler
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static float getVerticalPostRotateOffset(EntityLiving ent)
+	public static float getVerticalPostRotateOffset(EntityLivingBase ent)
 	{
 		if(ent instanceof EntityBlaze)
 		{
@@ -907,7 +916,7 @@ public class HatHandler
 		}
 		else if(ent instanceof EntitySpider)
 		{
-			return -0.21F * ((EntitySpider)ent).spiderScaleAmount();
+			return -0.21F * getSpiderScale((EntitySpider)ent);
 		}
 		else if(ent instanceof EntitySheep)
 		{
@@ -929,7 +938,7 @@ public class HatHandler
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static float getHorizontalPostRotateOffset(EntityLiving ent)
+	public static float getHorizontalPostRotateOffset(EntityLivingBase ent)
 	{
 		if(ent instanceof EntityPig)
 		{
@@ -937,7 +946,7 @@ public class HatHandler
 		}
 		else if(ent instanceof EntitySpider)
 		{
-			return -0.265F * ((EntitySpider)ent).spiderScaleAmount();
+			return -0.265F * getSpiderScale((EntitySpider)ent);
 		}
 		else if(ent instanceof EntitySheep)
 		{
@@ -955,11 +964,11 @@ public class HatHandler
 	}
 	
 	@SideOnly(Side.CLIENT)
-	public static float getVerticalRenderOffset(EntityLiving ent)
+	public static float getVerticalRenderOffset(EntityLivingBase ent)
 	{
 		if(ent instanceof EntityPlayer)
 		{
-			 return (float)(Minecraft.getMinecraft().renderViewEntity != ent ? -0.06F : 0.0F ) + (ent != null && ent.isSneaking() ? Minecraft.getMinecraft().renderViewEntity != ent ? -0.17F : -0.05F : 0.015F);
+			 return (float)(Minecraft.getMinecraft().renderViewEntity != ent ? -0.06F : 0.01F ) + (ent != null && ent.isSneaking() ? Minecraft.getMinecraft().renderViewEntity != ent ? -0.17F : -0.05F : 0.015F);
 		}
 		else if(ent instanceof EntityPigZombie)
 		{
@@ -984,7 +993,7 @@ public class HatHandler
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static float getRenderScale(EntityLiving ent)
+	public static float getRenderScale(EntityLivingBase ent)
 	{
 		if(ent instanceof EntitySkeleton && ((EntitySkeleton)ent).getSkeletonType() == 1)
 		{
@@ -1004,7 +1013,7 @@ public class HatHandler
 		}
 		else if(ent instanceof EntitySpider)
 		{
-			return ((EntitySpider)ent).spiderScaleAmount();
+			return getSpiderScale((EntitySpider)ent);
 		}
 		else if(ent instanceof EntitySheep)
 		{
@@ -1021,7 +1030,26 @@ public class HatHandler
 		return 1.0F;
 	}
 	
-	public static boolean canMobHat(EntityLiving ent)
+	@SideOnly(Side.CLIENT)
+	public static float getSpiderScale(EntitySpider spider)
+	{
+		FloatBuffer buffer = GLAllocation.createDirectFloatBuffer(16);
+		FloatBuffer buffer1 = GLAllocation.createDirectFloatBuffer(16);
+
+		GL11.glPushMatrix();
+		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
+		Render rend = RenderManager.instance.getEntityRenderObject(spider);
+		invokePreRenderCallback(rend, rend.getClass(), spider, 1.0F);
+		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer1);
+		GL11.glPopMatrix();
+
+//		float prevScaleX = buffer1.get(0) / buffer.get(0);
+//		float prevScaleY = buffer1.get(1) / buffer.get(1);
+//		float prevScaleZ = buffer1.get(2) / buffer.get(2);
+		return buffer1.get(0) / buffer.get(0);
+	}
+	
+	public static boolean canMobHat(EntityLivingBase ent)
 	{
 		return ent.isEntityAlive() && !ent.isChild() && (Hats.hatZombie == 1 && ent instanceof EntityZombie && !(ent instanceof EntityGiantZombie) || Hats.hatCreeper == 1 && ent instanceof EntityCreeper 
 				|| Hats.hatEnderman == 1 &&ent instanceof EntityEnderman || Hats.hatSkeleton == 1 && ent instanceof EntitySkeleton || Hats.hatVillager == 1 && ent instanceof EntityVillager 
@@ -1048,5 +1076,31 @@ public class HatHandler
 	public static HashMap<String, ArrayList<String>> categories = new HashMap<String, ArrayList<String>>();
 	
 	public static Random rand = new Random();
+	
+	public static final String preRenderCallbackObf = "func_77041_b";
+	public static final String preRenderCallbackDeobf = "preRenderCallback";
+	public static boolean obfuscation = true;
 
+	@SideOnly(Side.CLIENT)
+	public static void invokePreRenderCallback(Render rend, Class clz, EntityLivingBase ent, float rendTick)
+	{
+		try
+		{
+			Method m = clz.getDeclaredMethod(obfuscation ? preRenderCallbackObf : preRenderCallbackDeobf, EntityLivingBase.class, float.class);
+			m.setAccessible(true);
+			m.invoke(rend, ent, rendTick);
+		}
+		catch(NoSuchMethodException e)
+		{
+			if(clz != RendererLivingEntity.class)
+			{
+				invokePreRenderCallback(rend, clz.getSuperclass(), ent, rendTick);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 }

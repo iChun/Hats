@@ -15,14 +15,19 @@ import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.stats.Achievement;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 @SideOnly(Side.CLIENT)
 public class GuiHatUnlocked extends Gui
 {
+	private static final ResourceLocation texAchi = new ResourceLocation("textures/gui/achievement/achievement_background.png");
+	
     /** Holds the instance of the game (Minecraft) */
     private Minecraft theGame;
 
@@ -131,7 +136,7 @@ public class GuiHatUnlocked extends Gui
                 int j = 0 - (int)(d1 * 36.0D);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
-                this.theGame.renderEngine.bindTexture("/achievement/bg.png");
+                this.theGame.func_110434_K().func_110577_a(texAchi);
                 GL11.glDisable(GL11.GL_LIGHTING);
                 this.drawTexturedModalRect(i, j, 96, 202, 160, 32);
 
@@ -160,11 +165,10 @@ public class GuiHatUnlocked extends Gui
 			        {
 			            if (ClientProxy.bufferedImageID.get(image) == -1)
 			            {
-			            	ClientProxy.bufferedImageID.put(image, Minecraft.getMinecraft().renderEngine.allocateAndSetupTexture(image));
+			            	ClientProxy.bufferedImageID.put(image, TextureUtil.func_110987_a(TextureUtil.func_110996_a(), image));
 			            }
 	
 			            GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.bufferedImageID.get(image));
-			            Minecraft.getMinecraft().renderEngine.resetBoundTexture();
 			        }
 
 			        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

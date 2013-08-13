@@ -29,6 +29,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -43,6 +44,9 @@ public class GuiHatSelection extends GuiScreen
 	implements ISlider
 {
 
+	public static final ResourceLocation texIcons = new ResourceLocation("hats", "textures/gui/icons.png");
+	public static final ResourceLocation texChooser = new ResourceLocation("hats", "textures/gui/hatchooser.png");
+	
 	private final int ID_PAGE_LEFT = 1;
 	private final int ID_DONE_SELECT = 2;
 	private final int ID_PAGE_RIGHT = 3;
@@ -131,7 +135,7 @@ public class GuiHatSelection extends GuiScreen
 	public int view;
 	
 	public Random rand;
-	
+
 	public GuiHatSelection(EntityPlayer ply)
 	{
 		if(Hats.proxy.tickHandlerClient.serverHatMode == 4)
@@ -1655,12 +1659,12 @@ public class GuiHatSelection extends GuiScreen
     	drawDefaultBackground();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.renderEngine.bindTexture("/mods/hats/textures/gui/hatchooser.png");
+        this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texChooser);
         int k = this.guiLeft;
         int l = this.guiTop;
         this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
         
-        this.mc.renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
+        this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texIcons);
 
         if(personalizing)
         {
@@ -1703,7 +1707,7 @@ public class GuiHatSelection extends GuiScreen
 	            GL11.glEnable(GL11.GL_BLEND);
 	            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	            
-	            this.mc.renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
+	            this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texIcons);
 
 	            if(btn.drawButton)
 	            {
@@ -2035,7 +2039,7 @@ public class GuiHatSelection extends GuiScreen
 	        GL11.glEnable(GL11.GL_BLEND);
 	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	
-	    	Minecraft.getMinecraft().renderEngine.bindTexture("/mods/hats/textures/gui/icons.png");
+	        this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texIcons);
 	    	
 	    	drawTexturedModalRect(this.width / 2 - 85, height - 22, (adding || renaming) ? 112 : 128, 0, 16, 16);
 	    	

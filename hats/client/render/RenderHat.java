@@ -9,13 +9,16 @@ import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.entity.EntityHat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -99,11 +102,10 @@ public class RenderHat extends Render
 			        {
 			            if (ClientProxy.bufferedImageID.get(image) == -1)
 			            {
-			            	ClientProxy.bufferedImageID.put(image, Minecraft.getMinecraft().renderEngine.allocateAndSetupTexture(image));
+			            	ClientProxy.bufferedImageID.put(image, TextureUtil.func_110987_a(TextureUtil.func_110996_a(), image));
 			            }
 	
 			            GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.bufferedImageID.get(image));
-			            Minecraft.getMinecraft().renderEngine.resetBoundTexture();
 			        }
 	
 			        GL11.glScalef(-1.0F, -1.0F, 1.0F);
@@ -150,5 +152,11 @@ public class RenderHat extends Render
 
         return par1 + par3 * f3;
     }
+
+	@Override
+	protected ResourceLocation func_110775_a(Entity entity) 
+	{
+		return AbstractClientPlayer.field_110314_b;
+	}
 
 }

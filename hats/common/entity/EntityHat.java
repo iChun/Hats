@@ -1,27 +1,25 @@
 package hats.common.entity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class EntityHat extends Entity 
 {
 
-	public EntityLiving parent;
+	public EntityLivingBase parent;
 	public String hatName;
 	
 	public int reColour;
@@ -57,7 +55,7 @@ public class EntityHat extends Entity
 		renderDistanceWeight = 10D;
 	}
 	
-	public EntityHat(World par1World, EntityLiving ent, HatInfo hatInfo) 
+	public EntityHat(World par1World, EntityLivingBase ent, HatInfo hatInfo) 
 	{
 		super(par1World);
 		setSize(0.1F, 0.1F);
@@ -185,7 +183,6 @@ public class EntityHat extends Entity
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void setDead()
 	{
 		super.setDead();

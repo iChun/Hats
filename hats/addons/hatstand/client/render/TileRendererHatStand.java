@@ -11,18 +11,32 @@ import hats.client.model.ModelHat;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.ModelSkeletonHead;
 import net.minecraft.client.renderer.ImageBufferDownload;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.client.renderer.tileentity.TileEntityRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StringUtils;
 
 public class TileRendererHatStand extends TileEntitySpecialRenderer 
 {
+	public static final ResourceLocation texSkele		 = new ResourceLocation("textures/entity/skeleton/skeleton.png");
+    public static final ResourceLocation texSkeleWither	 = new ResourceLocation("textures/entity/skeleton/wither_skeleton.png");
+    public static final ResourceLocation texPigman		 = new ResourceLocation("hats", "textures/entity/pigman.png");
+    public static final ResourceLocation texZombie		 = new ResourceLocation("textures/entity/zombie/zombie.png");
+    public static final ResourceLocation texCreeper		 = new ResourceLocation("textures/entity/creeper/creeper.png");
+    public static final ResourceLocation texPlayer		 = new ResourceLocation("textures/entity/steve.png");
+    public static final ResourceLocation texWitherInvul	 = new ResourceLocation("textures/entity/wither/wither_invulnerable.png");
+    public static final ResourceLocation texWither		 = new ResourceLocation("textures/entity/wither/wither.png");
+    public static final ResourceLocation texBlaze		 = new ResourceLocation("textures/entity/blaze.png");
+    public static final ResourceLocation texSpiderEyes	 = new ResourceLocation("textures/entity/spider_eyes.png");
+	
 	public static TileRendererHatStand renderer;
 	public static RenderBlocks renderBlocks = new RenderBlocks();
 	
@@ -84,55 +98,46 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 			{
             case 1:
             default:
-                this.bindTextureByName("/mob/skeleton.png");
+                this.func_110628_a(texSkele);
                 break;
             case 2:
-                this.bindTextureByName("/mob/skeleton_wither.png");
+                this.func_110628_a(texSkeleWither);
                 break;
             case 3:
-                this.bindTextureByName("/mob/zombie.png");
+                this.func_110628_a(texZombie);
                 head = head64;
                 break;
             case 4:
+            	ResourceLocation resourcelocation = AbstractClientPlayer.field_110314_b;
                 if (stand.headName != null && stand.headName.length() > 0)
                 {
-                    String s1 = "http://skins.minecraft.net/MinecraftSkins/" + StringUtils.stripControlCodes(stand.headName) + ".png";
-
-                    if (!this.tileEntityRenderer.renderEngine.hasImageData(s1))
-                    {
-                        this.tileEntityRenderer.renderEngine.obtainImageData(s1, new ImageBufferDownload());
-                    }
-
-                    this.bindTextureByURL(s1, "/mob/char.png");
+                    resourcelocation = AbstractClientPlayer.func_110305_h(stand.headName);
+                    AbstractClientPlayer.func_110304_a(resourcelocation, stand.headName);
                 }
-                else
-                {
-                    this.bindTextureByName("/mob/char.png");
-                }
-
+                this.func_110628_a(resourcelocation);
                 break;
             case 5:
-            	this.bindTextureByName("/mob/char.png");
+            	this.func_110628_a(texPlayer);
             	break;
             case 6:
-                this.bindTextureByName("/mob/creeper.png");
+                this.func_110628_a(texCreeper);
                 break;
             case 7:
-            	this.bindTextureByName("/mob/wither.png");
+            	this.func_110628_a(texWither);
             	head = head64;
             	break;
             case 8:
-            	this.bindTextureByName("/mob/wither_invul.png");
+            	this.func_110628_a(texWitherInvul);
             	head = head64;
             	break;
             case 9:
-                this.bindTextureByName("/mob/pigman.png");
+            	this.func_110628_a(texPigman);
                 break;
             case 10:
-                this.bindTextureByName("/mob/fire.png");
+                this.func_110628_a(texBlaze);
                 break;
             case 11:
-                this.bindTextureByName("/mob/spider_eyes.png");
+                this.func_110628_a(texSpiderEyes);
                 break;
 			}
 			
@@ -161,11 +166,10 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 	        {
 	            if (ClientProxy.bufferedImageID.get(image) == -1)
 	            {
-	            	ClientProxy.bufferedImageID.put(image, Minecraft.getMinecraft().renderEngine.allocateAndSetupTexture(image));
+	            	ClientProxy.bufferedImageID.put(image, TextureUtil.func_110987_a(TextureUtil.func_110996_a(), image));
 	            }
 
 	            GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.bufferedImageID.get(image));
-	            Minecraft.getMinecraft().renderEngine.resetBoundTexture();
 	        }
 	        
 	        GL11.glTranslated(0.0D, -0.038D, 0.0D);

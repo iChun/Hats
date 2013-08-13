@@ -15,7 +15,7 @@ import java.util.WeakHashMap;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet131MapData;
@@ -64,11 +64,11 @@ public class TickHandlerServer implements ITickHandler {
 
 	public void worldTick(WorldServer world)
 	{
-		Iterator<Entry<EntityLiving, String>> iterator1 = mobHats.entrySet().iterator();
+		Iterator<Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
 		
 		while(iterator1.hasNext())
 		{
-			Entry<EntityLiving, String> e = iterator1.next();
+			Entry<EntityLivingBase, String> e = iterator1.next();
 			if(!e.getKey().isEntityAlive() || e.getKey().isChild())
 			{
 				iterator1.remove();
@@ -78,12 +78,12 @@ public class TickHandlerServer implements ITickHandler {
 		for(int i = 0; i < world.loadedEntityList.size(); i++)
 		{
 			Entity ent = (Entity)world.loadedEntityList.get(i);
-			if(!(ent instanceof EntityLiving) || !HatHandler.canMobHat((EntityLiving)ent) || mobHats.containsKey(ent))
+			if(!(ent instanceof EntityLivingBase) || !HatHandler.canMobHat((EntityLivingBase)ent) || mobHats.containsKey(ent))
 			{
 				continue;
 			}
 			
-			EntityLiving living = (EntityLiving)ent;
+			EntityLivingBase living = (EntityLivingBase)ent;
 			
 			String hat = mobHats.get(living);
 			if(hat == null)
@@ -98,7 +98,7 @@ public class TickHandlerServer implements ITickHandler {
 					}
 					
 					TileEntityMobSpawner spawner = (TileEntityMobSpawner)te;
-					MobSpawnerBaseLogic logic = spawner.func_98049_a();
+					MobSpawnerBaseLogic logic = spawner.getSpawnerLogic();
 					if(logic.canRun())
 					{
 						Entity entity = EntityList.createEntityByName(logic.getEntityNameToSpawn(), logic.getSpawnerWorld());
@@ -126,7 +126,7 @@ public class TickHandlerServer implements ITickHandler {
 	{
 	}
 	
-	public void playerKilledEntity(EntityLiving living, EntityPlayer player)
+	public void playerKilledEntity(EntityLivingBase living, EntityPlayer player)
 	{
 		String hat = mobHats.get(living);
 		if(hat != null)
@@ -158,6 +158,6 @@ public class TickHandlerServer implements ITickHandler {
         Hats.proxy.sendPlayerListOfWornHats(player, false, false);
 	}
 	
-	public WeakHashMap<EntityLiving, String> mobHats = new WeakHashMap<EntityLiving, String>();
+	public WeakHashMap<EntityLivingBase, String> mobHats = new WeakHashMap<EntityLivingBase, String>();
 	public HashMap<String, ArrayList<String>> playerHats = new HashMap<String, ArrayList<String>>();
 }

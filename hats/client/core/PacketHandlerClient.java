@@ -11,7 +11,7 @@ import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import cpw.mods.fml.common.network.IPacketHandler;
@@ -88,10 +88,10 @@ public class PacketHandlerClient
 						name = stream.readUTF();
 						
 						Entity ent = mc.theWorld.getEntityByID(idd);
-						if(ent != null && ent instanceof EntityLiving)
+						if(ent != null && ent instanceof EntityLivingBase)
 						{
 							HatInfo hatInfo = new HatInfo(name);
-							EntityHat hat = new EntityHat(ent.worldObj, (EntityLiving)ent, hatInfo);
+							EntityHat hat = new EntityHat(ent.worldObj, (EntityLivingBase)ent, hatInfo);
 							Hats.proxy.tickHandlerClient.mobHats.put(ent.entityId, hat);
 							ent.worldObj.spawnEntityInWorld(hat);
 						}
