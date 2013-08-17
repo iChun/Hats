@@ -1,5 +1,8 @@
 package hats.common.entity;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
@@ -10,8 +13,10 @@ import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySquid;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -20,6 +25,8 @@ public class EntityHat extends Entity
 {
 
 	public EntityLivingBase parent;
+	public EntityLivingBase renderingParent; 
+	public boolean render;
 	public String hatName;
 	
 	public int reColour;
@@ -59,7 +66,7 @@ public class EntityHat extends Entity
 	{
 		super(par1World);
 		setSize(0.1F, 0.1F);
-		parent = ent;
+		renderingParent = parent = ent;
 		hatName = hatInfo.hatName;
 		
 		setLocationAndAngles(parent.posX, parent.posY + parent.getEyeHeight() - 0.35F, parent.posZ, parent.rotationYaw, parent.rotationPitch);
@@ -82,6 +89,8 @@ public class EntityHat extends Entity
 	@Override
 	public void onUpdate()
 	{
+		renderingParent = parent;
+		render = true;
 		ticksExisted++;
 		
 		if(reColour > 0)
@@ -95,16 +104,57 @@ public class EntityHat extends Entity
 			return;
 		}
 		
+		if(Hats.hasMorphMod && parent instanceof EntityPlayer)
+		{
+			try
+			{
+				EntityPlayer player = (EntityPlayer)parent;
+				Object obj = Hats.morphMap.get(player.username);
+				if(obj != null)
+				{
+					Method m = obj.getClass().getSuperclass().getDeclaredMethod("getMorphing");
+					m.setAccessible(true);
+					boolean morphing = (Boolean)m.invoke(obj);
+					if(morphing)
+					{
+						render = false;
+					}
+					else
+					{
+						Field stateField = obj.getClass().getSuperclass().getDeclaredField("nextState");
+						stateField.setAccessible(true);
+						Object state = stateField.get(obj);
+						if(state != null)
+						{
+							Class stateClz = state.getClass();
+							
+							Field entInstanceField = stateClz.getDeclaredField("entInstance");
+							entInstanceField.setAccessible(true);
+							EntityLivingBase ent = (EntityLivingBase)entInstanceField.get(state);
+							if(ent != null)
+							{
+								renderingParent = ent;
+							}
+						}
+					}
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
 		lastUpdate = worldObj.getWorldTime();
 
-		lastTickPosX = prevPosX = parent.prevPosX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(parent.prevRenderYawOffset));
-		lastTickPosY = prevPosY = parent.prevPosY + HatHandler.getVerticalPosOffset(parent);
-		lastTickPosZ = prevPosZ = parent.prevPosZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(parent.prevRenderYawOffset));
+		lastTickPosX = prevPosX = renderingParent.prevPosX - HatHandler.getHorizontalPosOffset(renderingParent) * Math.sin(Math.toRadians(renderingParent.prevRenderYawOffset));
+		lastTickPosY = prevPosY = renderingParent.prevPosY + HatHandler.getVerticalPosOffset(renderingParent);
+		lastTickPosZ = prevPosZ = renderingParent.prevPosZ + HatHandler.getHorizontalPosOffset(renderingParent) * Math.cos(Math.toRadians(renderingParent.prevRenderYawOffset));
 		
 		setPosition(posX, posY, posZ);
-		posX = parent.posX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(parent.renderYawOffset));
-		posY = parent.posY + HatHandler.getVerticalPosOffset(parent);
-		posZ = parent.posZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(parent.renderYawOffset));
+		posX = renderingParent.posX - HatHandler.getHorizontalPosOffset(renderingParent) * Math.sin(Math.toRadians(renderingParent.renderYawOffset));
+		posY = renderingParent.posY + HatHandler.getVerticalPosOffset(renderingParent);
+		posZ = renderingParent.posZ + HatHandler.getHorizontalPosOffset(renderingParent) * Math.cos(Math.toRadians(renderingParent.renderYawOffset));
 		
 		prevRotationYaw = getPrevRotationYaw();
 		rotationYaw = getRotationYaw();

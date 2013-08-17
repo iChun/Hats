@@ -269,7 +269,7 @@ public class TickHandlerClient
 			{
 				EntityHat hat = e.getValue();
 				
-				updateHatPosAndAngle(hat, hat.parent);
+				updateHatPosAndAngle(hat, hat.renderingParent);
 			}
 		}
 		

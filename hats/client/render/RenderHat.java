@@ -32,11 +32,11 @@ public class RenderHat extends Render
 	
     public void renderHat(EntityHat hat, double par2, double par4, double par6, float par8, float par9)
     {
-    	if(!hat.hatName.equalsIgnoreCase("") && hat.parent != null && !hat.parent.isPlayerSleeping() && hat.parent.isEntityAlive() && Hats.renderHats == 1)
+    	if(!hat.hatName.equalsIgnoreCase("") && hat.parent != null && !hat.parent.isPlayerSleeping() && hat.parent.isEntityAlive() && Hats.renderHats == 1 && hat.render && (hat.parent instanceof EntityPlayer && (hat.renderingParent instanceof EntityPlayer || HatHandler.canMobHat(hat.renderingParent) || !(hat.parent instanceof EntityPlayer))))
     	{
     		boolean firstPerson = (hat.parent == Minecraft.getMinecraft().renderViewEntity && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !((Minecraft.getMinecraft().currentScreen instanceof GuiInventory || Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative || Minecraft.getMinecraft().currentScreen instanceof GuiHatSelection) && RenderManager.instance.playerViewY == 180.0F));
     		
-    		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && !hat.parent.isInvisible())
+    		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && !hat.renderingParent.isInvisible() )
     		{
 		    	ModelHat model = ClientProxy.models.get(hat.hatName);
 		    	
@@ -54,16 +54,20 @@ public class RenderHat extends Render
 			        
 		            float rotYawHead = interpolateRotation(hat.getPrevRotationYaw(), hat.getRotationYaw(), par9);
 		            
-			        GL11.glTranslatef((float)par2, (float)par4 + HatHandler.getVerticalRenderOffset(hat.parent), (float)par6);
+			        GL11.glTranslatef((float)par2, (float)par4 + HatHandler.getVerticalRenderOffset(hat.renderingParent), (float)par6);
+			        if(hat.parent == Minecraft.getMinecraft().renderViewEntity && hat.renderingParent != hat.parent)
+			        {
+			        	GL11.glTranslatef(0.0F, -hat.parent.yOffset, 0.0F);
+			        }
 			        GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 			        
 			        GL11.glRotatef(interpolateRotation(hat.getPrevRotationPitch(), hat.getRotationPitch(), par9), -1.0F, 0.0F, 0.0F);
 			        
 			        GL11.glRotatef(180.0F - par8, 0.0F, -1.0F, 0.0F);
-			        GL11.glTranslatef((HatHandler.getHorizontalPostRotateOffset(hat.parent) * (float)Math.sin(Math.toRadians(rotYawHead))), HatHandler.getVerticalPostRotateOffset(hat.parent), -(HatHandler.getHorizontalPostRotateOffset(hat.parent) * (float)Math.cos(Math.toRadians(rotYawHead))));
+			        GL11.glTranslatef((HatHandler.getHorizontalPostRotateOffset(hat.renderingParent) * (float)Math.sin(Math.toRadians(rotYawHead))), HatHandler.getVerticalPostRotateOffset(hat.renderingParent), -(HatHandler.getHorizontalPostRotateOffset(hat.renderingParent) * (float)Math.cos(Math.toRadians(rotYawHead))));
 			        GL11.glRotatef(180.0F - par8, 0.0F, 1.0F, 0.0F);
 			        
-			        float scale = HatHandler.getRenderScale(hat.parent);
+			        float scale = HatHandler.getRenderScale(hat.renderingParent);
 			        GL11.glScalef(scale, scale, scale);
 			        
 			        if(hat.reColour > 0)

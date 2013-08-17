@@ -1970,7 +1970,7 @@ public class GuiHatSelection extends GuiScreen
     	if(player != null)
     	{
 	    	hat = Hats.proxy.tickHandlerClient.hats.get(player.username);
-	    	if(hat == null)
+	    	if(hat == null || hat.renderingParent == null)
 	    	{
 	    		return;
 	    	}
@@ -1982,9 +1982,9 @@ public class GuiHatSelection extends GuiScreen
 	        GL11.glTranslatef((float)par1, (float)par2, 50.0F);
 	        GL11.glScalef((float)(-par3), (float)par3, (float)par3);
 	        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-	        float f2 = player.renderYawOffset;
-	        float f3 = player.rotationYaw;
-	        float f4 = player.rotationPitch;
+	        float f2 = hat.renderingParent.renderYawOffset;
+	        float f3 = hat.renderingParent.rotationYaw;
+	        float f4 = hat.renderingParent.rotationPitch;
 	        
 	        float ff3 = hat.rotationYaw;
 	        float ff4 = hat.rotationPitch;
@@ -1994,27 +1994,31 @@ public class GuiHatSelection extends GuiScreen
 	        GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
 	        GL11.glRotatef(-((float)Math.atan((double)(par5 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
 	        
-	        player.renderYawOffset = (float)Math.atan((double)(par4 / 40.0F)) * 20.0F;
-	        player.rotationYaw = hat.rotationYaw = (float)Math.atan((double)(par4 / 40.0F)) * 40.0F;
-	        player.rotationPitch = hat.rotationPitch = -((float)Math.atan((double)(par5 / 40.0F))) * 20.0F;
-	        player.rotationYawHead = player.rotationYaw;
-	        GL11.glTranslatef(0.0F, player.yOffset, 0.0F);
+	        hat.renderingParent.renderYawOffset = (float)Math.atan((double)(par4 / 40.0F)) * 20.0F;
+	        hat.renderingParent.rotationYaw = hat.rotationYaw = (float)Math.atan((double)(par4 / 40.0F)) * 40.0F;
+	        hat.renderingParent.rotationPitch = hat.rotationPitch = -((float)Math.atan((double)(par5 / 40.0F))) * 20.0F;
+	        hat.renderingParent.rotationYawHead = hat.renderingParent.rotationYaw;
+	        GL11.glTranslatef(0.0F, hat.renderingParent.yOffset, 0.0F);
 	        
 	        RenderManager.instance.playerViewY = 180.0F;
-	        RenderManager.instance.renderEntityWithPosYaw(player, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
+	        RenderManager.instance.renderEntityWithPosYaw(hat.renderingParent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
 	        GL11.glTranslatef(0.0F, -0.22F, 0.0F);
 	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 255.0F * 0.8F, 255.0F * 0.8F);
 	        Tessellator.instance.setBrightness(240);
 	        GL11.glDisable(GL11.GL_LIGHTING);
 	        int rend = Hats.renderHats;
 	        Hats.renderHats = 1;
+	        if(hat.parent == Minecraft.getMinecraft().renderViewEntity && hat.renderingParent != hat.parent)
+	        {
+	        	GL11.glTranslatef((float)HatHandler.getHorizontalPosOffset(hat.renderingParent), hat.parent.yOffset * 2, 0.0F);
+	        }
 	        RenderManager.instance.renderEntityWithPosYaw(hat, 0.0D, 0.0D, 0.0D, hat.rotationYaw, 1.0F);
 	        Hats.renderHats = rend;
 	        GL11.glEnable(GL11.GL_LIGHTING);
 	        
-	        player.renderYawOffset = f2;
-	        player.rotationYaw = f3;
-	        player.rotationPitch = f4;
+	        hat.renderingParent.renderYawOffset = f2;
+	        hat.renderingParent.rotationYaw = f3;
+	        hat.renderingParent.rotationPitch = f4;
 	        
 	        hat.rotationYaw = ff3;
 	        hat.rotationPitch = ff4;

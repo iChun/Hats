@@ -12,6 +12,7 @@ import hats.common.core.PacketHandlerServer;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.logging.Level;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -110,6 +111,9 @@ public class Hats
 	
 	public static File configFile;
 	public static boolean firstConfigLoad = true;
+	
+	public static boolean hasMorphMod = false;
+	public static HashMap morphMap = new HashMap();
 	
 	@Instance("Hats")
 	public static Hats instance;
@@ -260,6 +264,28 @@ public class Hats
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{
+		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
+		{
+	        try
+	        {
+	        	Class clz = Class.forName("morph.common.Morph");
+	        	hasMorphMod = true;
+	        	
+	        	Field proxyField = clz.getDeclaredField("proxy");
+	        	proxyField.setAccessible(true);
+	        	Object proxyObj = proxyField.get(null);
+	        	Class proxyClz = proxyObj.getClass().getSuperclass();
+	        	Field tickHandlerClientField = proxyClz.getDeclaredField("tickHandlerClient");
+	        	tickHandlerClientField.setAccessible(true);
+	        	Object ticker = tickHandlerClientField.get(proxyObj);
+	        	Class tickerClz = ticker.getClass();
+	        	Field map = tickerClz.getDeclaredField("playerMorphInfo");
+	        	morphMap = (HashMap)map.get(ticker);
+	        }
+	        catch(Exception e)
+	        {
+	        }
+		}
 	}
 	
 	public static int addCommentAndReturnInt(Configuration config, String cat, String s, String comment, int i) //Taken from iChun Util
