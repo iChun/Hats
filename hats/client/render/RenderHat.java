@@ -32,10 +32,10 @@ public class RenderHat extends Render
 	
     public void renderHat(EntityHat hat, double par2, double par4, double par6, float par8, float par9)
     {
-    	if(!hat.hatName.equalsIgnoreCase("") && hat.parent != null && !hat.parent.isPlayerSleeping() && hat.parent.isEntityAlive() && Hats.renderHats == 1 && hat.render && (hat.parent instanceof EntityPlayer && (hat.renderingParent instanceof EntityPlayer || HatHandler.canMobHat(hat.renderingParent) || !(hat.parent instanceof EntityPlayer))))
+    	if(!hat.hatName.equalsIgnoreCase("") && hat.parent != null && !hat.parent.isPlayerSleeping() && hat.parent.isEntityAlive() && Hats.renderHats == 1 && hat.render && (hat.parent instanceof EntityPlayer && (hat.renderingParent instanceof EntityPlayer || HatHandler.canMobHat(hat.renderingParent)) || !(hat.parent instanceof EntityPlayer)))
     	{
     		boolean firstPerson = (hat.parent == Minecraft.getMinecraft().renderViewEntity && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !((Minecraft.getMinecraft().currentScreen instanceof GuiInventory || Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative || Minecraft.getMinecraft().currentScreen instanceof GuiHatSelection) && RenderManager.instance.playerViewY == 180.0F));
-    		
+
     		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && !hat.renderingParent.isInvisible() )
     		{
 		    	ModelHat model = ClientProxy.models.get(hat.hatName);
