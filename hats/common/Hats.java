@@ -113,7 +113,6 @@ public class Hats
 	public static boolean firstConfigLoad = true;
 	
 	public static boolean hasMorphMod = false;
-	public static HashMap morphMap = new HashMap();
 	
 	@Instance("Hats")
 	public static Hats instance;
@@ -270,17 +269,6 @@ public class Hats
 	        {
 	        	Class clz = Class.forName("morph.common.Morph");
 	        	hasMorphMod = true;
-	        	
-	        	Field proxyField = clz.getDeclaredField("proxy");
-	        	proxyField.setAccessible(true);
-	        	Object proxyObj = proxyField.get(null);
-	        	Class proxyClz = proxyObj.getClass().getSuperclass();
-	        	Field tickHandlerClientField = proxyClz.getDeclaredField("tickHandlerClient");
-	        	tickHandlerClientField.setAccessible(true);
-	        	Object ticker = tickHandlerClientField.get(proxyObj);
-	        	Class tickerClz = ticker.getClass();
-	        	Field map = tickerClz.getDeclaredField("playerMorphInfo");
-	        	morphMap = (HashMap)map.get(ticker);
 	        }
 	        catch(Exception e)
 	        {

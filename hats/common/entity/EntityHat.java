@@ -106,42 +106,19 @@ public class EntityHat extends Entity
 		
 		if(Hats.hasMorphMod && parent instanceof EntityPlayer)
 		{
-			try
+			EntityPlayer player = (EntityPlayer)parent;
+			
+			if(morph.api.Api.hasMorph(player.username, true) && morph.api.Api.morphProgress(player.username, true) < 1.0F)
 			{
-				EntityPlayer player = (EntityPlayer)parent;
-				Object obj = Hats.morphMap.get(player.username);
-				if(obj != null)
-				{
-					Method m = obj.getClass().getSuperclass().getDeclaredMethod("getMorphing");
-					m.setAccessible(true);
-					boolean morphing = (Boolean)m.invoke(obj);
-					if(morphing)
-					{
-						render = false;
-					}
-					else
-					{
-						Field stateField = obj.getClass().getSuperclass().getDeclaredField("nextState");
-						stateField.setAccessible(true);
-						Object state = stateField.get(obj);
-						if(state != null)
-						{
-							Class stateClz = state.getClass();
-							
-							Field entInstanceField = stateClz.getDeclaredField("entInstance");
-							entInstanceField.setAccessible(true);
-							EntityLivingBase ent = (EntityLivingBase)entInstanceField.get(state);
-							if(ent != null)
-							{
-								renderingParent = ent;
-							}
-						}
-					}
-				}
+				render = false;
 			}
-			catch(Exception e)
+			else
 			{
-				e.printStackTrace();
+				EntityLivingBase morphEnt = morph.api.Api.getMorphEntity(player.username, true);
+				if(morphEnt != null)
+				{
+					renderingParent = morphEnt;
+				}
 			}
 		}
 		
