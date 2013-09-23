@@ -136,7 +136,7 @@ public class GuiHatUnlocked extends Gui
                 int j = 0 - (int)(d1 * 36.0D);
                 GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                 GL11.glEnable(GL11.GL_TEXTURE_2D);
-                this.theGame.func_110434_K().func_110577_a(texAchi);
+                this.theGame.getTextureManager().bindTexture(texAchi);
                 GL11.glDisable(GL11.GL_LIGHTING);
                 this.drawTexturedModalRect(i, j, 96, 202, 160, 32);
 
@@ -165,7 +165,7 @@ public class GuiHatUnlocked extends Gui
 			        {
 			            if (ClientProxy.bufferedImageID.get(image) == -1)
 			            {
-			            	ClientProxy.bufferedImageID.put(image, TextureUtil.func_110987_a(TextureUtil.func_110996_a(), image));
+			            	ClientProxy.bufferedImageID.put(image, TextureUtil.uploadTextureImage(TextureUtil.glGenTextures(), image));
 			            }
 	
 			            GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.bufferedImageID.get(image));

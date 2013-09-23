@@ -64,14 +64,17 @@ public class TickHandlerServer implements ITickHandler {
 
 	public void worldTick(WorldServer world)
 	{
-		Iterator<Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
-		
-		while(iterator1.hasNext())
+		if(world.provider.dimensionId == 0)
 		{
-			Entry<EntityLivingBase, String> e = iterator1.next();
-			if(!e.getKey().isEntityAlive() || e.getKey().isChild())
+			Iterator<Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
+			
+			while(iterator1.hasNext())
 			{
-				iterator1.remove();
+				Entry<EntityLivingBase, String> e = iterator1.next();
+				if(!e.getKey().isEntityAlive() || e.getKey().isChild())
+				{
+					iterator1.remove();
+				}
 			}
 		}
 		

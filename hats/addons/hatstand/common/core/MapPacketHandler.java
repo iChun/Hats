@@ -108,7 +108,7 @@ public class MapPacketHandler
 
 			        try
 			        {
-			        	stream1.writeBoolean(FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().areCommandsAllowed(player.username.toLowerCase().trim()));
+			        	stream1.writeBoolean(FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().isPlayerOpped(player.username.toLowerCase().trim()));
 			        	
 			        	PacketDispatcher.sendPacketToPlayer(new Packet131MapData((short)Hats.getNetId(), (short)0, bytes.toByteArray()), (Player)player);
 			        }

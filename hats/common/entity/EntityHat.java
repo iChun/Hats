@@ -221,54 +221,54 @@ public class EntityHat extends Entity
 	
 	public float getPrevRotationYaw()
 	{
-		if(parent instanceof EntityGhast || parent instanceof EntitySilverfish)
+		if(renderingParent instanceof EntityGhast || renderingParent instanceof EntitySilverfish)
 		{
-			return parent.prevRenderYawOffset;
+			return renderingParent.prevRenderYawOffset;
 		}
-		else if(parent instanceof EntitySquid)
+		else if(renderingParent instanceof EntitySquid)
 		{
-			return ((EntitySquid)parent).prevRenderYawOffset;
+			return ((EntitySquid)renderingParent).prevRenderYawOffset;
 		}
-		return parent.prevRotationYawHead;
+		return renderingParent.prevRotationYawHead;
 	}
 
 	public float getRotationYaw()
 	{
-		if(parent instanceof EntityGhast || parent instanceof EntitySilverfish)
+		if(renderingParent instanceof EntityGhast || renderingParent instanceof EntitySilverfish)
 		{
-			return parent.renderYawOffset;
+			return renderingParent.renderYawOffset;
 		}
-		else if(parent instanceof EntitySquid)
+		else if(renderingParent instanceof EntitySquid)
 		{
-			return ((EntitySquid)parent).renderYawOffset;
+			return ((EntitySquid)renderingParent).renderYawOffset;
 		}
-		return parent.rotationYawHead;
+		return renderingParent.rotationYawHead;
 	}
 	
 	public float getPrevRotationPitch()
 	{
-		if(parent instanceof EntityGhast || parent instanceof EntitySilverfish)
+		if(renderingParent instanceof EntityGhast || renderingParent instanceof EntitySilverfish)
 		{
 			return 0.0F;
 		}
-		else if(parent instanceof EntitySquid)
+		else if(renderingParent instanceof EntitySquid)
 		{
-			return -((EntitySquid)parent).prevSquidPitch;
+			return -((EntitySquid)renderingParent).prevSquidPitch;
 		}
-		return parent.prevRotationPitch;
+		return renderingParent.prevRotationPitch;
 	}
 
 	public float getRotationPitch()
 	{
-		if(parent instanceof EntityGhast || parent instanceof EntitySilverfish)
+		if(renderingParent instanceof EntityGhast || renderingParent instanceof EntitySilverfish)
 		{
 			return 0.0F;
 		}
-		else if(parent instanceof EntitySquid)
+		else if(renderingParent instanceof EntitySquid)
 		{
-			return -((EntitySquid)parent).squidPitch;
+			return -((EntitySquid)renderingParent).squidPitch;
 		}
-		return parent.rotationPitch;
+		return renderingParent.rotationPitch;
 	}
 
 	
@@ -278,7 +278,7 @@ public class EntityHat extends Entity
 	}
 	
 	@Override
-    public boolean addEntityID(NBTTagCompound par1NBTTagCompound)//disable saving of the entity
+    public boolean writeToNBTOptional(NBTTagCompound par1NBTTagCompound)//disable saving of the entity
     {
     	return false;
     }

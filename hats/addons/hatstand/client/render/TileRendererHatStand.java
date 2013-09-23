@@ -98,46 +98,46 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 			{
             case 1:
             default:
-                this.func_110628_a(texSkele);
+                this.bindTexture(texSkele);
                 break;
             case 2:
-                this.func_110628_a(texSkeleWither);
+                this.bindTexture(texSkeleWither);
                 break;
             case 3:
-                this.func_110628_a(texZombie);
+                this.bindTexture(texZombie);
                 head = head64;
                 break;
             case 4:
-            	ResourceLocation resourcelocation = AbstractClientPlayer.field_110314_b;
+            	ResourceLocation resourcelocation = AbstractClientPlayer.locationStevePng;
                 if (stand.headName != null && stand.headName.length() > 0)
                 {
-                    resourcelocation = AbstractClientPlayer.func_110305_h(stand.headName);
-                    AbstractClientPlayer.func_110304_a(resourcelocation, stand.headName);
+                    resourcelocation = AbstractClientPlayer.getLocationSkull(stand.headName);
+                    AbstractClientPlayer.getDownloadImageSkin(resourcelocation, stand.headName);
                 }
-                this.func_110628_a(resourcelocation);
+                this.bindTexture(resourcelocation);
                 break;
             case 5:
-            	this.func_110628_a(texPlayer);
+            	this.bindTexture(texPlayer);
             	break;
             case 6:
-                this.func_110628_a(texCreeper);
+                this.bindTexture(texCreeper);
                 break;
             case 7:
-            	this.func_110628_a(texWither);
+            	this.bindTexture(texWither);
             	head = head64;
             	break;
             case 8:
-            	this.func_110628_a(texWitherInvul);
+            	this.bindTexture(texWitherInvul);
             	head = head64;
             	break;
             case 9:
-            	this.func_110628_a(texPigman);
+            	this.bindTexture(texPigman);
                 break;
             case 10:
-                this.func_110628_a(texBlaze);
+                this.bindTexture(texBlaze);
                 break;
             case 11:
-                this.func_110628_a(texSpiderEyes);
+                this.bindTexture(texSpiderEyes);
                 break;
 			}
 			
@@ -166,7 +166,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 	        {
 	            if (ClientProxy.bufferedImageID.get(image) == -1)
 	            {
-	            	ClientProxy.bufferedImageID.put(image, TextureUtil.func_110987_a(TextureUtil.func_110996_a(), image));
+	            	ClientProxy.bufferedImageID.put(image, TextureUtil.uploadTextureImage(TextureUtil.glGenTextures(), image));
 	            }
 
 	            GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.bufferedImageID.get(image));

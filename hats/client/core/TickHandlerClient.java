@@ -289,13 +289,13 @@ public class TickHandlerClient
 	
 	public void updateHatPosAndAngle(EntityHat hat, EntityLivingBase parent)
 	{
-		hat.prevPosX = hat.parent.prevPosX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(hat.parent.prevRenderYawOffset));
-		hat.prevPosY = hat.parent.prevPosY + HatHandler.getVerticalPosOffset(parent);
-		hat.prevPosZ = hat.parent.prevPosZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(hat.parent.prevRenderYawOffset));
+		hat.prevPosX = hat.renderingParent.prevPosX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(hat.parent.prevRenderYawOffset));
+		hat.prevPosY = hat.renderingParent.prevPosY + HatHandler.getVerticalPosOffset(parent);
+		hat.prevPosZ = hat.renderingParent.prevPosZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(hat.parent.prevRenderYawOffset));
 		
-		hat.posX = hat.parent.posX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(hat.parent.renderYawOffset));
-		hat.posY = hat.parent.posY + HatHandler.getVerticalPosOffset(parent);
-		hat.posZ = hat.parent.posZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(hat.parent.renderYawOffset));
+		hat.posX = hat.renderingParent.posX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(hat.parent.renderYawOffset));
+		hat.posY = hat.renderingParent.posY + HatHandler.getVerticalPosOffset(parent);
+		hat.posZ = hat.renderingParent.posZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(hat.parent.renderYawOffset));
 		
 		hat.prevRotationPitch = hat.getPrevRotationPitch();
 		hat.rotationPitch = hat.getRotationPitch();

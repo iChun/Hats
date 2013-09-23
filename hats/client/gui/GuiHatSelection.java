@@ -1659,12 +1659,12 @@ public class GuiHatSelection extends GuiScreen
     	drawDefaultBackground();
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texChooser);
+        this.mc.getTextureManager().bindTexture(hats.client.gui.GuiHatSelection.texChooser);
         int k = this.guiLeft;
         int l = this.guiTop;
         this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
         
-        this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texIcons);
+        this.mc.getTextureManager().bindTexture(hats.client.gui.GuiHatSelection.texIcons);
 
         if(personalizing)
         {
@@ -1707,7 +1707,7 @@ public class GuiHatSelection extends GuiScreen
 	            GL11.glEnable(GL11.GL_BLEND);
 	            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	            
-	            this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texIcons);
+	            this.mc.getTextureManager().bindTexture(hats.client.gui.GuiHatSelection.texIcons);
 
 	            if(btn.drawButton)
 	            {
@@ -2043,7 +2043,7 @@ public class GuiHatSelection extends GuiScreen
 	        GL11.glEnable(GL11.GL_BLEND);
 	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	
-	        this.mc.func_110434_K().func_110577_a(hats.client.gui.GuiHatSelection.texIcons);
+	        this.mc.getTextureManager().bindTexture(hats.client.gui.GuiHatSelection.texIcons);
 	    	
 	    	drawTexturedModalRect(this.width / 2 - 85, height - 22, (adding || renaming) ? 112 : 128, 0, 16, 16);
 	    	

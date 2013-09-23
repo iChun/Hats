@@ -106,7 +106,7 @@ public class RenderHat extends Render
 			        {
 			            if (ClientProxy.bufferedImageID.get(image) == -1)
 			            {
-			            	ClientProxy.bufferedImageID.put(image, TextureUtil.func_110987_a(TextureUtil.func_110996_a(), image));
+			            	ClientProxy.bufferedImageID.put(image, TextureUtil.uploadTextureImage(TextureUtil.glGenTextures(), image));
 			            }
 	
 			            GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.bufferedImageID.get(image));
@@ -158,9 +158,9 @@ public class RenderHat extends Render
     }
 
 	@Override
-	protected ResourceLocation func_110775_a(Entity entity) 
+	protected ResourceLocation getEntityTexture(Entity entity) 
 	{
-		return AbstractClientPlayer.field_110314_b;
+		return AbstractClientPlayer.locationStevePng;
 	}
 
 }

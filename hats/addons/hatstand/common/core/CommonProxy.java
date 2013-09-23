@@ -18,7 +18,7 @@ public class CommonProxy
 
 	public void initMod()
 	{
-		HatStand.blockHatStand = (new BlockHatStand(HatStand.blockHatStandID, Material.wood)).setHardness(0.5F).setCreativeTab(CreativeTabs.tabDecorations).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("wood").func_111022_d("planks");
+		HatStand.blockHatStand = (new BlockHatStand(HatStand.blockHatStandID, Material.wood)).setHardness(0.5F).setCreativeTab(CreativeTabs.tabDecorations).setStepSound(Block.soundWoodFootstep).setUnlocalizedName("wood").setTextureName("planks");
 		
 		GameRegistry.addRecipe(new ItemStack(HatStand.blockHatStand, 1),
 				new Object[] { "S", "#", Character.valueOf('#'), Block.woodSingleSlab, Character.valueOf('S'), Item.stick});
