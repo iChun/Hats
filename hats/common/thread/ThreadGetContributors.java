@@ -47,7 +47,7 @@ public class ThreadGetContributors extends Thread
     	int hatCount = 0;
         try
         {
-            URL var1 = new URL("http://repo.creeperhost.net/static/ichun/hatscontrib.xml");
+            URL var1 = new URL("http://new.creeperrepo.net/ichun/static/hatscontrib.xml");
             DocumentBuilderFactory var2 = DocumentBuilderFactory.newInstance();
             DocumentBuilder var3 = var2.newDocumentBuilder();
             //Add a timeout of 60 seconds to getting the list, MC stalls without sound for some users.
