@@ -44,16 +44,16 @@ public class TickHandlerServer implements ITickHandler {
         {
         	worldTick((WorldServer)tickData[0]);
         }
-        else if (type.equals(EnumSet.of(TickType.PLAYER)))
+        else if (type.equals(EnumSet.of(TickType.SERVER)))
         {
-        	playerTick((WorldServer)((EntityPlayer)tickData[0]).worldObj, (EntityPlayerMP)tickData[0]);
+        	serverTick();
         }
 	}
 
 	@Override
 	public EnumSet<TickType> ticks() 
 	{
-		return EnumSet.of(TickType.WORLD);
+		return EnumSet.of(TickType.WORLD, TickType.SERVER);
 	}
 
 	@Override
@@ -64,20 +64,6 @@ public class TickHandlerServer implements ITickHandler {
 
 	public void worldTick(WorldServer world)
 	{
-		if(world.provider.dimensionId == 0)
-		{
-			Iterator<Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
-			
-			while(iterator1.hasNext())
-			{
-				Entry<EntityLivingBase, String> e = iterator1.next();
-				if(!e.getKey().isEntityAlive() || e.getKey().isChild())
-				{
-					iterator1.remove();
-				}
-			}
-		}
-		
 		for(int i = 0; i < world.loadedEntityList.size(); i++)
 		{
 			Entity ent = (Entity)world.loadedEntityList.get(i);
@@ -125,8 +111,18 @@ public class TickHandlerServer implements ITickHandler {
 		}
 	}
 	
-	public void playerTick(WorldServer world, EntityPlayerMP player)
+	public void serverTick()
 	{
+		Iterator<Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
+		
+		while(iterator1.hasNext())
+		{
+			Entry<EntityLivingBase, String> e = iterator1.next();
+			if(e.getKey().isDead || e.getKey().isChild())
+			{
+				iterator1.remove();
+			}
+		}
 	}
 	
 	public void playerKilledEntity(EntityLivingBase living, EntityPlayer player)

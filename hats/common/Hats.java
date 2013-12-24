@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.MinecraftForge;
@@ -227,10 +228,9 @@ public class Hats
 		
 		handleConfig();
 		
-		
         try
         {
-            Field[] fields = Class.forName("net.minecraft.world.World").getDeclaredFields();
+            Field[] fields = World.class.getDeclaredFields();
             for(Field f : fields)
             {
             	f.setAccessible(true);
@@ -351,14 +351,9 @@ public class Hats
 	}
 	
 	@EventHandler
-	public void serverStarted(FMLServerStoppingEvent event)
-	{
-		proxy.tickHandlerServer.mobHats.clear();
-	}
-	
-	@EventHandler
 	public void serverStopped(FMLServerStoppedEvent event)
 	{
+		proxy.tickHandlerServer.mobHats.clear();
 		proxy.tickHandlerServer.playerHats.clear();
 		proxy.playerWornHats.clear();
 		proxy.saveData = null;
