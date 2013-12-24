@@ -625,6 +625,10 @@ public class HatHandler
 	
 	public static boolean hasHat(String name)
 	{
+		if(name.equalsIgnoreCase(""))
+		{
+			return true;
+		}
 		for(Entry<File, String> e : hatNames.entrySet())
 		{
 			if(e.getValue().equalsIgnoreCase(name))
