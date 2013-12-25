@@ -28,7 +28,7 @@ public class HelperWolf extends RenderOnEntityHelper {
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)
 	{
-		return 10.5F/16F;
+		return 10.645F/16F;
 	}
 
 	@Override
