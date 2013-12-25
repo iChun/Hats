@@ -37,7 +37,7 @@ public class RenderHat extends Render
 	
     public void renderHat(EntityHat hat, double par2, double par4, double par6, float par8, float par9)
     {
-    	if(hat.info != null && !hat.info.hatName.equalsIgnoreCase("") && !hat.renderingParent.isPlayerSleeping() && hat.renderingParent.isEntityAlive() && Hats.renderHats == 1 && hat.render && (hat.parent instanceof EntityPlayer && (hat.renderingParent instanceof EntityPlayer || HatHandler.canMobHat(hat.renderingParent)) || !(hat.parent instanceof EntityPlayer)))
+    	if(hat.info != null && !hat.info.hatName.equalsIgnoreCase("") && !hat.renderingParent.isPlayerSleeping() && hat.renderingParent.isEntityAlive() && (Hats.renderHats == 1 || Hats.renderHats == 13131) && hat.render && (hat.parent instanceof EntityPlayer && (hat.renderingParent instanceof EntityPlayer || HatHandler.canMobHat(hat.renderingParent)) || !(hat.parent instanceof EntityPlayer)))
     	{
     		boolean firstPerson = (hat.parent == Minecraft.getMinecraft().renderViewEntity && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !((Minecraft.getMinecraft().currentScreen instanceof GuiInventory || Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative || Minecraft.getMinecraft().currentScreen instanceof GuiHatSelection) && RenderManager.instance.playerViewY == 180.0F));
 
@@ -55,13 +55,15 @@ public class RenderHat extends Render
 				
 		        GL11.glTranslated(par2, par4, par6);
 	            GL11.glTranslatef(0.0F, -hat.parent.yOffset, 0.0F);
-	            GL11.glTranslatef(0.0F, (float)-(hat.lastTickPosY - hat.parent.lastTickPosY) + (float)((hat.parent.boundingBox.minY + hat.parent.yOffset) - (hat.parent.posY)), 0.0F);
-	            
 
-	            int i = hat.renderingParent.getBrightnessForRender(renderTick);
-	            int j = i % 65536;
-	            int k = i / 65536;
-	            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
+	            if(Hats.renderHats == 1)
+	            {
+		            GL11.glTranslatef(0.0F, (float)-(hat.lastTickPosY - hat.parent.lastTickPosY) + (float)((hat.parent.boundingBox.minY + hat.parent.yOffset) - (hat.parent.posY)), 0.0F);
+		            int i = hat.renderingParent.getBrightnessForRender(renderTick);
+		            int j = i % 65536;
+		            int k = i / 65536;
+		            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
+	            }
 	            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	            
 	    		FloatBuffer buffer = GLAllocation.createDirectFloatBuffer(16);

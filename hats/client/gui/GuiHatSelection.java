@@ -1,5 +1,6 @@
 package hats.client.gui;
 
+import hats.client.render.HatRendererHelper;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
@@ -1979,7 +1980,7 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        GL11.glDisable(GL11.GL_ALPHA_TEST);
 	        
-	        GL11.glTranslatef((float)par1, (float)par2, 50.0F);
+	        GL11.glTranslatef((float)par1, (float)par2, 500.0F);
 	        GL11.glScalef((float)(-par3), (float)par3, (float)par3);
 	        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
 	        float f2 = hat.renderingParent.renderYawOffset;
@@ -1998,23 +1999,32 @@ public class GuiHatSelection extends GuiScreen
 	        hat.renderingParent.rotationYaw = hat.rotationYaw = (float)Math.atan((double)(par4 / 40.0F)) * 40.0F;
 	        hat.renderingParent.rotationPitch = hat.rotationPitch = -((float)Math.atan((double)(par5 / 40.0F))) * 20.0F;
 	        hat.renderingParent.rotationYawHead = hat.renderingParent.rotationYaw;
-	        GL11.glTranslatef(0.0F, hat.renderingParent.yOffset, 0.0F);
+	        
+    		float nextEntSize = hat.renderingParent.width > hat.renderingParent.height ? hat.renderingParent.width : hat.renderingParent.height;
+    		
+    		float nextScaleMag = nextEntSize > 2.5F ? (2.5F / nextEntSize) : 1.0F;
+	        
+    		GL11.glScalef(nextScaleMag, nextScaleMag, nextScaleMag);
+    		
+	        GL11.glTranslatef(0.0F, hat.parent == hat.renderingParent ? hat.parent.yOffset : 0.0F, 0.0F);
 	        
 	        RenderManager.instance.playerViewY = 180.0F;
 	        RenderManager.instance.renderEntityWithPosYaw(hat.renderingParent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
-	        GL11.glTranslatef(0.0F, -0.22F, 0.0F);
-	        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 255.0F * 0.8F, 255.0F * 0.8F);
+	        
 	        Tessellator.instance.setBrightness(240);
-	        GL11.glDisable(GL11.GL_LIGHTING);
 	        int rend = Hats.renderHats;
-	        Hats.renderHats = 1;
-	        if(hat.parent == Minecraft.getMinecraft().renderViewEntity && hat.renderingParent != hat.parent)
-	        {
-	        	GL11.glTranslatef((float)HatHandler.getHorizontalPosOffset(hat.renderingParent), hat.parent.yOffset * 2, 0.0F);
-	        }
-	        RenderManager.instance.renderEntityWithPosYaw(hat, 0.0D, 0.0D, 0.0D, hat.rotationYaw, 1.0F);
+	        Hats.renderHats = 13131;
+//	        GL11.glTranslatef(0.0F, (float)(hat.lastTickPosY - hat.parent.lastTickPosY) + (float)((hat.parent.boundingBox.minY + hat.parent.yOffset) - (hat.parent.posY)), 0.0F);
+	        
+	        Hats.proxy.tickHandlerClient.updateHatPosAndAngle(hat, hat.renderingParent);
+	        
+            int i = 15728880;
+            int j = i % 65536;
+            int k = i / 65536;
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
+	        
+	        RenderManager.instance.renderEntityWithPosYaw(hat, 0.0D, hat.parent == hat.renderingParent ? 0.0F : hat.parent.yOffset, 0.0D, hat.rotationYaw, 1.0F);
 	        Hats.renderHats = rend;
-	        GL11.glEnable(GL11.GL_LIGHTING);
 	        
 	        hat.renderingParent.renderYawOffset = f2;
 	        hat.renderingParent.rotationYaw = f3;
