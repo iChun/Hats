@@ -1,5 +1,6 @@
 package hats.client.core;
 
+import hats.api.RenderOnEntityHelper;
 import hats.client.gui.GuiHatUnlocked;
 import hats.client.render.HatRendererHelper;
 import hats.common.Hats;
@@ -302,11 +303,16 @@ public class TickHandlerClient
 		hat.posY = hat.parent.posY;
 		hat.posZ = hat.parent.posZ;
 		
-		hat.prevRotationPitch = HatRendererHelper.getPrevRotationPitch(parent);
-		hat.rotationPitch = HatRendererHelper.getRotationPitch(parent);
+		RenderOnEntityHelper helper = HatRendererHelper.getRenderHelper(hat.renderingParent.getClass());
 		
-		hat.prevRotationYaw = HatRendererHelper.getPrevRotationYaw(parent);
-		hat.rotationYaw = HatRendererHelper.getRotationYaw(parent);
+		if(helper != null)
+		{
+			hat.prevRotationPitch = helper.getPrevRotationPitch(parent);
+			hat.rotationPitch = helper.getRotationPitch(parent);
+			
+			hat.prevRotationYaw = helper.getPrevRotationYaw(parent);
+			hat.rotationYaw = helper.getRotationYaw(parent);
+		}
 	}
 	
 	public void renderTick(Minecraft mc, World world, float renderTick)
@@ -331,6 +337,8 @@ public class TickHandlerClient
 	public HashMap<String, HatInfo> playerWornHats = new HashMap<String, HatInfo>();
 	public HashMap<String, EntityHat> hats = new HashMap<String, EntityHat>();
 	public HashMap<Integer, EntityHat> mobHats = new HashMap<Integer, EntityHat>();
+	
+	public HashMap<Integer, EntityHat> rendered = new HashMap<Integer, EntityHat>();
 	
 	public ArrayList<String> availableHats = new ArrayList<String>();
 	public ArrayList<String> requestedHats = new ArrayList<String>();

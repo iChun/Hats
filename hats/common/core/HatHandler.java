@@ -12,8 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
@@ -26,35 +24,28 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.monster.EntityGiantZombie;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraftforge.common.DimensionManager;
-
-import org.lwjgl.opengl.GL11;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
@@ -826,7 +817,8 @@ public class HatHandler
 				|| Hats.hatEnderman == 1 &&ent instanceof EntityEnderman || Hats.hatSkeleton == 1 && ent instanceof EntitySkeleton || Hats.hatVillager == 1 && ent instanceof EntityVillager 
 				|| Hats.hatGhast == 1 && ent instanceof EntityGhast || Hats.hatBlaze == 1 && ent instanceof EntityBlaze || Hats.hatSquid == 1 && ent instanceof EntitySquid 
 				|| Hats.hatPig == 1 && ent instanceof EntityPig || Hats.hatSpider == 1 && ent instanceof EntitySpider || Hats.hatSheep == 1 && ent instanceof EntitySheep 
-				|| Hats.hatCow == 1 && ent instanceof EntityCow || Hats.hatChicken == 1 && ent instanceof EntityChicken || ent instanceof EntitySlime);
+				|| Hats.hatCow == 1 && ent instanceof EntityCow || Hats.hatChicken == 1 && ent instanceof EntityChicken || ent instanceof EntitySlime
+				|| Hats.hatWolf == 1 && ent instanceof EntityWolf || Hats.hatOcelot == 1 && ent instanceof EntityOcelot);
 	}
 	
 	public static boolean threadLoadComplete = true;

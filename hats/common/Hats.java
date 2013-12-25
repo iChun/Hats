@@ -108,6 +108,8 @@ public class Hats
 	public static int hatCow = 1;
 	public static int hatChicken = 1;
 	public static int hatSlime = 1;
+	public static int hatWolf = 1;
+	public static int hatOcelot = 1;
 	
 	public static HatInfo favouriteHatInfo = new HatInfo();
 	
@@ -184,6 +186,8 @@ public class Hats
 		hatCow = addCommentAndReturnInt(config, "randoMobOptions", "hatCow", "", hatCow);
 		hatChicken = addCommentAndReturnInt(config, "randoMobOptions", "hatChicken", "", hatChicken);
 		hatSlime = addCommentAndReturnInt(config, "randoMobOptions", "hatSlime", "", hatSlime);
+		hatWolf = addCommentAndReturnInt(config, "randoMobOptions", "hatWolf", "", hatWolf);
+		hatOcelot = addCommentAndReturnInt(config, "randoMobOptions", "hatOcelot", "", hatOcelot);
 		
 		config.save();
 		

@@ -106,8 +106,6 @@ public class EntityHat extends Entity
 			return;
 		}
 		
-//		hatName = "PahiHat".toLowerCase();
-		
 		if(Hats.hasMorphMod && parent instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer)parent;

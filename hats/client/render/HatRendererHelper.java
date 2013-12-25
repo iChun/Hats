@@ -1,5 +1,6 @@
 package hats.client.render;
 
+import hats.api.RenderOnEntityHelper;
 import hats.client.core.ClientProxy;
 import hats.client.core.HatInfoClient;
 import hats.client.model.ModelHat;
@@ -9,27 +10,10 @@ import hats.common.core.HatHandler;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Method;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RendererLivingEntity;
 import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.player.EntityPlayer;
 
 import org.lwjgl.opengl.GL11;
 
@@ -39,7 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class HatRendererHelper 
 {
-	public static void renderHat(HatInfoClient info, float hatScale, float mobRenderScaleX, float mobRenderScaleY, float mobRenderScaleZ, float renderYawOffset, float rotationYaw, float rotationPitch, float rotatePointVert, float rotatePointHori, float offsetVert, float offsetHori, boolean isPlayer, float renderTick)
+	public static void renderHat(HatInfoClient info, float hatScale, float mobRenderScaleX, float mobRenderScaleY, float mobRenderScaleZ, float renderYawOffset, float rotationYaw, float rotationPitch, float rotationRoll, float rotatePointVert, float rotatePointHori, float rotatePointSide, float offsetVert, float offsetHori, boolean isPlayer, float renderTick)
 	{
     	ModelHat model = ClientProxy.models.get(info.hatName);
     	
@@ -59,7 +43,7 @@ public class HatRendererHelper
 
             GL11.glRotatef(renderYawOffset, 0.0F, -1.0F, 0.0F);
             
-            GL11.glTranslatef(0.0F, 0.0F, rotatePointHori);
+            GL11.glTranslatef(-rotatePointSide, 0.0F, rotatePointHori);
             
             GL11.glRotatef(renderYawOffset, 0.0F, 1.0F, 0.0F);
             
@@ -69,6 +53,7 @@ public class HatRendererHelper
             
             GL11.glRotatef(rotationYaw, 0.0F, -1.0F, 0.0F);
             GL11.glRotatef(rotationPitch, -1.0F, 0.0F, 0.0F);
+            GL11.glRotatef(rotationRoll, 0.0F, 0.0F, 1.0F);
 
             GL11.glTranslatef(0.0F, 1F, 0.0F);
             
@@ -126,231 +111,18 @@ public class HatRendererHelper
     	}
 	}
 	
-	public static float getPrevRenderYaw(EntityLivingBase living)
+	public static RenderOnEntityHelper getRenderHelper(Class clz)
 	{
-		if(living instanceof EntityGhast || living instanceof EntitySilverfish || living instanceof EntitySquid || living instanceof EntitySlime)
-		{
-			return living.prevRenderYawOffset;
-		}
-		return living.prevRenderYawOffset;
-	}
-
-	public static float getRenderYaw(EntityLivingBase living)
-	{
-		if(living instanceof EntityGhast || living instanceof EntitySilverfish || living instanceof EntitySquid || living instanceof EntitySlime)
-		{
-			return living.renderYawOffset;
-		}
-		return living.renderYawOffset;
-	}
-	
-	public static float getPrevRotationYaw(EntityLivingBase living)
-	{
-		if(living instanceof EntityGhast || living instanceof EntitySilverfish || living instanceof EntitySquid || living instanceof EntitySlime)
-		{
-			return living.prevRenderYawOffset;
-		}
-		return living.prevRotationYawHead;
-	}
-
-	public static float getRotationYaw(EntityLivingBase living)
-	{
-		if(living instanceof EntityGhast || living instanceof EntitySilverfish || living instanceof EntitySquid || living instanceof EntitySlime)
-		{
-			return living.renderYawOffset;
-		}
-		return living.rotationYawHead;
-	}
-	
-	public static float getPrevRotationPitch(EntityLivingBase living)
-	{
-		if(living instanceof EntityGhast || living instanceof EntitySilverfish)
-		{
-			return 0.0F;
-		}
-		else if(living instanceof EntitySquid)
-		{
-			return -((EntitySquid)living).prevSquidPitch;
-		}
-		return living.prevRotationPitch;
-	}
-
-	public static float getRotationPitch(EntityLivingBase living)
-	{
-		if(living instanceof EntityGhast || living instanceof EntitySilverfish)
-		{
-			return 0.0F;
-		}
-		else if(living instanceof EntitySquid)
-		{
-			return -((EntitySquid)living).squidPitch;
-		}
-		return living.rotationPitch;
-	}
-
-	public static float getRotatePointVert(EntityLivingBase ent)
-	{
-		if(ent instanceof EntityPlayer || ent instanceof EntityZombie || ent instanceof EntitySkeleton || ent instanceof EntityVillager)
-		{
-			return ent.isSneaking() ? ent == Minecraft.getMinecraft().thePlayer ? 23F/16F : 21F/16F : 24F/16F ;
-		}
-		else if(ent instanceof EntityCreeper)
-		{
-			return 20.15F/16F;
-		}
-		else if(ent instanceof EntityEnderman)
-		{
-			return 37.1F/16F;
-		}
-		else if(ent instanceof EntityBlaze)
-		{
-			return 24F/16F;
-		}
-		else if(ent instanceof EntitySquid)
-		{
-			return 8F/16F;
-		}
-		else if(ent instanceof EntityPig)
-		{
-			return 12.35F/16F;
-		}
-		else if(ent instanceof EntitySpider)
-		{
-			return 9.2F/16F;
-		}
-		else if(ent instanceof EntitySheep)
-		{
-			return 18.2F/16F;
-		}
-		else if(ent instanceof EntityCow)
-		{
-			return 20.2F/16F;
-		}
-		else if(ent instanceof EntityChicken)
-		{
-			return 9F/16F;
-		}
-		else if(ent instanceof EntityGhast)
-		{
-			return 14.5F/16F;
-		}
-		else if(ent instanceof EntitySlime)
-		{
-			return 8F/16F;
-		}
-		return 0.0F;
-	}
-	
-	public static float getRotatePointHori(EntityLivingBase ent)
-	{
-		if(ent instanceof EntityPig)
-		{
-			return 6F/16F;
-		}
-		else if(ent instanceof EntitySpider)
-		{
-			return 3F/16F;
-		}
-		else if(ent instanceof EntitySheep)
-		{
-			return 8F/16F;
-		}
-		else if(ent instanceof EntityCow)
-		{
-			return 8F/16F;
-		}
-		else if(ent instanceof EntityChicken)
-		{
-			return 4F/16F;
-		}
-		return 0.0F;
-	}
-	
-	public static float getOffsetPointVert(EntityLivingBase ent)
-	{
-		if(ent instanceof EntityZombie)
-		{
-			return ((EntityZombie)ent).isVillager() ? 10F/16F : 8F/16F;
-		}
-		else if(ent instanceof EntityEnderman)
-		{
-			return ((EntityEnderman)ent).isScreaming() ? 13F/16F : 8F/16F;
-		}
-		else if(ent instanceof EntityPlayer || ent instanceof EntitySkeleton || ent instanceof EntityCreeper) //Normal Biped Head
-		{
-			return 8F/16F;
-		}
-		else if(ent instanceof EntityBlaze)
-		{
-			return 4F/16F;
-		}
-		else if(ent instanceof EntityVillager)
-		{
-			return 10F/16F;
-		}
-		else if(ent instanceof EntitySquid)
-		{
-			return 5F/16F;
-		}
-		else if(ent instanceof EntityPig)
-		{
-			return 4F/16F;
-		}
-		else if(ent instanceof EntitySpider)
-		{
-			return 3.8F/16F;
-		}
-		else if(ent instanceof EntitySheep || ent instanceof EntityCow)
-		{
-			return 4F/16F;
-		}
-		else if(ent instanceof EntityChicken)
-		{
-			return 6F/16F;
-		}
-		return 0.0F;
-	}
-	
-	public static float getOffsetPointHori(EntityLivingBase ent)
-	{
-		if(ent instanceof EntityPig || ent instanceof EntitySpider)
-		{
-			return 4F/16F;
-		}
-		else if(ent instanceof EntitySheep)
-		{
-			return 3F/16F;
-		}
-		else if(ent instanceof EntityCow)
-		{
-			return 2F/16F;
-		}
-		return 0.0F;
-	}
-	
-	public static float getHatScale(EntityLivingBase ent)
-	{
-		if(ent instanceof EntitySquid)
-		{
-			return 1.5F;
-		}
-		else if(ent instanceof EntitySheep)
-		{
-			if(((EntitySheep) ent).func_70894_j(1.0F) != 0.0F)
-			{
-				return 0.0F;
-			}
-			return 0.75F;
-		}
-		else if(ent instanceof EntityChicken)
-		{
-			return 0.5F;
-		}
-		else if(ent instanceof EntityGhast)
-		{
-			return 2.0F;
-		}
-		return 1.0F;
+    	if(EntityLivingBase.class.isAssignableFrom(clz) && clz != EntityLivingBase.class)
+    	{
+    		RenderOnEntityHelper helper = ClientProxy.renderHelpers.get(clz);
+    		if(helper == null)
+    		{
+    			return getRenderHelper(clz.getSuperclass());
+    		}
+    		return helper;
+    	}
+		return null;
 	}
 	
     public static float interpolateRotation(float par1, float par2, float par3)

@@ -1,15 +1,13 @@
 package hats.client.render;
 
-import java.awt.image.BufferedImage;
-import java.nio.FloatBuffer;
-
-import hats.client.core.ClientProxy;
-import hats.client.core.HatInfoClient;
+import hats.api.RenderOnEntityHelper;
 import hats.client.gui.GuiHatSelection;
-import hats.client.model.ModelHat;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.entity.EntityHat;
+
+import java.nio.FloatBuffer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
@@ -18,11 +16,8 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -43,9 +38,22 @@ public class RenderHat extends Render
 
     		if((Hats.renderInFirstPerson == 1 && firstPerson || !firstPerson) && !hat.renderingParent.isInvisible())
     		{
+    			boolean isPlayer = hat.parent instanceof EntityPlayer;
+    			if(!isPlayer && Hats.proxy.tickHandlerClient.mobHats.get(hat.parent.entityId) != hat)
+    			{
+    				hat.setDead();
+    				return;
+    			}
+    			
+    			RenderOnEntityHelper helper = HatRendererHelper.getRenderHelper(hat.renderingParent.getClass());
+    			
+    			if(helper == null)
+    			{
+    				return;
+    			}
+    			
 	    		GL11.glPushMatrix();
 
-    			boolean isPlayer = hat.parent instanceof EntityPlayer;
     			if(isPlayer && hat.parent == Minecraft.getMinecraft().renderViewEntity && hat.parent.isSneaking())
     			{
     				GL11.glTranslatef(0.0F, -0.075F, 0.0F);
@@ -80,10 +88,7 @@ public class RenderHat extends Render
 	    		float prevScaleY = buffer1.get(5) / buffer.get(5);
 	    		float prevScaleZ = buffer1.get(8) / buffer.get(8);
 	            
-				for(int ii = 0 ; ii < 1; ii ++)
-				{
-					HatRendererHelper.renderHat(hat.info, HatRendererHelper.getHatScale(hat.renderingParent), prevScaleX, prevScaleY, prevScaleZ, HatRendererHelper.interpolateRotation(HatRendererHelper.getPrevRenderYaw(hat.renderingParent), HatRendererHelper.getRenderYaw(hat.renderingParent), renderTick), HatRendererHelper.interpolateRotation(HatRendererHelper.getPrevRotationYaw(hat.renderingParent), HatRendererHelper.getRotationYaw(hat.renderingParent), renderTick), HatRendererHelper.interpolateRotation(HatRendererHelper.getPrevRotationPitch(hat.renderingParent), HatRendererHelper.getRotationPitch(hat.renderingParent), renderTick) + ii * 90F, HatRendererHelper.getRotatePointVert(hat.renderingParent), HatRendererHelper.getRotatePointHori(hat.renderingParent), HatRendererHelper.getOffsetPointVert(hat.renderingParent), HatRendererHelper.getOffsetPointHori(hat.renderingParent), isPlayer, renderTick);
-				}
+				HatRendererHelper.renderHat(hat.info, helper.getHatScale(hat.renderingParent), prevScaleX, prevScaleY, prevScaleZ, HatRendererHelper.interpolateRotation(helper.getPrevRenderYaw(hat.renderingParent), helper.getRenderYaw(hat.renderingParent), renderTick), HatRendererHelper.interpolateRotation(helper.getPrevRotationYaw(hat.renderingParent), helper.getRotationYaw(hat.renderingParent), renderTick), HatRendererHelper.interpolateRotation(helper.getPrevRotationPitch(hat.renderingParent), helper.getRotationPitch(hat.renderingParent), renderTick), helper.getRotationRoll(hat.renderingParent), helper.getRotatePointVert(hat.renderingParent), helper.getRotatePointHori(hat.renderingParent), helper.getRotatePointSide(hat.renderingParent), helper.getOffsetPointVert(hat.renderingParent), helper.getOffsetPointHori(hat.renderingParent), isPlayer, renderTick);
 				
 				GL11.glPopMatrix();
     		}
