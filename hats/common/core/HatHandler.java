@@ -1,5 +1,6 @@
 package hats.common.core;
 
+import hats.api.RenderOnEntityHelper;
 import hats.common.Hats;
 
 import java.io.ByteArrayOutputStream;
@@ -813,12 +814,21 @@ public class HatHandler
 
 	public static boolean canMobHat(EntityLivingBase ent)
 	{
-		return !ent.isDead && !ent.isChild() && (Hats.hatZombie == 1 && ent instanceof EntityZombie && !(ent instanceof EntityGiantZombie) || Hats.hatCreeper == 1 && ent instanceof EntityCreeper 
-				|| Hats.hatEnderman == 1 &&ent instanceof EntityEnderman || Hats.hatSkeleton == 1 && ent instanceof EntitySkeleton || Hats.hatVillager == 1 && ent instanceof EntityVillager 
-				|| Hats.hatGhast == 1 && ent instanceof EntityGhast || Hats.hatBlaze == 1 && ent instanceof EntityBlaze || Hats.hatSquid == 1 && ent instanceof EntitySquid 
-				|| Hats.hatPig == 1 && ent instanceof EntityPig || Hats.hatSpider == 1 && ent instanceof EntitySpider || Hats.hatSheep == 1 && ent instanceof EntitySheep 
-				|| Hats.hatCow == 1 && ent instanceof EntityCow || Hats.hatChicken == 1 && ent instanceof EntityChicken || ent instanceof EntitySlime
-				|| Hats.hatWolf == 1 && ent instanceof EntityWolf || Hats.hatOcelot == 1 && ent instanceof EntityOcelot);
+		return !ent.isDead && !ent.isChild() && getRenderHelper(ent.getClass()) != null && getRenderHelper(ent.getClass()).canWearHat(ent);
+	}
+	
+	public static RenderOnEntityHelper getRenderHelper(Class clz)
+	{
+		if(EntityLivingBase.class.isAssignableFrom(clz) && clz != EntityLivingBase.class)
+		{
+			RenderOnEntityHelper helper = CommonProxy.renderHelpers.get(clz);
+			if(helper == null)
+			{
+				return getRenderHelper(clz.getSuperclass());
+			}
+			return helper;
+		}
+		return null;
 	}
 	
 	public static boolean threadLoadComplete = true;
@@ -841,5 +851,5 @@ public class HatHandler
 	public static Random rand = new Random();
 
 	public static boolean obfuscation;
-	
+
 }

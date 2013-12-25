@@ -1,6 +1,5 @@
 package hats.client.render;
 
-import hats.api.RenderOnEntityHelper;
 import hats.client.core.ClientProxy;
 import hats.client.core.HatInfoClient;
 import hats.client.model.ModelHat;
@@ -111,21 +110,7 @@ public class HatRendererHelper
     	}
 	}
 	
-	public static RenderOnEntityHelper getRenderHelper(Class clz)
-	{
-    	if(EntityLivingBase.class.isAssignableFrom(clz) && clz != EntityLivingBase.class)
-    	{
-    		RenderOnEntityHelper helper = ClientProxy.renderHelpers.get(clz);
-    		if(helper == null)
-    		{
-    			return getRenderHelper(clz.getSuperclass());
-    		}
-    		return helper;
-    	}
-		return null;
-	}
-	
-    public static float interpolateRotation(float par1, float par2, float par3)
+	public static float interpolateRotation(float par1, float par2, float par3)
     {
         float f3;
 

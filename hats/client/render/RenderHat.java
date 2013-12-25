@@ -45,7 +45,7 @@ public class RenderHat extends Render
     				return;
     			}
     			
-    			RenderOnEntityHelper helper = HatRendererHelper.getRenderHelper(hat.renderingParent.getClass());
+    			RenderOnEntityHelper helper = HatHandler.getRenderHelper(hat.renderingParent.getClass());
     			
     			if(helper == null)
     			{

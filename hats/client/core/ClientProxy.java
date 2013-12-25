@@ -1,6 +1,5 @@
 package hats.client.core;
 
-import hats.api.RenderOnEntityHelper;
 import hats.client.gui.GuiHatSelection;
 import hats.client.model.ModelHat;
 import hats.client.render.RenderHat;
@@ -71,24 +70,6 @@ public class ClientProxy extends CommonProxy
 	public void initRenderersAndTextures() 
 	{
 		RenderingRegistry.registerEntityRenderingHandler(EntityHat.class, new RenderHat());
-		
-		renderHelpers.put(EntityBlaze.class		, new HelperBlaze());
-		renderHelpers.put(EntityChicken.class	, new HelperChicken());
-		renderHelpers.put(EntityCow.class		, new HelperCow());
-		renderHelpers.put(EntityCreeper.class	, new HelperCreeper());
-		renderHelpers.put(EntityEnderman.class	, new HelperEnderman());
-		renderHelpers.put(EntityGhast.class		, new HelperGhast());
-		renderHelpers.put(EntityOcelot.class	, new HelperOcelot());
-		renderHelpers.put(EntityPig.class		, new HelperPig());
-		renderHelpers.put(EntityPlayer.class	, new HelperPlayer());
-		renderHelpers.put(EntitySheep.class		, new HelperSheep());
-		renderHelpers.put(EntitySkeleton.class	, new HelperSkeleton());
-		renderHelpers.put(EntitySlime.class		, new HelperSlime());
-		renderHelpers.put(EntitySpider.class	, new HelperSpider());
-		renderHelpers.put(EntitySquid.class		, new HelperSquid());
-		renderHelpers.put(EntityVillager.class	, new HelperVillager());
-		renderHelpers.put(EntityWolf.class		, new HelperWolf());
-		renderHelpers.put(EntityZombie.class	, new HelperZombie());
 	}
 
 	@Override
@@ -178,6 +159,5 @@ public class ClientProxy extends CommonProxy
 	public static HashMap<String, BufferedImage> bufferedImages = new HashMap<String, BufferedImage>();
 	public static HashMap<BufferedImage, Integer> bufferedImageID = new HashMap<BufferedImage, Integer>();
 	public static HashMap<String, ModelHat> models = new HashMap<String, ModelHat>();
-	public static HashMap<Class, RenderOnEntityHelper> renderHelpers = new HashMap<Class, RenderOnEntityHelper>();
 	
 }

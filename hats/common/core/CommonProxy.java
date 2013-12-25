@@ -1,6 +1,24 @@
 package hats.common.core;
 
+import hats.api.RenderOnEntityHelper;
 import hats.client.core.TickHandlerClient;
+import hats.client.render.helper.HelperBlaze;
+import hats.client.render.helper.HelperChicken;
+import hats.client.render.helper.HelperCow;
+import hats.client.render.helper.HelperCreeper;
+import hats.client.render.helper.HelperEnderman;
+import hats.client.render.helper.HelperGhast;
+import hats.client.render.helper.HelperOcelot;
+import hats.client.render.helper.HelperPig;
+import hats.client.render.helper.HelperPlayer;
+import hats.client.render.helper.HelperSheep;
+import hats.client.render.helper.HelperSkeleton;
+import hats.client.render.helper.HelperSlime;
+import hats.client.render.helper.HelperSpider;
+import hats.client.render.helper.HelperSquid;
+import hats.client.render.helper.HelperVillager;
+import hats.client.render.helper.HelperWolf;
+import hats.client.render.helper.HelperZombie;
 import hats.common.Hats;
 import hats.common.thread.ThreadReadHats;
 
@@ -23,6 +41,22 @@ import java.util.Random;
 
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommandManager;
+import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityGhast;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityOcelot;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.entity.passive.EntitySquid;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,6 +71,7 @@ import cpw.mods.fml.relauncher.Side;
 
 public class CommonProxy 
 {
+	public static HashMap<Class, RenderOnEntityHelper> renderHelpers = new HashMap<Class, RenderOnEntityHelper>();
 	public void initCommands(MinecraftServer server)
 	{
 		ICommandManager manager = server.getCommandManager();
@@ -50,6 +85,24 @@ public class CommonProxy
 	public void initMod()
 	{
 		getHats();
+		
+		CommonProxy.renderHelpers.put(EntityBlaze.class		, new HelperBlaze());
+		CommonProxy.renderHelpers.put(EntityChicken.class	, new HelperChicken());
+		CommonProxy.renderHelpers.put(EntityCow.class		, new HelperCow());
+		CommonProxy.renderHelpers.put(EntityCreeper.class	, new HelperCreeper());
+		CommonProxy.renderHelpers.put(EntityEnderman.class	, new HelperEnderman());
+		CommonProxy.renderHelpers.put(EntityGhast.class		, new HelperGhast());
+		CommonProxy.renderHelpers.put(EntityOcelot.class	, new HelperOcelot());
+		CommonProxy.renderHelpers.put(EntityPig.class		, new HelperPig());
+		CommonProxy.renderHelpers.put(EntityPlayer.class	, new HelperPlayer());
+		CommonProxy.renderHelpers.put(EntitySheep.class		, new HelperSheep());
+		CommonProxy.renderHelpers.put(EntitySkeleton.class	, new HelperSkeleton());
+		CommonProxy.renderHelpers.put(EntitySlime.class		, new HelperSlime());
+		CommonProxy.renderHelpers.put(EntitySpider.class	, new HelperSpider());
+		CommonProxy.renderHelpers.put(EntitySquid.class		, new HelperSquid());
+		CommonProxy.renderHelpers.put(EntityVillager.class	, new HelperVillager());
+		CommonProxy.renderHelpers.put(EntityWolf.class		, new HelperWolf());
+		CommonProxy.renderHelpers.put(EntityZombie.class	, new HelperZombie());
 	}
 	
 	public void initRenderersAndTextures() {}

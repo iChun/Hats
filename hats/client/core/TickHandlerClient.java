@@ -2,7 +2,6 @@ package hats.client.core;
 
 import hats.api.RenderOnEntityHelper;
 import hats.client.gui.GuiHatUnlocked;
-import hats.client.render.HatRendererHelper;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
@@ -167,7 +166,7 @@ public class TickHandlerClient
 			for(int i = 0; i < world.loadedEntityList.size(); i++)
 			{
 				Entity ent = (Entity)world.loadedEntityList.get(i);
-				if(!(ent instanceof EntityLivingBase) || !(serverHasMod && serverHatMode == 4) && !HatHandler.canMobHat((EntityLivingBase)ent))
+				if(!(ent instanceof EntityLivingBase) || !(serverHasMod && serverHatMode == 4) && !HatHandler.canMobHat((EntityLivingBase)ent) || ent instanceof EntityPlayer)
 				{
 					continue;
 				}
@@ -303,7 +302,7 @@ public class TickHandlerClient
 		hat.posY = hat.parent.posY;
 		hat.posZ = hat.parent.posZ;
 		
-		RenderOnEntityHelper helper = HatRendererHelper.getRenderHelper(hat.renderingParent.getClass());
+		RenderOnEntityHelper helper = HatHandler.getRenderHelper(parent.getClass());
 		
 		if(helper != null)
 		{

@@ -8,11 +8,11 @@ import cpw.mods.fml.relauncher.SideOnly;
  * 
  * RenderOnEntityHelper class
  * Contains functions which are overriden to provide the Hats mod with values to help rendering hats on mobs. 
+ * Mainly used on the client but also used on the server to see if mob should be allowed to wear a hat.
  * Think of it like the Entity class, extend it to make your own types.
  * @author iChun
  *
  */
-@SideOnly(Side.CLIENT)
 public abstract class RenderOnEntityHelper 
 {
 	/**
