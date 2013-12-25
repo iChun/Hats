@@ -38,6 +38,7 @@ public abstract class RenderOnEntityHelper
 	 * The player head, for example, is 8 x 8 x 8 voxels.
 	 * Rotate point is the point on the model where the head rotates.
 	 * Offset point is the point from the rotate point where the hat should lay on.
+	 * Do note that the hat will also be scaled based on what preRenderCallback in RendererLivingEntity scales.
 	 * @param living
 	 * @return default mob values
 	 */
