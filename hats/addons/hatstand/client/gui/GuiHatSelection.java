@@ -5,24 +5,20 @@ import hats.addons.hatstand.client.render.TileRendererHatStand;
 import hats.addons.hatstand.common.HatStand;
 import hats.addons.hatstand.common.block.BlockHatStand;
 import hats.addons.hatstand.common.tileentity.TileEntityHatStand;
+import hats.client.core.HatInfoClient;
 import hats.client.gui.GuiSlider;
 import hats.client.gui.ISlider;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
-import hats.common.core.HatInfo;
-import hats.common.entity.EntityHat;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
@@ -30,16 +26,12 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -111,6 +103,8 @@ public class GuiHatSelection extends GuiScreen
 	private String prevHeadName;
 	private boolean prevBase;
 	private boolean prevStandPost;
+	
+	private HatInfoClient tempInfo;
 	
 	public int view;
 	
@@ -1004,8 +998,19 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        GL11.glTranslated(-0.5D, -0.5D, -0.5D);
 	        
+	        HatInfoClient info = stand.info;
+	        
+	        if(tempInfo == null || info == null || !(tempInfo.hatName.equalsIgnoreCase(stand.hatName) && tempInfo.colourR == stand.colourR && tempInfo.colourG == stand.colourG && tempInfo.colourB == stand.colourB))
+	        {
+	        	tempInfo = new HatInfoClient(stand.hatName, stand.colourR, stand.colourG, stand.colourB);
+	        }
+	        
+	        stand.info = tempInfo;
+	        
 	        TileRendererHatStand.renderer.renderHatStand(stand, 0, 0, 0, 1.0F);
 
+	        stand.info = info;
+	        
 //	        GL11.glEnable(GL11.GL_ALPHA_TEST);
 	        
 	        GL11.glPopMatrix();

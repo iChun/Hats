@@ -1,5 +1,7 @@
 package hats.client.gui;
 
+import hats.addons.hatstand.client.render.TileRendererHatStand;
+import hats.client.core.HatInfoClient;
 import hats.client.render.HatRendererHelper;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
@@ -132,6 +134,8 @@ public class GuiHatSelection extends GuiScreen
 	private int prevColourR;
 	private int prevColourG;
 	private int prevColourB;
+	
+	private HatInfoClient tempInfo;
 	
 	public int view;
 	
@@ -2023,7 +2027,19 @@ public class GuiHatSelection extends GuiScreen
             int k = i / 65536;
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
 	        
+	        HatInfoClient info = hat.info;
+	        
+	        if(tempInfo == null || info == null || !(tempInfo.hatName.equalsIgnoreCase(hat.hatName) && tempInfo.colourR == hat.getR() && tempInfo.colourG == hat.getG() && tempInfo.colourB == hat.getB()))
+	        {
+	        	tempInfo = new HatInfoClient(hat.hatName, hat.getR(), hat.getG(), hat.getB());
+	        }
+	        
+	        hat.info = tempInfo;
+	        
 	        RenderManager.instance.renderEntityWithPosYaw(hat, 0.0D, hat.parent == hat.renderingParent ? 0.0F : hat.parent.yOffset, 0.0D, hat.rotationYaw, 1.0F);
+	        
+	        hat.info = info;
+
 	        Hats.renderHats = rend;
 	        
 	        hat.renderingParent.renderYawOffset = f2;

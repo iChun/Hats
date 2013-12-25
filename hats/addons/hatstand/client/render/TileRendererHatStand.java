@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL12;
 import hats.addons.hatstand.common.tileentity.TileEntityHatStand;
 import hats.client.core.ClientProxy;
 import hats.client.model.ModelHat;
+import hats.client.render.HatRendererHelper;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import net.minecraft.client.Minecraft;
@@ -151,44 +152,11 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 			GL11.glTranslated(0.0D, 0.45D, 0.0D);
 		}
 		
-		ModelHat model = ClientProxy.models.get(stand.hatName);
-		if(model != null)
-		{
-			GL11.glPushMatrix();
-            GL11.glEnable(GL11.GL_BLEND);
-            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-            
-            GL11.glColor4f((float)stand.colourR / 255.0F, (float)stand.colourG / 255.0F, (float)stand.colourB / 255.0F, 1.0F);
-            
-	        BufferedImage image = ClientProxy.bufferedImages.get(stand.hatName);
-
-	        if (image != null)
-	        {
-	            if (ClientProxy.bufferedImageID.get(image) == -1)
-	            {
-	            	ClientProxy.bufferedImageID.put(image, TextureUtil.uploadTextureImage(TextureUtil.glGenTextures(), image));
-	            }
-
-	            GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.bufferedImageID.get(image));
-	        }
-	        
-	        GL11.glTranslated(0.0D, -0.038D, 0.0D);
-	        
-	        model.render((Entity)null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-	        
-	        GL11.glDisable(GL11.GL_BLEND);
-	        
-	        GL11.glPopMatrix();
-
-		}
-    	else if(!HatHandler.reloadingHats)
-    	{
-    		if(!Hats.proxy.tickHandlerClient.requestedHats.contains(stand.hatName))
-    		{
-    			HatHandler.requestHat(stand.hatName, null);
-    			Hats.proxy.tickHandlerClient.requestedHats.add(stand.hatName);
-    		}
-    	}
+		GL11.glScalef(-1.0F, -1.0F, 1.0F);
+		
+		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
+		
+		HatRendererHelper.renderHat(stand.info, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.50000000000F, 0.0F, 0.0F, 0.0F, 0.0F, true, f);
 		
         GL11.glPopMatrix();
 	}

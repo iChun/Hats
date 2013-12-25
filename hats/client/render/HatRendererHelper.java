@@ -24,6 +24,10 @@ public class HatRendererHelper
 {
 	public static void renderHat(HatInfoClient info, float hatScale, float mobRenderScaleX, float mobRenderScaleY, float mobRenderScaleZ, float renderYawOffset, float rotationYaw, float rotationPitch, float rotationRoll, float rotatePointVert, float rotatePointHori, float rotatePointSide, float offsetVert, float offsetHori, boolean isPlayer, float renderTick)
 	{
+		if(info == null)
+		{
+			return;
+		}
     	ModelHat model = ClientProxy.models.get(info.hatName);
     	
     	if(model != null)

@@ -1,5 +1,6 @@
 package hats.addons.hatstand.common.tileentity;
 
+import hats.client.core.HatInfoClient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
@@ -27,6 +28,8 @@ public class TileEntityHatStand extends TileEntity
 	
 	public static final String[] headNames = new String[] { "None", "Skeleton", "W. Skele", "Zombie", "Player", "Steve", "Creeper", "Wither", "Wither (I)", "Pigman", "Blaze", "Invisible" };
 	
+	public HatInfoClient info;
+	
 	public TileEntityHatStand()
 	{
 		hasBase = true;
@@ -40,6 +43,8 @@ public class TileEntityHatStand extends TileEntity
 		colourG = 255;
 		colourB = 255;
 		hatName = "".toLowerCase();
+		
+		info = null;
 	}
 	
     @Override
@@ -92,6 +97,8 @@ public class TileEntityHatStand extends TileEntity
 		colourR = tag.getInteger("colourR");
 		colourG = tag.getInteger("colourG");
 		colourB = tag.getInteger("colourB");
+		
+		info = new HatInfoClient(hatName, colourR, colourG, colourB);
     }
 	
     @SideOnly(Side.CLIENT)
