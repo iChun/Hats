@@ -1,6 +1,7 @@
 package hats.client.core;
 
 import hats.client.gui.GuiHatUnlocked;
+import hats.client.render.HatRendererHelper;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
@@ -289,19 +290,23 @@ public class TickHandlerClient
 	
 	public void updateHatPosAndAngle(EntityHat hat, EntityLivingBase parent)
 	{
-		hat.prevPosX = hat.renderingParent.prevPosX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(hat.parent.prevRenderYawOffset));
-		hat.prevPosY = hat.renderingParent.prevPosY + HatHandler.getVerticalPosOffset(parent);
-		hat.prevPosZ = hat.renderingParent.prevPosZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(hat.parent.prevRenderYawOffset));
+		hat.lastTickPosX = hat.parent.lastTickPosX;
+		hat.lastTickPosY = hat.parent.lastTickPosY;
+		hat.lastTickPosZ = hat.parent.lastTickPosZ;
 		
-		hat.posX = hat.renderingParent.posX - HatHandler.getHorizontalPosOffset(parent) * Math.sin(Math.toRadians(hat.parent.renderYawOffset));
-		hat.posY = hat.renderingParent.posY + HatHandler.getVerticalPosOffset(parent);
-		hat.posZ = hat.renderingParent.posZ + HatHandler.getHorizontalPosOffset(parent) * Math.cos(Math.toRadians(hat.parent.renderYawOffset));
+		hat.prevPosX = hat.parent.prevPosX;
+		hat.prevPosY = hat.parent.prevPosY;
+		hat.prevPosZ = hat.parent.prevPosZ;
 		
-		hat.prevRotationPitch = hat.getPrevRotationPitch();
-		hat.rotationPitch = hat.getRotationPitch();
+		hat.posX = hat.parent.posX;
+		hat.posY = hat.parent.posY;
+		hat.posZ = hat.parent.posZ;
 		
-		hat.prevRotationYaw = hat.getPrevRotationYaw();
-		hat.rotationYaw = hat.getRotationYaw();
+		hat.prevRotationPitch = HatRendererHelper.getPrevRotationPitch(parent);
+		hat.rotationPitch = HatRendererHelper.getRotationPitch(parent);
+		
+		hat.prevRotationYaw = HatRendererHelper.getPrevRotationYaw(parent);
+		hat.rotationYaw = HatRendererHelper.getRotationYaw(parent);
 	}
 	
 	public void renderTick(Minecraft mc, World world, float renderTick)

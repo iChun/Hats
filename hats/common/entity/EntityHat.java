@@ -3,6 +3,7 @@ package hats.common.entity;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import hats.client.core.HatInfoClient;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
@@ -28,6 +29,8 @@ public class EntityHat extends Entity
 	public EntityLivingBase renderingParent; 
 	public boolean render;
 	public String hatName;
+	
+	public HatInfoClient info;
 	
 	public int reColour;
 	
@@ -69,7 +72,7 @@ public class EntityHat extends Entity
 		renderingParent = parent = ent;
 		hatName = hatInfo.hatName;
 		
-		setLocationAndAngles(parent.posX, parent.posY + parent.getEyeHeight() - 0.35F, parent.posZ, parent.rotationYaw, parent.rotationPitch);
+		setLocationAndAngles(parent.posX, parent.boundingBox.minY, parent.posZ, parent.rotationYaw, parent.rotationPitch);
 		
 		reColour = 0;
 		
@@ -83,7 +86,6 @@ public class EntityHat extends Entity
 		lastUpdate = par1World.getWorldTime();
 		ignoreFrustumCheck = true;
 		renderDistanceWeight = 10D;
-
 	}
 	
 	@Override
@@ -103,6 +105,8 @@ public class EntityHat extends Entity
 			setDead();
 			return;
 		}
+		
+//		hatName = "PahiHat".toLowerCase();
 		
 		if(Hats.hasMorphMod && parent instanceof EntityPlayer)
 		{
@@ -124,46 +128,8 @@ public class EntityHat extends Entity
 		
 		lastUpdate = worldObj.getWorldTime();
 
-		lastTickPosX = prevPosX = renderingParent.prevPosX - HatHandler.getHorizontalPosOffset(renderingParent) * Math.sin(Math.toRadians(renderingParent.prevRenderYawOffset));
-		lastTickPosY = prevPosY = renderingParent.prevPosY + HatHandler.getVerticalPosOffset(renderingParent);
-		lastTickPosZ = prevPosZ = renderingParent.prevPosZ + HatHandler.getHorizontalPosOffset(renderingParent) * Math.cos(Math.toRadians(renderingParent.prevRenderYawOffset));
-		
-		setPosition(posX, posY, posZ);
-		posX = renderingParent.posX - HatHandler.getHorizontalPosOffset(renderingParent) * Math.sin(Math.toRadians(renderingParent.renderYawOffset));
-		posY = renderingParent.posY + HatHandler.getVerticalPosOffset(renderingParent);
-		posZ = renderingParent.posZ + HatHandler.getHorizontalPosOffset(renderingParent) * Math.cos(Math.toRadians(renderingParent.renderYawOffset));
-		
-		prevRotationYaw = getPrevRotationYaw();
-		rotationYaw = getRotationYaw();
-		
-		prevRotationPitch = getPrevRotationPitch();
-		rotationPitch = getRotationPitch();
-
-		motionX = posX - prevPosX;
-		motionY = posY - prevPosY;
-		motionZ = posZ - prevPosZ;
-		
-		
-		if(parent.ridingEntity != null && !(parent.ridingEntity instanceof EntityMinecart))
-		{
-			motionX = parent.ridingEntity.posX - parent.ridingEntity.prevPosX;
-			motionY = parent.ridingEntity.posY - parent.ridingEntity.prevPosY;
-			motionZ = parent.ridingEntity.posZ - parent.ridingEntity.prevPosZ;
-			
-			lastTickPosX = prevPosX = prevPosX + motionX;
-			lastTickPosY = prevPosY = prevPosY + motionY;
-			lastTickPosZ = prevPosZ = prevPosZ + motionZ;
-
-			posX += motionX;
-			posY += motionY;
-			posZ += motionZ;
-			
-			if(parent.ridingEntity instanceof EntityPig)
-			{
-				prevRotationYaw = ((EntityPig)parent.ridingEntity).prevRenderYawOffset;
-				rotationYaw = ((EntityPig)parent.ridingEntity).renderYawOffset;
-			}
-		}
+		validateHatInfo();
+		//TODO check when mobs are sitting
 		
 //		if(!(parent instanceof EntityPlayer))
 //		{
@@ -174,6 +140,24 @@ public class EntityHat extends Entity
 //			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 0.0D, 1.0D);
 //			worldObj.spawnParticle("smoke", posX, posY, posZ, 0.0D, 0.0D, -1.0D);
 //		}
+	}
+	
+	public void validateHatInfo()
+	{
+		boolean regen = true;
+		if(info != null && info.hatName.equalsIgnoreCase(hatName) && info.colourR == getR() && info.colourG == getG() && info.colourB == getB() && info.prevColourR == prevR && info.prevColourG == prevG && info.prevColourB == prevB)
+		{
+			regen = false;
+		}
+		if(regen)
+		{
+			info = new HatInfoClient(hatName, getR(), getG(), getB());
+		}
+		info.recolour = reColour;
+		info.doNotRender = !render;
+		info.prevColourR = prevR;
+		info.prevColourG = prevG;
+		info.prevColourB = prevB;
 	}
 	
 	public void setR(int i)
@@ -218,59 +202,6 @@ public class EntityHat extends Entity
 			Hats.proxy.tickHandlerClient.requestedMobHats.remove((Object)parent.entityId);
 		}
 	}
-	
-	public float getPrevRotationYaw()
-	{
-		if(renderingParent instanceof EntityGhast || renderingParent instanceof EntitySilverfish)
-		{
-			return renderingParent.prevRenderYawOffset;
-		}
-		else if(renderingParent instanceof EntitySquid)
-		{
-			return ((EntitySquid)renderingParent).prevRenderYawOffset;
-		}
-		return renderingParent.prevRotationYawHead;
-	}
-
-	public float getRotationYaw()
-	{
-		if(renderingParent instanceof EntityGhast || renderingParent instanceof EntitySilverfish)
-		{
-			return renderingParent.renderYawOffset;
-		}
-		else if(renderingParent instanceof EntitySquid)
-		{
-			return ((EntitySquid)renderingParent).renderYawOffset;
-		}
-		return renderingParent.rotationYawHead;
-	}
-	
-	public float getPrevRotationPitch()
-	{
-		if(renderingParent instanceof EntityGhast || renderingParent instanceof EntitySilverfish)
-		{
-			return 0.0F;
-		}
-		else if(renderingParent instanceof EntitySquid)
-		{
-			return -((EntitySquid)renderingParent).prevSquidPitch;
-		}
-		return renderingParent.prevRotationPitch;
-	}
-
-	public float getRotationPitch()
-	{
-		if(renderingParent instanceof EntityGhast || renderingParent instanceof EntitySilverfish)
-		{
-			return 0.0F;
-		}
-		else if(renderingParent instanceof EntitySquid)
-		{
-			return -((EntitySquid)renderingParent).squidPitch;
-		}
-		return renderingParent.rotationPitch;
-	}
-
 	
 	@Override
 	public void entityInit() 

@@ -39,6 +39,7 @@ import net.minecraft.entity.monster.EntityGiantZombie;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.monster.EntitySilverfish;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.entity.monster.EntitySpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityChicken;
@@ -819,247 +820,13 @@ public class HatHandler
 		Hats.proxy.tickHandlerClient.serverHats = new ArrayList<String>(Hats.proxy.tickHandlerClient.availableHats);
 	}
 
-	@SideOnly(Side.CLIENT)
-	public static double getVerticalPosOffset(EntityLivingBase ent)
-	{
-		if(ent instanceof EntityPlayer)
-		{
-			return ent.getEyeHeight() - 0.35F;
-		}
-		else if(ent instanceof EntityZombie || ent instanceof EntitySkeleton)
-		{
-			if(ent instanceof EntitySkeleton && ((EntitySkeleton)ent).getSkeletonType() == 1)
-			{
-				return 1.8F;
-			}
-			return 1.55D;
-		}
-		else if(ent instanceof EntityCreeper)
-		{
-			return 1.28D;
-		}
-		else if(ent instanceof EntityEnderman)
-		{
-			return 2.4F;
-		}
-		else if(ent instanceof EntityVillager)
-		{
-			return 1.4F;
-		}
-		else if(ent instanceof EntityBlaze)
-		{
-			return 1.5D;
-		}
-		else if(ent instanceof EntitySquid)
-		{
-			return 0.5D;
-		}
-		else if(ent instanceof EntityPig)
-		{
-			return 0.75D;
-		}
-		else if(ent instanceof EntitySpider)
-		{
-			return 0.57D * getSpiderScale((EntitySpider)ent);
-		}
-		else if(ent instanceof EntitySheep)
-		{
-			return 1.1D;
-		}
-		else if(ent instanceof EntityCow)
-		{
-			return 1.25D;
-		}
-		else if(ent instanceof EntityChicken)
-		{
-			return 0.55D;
-		}
-		return 0.0D;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static double getHorizontalPosOffset(EntityLivingBase ent)
-	{
-		if(ent instanceof EntityPig)
-		{
-			return 0.37D;
-		}
-		else if(ent instanceof EntitySpider)
-		{
-			return 0.18D * getSpiderScale((EntitySpider)ent);
-		}
-		else if(ent instanceof EntitySheep)
-		{
-			return 0.50D;
-		}
-		else if(ent instanceof EntityCow)
-		{
-			return 0.50D;
-		}
-		else if(ent instanceof EntityChicken)
-		{
-			return 0.25D;
-		}
-		return 0.0D;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static float getVerticalPostRotateOffset(EntityLivingBase ent)
-	{
-		if(ent instanceof EntityBlaze)
-		{
-			return -0.21F;
-		}
-		else if(ent instanceof EntitySquid)
-		{
-			return -0.39F;
-		}
-		else if(ent instanceof EntityPig)
-		{
-			return -0.205F;
-		}
-		else if(ent instanceof EntitySpider)
-		{
-			return -0.21F * getSpiderScale((EntitySpider)ent);
-		}
-		else if(ent instanceof EntitySheep)
-		{
-			return -0.065F;
-		}
-		else if(ent instanceof EntityVillager)
-		{
-			return 0.13F;
-		}
-		else if(ent instanceof EntityCow)
-		{
-			return -0.21F;
-		}
-		else if(ent instanceof EntityChicken)
-		{
-			return 0.165F;
-		}
-		return 0.0F;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static float getHorizontalPostRotateOffset(EntityLivingBase ent)
-	{
-		if(ent instanceof EntityPig)
-		{
-			return -0.25F;
-		}
-		else if(ent instanceof EntitySpider)
-		{
-			return -0.265F * getSpiderScale((EntitySpider)ent);
-		}
-		else if(ent instanceof EntitySheep)
-		{
-			return -0.18F;
-		}
-		else if(ent instanceof EntityCow)
-		{
-			return -0.125F;
-		}
-		else if(ent instanceof EntityChicken)
-		{
-			return 0.0F;
-		}
-		return 0F;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static float getVerticalRenderOffset(EntityLivingBase ent)
-	{
-		if(ent instanceof EntityPlayer)
-		{
-			 return (float)(Minecraft.getMinecraft().renderViewEntity != ent ? -0.06F : 0.01F ) + (ent != null && ent.isSneaking() ? Minecraft.getMinecraft().renderViewEntity != ent ? -0.17F : -0.05F : 0.015F);
-		}
-		else if(ent instanceof EntityPigZombie)
-		{
-			return 0.025F;
-		}
-		else if(ent instanceof EntityEnderman)
-		{
-			if(((EntityEnderman)ent).isScreaming())
-			{
-				return 0.27F;
-			}
-			else
-			{
-				return -0.06F;
-			}
-		}
-		else if(ent instanceof EntityGhast)
-		{
-			return -0.05F;
-		}
-		return 0.0F;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public static float getRenderScale(EntityLivingBase ent)
-	{
-		if(ent instanceof EntitySkeleton && ((EntitySkeleton)ent).getSkeletonType() == 1)
-		{
-			return 1.2F;
-		}
-		else if(ent instanceof EntityGhast)
-		{
-			return 9.0F;
-		}
-		else if(ent instanceof EntitySilverfish)
-		{
-			return 0.7F;
-		}
-		else if(ent instanceof EntitySquid)
-		{
-			return 1.5F;
-		}
-		else if(ent instanceof EntitySpider)
-		{
-			return getSpiderScale((EntitySpider)ent);
-		}
-		else if(ent instanceof EntitySheep)
-		{
-			if(((EntitySheep) ent).func_70894_j(1.0F) != 0.0F)
-			{
-				return 0.0F;
-			}
-			return 0.75F;
-		}
-		else if(ent instanceof EntityChicken)
-		{
-			return 0.5F;
-		}
-		return 1.0F;
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static float getSpiderScale(EntitySpider spider)
-	{
-		FloatBuffer buffer = GLAllocation.createDirectFloatBuffer(16);
-		FloatBuffer buffer1 = GLAllocation.createDirectFloatBuffer(16);
-
-		GL11.glPushMatrix();
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
-		Render rend = RenderManager.instance.getEntityRenderObject(spider);
-		invokePreRenderCallback(rend, rend.getClass(), spider, 1.0F);
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer1);
-		GL11.glPopMatrix();
-
-//		float prevScaleX = buffer1.get(0) / buffer.get(0);
-//		float prevScaleY = buffer1.get(1) / buffer.get(1);
-//		float prevScaleZ = buffer1.get(2) / buffer.get(2);
-		return buffer1.get(0) / buffer.get(0);
-	}
-	
 	public static boolean canMobHat(EntityLivingBase ent)
 	{
-		return ent.isEntityAlive() && !ent.isChild() && (Hats.hatZombie == 1 && ent instanceof EntityZombie && !(ent instanceof EntityGiantZombie) || Hats.hatCreeper == 1 && ent instanceof EntityCreeper 
+		return !ent.isDead && !ent.isChild() && (Hats.hatZombie == 1 && ent instanceof EntityZombie && !(ent instanceof EntityGiantZombie) || Hats.hatCreeper == 1 && ent instanceof EntityCreeper 
 				|| Hats.hatEnderman == 1 &&ent instanceof EntityEnderman || Hats.hatSkeleton == 1 && ent instanceof EntitySkeleton || Hats.hatVillager == 1 && ent instanceof EntityVillager 
 				|| Hats.hatGhast == 1 && ent instanceof EntityGhast || Hats.hatBlaze == 1 && ent instanceof EntityBlaze || Hats.hatSquid == 1 && ent instanceof EntitySquid 
 				|| Hats.hatPig == 1 && ent instanceof EntityPig || Hats.hatSpider == 1 && ent instanceof EntitySpider || Hats.hatSheep == 1 && ent instanceof EntitySheep 
-				|| Hats.hatCow == 1 && ent instanceof EntityCow || Hats.hatChicken == 1 && ent instanceof EntityChicken);
+				|| Hats.hatCow == 1 && ent instanceof EntityCow || Hats.hatChicken == 1 && ent instanceof EntityChicken || ent instanceof EntitySlime);
 	}
 	
 	public static boolean threadLoadComplete = true;
@@ -1080,31 +847,7 @@ public class HatHandler
 	public static HashMap<String, ArrayList<String>> categories = new HashMap<String, ArrayList<String>>();
 	
 	public static Random rand = new Random();
-	
-	public static final String preRenderCallbackObf = "func_77041_b";
-	public static final String preRenderCallbackDeobf = "preRenderCallback";
-	public static boolean obfuscation = true;
 
-	@SideOnly(Side.CLIENT)
-	public static void invokePreRenderCallback(Render rend, Class clz, EntityLivingBase ent, float rendTick)
-	{
-		try
-		{
-			Method m = clz.getDeclaredMethod(obfuscation ? preRenderCallbackObf : preRenderCallbackDeobf, EntityLivingBase.class, float.class);
-			m.setAccessible(true);
-			m.invoke(rend, ent, rendTick);
-		}
-		catch(NoSuchMethodException e)
-		{
-			if(clz != RendererLivingEntity.class)
-			{
-				invokePreRenderCallback(rend, clz.getSuperclass(), ent, rendTick);
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
+	public static boolean obfuscation;
 	
 }
