@@ -36,7 +36,7 @@ public class PacketHandlerClient
 					Hats.proxy.tickHandlerClient.serverHasMod = true;
 					Hats.proxy.tickHandlerClient.serverHatMode = stream.readByte();
 					boolean hasVisited = !stream.readBoolean();
-					Hats.proxy.tickHandlerClient.showHatHuntingMode = Hats.proxy.tickHandlerClient.serverHatMode == 4 && hasVisited;
+					Hats.proxy.tickHandlerClient.showJoinMessage = Hats.proxy.tickHandlerClient.serverHatMode == 4 && hasVisited;
 					
 					String availHats = stream.readUTF(); //ignored on Free Mode
 					if(Hats.proxy.tickHandlerClient.serverHatMode == 4)

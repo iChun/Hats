@@ -1232,8 +1232,8 @@ public class GuiHatSelection extends GuiScreen
         else
         {
         	buttonList.add(new GuiButton(ID_SET_KEY, width / 2 - 6, height / 2 - 78, 88, 20, "GUI: " + (Hats.guiKeyBind < 0 ? Mouse.getButtonName(Hats.guiKeyBind + 100) : Keyboard.getKeyName(Hats.guiKeyBind))));
-        	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, StatCollector.translateToLocal("hats.gui.firstPerson") + ": " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No")));
-        	buttonList.add(new GuiButton(ID_SHOW_HATS, width / 2 - 6, height / 2 - 78 + (22 * 2), 88, 20, StatCollector.translateToLocal("hats.gui.showHats") + ": " + (Hats.renderHats == 1 ? "Yes" : "No")));
+        	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, StatCollector.translateToLocal("hats.gui.firstPerson") + ": " + (Hats.renderInFirstPerson == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"))));
+        	buttonList.add(new GuiButton(ID_SHOW_HATS, width / 2 - 6, height / 2 - 78 + (22 * 2), 88, 20, StatCollector.translateToLocal("hats.gui.showHats") + ": " + (Hats.renderHats == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"))));
         	buttonList.add(new GuiButton(ID_RESET_SIDE, width / 2 - 6, height / 2 - 78 + (22 * 5), 88, 20, StatCollector.translateToLocal("hats.gui.resetSide")));
         	if(Hats.proxy.tickHandlerClient.serverHatMode != 4)
         	{

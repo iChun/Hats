@@ -94,9 +94,9 @@ public class TickHandlerClient
 			requestedMobHats.clear();
 			requestCooldown = 40;
 		}
-		if(showHatHuntingMode)
+		if(showJoinMessage)
 		{
-			showHatHuntingMode = false;
+			showJoinMessage = false;
 			mc.thePlayer.addChatMessage(StatCollector.translateToLocal("hats.firstJoin.hatHunting"));
 		}
 		if(Hats.enableInServersWithoutMod == 1 && !serverHasMod || serverHasMod)
@@ -352,7 +352,7 @@ public class TickHandlerClient
 	public World worldInstance;
 	
 	public boolean serverHasMod = false;
-	public boolean showHatHuntingMode = false;
+	public boolean showJoinMessage = false;
 	
 	public boolean guiKeyDown;
 	public boolean hasScreen;
