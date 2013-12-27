@@ -163,5 +163,5 @@ hats.gui.helpInfo19.desc1=Did du vet att du kan anpassa
 hats.gui.helpInfo19.desc2=if mobs har hattar? Dess i den
 hats.gui.helpInfo19.desc3="Personalize" fliken
  
-hats.addon.hatstands.GUI.base=Base
-hats.addon.hatstands.GUI.stand=Stå
+hats.addon.hatstands.gui.base=Base
+hats.addon.hatstands.gui.stand=Stå
