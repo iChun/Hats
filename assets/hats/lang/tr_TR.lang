@@ -1,5 +1,6 @@
 hats.firstJoin.hatHunting=[Hats] şapka AV modu sunucusudur. Kilidi açmak için bir şapkayla mob öldürün!
 hats.firstJoin.kingOfTheHat.hasKing=[Hats] sunucu üzerinde şapka modunun Kral olduğunu! Kralı öldürmek ve bir şapka giymek hakkını iddia!
+hats.kingOfTheHat.update.playerJoin=[Hats] Rejoice! %s şimdi yeni kral değil!
 hats.kingOfTheHat.update.playerDied=[Hats] %1$ s öldü! %2$ s yeni kral şimdi!
 hats.kingOfTheHat.update.playerSlayed=[Hats] %1$ s öldürüldü! %2$ s yeni kral şimdi!
 hats.kingOfTheHat.update.playerLeft=[Hats] %1$ s sunucu yaptı! %2$ s yeni kral şimdi!
@@ -163,4 +164,4 @@ hats.gui.helpInfo19.desc2=if çetelerin şapkalar var? Onun içinde
 hats.gui.helpInfo19.desc3="Personalize" sekmesi
  
 Hats.addon.hatstands.gui.Base=Base
-Hats.addon.hatstands.gui.stand=Base
+Hats.addon.hatstands.gui.stand=Stand

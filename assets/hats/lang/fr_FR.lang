@@ -1,5 +1,6 @@
 hats.firstJoin.hatHunting=[Hats] serveur est sur le Mode de chasse chapeau ! Tuer un mob avec un chapeau pour le débloquer !
 hats.firstJoin.kingOfTheHat.hasKing=[Hats] serveur est le roi de la Mode du chapeau ! Tuer le roi et revendiquer son droit de porter un chapeau !
+hats.kingOfTheHat.update.playerJoin=[Hats] Réjouissez-vous! %s est maintenant le nouveau roi!
 hats.kingOfTheHat.update.playerDied=[Hats] %1$ s est mort ! %2$ s est maintenant le nouveau roi !
 hats.kingOfTheHat.update.playerSlayed=[Hats] %1$ s a été tué ! %2$ s est maintenant le nouveau roi !
 hats.kingOfTheHat.update.playerLeft=[Hats] %1$ s a laissé le serveur ! %2$ s est maintenant le nouveau roi !
@@ -162,5 +163,5 @@ hats.gui.helpInfo19.desc1=Did vous savez que vous pouvez personnaliser
 hats.gui.helpInfo19.desc2=if monstres ont des chapeaux ? Ses dans le onglet 
 hats.gui.helpInfo19.desc3="Personalize"
  
-hats.addon.hatstands.gui.base=base
-hats.addon.hatstands.gui.stand=base
+hats.addon.hatstands.gui.base=Base
+hats.addon.hatstands.gui.stand=Stand

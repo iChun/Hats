@@ -1,5 +1,6 @@
 hats.firstJoin.hatHunting=[Hats] Dieser Server ist im Hutjagd Modus! Töte ein Monster mit einem Hut um ihn freizuschalten!
 hats.firstJoin.kingOfTheHat.hasKing=[Hats] Dieser Server ist im König des Hutes Modus! Töte den König um das Recht einen Hut zu tragen zu erhalten!
+hats.kingOfTheHat.update.playerJoin=[Hats] Freut euch! %s ist jetzt der neue König!
 hats.kingOfTheHat.update.playerDied=[Hats] %1$s ist gestorben! %2$s ist jetzt der König!
 hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s ist gefallen! %2$s ist jetzt der König!
 hats.kingOfTheHat.update.playerLeft=[Hats] %1$s hat das Spiel verlassen! %2$s ist jetzt der König!
@@ -163,4 +164,4 @@ hats.gui.helpInfo19.desc2=ob Monster Hüte haben? Es ist unter dem
 hats.gui.helpInfo19.desc3="Personalisierung" Tab.
 
 hats.addon.hatstands.gui.base=Basis
-hats.addon.hatstands.gui.stand=Hutstand
+hats.addon.hatstands.gui.stand=Basis

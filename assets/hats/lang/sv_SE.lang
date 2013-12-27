@@ -1,5 +1,6 @@
 hats.firstJoin.hatHunting=[Hats] servern är på Hat jakt läge! Döda en mobb med en hatt för att låsa upp den!
 hats.firstJoin.kingOfTheHat.hasKing=[Hats] servern är på konungen av hatt-läge! Döda kungen och hävda sin rätt att bära en hatt!
+hats.kingOfTheHat.update.playerJoin=[Hats] Glädjas! %s är nu den nya kungen!
 hats.kingOfTheHat.update.playerDied=[Hats] %1$ s dog! %2$ s är nu den nya kungen!
 hats.kingOfTheHat.update.playerSlayed=[Hats] %1$ s har dräpts! %2$ s är nu den nya kungen!
 hats.kingOfTheHat.update.playerLeft=[Hats] %1$ s lämnade servern! %2$ s är nu den nya kungen!
@@ -162,5 +163,5 @@ hats.gui.helpInfo19.desc1=Did du vet att du kan anpassa
 hats.gui.helpInfo19.desc2=if mobs har hattar? Dess i den
 hats.gui.helpInfo19.desc3="Personalize" fliken
  
-hats.addon.hatstands.GUI.base=base
-hats.addon.hatstands.GUI.Stand=base
+hats.addon.hatstands.GUI.base=Base
+hats.addon.hatstands.GUI.stand=Stå

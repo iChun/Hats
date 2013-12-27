@@ -1,5 +1,6 @@
 hats.firstJoin.hatHunting=[Hats] Serveren er satt på hatte jakt modus! Drepe et monster med en hatt for å låse den opp!
 hats.firstJoin.kingOfTheHat.hasKing=[Hats] Serveren er på Kongen av hattene modus! Drep kongen og krev hans/hennes rett på å ha hatten!
+hats.kingOfTheHat.update.playerJoin=[Hats] Gled dere! %s er nå den nye kongen!
 hats.kingOfTheHat.update.playerDied=[Hats] %1$ døde! %2$ er nå den nye Kongen!
 hats.kingOfTheHat.update.playerSlayed=[Hats] %1$ har blitt drept! %2$ er nå den nye Kongen!
 hats.kingOfTheHat.update.playerLeft=[Hats] %1$ forlatte serveren! %2$ er nå den nye Kongen!
@@ -163,4 +164,4 @@ hats.gui.helpInfo19.desc2=hvis monsterene har hatter? Det står inni
 hats.gui.helpInfo19.desc3="Personalisere" vinduet
 
 hats.addon.hatstands.gui.base=Bunn
-hats.addon.hatstands.gui.stand=Stativ
+hats.addon.hatstands.gui.stand=Stå
