@@ -18,10 +18,12 @@ import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 import org.lwjgl.input.Keyboard;
@@ -95,7 +97,7 @@ public class TickHandlerClient
 		if(showHatHuntingMode)
 		{
 			showHatHuntingMode = false;
-			mc.thePlayer.addChatMessage("[Hats] Server is on Hat Hunting Mode! Kill a mob with a hat to unlock it!");
+			mc.thePlayer.addChatMessage(StatCollector.translateToLocal("hats.firstJoin.hatHunting"));
 		}
 		if(Hats.enableInServersWithoutMod == 1 && !serverHasMod || serverHasMod)
 		{

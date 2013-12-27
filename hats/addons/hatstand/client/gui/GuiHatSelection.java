@@ -31,6 +31,7 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.network.packet.Packet131MapData;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -192,7 +193,7 @@ public class GuiHatSelection extends GuiScreen
 	        
 			searchBar = new GuiTextField(this.fontRenderer, this.width / 2 - 65, height - 24, 150, 20);
 			searchBar.setMaxStringLength(255);
-			searchBar.setText("Search");
+			searchBar.setText(StatCollector.translateToLocal("hats.gui.search"));
 			searchBar.setTextColor(0xAAAAAA);
 			searchBar.setVisible(enabledSearchBar);
 		}
@@ -388,7 +389,7 @@ public class GuiHatSelection extends GuiScreen
         if(searchBar.isFocused())
         {
         	searchBar.setTextColor(14737632);
-        	if(!hasClicked && searchBar.getText().equalsIgnoreCase("Search"))
+        	if(!hasClicked && searchBar.getText().equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.search")))
         	{
         		hasClicked = true;
         		searchBar.setText("");
@@ -401,7 +402,7 @@ public class GuiHatSelection extends GuiScreen
         	if(searchBar.getText().equalsIgnoreCase(""))
         	{
         		hasClicked = false;
-    			searchBar.setText("Search");
+    			searchBar.setText(StatCollector.translateToLocal("hats.gui.search"));
         	}
         }    	
     }
@@ -618,7 +619,7 @@ public class GuiHatSelection extends GuiScreen
 	        {
 	        	pageCount = 1;
 	        }
-	        currentDisplay = "All Hats" + " (" + (pageNumber + 1) + "/" + (pageCount) + ")";
+	        currentDisplay = StatCollector.translateToLocal("hats.gui.allHat") + " (" + (pageNumber + 1) + "/" + (pageCount) + ")";
     	}
     	else if(view == VIEW_COLOURIZER)
     	{
@@ -626,20 +627,20 @@ public class GuiHatSelection extends GuiScreen
     		
     		for(int i = 0; i < 3; i++)
     		{
-    			GuiButton btn = new GuiSlider(5 + i, width / 2 - 6, height / 2 - 78 + (22 * button), i == 0 ? "Red: " : i == 1 ? "Green: " : "Blue: ", 0, 255, i == 0 ? colourR : i == 1 ? colourG : colourB, this);
+    			GuiButton btn = new GuiSlider(5 + i, width / 2 - 6, height / 2 - 78 + (22 * button), i == 0 ? StatCollector.translateToLocal("item.fireworksCharge.red") + ": " : i == 1 ? StatCollector.translateToLocal("item.fireworksCharge.green") + ": " : StatCollector.translateToLocal("item.fireworksCharge.blue") + ": ", 0, 255, i == 0 ? colourR : i == 1 ? colourG : colourB, this);
     			buttonList.add(btn);
     			
     			button++;
     		}
     		
-    		buttonList.add(new GuiButton(ID_HEAD, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, "Head: " + TileEntityHatStand.headNames[stand.head]));
+    		buttonList.add(new GuiButton(ID_HEAD, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, StatCollector.translateToLocal("item.skull.char.name") + ": " + TileEntityHatStand.headNames[stand.head]));
     		button++;
     		
-    		buttonList.add(new GuiButton(ID_BASE, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, "Base: " + (base ? "Yes" : "No")));
+    		buttonList.add(new GuiButton(ID_BASE, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, StatCollector.translateToLocal("hats.addon.hatstands.gui.base") + ": " + (base ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"))));
     		button++;
     		
     		GuiButton btn;
-    		btn = new GuiButton(ID_STAND, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, "Stand: " + (standPost ? "Yes" : "No"));
+    		btn = new GuiButton(ID_STAND, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, StatCollector.translateToLocal("hats.addon.hatstands.gui.stand") + ": " + (standPost ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no")));
     		
     		if(!stand.isOnFloor || !base)
     		{
@@ -650,7 +651,7 @@ public class GuiHatSelection extends GuiScreen
 			
 			button++;
     		
-    		currentDisplay = "Personalize";
+    		currentDisplay = StatCollector.translateToLocal("hats.gui.personalize");
     	}
     }
     
@@ -862,19 +863,19 @@ public class GuiHatSelection extends GuiScreen
 	            }
 	            else if(btn.id == ID_CLOSE)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Discard changes?"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.discardChanges")}), par1, par2);
 	            }
 	            else if(btn.id == ID_NONE)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Remove hat (N)"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.removeHat") + " (N)"}), par1, par2);
 	            }
 	            else if(btn.id == ID_HAT_COLOUR_SWAP)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? "Personalize (H)" : "Hats List (H)")}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? StatCollector.translateToLocal("hats.gui.personalize") : StatCollector.translateToLocal("hats.gui.hatsList")) + " (H)"}), par1, par2);
 	            }
 	            else if(btn.id == ID_RANDOM)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? "Random Hat (R)" : isShiftKeyDown() ? "Reset Colour (R)" : "Random Colour (R)")}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? StatCollector.translateToLocal("hats.gui.randomHat") : isShiftKeyDown() ? StatCollector.translateToLocal("hats.gui.resetColor"): StatCollector.translateToLocal("hats.gui.randomColor")) + " (R)"}), par1, par2);
 	            }
             }
         }

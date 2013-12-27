@@ -11,6 +11,7 @@ import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatMessageComponent;
+import net.minecraft.util.StatCollector;
 import cpw.mods.fml.common.FMLCommonHandler;
 
 public class CommandHats extends CommandBase {
@@ -24,7 +25,7 @@ public class CommandHats extends CommandBase {
 	@Override
     public String getCommandUsage(ICommandSender par1ICommandSender)
     {
-        return "/" + this.getCommandName() + "           type /hats for full list.";
+        return "/" + this.getCommandName() + "           " + StatCollector.translateToLocal("hats.command.help");
     }
 	
 	@Override
@@ -44,30 +45,30 @@ public class CommandHats extends CommandBase {
 			{
 				if("send".startsWith(command.toLowerCase()))
 				{
-					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c/hats send <player> <hat name>  Send a hat to player."));
+					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + StatCollector.translateToLocal("hats.command.help.send")));
 				}
 				else if("set".startsWith(command.toLowerCase()))
 				{
-					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c/hats set <player> <hat name>   Set a player hat."));
+					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + StatCollector.translateToLocal("hats.command.help.set")));
 				}
 				else if("unlock".startsWith(command.toLowerCase()))
 				{
-					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c/hats unlock <player> <hat name>   Unlocks a hat for a player."));
+					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + StatCollector.translateToLocal("hats.command.help.unlock")));
 				}
 			}
 			else if(astring.length == 2)
 			{
 				if("send".startsWith(command.toLowerCase()))
 				{
-					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c/hats send <player> <hat name>  Send a hat to player."));
+					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + StatCollector.translateToLocal("hats.command.help.send")));
 				}
 				else if("set".startsWith(command.toLowerCase()))
 				{
-					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c/hats set <player> <hat name>   Set a player hat."));
+					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + StatCollector.translateToLocal("hats.command.help.set")));
 				}
 				else if("unlock".startsWith(command.toLowerCase()))
 				{
-					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c/hats unlock <player> <hat name>   Unlocks a hat for a player."));
+					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + StatCollector.translateToLocal("hats.command.help.unlock")));
 				}
 			}
 			else if(astring.length >= 3)
@@ -84,12 +85,12 @@ public class CommandHats extends CommandBase {
 				EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(playerName);
 				if(player == null)
 				{
-					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + playerName + " is not online!"));
+					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + StatCollector.translateToLocalFormatted("hats.command.notOnline", new Object[] {playerName})));
 					return;
 				}
 				if(!HatHandler.hasHat(hatName))
 				{
-					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + hatName + " does not exist!"));
+					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + StatCollector.translateToLocalFormatted("hats.command.hatDoesNotExist", new Object[] {hatName})));
 					return;
 				}
 				
@@ -97,15 +98,15 @@ public class CommandHats extends CommandBase {
 				{
 					if(Hats.allowSendingOfHats == 0)
 					{
-						icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + "Server has disabled sending hats!"));
+						icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A7c" + StatCollector.translateToLocal("hats.command.serverDisabledHatSending")));
 						return;
 					}
-					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A77" + "Sending " + hatName + " to " + player.username));
+					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.sendToPlayer", new Object[] {hatName, player.username})));
 					HatHandler.sendHat(hatName, player);
 				}
 				else if("set".startsWith(command.toLowerCase()))
 				{
-					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A77" + "Setting " + hatName + " on " + player.username));
+					icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.setPlayerHat", new Object[] {hatName, player.username})));
 					Hats.proxy.playerWornHats.put(player.username, new HatInfo(hatName.toLowerCase(), 255, 255, 255));
 					Hats.proxy.sendPlayerListOfWornHats(player, false, false);
 				}
@@ -115,18 +116,18 @@ public class CommandHats extends CommandBase {
 					{
 						if(player.capabilities.isCreativeMode)
 						{
-							icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A77" + player.username + " is in creative!"));
+							icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.playerIsInCreative", new Object[] {player.username})));
 						}
 						else
 						{
-							icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A77" + "Unlocking " + hatName + " for " + player.username));
-							Hats.console(icommandsender.getCommandSenderName() + " unlocked " + hatName + " for " + player.username);
+							icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.unlockHatForPlayer", new Object[] {hatName, player.username})));
+							Hats.console(StatCollector.translateToLocalFormatted("hats.command.adminNotify.unlockHatForPlayer", new Object[] {icommandsender.getCommandSenderName(), hatName, player.username}));
 							HatHandler.unlockHat(player, hatName);
 						}
 					}
 					else
 					{
-						icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A77" + "Server is not in Hat Hunting Mode!"));
+						icommandsender.sendChatToPlayer(ChatMessageComponent.createFromText("\u00A77" + StatCollector.translateToLocal("hats.command.serverIsNotOnHatHuntingMode")));
 					}
 				}
 			}
@@ -147,10 +148,10 @@ public class CommandHats extends CommandBase {
 	
 	public String getUsageString()
 	{
-		return " Hats commands\n" +
-				"/hats set <player> <hat name>      Set a player hat.\n" +
-				"/hats send <player> <hat name>    Send a hat to player.\n" +
-				"/hats unlock <player> <hat name>  Unlock a hat for a player.";
+		return StatCollector.translateToLocal("hats.command") + "\n" +
+				StatCollector.translateToLocal("hats.command.help.send") + "\n" +
+				StatCollector.translateToLocal("hats.command.help.set") + "\n" +
+				StatCollector.translateToLocal("hats.command.help.send");
 	}
 
 }

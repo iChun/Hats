@@ -19,6 +19,7 @@ import net.minecraft.network.NetServerHandler;
 import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.StatCollector;
 import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -170,7 +171,7 @@ implements ITinyPacketHandler
 					}
 					else
 					{
-						Minecraft.getMinecraft().thePlayer.addChatMessage("Server has hats set to Command Giver Mode. You can not give commands!");
+						Minecraft.getMinecraft().thePlayer.addChatMessage(StatCollector.translateToLocal("hats.serverOnCommandGiverMode"));
 					}
 					break;
 				}

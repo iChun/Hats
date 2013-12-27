@@ -34,6 +34,7 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -263,7 +264,7 @@ public class GuiHatSelection extends GuiScreen
 	        
 			searchBar = new GuiTextField(this.fontRenderer, this.width / 2 - 65, height - 24, 150, 20);
 			searchBar.setMaxStringLength(255);
-			searchBar.setText("Search");
+			searchBar.setText(StatCollector.translateToLocal("hats.gui.search"));
 			searchBar.setTextColor(0xAAAAAA);
 			searchBar.setVisible(enabledSearchBar);
 		}
@@ -539,7 +540,7 @@ public class GuiHatSelection extends GuiScreen
     				invalidFolderName = true;
     			}
     		}
-    		if(searchBar.getText().equalsIgnoreCase("Favourites") || searchBar.getText().equalsIgnoreCase("All Hats") || searchBar.getText().equalsIgnoreCase("Add New"))
+    		if(searchBar.getText().equalsIgnoreCase("Favourites") || searchBar.getText().equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.allHats")) || searchBar.getText().equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.addNew")))
     		{
 				searchBar.setTextColor(0xFF5555);
 				invalidFolderName = true;
@@ -560,15 +561,15 @@ public class GuiHatSelection extends GuiScreen
     	}
     	else
     	{
-	    	if(searchBar.getText().equalsIgnoreCase("") || !hasClicked && searchBar.getText().equalsIgnoreCase("Search"))
+	    	if(searchBar.getText().equalsIgnoreCase("") || !hasClicked && searchBar.getText().equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.search")))
 	    	{
 	    		searchBar.setTextColor(14737632);
 	   			hatsToShow = new ArrayList<String>(view == VIEW_HATS ? availableHats : view == VIEW_CATEGORY ? categoryHats : categories);
         		Collections.sort(hatsToShow);
         		if(view == VIEW_CATEGORIES)
         		{
-        			hatsToShow.add(0, "All Hats");
-        			hatsToShow.add("Add New");
+        			hatsToShow.add(0, StatCollector.translateToLocal("hats.gui.allHats"));
+        			hatsToShow.add(StatCollector.translateToLocal("hats.gui.addNew"));
         		}
 	    	}
 	    	else
@@ -577,7 +578,7 @@ public class GuiHatSelection extends GuiScreen
 	    		ArrayList<String> matches = new ArrayList<String>();
 	    		for(String s : (view == VIEW_HATS ? availableHats : view == VIEW_CATEGORY ? categoryHats : categories))
 	    		{
-	    			if(view == VIEW_CATEGORIES && (s.equalsIgnoreCase("All Hats") || s.equalsIgnoreCase("Add New")))
+	    			if(view == VIEW_CATEGORIES && (s.equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.allHats")) || s.equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.addNew"))))
 	    			{
 	    				continue;
 	    			}
@@ -611,8 +612,8 @@ public class GuiHatSelection extends GuiScreen
 	        		Collections.sort(hatsToShow);
 	        		if(view == VIEW_CATEGORIES)
 	        		{
-	        			hatsToShow.add(0, "All Hats");
-	        			hatsToShow.add("Add New");
+	        			hatsToShow.add(0, StatCollector.translateToLocal("hats.gui.allHats"));
+	        			hatsToShow.add(StatCollector.translateToLocal("hats.gui.addNew"));
 	        		}
 	    		}
 	    		else
@@ -633,7 +634,7 @@ public class GuiHatSelection extends GuiScreen
         if(searchBar.isFocused())
         {
         	searchBar.setTextColor(14737632);
-        	if(!hasClicked && searchBar.getText().equalsIgnoreCase("Search"))
+        	if(!hasClicked && searchBar.getText().equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.search")))
         	{
         		hasClicked = true;
         		searchBar.setText("");
@@ -648,7 +649,7 @@ public class GuiHatSelection extends GuiScreen
         		hasClicked = false;
         		if(!adding && !renaming)
         		{
-        			searchBar.setText("Search");
+        			searchBar.setText(StatCollector.translateToLocal("hats.gui.search"));
         			
             		if(view == VIEW_CATEGORIES)
             		{
@@ -693,12 +694,12 @@ public class GuiHatSelection extends GuiScreen
 	    	else if(btn.id == ID_SET_FP)
 	    	{
 	    		Hats.renderInFirstPerson = (Hats.renderInFirstPerson == 1 ? 0 : 1);
-	    		btn.displayString = "First Person: " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No");
+	    		btn.displayString = StatCollector.translateToLocal("hats.gui.firstPerson") + ": " + (Hats.renderInFirstPerson == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"));
 	    	}
 	    	else if(btn.id == ID_SHOW_HATS)
 	    	{
 	    		Hats.renderHats = (Hats.renderHats == 1 ? 0 : 1);
-	    		btn.displayString = "Show Hats: " + (Hats.renderHats == 1 ? "Yes" : "No");
+	    		btn.displayString = StatCollector.translateToLocal("hats.gui.showHats") + ": " + (Hats.renderHats == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"));
 	    	}
 	    	else if(btn.id == ID_RESET_SIDE)
 	    	{
@@ -799,7 +800,7 @@ public class GuiHatSelection extends GuiScreen
 	    	{
 	    		if(!justClickedButton)
 	    		{
-	    			if(view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") && !category.equalsIgnoreCase("Contributors"))
+	    			if(view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") && !category.equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.contributors")))
 	    			{
 	    				HatHandler.removeFromCategory(selectedButtonName, category);
 	    				
@@ -976,7 +977,7 @@ public class GuiHatSelection extends GuiScreen
 	    		}
 	    		else
 	    		{
-		    		if(btn.displayString.equalsIgnoreCase("Add New"))
+		    		if(btn.displayString.equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.addNew")))
 		    		{
 		    			updateButtonList();
 		
@@ -997,7 +998,7 @@ public class GuiHatSelection extends GuiScreen
 		    			
 		    			searchBar.setText("");
 		    		}
-		    		else if(isShiftKeyDown() && !btn.displayString.equalsIgnoreCase("All Hats") && !btn.displayString.equalsIgnoreCase("Contributors"))
+		    		else if(isShiftKeyDown() && !btn.displayString.equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.allHats")) && !btn.displayString.equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.contributors")))
 		    		{
 		    			updateButtonList();
 		    			
@@ -1211,7 +1212,7 @@ public class GuiHatSelection extends GuiScreen
 		        {
 		        	pageCount = 1;
 		        }
-		        currentDisplay = (view == VIEW_HATS ? "All Hats" : view == VIEW_CATEGORY ? "Category - " + category : "Categories") + " (" + (pageNumber + 1) + "/" + (pageCount) + ")";
+		        currentDisplay = (view == VIEW_HATS ? StatCollector.translateToLocal("hats.gui.allHats") : view == VIEW_CATEGORY ? StatCollector.translateToLocal("hats.gui.category") + " - " + category : StatCollector.translateToLocal("hats.gui.categories")) + " (" + (pageNumber + 1) + "/" + (pageCount) + ")";
 	    	}
 	    	else if(view == VIEW_COLOURIZER)
 	    	{
@@ -1219,27 +1220,27 @@ public class GuiHatSelection extends GuiScreen
 	    		
 	    		for(int i = 0; i < 3; i++)
 	    		{
-	    			GuiButton btn = new GuiSlider(5 + i, width / 2 - 6, height / 2 - 78 + (22 * button), i == 0 ? "Red: " : i == 1 ? "Green: " : "Blue: ", 0, 255, i == 0 ? colourR : i == 1 ? colourG : colourB, this);
+	    			GuiButton btn = new GuiSlider(5 + i, width / 2 - 6, height / 2 - 78 + (22 * button), i == 0 ? StatCollector.translateToLocal("item.fireworksCharge.red") + ": " : i == 1 ? StatCollector.translateToLocal("item.fireworksCharge.green") + ": " : StatCollector.translateToLocal("item.fireworksCharge.blue") + ": ", 0, 255, i == 0 ? colourR : i == 1 ? colourG : colourB, this);
 	    			buttonList.add(btn);
 	    			
 	    			button++;
 	    		}
 	    		
-	    		currentDisplay = "Colourizer";
+	    		currentDisplay = StatCollector.translateToLocal("hats.gui.colorizer");
 	    	}
         }
         else
         {
         	buttonList.add(new GuiButton(ID_SET_KEY, width / 2 - 6, height / 2 - 78, 88, 20, "GUI: " + (Hats.guiKeyBind < 0 ? Mouse.getButtonName(Hats.guiKeyBind + 100) : Keyboard.getKeyName(Hats.guiKeyBind))));
-        	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, "First Person: " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No")));
-        	buttonList.add(new GuiButton(ID_SHOW_HATS, width / 2 - 6, height / 2 - 78 + (22 * 2), 88, 20, "Show Hats: " + (Hats.renderHats == 1 ? "Yes" : "No")));
-        	buttonList.add(new GuiButton(ID_RESET_SIDE, width / 2 - 6, height / 2 - 78 + (22 * 5), 88, 20, "Reset Side?"));
+        	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, StatCollector.translateToLocal("hats.gui.firstPerson") + ": " + (Hats.renderInFirstPerson == 1 ? "Yes" : "No")));
+        	buttonList.add(new GuiButton(ID_SHOW_HATS, width / 2 - 6, height / 2 - 78 + (22 * 2), 88, 20, StatCollector.translateToLocal("hats.gui.showHats") + ": " + (Hats.renderHats == 1 ? "Yes" : "No")));
+        	buttonList.add(new GuiButton(ID_RESET_SIDE, width / 2 - 6, height / 2 - 78 + (22 * 5), 88, 20, StatCollector.translateToLocal("hats.gui.resetSide")));
         	if(Hats.proxy.tickHandlerClient.serverHatMode != 4)
         	{
-        		buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 3), "RandoMobs: ", 0, 100, Hats.randomMobHat, this, "%"));
+        		buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 3), StatCollector.translateToLocal("hats.gui.randomobs") + ": ", 0, 100, Hats.randomMobHat, this, "%"));
         	}
         	
-        	currentDisplay = "Personalize";
+        	currentDisplay = StatCollector.translateToLocal("hats.gui.personalize");
         }
     }
     
@@ -1329,8 +1330,8 @@ public class GuiHatSelection extends GuiScreen
     		
 	    	hatsToShow = new ArrayList<String>(categories);
 	    	Collections.sort(hatsToShow);
-			hatsToShow.add(0, "All Hats");
-			hatsToShow.add("Add New");
+			hatsToShow.add(0, StatCollector.translateToLocal("hats.gui.allHats"));
+			hatsToShow.add(StatCollector.translateToLocal("hats.gui.addNew"));
 
     		return true;
     	}
@@ -1373,7 +1374,7 @@ public class GuiHatSelection extends GuiScreen
     
     public void showCategory(String s)
     {
-    	if(s.equalsIgnoreCase("All Hats"))
+    	if(s.equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.allHats")))
     	{
     		view = VIEW_COLOURIZER;
     		category = "";
@@ -1514,12 +1515,12 @@ public class GuiHatSelection extends GuiScreen
 	    	Collections.sort(hatsToShow);
 	    	if(!addingToCategory)
 	    	{
-				hatsToShow.add(0, "All Hats");
-				hatsToShow.add("Add New");
+				hatsToShow.add(0, StatCollector.translateToLocal("hats.gui.allHats"));
+				hatsToShow.add(StatCollector.translateToLocal("hats.gui.addNew"));
 	    	}
 	    	else
 	    	{
-	    		hatsToShow.remove("Contributors");
+	    		hatsToShow.remove(StatCollector.translateToLocal("hats.gui.contributors"));
 	    	}
 
 	    	updateButtonList();
@@ -1528,7 +1529,7 @@ public class GuiHatSelection extends GuiScreen
     
     public void personalize()
     {
-		showCategory("All Hats");
+		showCategory(StatCollector.translateToLocal("hats.gui.allHats"));
 
     	if(!personalizing)
     	{
@@ -1751,7 +1752,7 @@ public class GuiHatSelection extends GuiScreen
 	            	}
 	            	else if(btn.id == ID_ADD)
 	            	{
-	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") && !category.equalsIgnoreCase("Contributors") ? 224 : 160, 0, 16, 16);
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") && !category.equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.contributors")) ? 224 : 160, 0, 16, 16);
 	            	}
 	            	else if(btn.id == ID_RENAME)
 	            	{
@@ -1786,7 +1787,7 @@ public class GuiHatSelection extends GuiScreen
             }
         }
         
-        drawString(fontRenderer, "Viewing: " + currentDisplay, this.guiLeft, this.guiTop - 9, 0xffffff);
+        drawString(fontRenderer, StatCollector.translateToLocal("hats.gui.viewing") + ": " + currentDisplay, this.guiLeft, this.guiTop - 9, 0xffffff);
     	
         this.mouseX = (float)par1;
         this.mouseY = (float)par2;
@@ -1811,19 +1812,19 @@ public class GuiHatSelection extends GuiScreen
 	            }
 	            else if(btn.id == ID_CLOSE)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Discard changes?"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.discardChanges")}), par1, par2);
 	            }
 	            else if(btn.id == ID_NONE)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Remove hat (N)"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.removeHat") + " (N)"}), par1, par2);
 	            }
 	            else if(btn.id == ID_HAT_COLOUR_SWAP)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS || view == VIEW_CATEGORY ? "Colourizer (H)" : "Hats List (H)")}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS || view == VIEW_CATEGORY ? StatCollector.translateToLocal("hats.gui.colorizer") : StatCollector.translateToLocal("hats.gui.hatsList")) + " (H)"}), par1, par2);
 	            }
 	            else if(btn.id == ID_RANDOM)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS || view == VIEW_CATEGORY ? "Random Hat (R)" : view == VIEW_CATEGORIES ? "Random Category (R)" : isShiftKeyDown() ? "Reset Colour (R)" : "Random Colour (R)")}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS || view == VIEW_CATEGORY ? StatCollector.translateToLocal("hats.gui.randomHat") : view == VIEW_CATEGORIES ? StatCollector.translateToLocal("hats.gui.randomCategory") : isShiftKeyDown() ? StatCollector.translateToLocal("hats.gui.resetColor") : StatCollector.translateToLocal("hats.gui.randomColor")) + " (R)"}), par1, par2);
 	            }
 	            else if(btn.id == ID_HELP)
 	            {
@@ -1831,68 +1832,68 @@ public class GuiHatSelection extends GuiScreen
 	            }
 	            else if(btn.id == ID_RELOAD_HATS)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Reload all hats?", "This will discard all changes."}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.reloadAllHats"), StatCollector.translateToLocal("hats.gui.discardAllChanges")}), par1, par2);
 	            }
 	            else if(btn.id == ID_FAVOURITES)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Favourites (F)"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.favorites") + " (F)"}), par1, par2);
 	            }
 	            else if(btn.id == ID_CATEGORIES)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Categories (C)"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.categories") + " (C)"}), par1, par2);
 	            }
 	            else if(btn.id == ID_PERSONALIZE)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Personalize (P)"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.personalize") + " (P)"}), par1, par2);
 	            }
 	            else if(btn.id == ID_ADD)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {adding || renaming ? invalidFolderName ? "\u00a7cInvalid Name!" : "Add Category" : (view == VIEW_HATS || view == VIEW_CATEGORY && (category.equalsIgnoreCase("Favourites") || category.equalsIgnoreCase("Contributors"))) ? "Add to category" : "Remove from category"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {adding || renaming ? invalidFolderName ? "\u00a7c" + StatCollector.translateToLocal("hats.gui.invalidName") : StatCollector.translateToLocal("hats.gui.addCategory") : (view == VIEW_HATS || view == VIEW_CATEGORY && (category.equalsIgnoreCase("Favourites") || category.equalsIgnoreCase(StatCollector.translateToLocal("hats.gui.contributors")))) ? StatCollector.translateToLocal("hats.gui.addToCategory") : StatCollector.translateToLocal("hats.gui.removeFromCategory")}), par1, par2);
 	            }
 	            else if(btn.id == ID_CANCEL)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Cancel"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("gui.cancel")}), par1, par2);
 	            }
 	            else if(btn.id == ID_DELETE)
 	            {
 	            	if(deleting)
 	            	{
-	            		drawTooltip(Arrays.asList(new String[] {"Are you sure?", "", "Click again to confirm"}), par1, par2);
+	            		drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.areYouSure"), "", StatCollector.translateToLocal("hats.gui.clickConfirm")}), par1, par2);
 	            	}
 	            	else if(view == VIEW_CATEGORIES)
 	            	{
-	            		drawTooltip(Arrays.asList(new String[] {"Delete category?", "", "This will remove all hats", "in this category and reload", "the GUI.", "", "Double click to confirm"}), par1, par2);
+	            		drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.deleteCategory"), "", StatCollector.translateToLocal("hats.gui.deleteCategory.desc1"), StatCollector.translateToLocal("hats.gui.deleteCategory.desc2"), StatCollector.translateToLocal("hats.gui.deleteCategory.desc3"), "", StatCollector.translateToLocal("hats.gui.doubleClickConfirm")}), par1, par2);
 	            	}
 	            	else
 	            	{
 	            		if(isShiftKeyDown())
 	            		{
-	            			drawTooltip(Arrays.asList(new String[] {"Disable hat?", "", "This will disable this hat from", "all categories and reload", "the GUI. This will not", "delete the file.", "", "Double click to confirm"}), par1, par2);
+	            			drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.disableHat"), "", StatCollector.translateToLocal("hats.gui.disableHat.desc1"), StatCollector.translateToLocal("hats.gui.disableHat.desc2"), StatCollector.translateToLocal("hats.gui.disableHat.desc3"), StatCollector.translateToLocal("hats.gui.disableHat.desc4"), "", StatCollector.translateToLocal("hats.gui.doubleClickConfirm")}), par1, par2);
 	            		}
 	            		else
 	            		{
-	            			drawTooltip(Arrays.asList(new String[] {"Delete hat?", "", "This will remove this hat from", "all categories and reload", "the GUI.", "", "Double click to confirm"}), par1, par2);
+	            			drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.deleteHat"), "", StatCollector.translateToLocal("hats.gui.deleteHat.desc1"), StatCollector.translateToLocal("hats.gui.deleteHat.desc2"), StatCollector.translateToLocal("hats.gui.deleteHat.desc3"), "", StatCollector.translateToLocal("hats.gui.doubleClickConfirm")}), par1, par2);
 	            		}
 	            	}
 	            }
 	            else if(btn.id == ID_RENAME)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Rename Category?", "", "This will reload the GUI!"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.renameCategory"), "", StatCollector.translateToLocal("hats.gui.renameCategory.desc1")}), par1, par2);
 	            }
 	            else if(btn.id == ID_FAVOURITE)
 	            {
 	            	if(!selectedButtonName.equalsIgnoreCase("") && HatHandler.isInFavourites(selectedButtonName))
 	            	{
-	            		drawTooltip(Arrays.asList(new String[] {"Remove from Favourites"}), par1, par2);
+	            		drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.removeFromFavorites")}), par1, par2);
 	            	}
 	            	else
 	            	{
-	            		drawTooltip(Arrays.asList(new String[] {"Add to Favourites"}), par1, par2);
+	            		drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.addToFavorites")}), par1, par2);
 	            	}
 	            }
 	            else if(btn.id == ID_RESET_SIDE)
 	            {
-	            	drawTooltip(Arrays.asList(new String[] {"Reset buttons on side of GUI?"}), par1, par2);
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.resetButtonsOnSide")}), par1, par2);
 	            }
             }
         }
@@ -1998,7 +1999,7 @@ public class GuiHatSelection extends GuiScreen
 	        GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
 	        RenderHelper.enableStandardItemLighting();
 	        GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-	        GL11.glRotatef(-((float)Math.atan((double)(par5 / 40.0F))) * 20.0F, 1.0F, 0.0F, 0.0F);
+	        GL11.glRotatef(-((float)Math.atan((double)(par5 / 40.0F))) * 20.0F + 0.00001F, 1.0F, 0.0F, 0.0F);
 	        
 	        hat.renderingParent.renderYawOffset = (float)Math.atan((double)(par4 / 40.0F)) * 20.0F;
 	        hat.renderingParent.rotationYaw = hat.rotationYaw = (float)Math.atan((double)(par4 / 40.0F)) * 40.0F;
@@ -2111,26 +2112,25 @@ public class GuiHatSelection extends GuiScreen
 	
 	private static int helpPage = 0;
 	private static final ArrayList<String[]> help = new ArrayList<String[]>();
-	private static final String[] helpInfo1 = new String[] {"Shift click on the Hat", "button for more options!", "You can't shift click on", "the hat you're wearing", "however."};
-	private static final String[] helpInfo2 = new String[] {"If you're on a server that doesn't have", "the mod, another player with the", "mod won't be able to see your hat."};
-	private static final String[] helpInfo3 = new String[] {"Did you know you can always get more hats?", "Techne Online has a bunch of", "community made hats that you", "can download and install."};
-	private static final String[] helpInfo4 = new String[] {"You can also make your own hat!", "You need Techne and you make a hat with it.", "A \"head\" model is placed in the middle", "of the wood block. It's size is", "8 x 8 x 8. Make your hat on it!"};
-	private static final String[] helpInfo5 = new String[] {"Did you know that if your friend doesn't", "have the hat you're wearing, you send the hat", "to the server, and it gets sent to your friend.", "(Only on servers with the mod)"};
-	private static final String[] helpInfo6 = new String[] {"Shift clicking the Random Hat button gives you", "a random hat AND colour!"};
-	private static final String[] helpInfo7 = new String[] {"Shift clicking the Random Colour button resets", "all colours."};
-	private static final String[] helpInfo8 = new String[] {"You can hit TAB or T to quickly select", "the search bar."};
-	private static final String[] helpInfo9 = new String[] {"Did you know that this mod was initially", "made for a 96 hour modding marathon", "called ModJam?", "", "It won second place and was made and is", "currently maintained by iChun."};
-	private static final String[] helpInfo10 = new String[] {"The player hats added by the mod are the", "names of some people who made a significant", "contribution to the mod, in terms", "of development, testing, model contribution", "and support.", "", "Direwolf20 is just a bonus however."};
-	private static final String[] helpInfo11 = new String[] {"Shift Clicking on the Hats List will take", "you out of a category and back to all", "the hats."};
-	private static final String[] helpInfo12 = new String[] {"Did you know you can make your own categories?", "Hit the Categories button (or C, on your keyboard)", "and hit the \"Add New\" button."};
-	private static final String[] helpInfo13 = new String[] {"You can right click the Search bar", "to clear it."};
-	private static final String[] helpInfo14 = new String[] {"You can disable hats rather than deleting", "them. Just hold shift when deleting."};
-	private static final String[] helpInfo15 = new String[] {"Hitting Shift-F will favourite", "or unfavourite the hat you", "are currently wearing."};
-	private static final String[] helpInfo16 = new String[] {"The hot key for \"Personalize\" is", "\"P\", in case you accidentally", "disabled the button."};
-	private static final String[] helpInfo17 = new String[] {"You can get your own custom", "hat added to the mod if", "you give us a donation!", "", "Check the mod page for info."};
-	private static final String[] helpInfo18 = new String[] {"The (C) in the name of the hat", "represents a hat added as a thank", "you for a donation!"};
-	private static final String[] helpInfo19 = new String[] {"Did you know you can customize", "if mobs have hats? Its in the", "\"Personalize\" tab"};
-	private static final String[] helpInfo20 = new String[] {"If you have a contributor hat,", "you can use it in Hat", "Hunting Mode."};
+	private static final String[] helpInfo1 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo1.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo1.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo1.desc3"), StatCollector.translateToLocal("hats.gui.helpInfo1.desc4"), StatCollector.translateToLocal("hats.gui.helpInfo1.desc5")};
+	private static final String[] helpInfo2 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo2.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo2.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo2.desc3")};
+	private static final String[] helpInfo3 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo3.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo3.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo3.desc3"), StatCollector.translateToLocal("hats.gui.helpInfo3.desc4")};
+	private static final String[] helpInfo4 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo4.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo4.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo4.desc3"), StatCollector.translateToLocal("hats.gui.helpInfo4.desc4"), StatCollector.translateToLocal("hats.gui.helpInfo4.desc5")};
+	private static final String[] helpInfo5 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo5.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo5.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo5.desc3")};
+	private static final String[] helpInfo6 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo6.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo6.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo6.desc3"), StatCollector.translateToLocal("hats.gui.helpInfo6.desc4")};
+	private static final String[] helpInfo7 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo7.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo7.desc2")};
+	private static final String[] helpInfo8 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo8.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo8.desc2")};
+	private static final String[] helpInfo9 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo9.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo9.desc2")};
+	private static final String[] helpInfo10 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo10.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo10.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo10.desc3"), StatCollector.translateToLocal("hats.gui.helpInfo10.desc4"), StatCollector.translateToLocal("hats.gui.helpInfo10.desc5")};
+	private static final String[] helpInfo11 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo11.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo11.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo11.desc3"), StatCollector.translateToLocal("hats.gui.helpInfo11.desc4"), StatCollector.translateToLocal("hats.gui.helpInfo11.desc5"), StatCollector.translateToLocal("hats.gui.helpInfo11.desc6")};
+	private static final String[] helpInfo12 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo12.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo12.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo12.desc3")};
+	private static final String[] helpInfo13 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo13.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo13.desc2")};
+	private static final String[] helpInfo14 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo14.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo14.desc2")};
+	private static final String[] helpInfo15 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo15.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo15.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo15.desc3")};
+	private static final String[] helpInfo16 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo16.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo16.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo16.desc3"), StatCollector.translateToLocal("hats.gui.helpInfo16.desc4")};
+	private static final String[] helpInfo17 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo17.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo17.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo17.desc3")};
+	private static final String[] helpInfo18 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo18.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo18.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo18.desc3")};
+	private static final String[] helpInfo19 = new String[] {StatCollector.translateToLocal("hats.gui.helpInfo19.desc1"), StatCollector.translateToLocal("hats.gui.helpInfo19.desc2"), StatCollector.translateToLocal("hats.gui.helpInfo19.desc3")};
 	
 	static
 	{
@@ -2153,7 +2153,6 @@ public class GuiHatSelection extends GuiScreen
 		help.add(helpInfo17);
 		help.add(helpInfo18);
 		help.add(helpInfo19);
-		help.add(helpInfo20);
 		
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());

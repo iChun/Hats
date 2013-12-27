@@ -46,7 +46,7 @@ public class GuiHatUnlocked extends Gui
     public GuiHatUnlocked(Minecraft par1Minecraft)
     {
         this.theGame = par1Minecraft;
-        this.headerText = "\u00A7e" + "Hat Unlocked!";
+        this.headerText = "\u00A7e" + StatCollector.translateToLocal("hats.hatUnlocked");
         hatNameText = "";
     }
 
