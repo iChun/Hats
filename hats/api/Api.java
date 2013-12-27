@@ -1,8 +1,5 @@
 package hats.api;
 
-import morph.common.Morph;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayerMP;
 
 public final class Api 
 {
