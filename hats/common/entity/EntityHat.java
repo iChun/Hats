@@ -140,6 +140,16 @@ public class EntityHat extends Entity
 //		}
 	}
 	
+	@Override
+    public int getBrightnessForRender(float par1)
+    {
+		if(Hats.renderHats == 13131)
+		{
+			return 15728880;
+		}
+        return super.getBrightnessForRender(par1);
+    }
+	
 	public void validateHatInfo()
 	{
 		boolean regen = true;

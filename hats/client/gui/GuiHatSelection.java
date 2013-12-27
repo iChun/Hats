@@ -2024,6 +2024,8 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        Hats.proxy.tickHandlerClient.updateHatPosAndAngle(hat, hat.renderingParent);
 	        
+	        RenderHelper.disableStandardItemLighting();
+	        
             int i = 15728880;
             int j = i % 65536;
             int k = i / 65536;
@@ -2054,7 +2056,6 @@ public class GuiHatSelection extends GuiScreen
 	        GL11.glEnable(GL11.GL_ALPHA_TEST);
 	        
 	        GL11.glPopMatrix();
-	        RenderHelper.disableStandardItemLighting();
 	        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
 	        OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
 	        GL11.glDisable(GL11.GL_TEXTURE_2D);
