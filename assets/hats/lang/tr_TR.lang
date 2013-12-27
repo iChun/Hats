@@ -1,0 +1,166 @@
+hats.firstJoin.hatHunting=[Hats] şapka AV modu sunucusudur. Kilidi açmak için bir şapkayla mob öldürün!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] sunucu üzerinde şapka modunun Kral olduğunu! Kralı öldürmek ve bir şapka giymek hakkını iddia!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$ s öldü! %2$ s yeni kral şimdi!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$ s öldürüldü! %2$ s yeni kral şimdi!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$ s sunucu yaptı! %2$ s yeni kral şimdi!
+hats.trade.tradeWith=Trading ile %s 
+hats.trade.yourHats=Your şapka
+hats.trade.yourInventory=Your envanter
+hats.trade.yourOfferings=Your teklifleri:
+hats.trade.theirOfferings=%s's teklifleri:
+hats.trade.waitingForOffer=Waiting birine bir teklif yapmak.
+hats.trade.tradeNotReady=Not ticaret için hazır.
+hats.trade.tradeReady=Ticaret Ready.
+hats.trade.makeTrade=Make ticaret
+hats.trade.waitingForReady=Waiting ticaret hazır her iki taraf için.
+hats.trade.cancelTrade=Cancel ticaret
+hats.Command= şapka komutları
+hats.Command.help=Type /hats tam liste için
+hats.Command.help.send=/hats send <oyuncu> <şapka adı> şapka oyuncu için gönderin.
+hats.Command.help.Set=/hats set < oyuncu >< şapka adı > Küme oyuncu şapka.
+hats.Command.help.Unlock=/hats unlock <oyuncu> <şapka adı> şapka bir oyuncu kilidini açar.
+hats.command.notOnline=%s çevrimiçi değil!
+hats.command.hatDoesNotExist=%s yok!
+hats.command.serverDisabledHatSending=Server gönderen şapkalar devre dışı bıraktı.
+hats.command.sendToPlayer=Sending %1$ s %2$ s
+hats.command.setPlayerHat=Setting %1$ s olarak %2$ s
+hats.command.playerIsInCreative=%s yaratıcı olduğunu!
+hats.command.unlockHatForPlayer=Unlocking %1$ s için %2$ s
+hats.command.adminNotify.unlockHatForPlayer=%1$s kilidi %2$ s için %3$ s
+hats.command.serverIsNotOnHatHuntingMode=Server şapka Av modunda değil!
+hats.serverOnCommandGiverMode=Server komutu veren modunda şapka vardır. Komutlar verebilir değil!
+hats.hatUnlocked=Hat kilitli değil!
+hats.gui.Search=Search
+hats.gui.allHats=All şapka
+hats.gui.addNew=Add Yeni
+hats.gui.firstPerson=First kişi
+hats.gui.showHats=Show şapka
+hats.gui.Contributors=Contributors
+hats.gui.Category=Category
+hats.gui.Categories=Categories
+hats.gui.Colorizer=Colorizer
+hats.gui.hatsList=Hats listesi
+hats.gui.resetSide=Reset yan?
+hats.gui.randomobs=RandoMobs
+hats.gui.Personalize=Personalize
+hats.gui.Viewing=Viewing
+hats.gui.discardChanges=Discard değişiklik var mı?
+hats.gui.removeHat=Remove şapka
+hats.gui.randomHat=Random şapka
+hats.gui.randomCategory=Random Kategori
+hats.gui.randomColor=Random renk
+hats.gui.resetColor=Reset renk
+hats.gui.reloadAllHats=Reload tüm şapka?
+hats.gui.discardAllChanges=This tüm değişiklikler atılacak.
+hats.gui.favorites=Favorites
+hats.gui.invalidName=Invalid Adı!
+hats.gui.addCategory=Add Kategori
+hats.gui.addToCategory=Add Kategori için
+hats.gui.removeFromCategory=Remove Kategori
+hats.gui.areYouSure=Are emin misin?
+hats.gui.clickConfirm=Click tekrar onaylamak için
+hats.gui.deleteCategory=Delete Kategori
+hats.gui.deleteCategory.desc1=This-ecek çıkarmak tüm şapkalar
+hats.gui.deleteCategory.desc2=in bu kategori ve yeniden yükle
+hats.gui.deleteCategory.desc3=the GUI.
+hats.gui.doubleClickConfirm=Double onaylamak için tıklayın
+hats.gui.disableHat=Disable şapka?
+hats.gui.disableHat.desc1=This bu hat üzerinden işlemlerini devre dışı bırakır
+hats.gui.disableHat.desc2=all Kategoriler ve yeniden yükle
+hats.gui.disableHat.desc3=the GUI. Bu olacak değil
+hats.gui.disableHat.desc4=delete dosyası.
+hats.gui.deleteHat=Delete şapka?
+hats.gui.deleteHat.desc1=This bu şapkayı den kaldıracağız
+hats.gui.deleteHat.desc2=all Kategoriler ve yeniden yükle
+hats.gui.deleteHat.desc3=the GUI.
+hats.gui.renameCategory=Rename Kategori?
+hats.gui.renameCategory.desc1=This GUI yeniden yükler.
+hats.gui.removeFromFavorites=Remove sık
+hats.gui.addToFavorites=Add Sık Kullanılanlar
+hats.gui.resetButtonsOnSide=Reset GUI tarafındaki düğmeleri?
+ 
+hats.gui.helpInfo1.desc1=Shift tıklayın Şapka 
+hats.gui.helpInfo1.desc2=button daha fazla seçenek için!
+hats.gui.helpInfo1.desc3=You üzerinde tıklama kaydırılamaz
+hats.gui.helpInfo1.desc4=the şapka taktığın
+hats.gui.helpInfo1.desc5=however.
+ 
+hats.gui.helpInfo2.desc1=If sahip olmayan bir sunucu üzerinde konum
+hats.gui.helpInfo2.desc2=the mod, başka bir oyuncu ile
+hats.gui.helpInfo2.desc3=mod şapka görmek mümkün olmayacaktır.
+ 
+hats.gui.helpInfo3.desc1=Did sen biliyorsun her zaman daha fazla şapka alabilir miyim?
+hats.gui.helpInfo3.desc2=Techne Online bir grup vardır
+hats.gui.helpInfo3.desc3=community sen şapka yapılan 
+hats.gui.helpInfo3.desc4=can indirmek ve kurmak.
+ 
+hats.gui.helpInfo4.desc1=You-ebilmek da yapmak senin kendi şapka!
+hats.gui.helpInfo4.desc2=You Techne gerekir Bu şapka ve.
+hats.gui.helpInfo4.desc3=A "baş" modeli ortaya konur
+hats.gui.helpInfo4.desc4=of ahşap blok. Bunu 's büyüklüğü
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Şapkanı üzerinde olun!
+ 
+hats.gui.helpInfo5.desc1=Did biliyor musun kendi kategorilerinizi yapabilir miyim?
+hats.gui.helpInfo5.desc2=Hit Kategoriler düğmesini (veya klavyenizdeki C)
+hats.gui.helpInfo5.desc3=and "Yeni Ekle" düğmesine basın.
+ 
+hats.gui.helpInfo6.desc1=Did sen bunu biliyorsun Eğer arkadaşın.
+hats.gui.helpInfo6.desc2=have giydiğin şapka, şapka göndermek
+hats.gui.helpInfo6.desc3=to sunucu ve arkadaşınıza gönderilen.
+hats.gui.helpInfo6.desc4= (sadece sunucularda mod ile)
+ 
+hats.gui.helpInfo7.desc1=Shift rasgele şapka düğmesine tıklayarak size verir
+hats.gui.helpInfo7.desc2=a rasgele şapka ve renk!
+ 
+hats.gui.helpInfo8.desc1=Shift sıfırlar Rasgele renk düğmesini tıklatarak 
+hats.gui.helpInfo8.desc2=all renkler.
+ 
+hats.gui.helpInfo9.desc1=You-ebilmek vurmak hızlı bir şekilde seçmek için sekme veya T
+hats.gui.helpInfo9.desc2=the arama çubuğu.
+ 
+hats.gui.helpInfo10.desc1=Did bu mod başlangıçta olduğunu biliyorsun
+hats.gui.helpInfo10.desc2=made 96 saat modding maraton 
+hats.gui.helpInfo10.desc3=called ModJam?
+hats.gui.helpInfo10.desc4=It ikinci sıraya kazanmış ve was-den yapılmış ve
+hats.gui.helpInfo10.desc5=currently iChun tarafından yapılmaktadır.
+ 
+hats.gui.helpInfo11.desc1=The oyuncu şapkalar tarafından mod eklendi
+hats.gui.helpInfo11.desc2=names Bazı insanlar bir önemli
+hats.gui.helpInfo11.desc3=contribution açısından mod
+hats.gui.helpInfo11.desc4=of geliştirme, test etme, model katkı
+hats.gui.helpInfo11.desc5=and destek.
+hats.gui.helpInfo11.desc6=Direwolf20 ancak bir bonus olduğunu.
+ 
+hats.gui.helpInfo12.desc1=Shift tıklamak şapkalar listesinde alacak
+hats.gui.helpInfo12.desc2=you kategori ve geri tüm
+hats.gui.helpInfo12.desc3=the şapka.
+ 
+hats.gui.helpInfo13.desc1=You doğru ara çubuğunu tıklatabilirsiniz
+hats.gui.helpInfo13.desc2=to temizleyin.
+ 
+hats.gui.helpInfo14.desc1=You şapka silmek yerine devre dışı bırakabilirsiniz
+hats.gui.helpInfo14.desc2=them. Sadece shift silerken tutun.
+ 
+hats.gui.helpInfo15.desc1=Hitting SHIFT-F favori olacaktır
+hats.gui.helpInfo15.desc2=or unfavorite şapkayı sana
+hats.gui.helpInfo15.desc3=are şu anda giyiyor.
+ 
+hats.gui.helpInfo16.desc1=The sıcak anahtar "Kişilik" için
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=in sen kazara durumda
+hats.gui.helpInfo16.desc4=disabled düğmesi.
+ 
+hats.gui.helpInfo17.desc1=If, sen-si olmak bir katılımcı şapka
+hats.gui.helpInfo17.desc2=you-ebilmek kullanma o şapka
+hats.gui.helpInfo17.desc3=Hunting modu.
+ 
+hats.gui.helpInfo18.desc1=The (C) adına şapka
+hats.gui.helpInfo18.desc2=represents bir teşekkür eklenen bir şapka
+hats.gui.helpInfo18.desc3=you mod doğru bir bağış için!
+ 
+hats.gui.helpInfo19.desc1=Did sen-ebilmek gelenek
+hats.gui.helpInfo19.desc2=if çetelerin şapkalar var? Onun içinde
+hats.gui.helpInfo19.desc3="Personalize" sekmesi
+ 
+Hats.addon.hatstands.gui.Base=Base
+Hats.addon.hatstands.gui.stand=Base
