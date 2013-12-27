@@ -16,9 +16,9 @@ hats.trade.waitingForReady=Waiting für beide Seiten den Handel bereit.
 hats.trade.cancelTrade=Cancel Handel
 hats.Command=-Hüte-Befehle
 hats.Command.Help=Type /hats für vollständige Liste.
-hats.Command.Help.Send=/Hats Send < Spieler >< Hut Name > senden einen Hut an Spieler.
-hats.Command.Help.Set=/Hats Set < Spieler >< Hut Name > einen Spieler-Hut.
-hats.Command.Help.Unlock=/Hats entsperren < Spieler >< Hut Name > entsperrt einen Hut für einen Spieler.
+hats.Command.Help.Send=/hats send <Spieler> <Hut Name> senden einen Hut an Spieler.
+hats.Command.Help.Set=/hats Set <Spieler> <Hut Name> einen Spieler-Hut.
+hats.Command.Help.Unlock=/hats unlock <Spieler> <Hut Name> entsperrt einen Hut für einen Spieler.
 hats.command.notOnline=%s ist nicht online!
 hats.command.hatDoesNotExist=%s existiert nicht!
 hats.command.serverDisabledHatSending=Server wurde deaktiviert, sendende Hüte!
@@ -100,7 +100,7 @@ hats.gui.helpInfo4.desc3=A "Kopf" Modell wird in der Mitte platziert.
 hats.gui.helpInfo4.desc4=of der Holz-Block. Seine Größe ist
 hats.gui.helpInfo4.desc5=8 X 8 X 8. Machen Sie Ihren Hut drauf!
  
-hats.gui.helpInfo5.desc1=Did du weißt du kannst eigene Kategorien?
+hats.gui.helpInfo5.desc1=Did du weißt du kannst machen eigene Kategorien?
 hats.gui.helpInfo5.desc2=Hit die Schaltfläche Kategorien (oder C auf der Tastatur)
 hats.gui.helpInfo5.desc3=and drücken Sie die Schaltfläche "Neu hinzufügen".
  
@@ -158,9 +158,9 @@ hats.gui.helpInfo18.desc1=The (C) im Namen der Hut
 hats.gui.helpInfo18.desc2=represents einen Hut als ein Dankeschön hinzugefügt
 hats.gui.helpInfo18.desc3=you für eine Spende in Richtung der mod!
  
-hats.gui.helpInfo19.desc1=Did Sie wissen können anpassen haben 
-hats.gui.helpInfo19.desc2=if-Mobs Hüte? Seine in der Registerkarte
-hats.gui.helpInfo19.desc3="Personalize"
+hats.gui.helpInfo19.desc1=Did Sie wissen können anpassen
+hats.gui.helpInfo19.desc2=if-Mobs haben Hüte? Seine in der
+hats.gui.helpInfo19.desc3="Personalize" Registerkarte
  
-hats.addon.hatstands.GUI.Base=Base
-hats.addon.hatstands.GUI.Stand=Base
+Hats.addon.hatstands.GUI.Base=Base
+Hats.addon.hatstands.GUI.Stand=Base
