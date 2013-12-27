@@ -80,57 +80,57 @@ hats.gui.removeFromFavorites=Rimuovi dai preferiti
 hats.gui.addToFavorites=Aggiungi ai preferiti.
 hats.gui.resetButtonsOnSide=Reimposta i bottoni ai lati dell'interfaccia grafica?
 
-hats.gui.helpInfo1.desc1=Shift click on the Hat
-hats.gui.helpInfo1.desc2=button for more options!
-hats.gui.helpInfo1.desc3=You can't shift click on
-hats.gui.helpInfo1.desc4=the hat you're wearing
-hats.gui.helpInfo1.desc5=however.
+hats.gui.helpInfo1.desc1=Shift click sul bottone del
+hats.gui.helpInfo1.desc2=cappello per altre opzioni!
+hats.gui.helpInfo1.desc3=Non puoi fare shift click sul
+hats.gui.helpInfo1.desc4=cappello che stai indossando
+hats.gui.helpInfo1.desc5=però.
 
-hats.gui.helpInfo2.desc1=If you're on a server that doesn't have
-hats.gui.helpInfo2.desc2=the mod, another player with the
-hats.gui.helpInfo2.desc3=mod won't be able to see your hat.
+hats.gui.helpInfo2.desc1=Se sei su un server che non possiede
+hats.gui.helpInfo2.desc2=questa mod, altri giocatori con questa
+hats.gui.helpInfo2.desc3=mod non saranno in grado di vedere il tuo cappello.
 
-hats.gui.helpInfo3.desc1=Did you know you can always get more hats?
-hats.gui.helpInfo3.desc2=Techne Online has a bunch of
-hats.gui.helpInfo3.desc3=community made hats that you
-hats.gui.helpInfo3.desc4=can download and install.
+hats.gui.helpInfo3.desc1=Lo sapevi che puoi sempre trovare nuovi cappelli?
+hats.gui.helpInfo3.desc2=Techne Online ha molti
+hats.gui.helpInfo3.desc3=cappelli creati dalla comunità che puoi
+hats.gui.helpInfo3.desc4=scaricare ed installare.
 
-hats.gui.helpInfo4.desc1=You can also make your own hat!
-hats.gui.helpInfo4.desc2=You need Techne and you make a hat with it.
-hats.gui.helpInfo4.desc3=A "head" model is placed in the middle
-hats.gui.helpInfo4.desc4=of the wood block. It's size is
-hats.gui.helpInfo4.desc5=8 x 8 x 8. Make your hat on it!
+hats.gui.helpInfo4.desc1=Puoi anche fare i tuoi cappelli personali!
+hats.gui.helpInfo4.desc2=Avrai bisogno di Techne e potrai farci un cappello.
+hats.gui.helpInfo4.desc3=Il modello della testa è piazzato in mezzo al
+hats.gui.helpInfo4.desc4=blocco di legno. La grandezza è di
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Costruiscici il tuo cappello!
 
-hats.gui.helpInfo5.desc1=Did you know you can make your own categories?
-hats.gui.helpInfo5.desc2=Hit the Categories button (or C, on your keyboard)
-hats.gui.helpInfo5.desc3=and hit the "Add New" button.
+hats.gui.helpInfo5.desc1=Lo sapevi che puoi fare le tue categorie personali?
+hats.gui.helpInfo5.desc2=Premi il bottone delle categorie (o C, sulla tu tastiera)
+hats.gui.helpInfo5.desc3=e premi il bottone "Aggiungi nuova".
 
-hats.gui.helpInfo6.desc1=Did you know that if your friend doesn't
-hats.gui.helpInfo6.desc2=have the hat you're wearing, you send the hat
-hats.gui.helpInfo6.desc3=to the server, and it gets sent to your friend.
-hats.gui.helpInfo6.desc4=(Only on servers with the mod)
+hats.gui.helpInfo6.desc1=Lo sapevi che se un tuo amico non
+hats.gui.helpInfo6.desc2=ha il cappello che stai indossando, invii il tuo cappello
+hats.gui.helpInfo6.desc3=al server, e viene inviato al tuo amico.
+hats.gui.helpInfo6.desc4=(Solo per i server con la mod)
 
-hats.gui.helpInfo7.desc1=Shift clicking the Random Hat button gives you
-hats.gui.helpInfo7.desc2=a random hat AND colour!
+hats.gui.helpInfo7.desc1=Shift click sul tasto per un cappello casuale ti darà
+hats.gui.helpInfo7.desc2=un cappello E un colore casuale!
 
-hats.gui.helpInfo8.desc1=Shift clicking the Random Colour button resets
-hats.gui.helpInfo8.desc2=all colours.
+hats.gui.helpInfo8.desc1=Shift click sul bottone del colore casuale reimposterà
+hats.gui.helpInfo8.desc2=tutti i colori.
 
-hats.gui.helpInfo9.desc1=You can hit TAB or T to quickly select
-hats.gui.helpInfo9.desc2=the search bar.
+hats.gui.helpInfo9.desc1=Puoi premere TAB o T per selezionare velocemente
+hats.gui.helpInfo9.desc2=la barra di ricerca.
 
-hats.gui.helpInfo10.desc1=Did you know that this mod was initially
-hats.gui.helpInfo10.desc2=made for a 96 hour modding marathon
-hats.gui.helpInfo10.desc3=called ModJam?
-hats.gui.helpInfo10.desc4=It won second place and was made and is
-hats.gui.helpInfo10.desc5=currently maintained by iChun.
+hats.gui.helpInfo10.desc1=Lo sapevi che questa mod è stata originariamente
+hats.gui.helpInfo10.desc2=fatta per una maratona di modding di 96 ore
+hats.gui.helpInfo10.desc3=chiamata ModJam?
+hats.gui.helpInfo10.desc4=Ha vinto il secondo posto ed è stata fatta e viene
+hats.gui.helpInfo10.desc5=attualmente mantenuta da iChun.
 
-hats.gui.helpInfo11.desc1=The player hats added by the mod are the
-hats.gui.helpInfo11.desc2=names of some people who made a significant
-hats.gui.helpInfo11.desc3=contribution to the mod, in terms
-hats.gui.helpInfo11.desc4=of development, testing, model contribution
-hats.gui.helpInfo11.desc5=and support.
-hats.gui.helpInfo11.desc6=Direwolf20 is just a bonus however.
+hats.gui.helpInfo11.desc1=I cappelli di giocatori aggiunti dalla mod sono i
+hats.gui.helpInfo11.desc2=nomi di alcune persone che hanno contribuito
+hats.gui.helpInfo11.desc3=significativamente alla mod, in termini
+hats.gui.helpInfo11.desc4=di sviluppo, prove, contributo per i modelli
+hats.gui.helpInfo11.desc5=e supporto.
+hats.gui.helpInfo11.desc6=Direwolf20 è solo un bonus però.
 
 hats.gui.helpInfo12.desc1=Shift Clicking on the Hats List will take
 hats.gui.helpInfo12.desc2=you out of a category and back to all
