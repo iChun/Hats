@@ -2,45 +2,33 @@ package hats.client.render.helper;
 
 import hats.api.RenderOnEntityHelper;
 import hats.common.Hats;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.monster.EntityGiantZombie;
 
-public class HelperSpider extends RenderOnEntityHelper {
+public class HelperGiantZombie extends RenderOnEntityHelper {
 
 	@Override
 	public Class helperForClass() 
 	{
-		return EntitySpider.class;
+		return EntityGiantZombie.class;
 	}
 
 	@Override
 	public boolean canWearHat(EntityLivingBase living)
 	{
-		return Hats.hatSpider == 1;
+		return Hats.hatZombie == 1;
 	}
 
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)
 	{
-		return 9.25F/16F;
+		return ent.isSneaking() ? ent == Minecraft.getMinecraft().thePlayer ? 23F/16F : 21F/16F : 24F/16F ;
 	}
-
-	@Override
-	public float getRotatePointHori(EntityLivingBase ent)
-	{
-		return 3F/16F;
-	}
-
+	
 	@Override
 	public float getOffsetPointVert(EntityLivingBase ent)
 	{
-		return 3.8F/16F;
+		return 8F/16F;
 	}
-
-	@Override
-	public float getOffsetPointHori(EntityLivingBase ent)
-	{
-		return 4F/16F;
-	}
-
 }

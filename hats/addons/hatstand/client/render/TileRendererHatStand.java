@@ -156,7 +156,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 		
 		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
 		
-		HatRendererHelper.renderHat(stand.info, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.50000000000F, 0.0F, 0.0F, 0.0F, 0.0F, true, f);
+		HatRendererHelper.renderHat(stand.info, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.50000000000F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, true, true, f);
 		
         GL11.glPopMatrix();
 	}

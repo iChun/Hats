@@ -14,6 +14,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.NetClientHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityGiantZombie;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetServerHandler;
 import net.minecraft.network.packet.NetHandler;
@@ -73,6 +74,10 @@ implements ITinyPacketHandler
 						HatHandler.requestHat(hatName, player);
 					}
 	
+//					EntityGiantZombie zomb = new EntityGiantZombie(player.worldObj);
+//					zomb.setLocationAndAngles(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
+//					player.worldObj.spawnEntityInWorld(zomb);
+
 					break;
 				}
 				case 1:
