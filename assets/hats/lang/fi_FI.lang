@@ -80,88 +80,88 @@ hats.gui.removeFromFavorites=Poista suosikeista
 hats.gui.addToFavorites=Lisää suosikkeihin
 hats.gui.resetButtonsOnSide=Nollaa nappulat GUI:n sivussa?
 
-hats.gui.helpInfo1.desc1=Shift click on the Hat
-hats.gui.helpInfo1.desc2=button for more options!
-hats.gui.helpInfo1.desc3=You can't shift click on
-hats.gui.helpInfo1.desc4=the hat you're wearing
-hats.gui.helpInfo1.desc5=however.
+hats.gui.helpInfo1.desc1=Shift klikkaa hatun
+hats.gui.helpInfo1.desc2=nappia lisätietoa varten!
+hats.gui.helpInfo1.desc3=Et voi Shift klikata
+hats.gui.helpInfo1.desc4=hattua jota pidät
+hats.gui.helpInfo1.desc5=kuitenkaan.
 
-hats.gui.helpInfo2.desc1=If you're on a server that doesn't have
-hats.gui.helpInfo2.desc2=the mod, another player with the
-hats.gui.helpInfo2.desc3=mod won't be able to see your hat.
+hats.gui.helpInfo2.desc1=Jos olet serverillä jolla ei ole
+hats.gui.helpInfo2.desc2=modia, muut pelaajat joilla on
+hats.gui.helpInfo2.desc3=modi eivät näe hattuasi.
 
-hats.gui.helpInfo3.desc1=Did you know you can always get more hats?
-hats.gui.helpInfo3.desc2=Techne Online has a bunch of
-hats.gui.helpInfo3.desc3=community made hats that you
-hats.gui.helpInfo3.desc4=can download and install.
+hats.gui.helpInfo3.desc1=Tiesitkö, että voit aina saada lisää hattuja?
+hats.gui.helpInfo3.desc2=Techne Onlinessa on paljon
+hats.gui.helpInfo3.desc3=yhteisön tekemiä hattuja
+hats.gui.helpInfo3.desc4=joita voit ladata ja asentaa.
 
-hats.gui.helpInfo4.desc1=You can also make your own hat!
-hats.gui.helpInfo4.desc2=You need Techne and you make a hat with it.
-hats.gui.helpInfo4.desc3=A "head" model is placed in the middle
-hats.gui.helpInfo4.desc4=of the wood block. It's size is
-hats.gui.helpInfo4.desc5=8 x 8 x 8. Make your hat on it!
+hats.gui.helpInfo4.desc1=Voit myös tehdä oman hattusi!
+hats.gui.helpInfo4.desc2=Tarvitset Technen, jolla teet hatun.
+hats.gui.helpInfo4.desc3="pää" malli asetetaan keskelle
+hats.gui.helpInfo4.desc4=puupalikkaa. Sen koko on
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Tee sillä hattusi!
 
-hats.gui.helpInfo5.desc1=Did you know you can make your own categories?
-hats.gui.helpInfo5.desc2=Hit the Categories button (or C, on your keyboard)
-hats.gui.helpInfo5.desc3=and hit the "Add New" button.
+hats.gui.helpInfo5.desc1=Tiestikö, että voit tehdä omia kategorioita?
+hats.gui.helpInfo5.desc2=Paina Kategoriat nappia (tai C, näppäimistölläsi)
+hats.gui.helpInfo5.desc3=ja paina "Lisää Uusi" nappia.
 
-hats.gui.helpInfo6.desc1=Did you know that if your friend doesn't
-hats.gui.helpInfo6.desc2=have the hat you're wearing, you send the hat
-hats.gui.helpInfo6.desc3=to the server, and it gets sent to your friend.
-hats.gui.helpInfo6.desc4=(Only on servers with the mod)
+hats.gui.helpInfo6.desc1=Tiesitkö, että jos kaverillasi ei ole hattua
+hats.gui.helpInfo6.desc2=jota sinä pidät päässäsi, voit lähettää sen
+hats.gui.helpInfo6.desc3=serverille, ja se lähettyy kaverillesi.
+hats.gui.helpInfo6.desc4=(Vain servereillä joissa on modi)
 
-hats.gui.helpInfo7.desc1=Shift clicking the Random Hat button gives you
-hats.gui.helpInfo7.desc2=a random hat AND colour!
+hats.gui.helpInfo7.desc1=Kun shift-klikkaat Satunnainen Hattu näppäintä, saat
+hats.gui.helpInfo7.desc2=satunnaisen hatun JA värin!
 
-hats.gui.helpInfo8.desc1=Shift clicking the Random Colour button resets
-hats.gui.helpInfo8.desc2=all colours.
+hats.gui.helpInfo8.desc1=Satunnainen Väri napin shift-klikkaaminen nollaa
+hats.gui.helpInfo8.desc2=kaikki värit.
 
-hats.gui.helpInfo9.desc1=You can hit TAB or T to quickly select
-hats.gui.helpInfo9.desc2=the search bar.
+hats.gui.helpInfo9.desc1=Voit painaa TAB tai T valitaksesi nopeasti
+hats.gui.helpInfo9.desc2=hakupalkin.
 
-hats.gui.helpInfo10.desc1=Did you know that this mod was initially
-hats.gui.helpInfo10.desc2=made for a 96 hour modding marathon
-hats.gui.helpInfo10.desc3=called ModJam?
-hats.gui.helpInfo10.desc4=It won second place and was made and is
-hats.gui.helpInfo10.desc5=currently maintained by iChun.
+hats.gui.helpInfo10.desc1=Tiesitkö, että tämä modi oli alkujaan
+hats.gui.helpInfo10.desc2=tehty 96 tunnin modaus marathoniin
+hats.gui.helpInfo10.desc3=nimeltä ModJam?
+hats.gui.helpInfo10.desc4=Se voitti toisen sijan, sen tekijänä ja
+hats.gui.helpInfo10.desc5=nykyään ylläpitäjänä on iChun.
 
-hats.gui.helpInfo11.desc1=The player hats added by the mod are the
-hats.gui.helpInfo11.desc2=names of some people who made a significant
-hats.gui.helpInfo11.desc3=contribution to the mod, in terms
-hats.gui.helpInfo11.desc4=of development, testing, model contribution
-hats.gui.helpInfo11.desc5=and support.
-hats.gui.helpInfo11.desc6=Direwolf20 is just a bonus however.
+hats.gui.helpInfo11.desc1=pelaaja hatut jotka tulevat modissa on
+hats.gui.helpInfo11.desc2=ovat joidenkin nimiä jotka ovat tehneet merkittävästi
+hats.gui.helpInfo11.desc3=osanottoa modiin, kehitysvaiheen
+hats.gui.helpInfo11.desc4=suhteen, testausta, mallintamista
+hats.gui.helpInfo11.desc5=ja tukea.
+hats.gui.helpInfo11.desc6=Direwolf20 on kuitenkin vain bonus.
 
-hats.gui.helpInfo12.desc1=Shift Clicking on the Hats List will take
-hats.gui.helpInfo12.desc2=you out of a category and back to all
-hats.gui.helpInfo12.desc3=the hats.
+hats.gui.helpInfo12.desc1=Shift-Klikkaamalla Hattu Listaa vie sinut
+hats.gui.helpInfo12.desc2=pois kategoriasta ja takaisin
+hats.gui.helpInfo12.desc3=kaikkiin hattuihin.
 
-hats.gui.helpInfo13.desc1=You can right click the Search bar
-hats.gui.helpInfo13.desc2=to clear it.
+hats.gui.helpInfo13.desc1=Voit oikea-klikata hakupalkkia
+hats.gui.helpInfo13.desc2=tyhjentääksesi sen.
 
-hats.gui.helpInfo14.desc1=You can disable hats rather than deleting
-hats.gui.helpInfo14.desc2=them. Just hold shift when deleting.
+hats.gui.helpInfo14.desc1=Voit ottaa hatuja pois käytöstä poistamisen sijaan
+hats.gui.helpInfo14.desc2=Paina vain shiftiä kun olet poistamassa sitä.
 
-hats.gui.helpInfo15.desc1=Hitting Shift-F will favorite
-hats.gui.helpInfo15.desc2=or unfavorite the hat you
-hats.gui.helpInfo15.desc3=are currently wearing.
+hats.gui.helpInfo15.desc1=Painamalla Shift-F voit lisätä suosikkeihin
+hats.gui.helpInfo15.desc2=tai poistaa suosikeista sen hatun
+hats.gui.helpInfo15.desc3=ajoka sinulla on nyt päällä.
 
-hats.gui.helpInfo16.desc1=The hot key for "Personalize" is
+hats.gui.helpInfo16.desc1=Pikanäppäin "Mukauttamiselle" on
 hats.gui.helpInfo16.desc2="P"
-hats.gui.helpInfo16.desc3=in case you accidentally
-hats.gui.helpInfo16.desc4=disabled the button.
+hats.gui.helpInfo16.desc3=siltä varalta, että
+hats.gui.helpInfo16.desc4=otit napin pois käytöstä.
 
-hats.gui.helpInfo17.desc1=If you have a contributor hat,
-hats.gui.helpInfo17.desc2=you can use it in Hat
-hats.gui.helpInfo17.desc3=Hunting Mode.
+hats.gui.helpInfo17.desc1=Jos sinulla on osanottaja hattu,
+hats.gui.helpInfo17.desc2=voit käyttää sitä Hattua
+hats.gui.helpInfo17.desc3=Metsästys muodossa.
 
-hats.gui.helpInfo18.desc1=The (C) in the name of the hat
-hats.gui.helpInfo18.desc2=represents a hat added as a thank
-hats.gui.helpInfo18.desc3=you for a donation towards the mod!
+hats.gui.helpInfo18.desc1=(C) hatun nimessä
+hats.gui.helpInfo18.desc2=tarkoittaa, että hattu lisättiin kiitoksena
+hats.gui.helpInfo18.desc3=modiin lahjoituksesta!
 
-hats.gui.helpInfo19.desc1=Did you know you can customize
-hats.gui.helpInfo19.desc2=if mobs have hats? Its in the
-hats.gui.helpInfo19.desc3="Personalize" tab
+hats.gui.helpInfo19.desc1=Tiesitkö, että voit mukauttaa
+hats.gui.helpInfo19.desc2=jos mobilla on hattu? Se on
+hats.gui.helpInfo19.desc3="Mukauta" välilehdessä
 
-hats.addon.hatstands.gui.base=Base
-hats.addon.hatstands.gui.stand=Stand
+hats.addon.hatstands.gui.base=Tuki
+hats.addon.hatstands.gui.stand=Jalusta
