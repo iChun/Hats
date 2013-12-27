@@ -163,5 +163,5 @@ hats.gui.helpInfo19.desc1=Did sen-ebilmek gelenek
 hats.gui.helpInfo19.desc2=if çetelerin şapkalar var? Onun içinde
 hats.gui.helpInfo19.desc3="Personalize" sekmesi
  
-Hats.addon.hatstands.gui.Base=Baz
-Hats.addon.hatstands.gui.stand=Direnmek
+hats.addon.hatstands.gui.Base=Baz
+hats.addon.hatstands.gui.stand=Direnmek
