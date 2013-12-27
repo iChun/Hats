@@ -1,0 +1,167 @@
+hats.firstJoin.hatHunting=[Hats] Serveri on Hatun Metsästys muodossa! Tapa mob jolla on hattu avataksesi sen!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Serveri on Hattumoding Kuningas muodossa! Tapa kuningas ja nouda sen oikeus pitää hattuja!
+hats.kingOfTheHat.update.playerJoin=[Hats] Iloitkaa! %s on nyt uusi Kuningas!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s kuoli! %2$s on nyt uusi Kuningas!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s on surmattu! %2$s on uusi Kuningas!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s lähti serveriltä! %2$s on nyt uusi Kuningas!
+hats.trade.tradeWith=Vaihdetaan %s:n kanssa.
+hats.trade.yourHats=Sinun hattusi
+hats.trade.yourInventory=Sinun tavaravalikko
+hats.trade.yourOfferings=Sinun tarjouksesi:
+hats.trade.theirOfferings=%s:n tarjoukset:
+hats.trade.waitingForOffer=Odotetaan, että joku tekee tarjouksen.
+hats.trade.tradeNotReady=Ei valmiina vaihtamaan.
+hats.trade.tradeReady=Valmiina vaihtamaan.
+hats.trade.makeTrade=Tee Vaihto
+hats.trade.waitingForReady=Odotetaan, että molemmat osapuolet ovat valmiita.
+hats.trade.cancelTrade=Peruuta vaihto
+hats.command= HAts komennot
+hats.command.help=kirjoita /hats täyttä listaa varten.
+hats.command.help.send=/hats send <player> <hat name>  Lähetä hattu pelaajalle.
+hats.command.help.set=/hats set <player> <hat name>   Aseta pelaajan hattu.
+hats.command.help.unlock=/hats unlock <player> <hat name>   Avaa hattu pelaajalle.
+hats.command.notOnline=%s ei ole paikalla!
+hats.command.hatDoesNotExist=%s:aa ei ole olemassa!
+hats.command.serverDisabledHatSending=Serveriltä on otettu hattujen lähettäminen pois käytöstä!
+hats.command.sendToPlayer=Lähetetään %1$s %2$s:lle
+hats.command.setPlayerHat=Asetetaan %1$s %2$s:lle
+hats.command.playerIsInCreative=%s on luovalla!
+hats.command.unlockHatForPlayer=Avataan %1$s %2$s:lle
+hats.command.adminNotify.unlockHatForPlayer=%1$s avasi %2$s %3$s:lle
+hats.command.serverIsNotOnHatHuntingMode=Serveri ei ole Hatun Metsästys muodossa!
+hats.serverOnCommandGiverMode=Serveri on asettanut hatut Komento Antaja muodolle. Et voi antaa komentoja!
+hats.hatUnlocked=Hattu Avattu!
+hats.gui.search=Etsi
+hats.gui.allHats=Kaikki Hatut
+hats.gui.addNew=Lisää Uusi
+hats.gui.firstPerson=Ensimmäinen Persoona
+hats.gui.showHats=Näytä Hatut
+hats.gui.contributors=Avustajat
+hats.gui.category=Kategoria
+hats.gui.categories=Kategoriat
+hats.gui.colorizer=Värittäjä
+hats.gui.hatsList=Hattulista
+hats.gui.resetSide=Nollaa puoli?
+hats.gui.randomobs=SatunnaisMobit
+hats.gui.personalize=Mukauta
+hats.gui.viewing=Katselu
+hats.gui.discardChanges=Hylkää muutokset?
+hats.gui.removeHat=Poista Hattu
+hats.gui.randomHat=Satunnainen Hattu
+hats.gui.randomCategory=Satunnainen Kategoria
+hats.gui.randomColor=Satunnainen Väri
+hats.gui.resetColor=Nollaa Väri
+hats.gui.reloadAllHats=Lataa kaikki hatut uudelleen?
+hats.gui.discardAllChanges=Tämä hylkää muutokset.
+hats.gui.favorites=Suosikit
+hats.gui.invalidName=Virheellinen nimi!
+hats.gui.addCategory=Lisää Kategoria
+hats.gui.addToCategory=Lisää Kategoriaan
+hats.gui.removeFromCategory=Poista Kategoriasta
+hats.gui.areYouSure=Oletko Varma?
+hats.gui.clickConfirm=Klikkaa uudelleen varmistaaksesi
+hats.gui.deleteCategory=Poista Kategoria
+hats.gui.deleteCategory.desc1=Tämä poistaa kaikki hatut
+hats.gui.deleteCategory.desc2=tästä kategoriasta ja lataa
+hats.gui.deleteCategory.desc3=GUI:n uudelleen.
+hats.gui.doubleClickConfirm=Tuplaklikkaa varmistaaksesi
+hats.gui.disableHat=Poista hattu käytöstä?
+hats.gui.disableHat.desc1=Tämä ottaan hatun pois käytöstä
+hats.gui.disableHat.desc2=kaikista kategorioista ja lataa
+hats.gui.disableHat.desc3=GUI:n uuelleen. Tämä ei
+hats.gui.disableHat.desc4=poista tiedostoa.
+hats.gui.deleteHat=Poista hattu?
+hats.gui.deleteHat.desc1=Tämä poistaa hatun
+hats.gui.deleteHat.desc2=kaikista kategorioista ja lataa
+hats.gui.deleteHat.desc3=GUI:n uudelleen.
+hats.gui.renameCategory=Nimeä kategoria uudelleen?
+hats.gui.renameCategory.desc1=Tämä lataa GUI:n uudelleen!
+hats.gui.removeFromFavorites=Poista suosikeista
+hats.gui.addToFavorites=Lisää suosikkeihin
+hats.gui.resetButtonsOnSide=Nollaa nappulat GUI:n sivussa?
+
+hats.gui.helpInfo1.desc1=Shift click on the Hat
+hats.gui.helpInfo1.desc2=button for more options!
+hats.gui.helpInfo1.desc3=You can't shift click on
+hats.gui.helpInfo1.desc4=the hat you're wearing
+hats.gui.helpInfo1.desc5=however.
+
+hats.gui.helpInfo2.desc1=If you're on a server that doesn't have
+hats.gui.helpInfo2.desc2=the mod, another player with the
+hats.gui.helpInfo2.desc3=mod won't be able to see your hat.
+
+hats.gui.helpInfo3.desc1=Did you know you can always get more hats?
+hats.gui.helpInfo3.desc2=Techne Online has a bunch of
+hats.gui.helpInfo3.desc3=community made hats that you
+hats.gui.helpInfo3.desc4=can download and install.
+
+hats.gui.helpInfo4.desc1=You can also make your own hat!
+hats.gui.helpInfo4.desc2=You need Techne and you make a hat with it.
+hats.gui.helpInfo4.desc3=A "head" model is placed in the middle
+hats.gui.helpInfo4.desc4=of the wood block. It's size is
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Make your hat on it!
+
+hats.gui.helpInfo5.desc1=Did you know you can make your own categories?
+hats.gui.helpInfo5.desc2=Hit the Categories button (or C, on your keyboard)
+hats.gui.helpInfo5.desc3=and hit the "Add New" button.
+
+hats.gui.helpInfo6.desc1=Did you know that if your friend doesn't
+hats.gui.helpInfo6.desc2=have the hat you're wearing, you send the hat
+hats.gui.helpInfo6.desc3=to the server, and it gets sent to your friend.
+hats.gui.helpInfo6.desc4=(Only on servers with the mod)
+
+hats.gui.helpInfo7.desc1=Shift clicking the Random Hat button gives you
+hats.gui.helpInfo7.desc2=a random hat AND colour!
+
+hats.gui.helpInfo8.desc1=Shift clicking the Random Colour button resets
+hats.gui.helpInfo8.desc2=all colours.
+
+hats.gui.helpInfo9.desc1=You can hit TAB or T to quickly select
+hats.gui.helpInfo9.desc2=the search bar.
+
+hats.gui.helpInfo10.desc1=Did you know that this mod was initially
+hats.gui.helpInfo10.desc2=made for a 96 hour modding marathon
+hats.gui.helpInfo10.desc3=called ModJam?
+hats.gui.helpInfo10.desc4=It won second place and was made and is
+hats.gui.helpInfo10.desc5=currently maintained by iChun.
+
+hats.gui.helpInfo11.desc1=The player hats added by the mod are the
+hats.gui.helpInfo11.desc2=names of some people who made a significant
+hats.gui.helpInfo11.desc3=contribution to the mod, in terms
+hats.gui.helpInfo11.desc4=of development, testing, model contribution
+hats.gui.helpInfo11.desc5=and support.
+hats.gui.helpInfo11.desc6=Direwolf20 is just a bonus however.
+
+hats.gui.helpInfo12.desc1=Shift Clicking on the Hats List will take
+hats.gui.helpInfo12.desc2=you out of a category and back to all
+hats.gui.helpInfo12.desc3=the hats.
+
+hats.gui.helpInfo13.desc1=You can right click the Search bar
+hats.gui.helpInfo13.desc2=to clear it.
+
+hats.gui.helpInfo14.desc1=You can disable hats rather than deleting
+hats.gui.helpInfo14.desc2=them. Just hold shift when deleting.
+
+hats.gui.helpInfo15.desc1=Hitting Shift-F will favorite
+hats.gui.helpInfo15.desc2=or unfavorite the hat you
+hats.gui.helpInfo15.desc3=are currently wearing.
+
+hats.gui.helpInfo16.desc1=The hot key for "Personalize" is
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=in case you accidentally
+hats.gui.helpInfo16.desc4=disabled the button.
+
+hats.gui.helpInfo17.desc1=If you have a contributor hat,
+hats.gui.helpInfo17.desc2=you can use it in Hat
+hats.gui.helpInfo17.desc3=Hunting Mode.
+
+hats.gui.helpInfo18.desc1=The (C) in the name of the hat
+hats.gui.helpInfo18.desc2=represents a hat added as a thank
+hats.gui.helpInfo18.desc3=you for a donation towards the mod!
+
+hats.gui.helpInfo19.desc1=Did you know you can customize
+hats.gui.helpInfo19.desc2=if mobs have hats? Its in the
+hats.gui.helpInfo19.desc3="Personalize" tab
+
+hats.addon.hatstands.gui.base=Base
+hats.addon.hatstands.gui.stand=Stand
