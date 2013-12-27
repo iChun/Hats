@@ -1,5 +1,6 @@
 hats.firstJoin.hatHunting[Hats] Servidor es en modo de gorra-cacería! Matar un mob con un gorra para desbloquearlo.
 hats.firstJoin.kingOfTheHat.hasKing=[Hats] Servidor es en modo de Rey del Gorra! Matar el rey y reclamar su derecho para la gorra!
+hats.kingOfTheHat.update.playerJoin=[Hats] Disfrute! %s es el nuevo rey!
 hats.kingOfTheHat.update.playerDied=[Hats] %1$s ha murió! %2$s es el nuevo rey!
 hats.kingOfTheHat.update.playerLeft=[Hats] %1$s ha dejado el servidor! %2$s es el nuevo rey!
 hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s ha sido asesinado! %2$s es el nuevo rey!
