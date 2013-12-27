@@ -110,6 +110,8 @@ public class Hats
 	public static int hatSlime = 1;
 	public static int hatWolf = 1;
 	public static int hatOcelot = 1;
+	public static int hatHorse = 1;
+	public static int hatWither = 1;
 	
 	public static HatInfo favouriteHatInfo = new HatInfo();
 	
@@ -123,6 +125,7 @@ public class Hats
 	
 	@SidedProxy(clientSide = "hats.client.core.ClientProxy", serverSide = "hats.common.core.CommonProxy")
 	public static CommonProxy proxy;
+
 	
 	public static void handleConfig()
 	{
@@ -188,6 +191,8 @@ public class Hats
 		hatSlime = addCommentAndReturnInt(config, "randoMobOptions", "hatSlime", "", hatSlime);
 		hatWolf = addCommentAndReturnInt(config, "randoMobOptions", "hatWolf", "", hatWolf);
 		hatOcelot = addCommentAndReturnInt(config, "randoMobOptions", "hatOcelot", "", hatOcelot);
+		hatHorse = addCommentAndReturnInt(config, "randoMobOptions", "hatHorse", "", hatHorse);
+		hatWither = addCommentAndReturnInt(config, "randoMobOptions", "hatWither", "", hatWither);
 		
 		config.save();
 		

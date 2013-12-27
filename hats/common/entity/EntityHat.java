@@ -110,17 +110,10 @@ public class EntityHat extends Entity
 		{
 			EntityPlayer player = (EntityPlayer)parent;
 			
-			if(morph.api.Api.hasMorph(player.username, true) && morph.api.Api.morphProgress(player.username, true) < 1.0F)
+			EntityLivingBase morphEnt = morph.api.Api.getMorphEntity(player.username, true);
+			if(morphEnt != null)
 			{
-				render = false;
-			}
-			else
-			{
-				EntityLivingBase morphEnt = morph.api.Api.getMorphEntity(player.username, true);
-				if(morphEnt != null)
-				{
-					renderingParent = morphEnt;
-				}
+				renderingParent = morphEnt;
 			}
 		}
 		

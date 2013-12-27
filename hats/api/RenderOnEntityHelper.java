@@ -102,8 +102,26 @@ public abstract class RenderOnEntityHelper
 		return 0.0F;
 	}
 	
+	public float getOffsetPointSide(EntityLivingBase ent)
+	{
+		return 0.0F;
+	}
+
 	public float getHatScale(EntityLivingBase ent)
 	{
 		return 1.0F;
+	}
+	
+	public int currentPass;
+	
+	/**
+	 * Returns how many passes are needed for rendering the hat.
+	 * For use of mobs with multiple heads.
+	 * currentPass var will be set from 0 to (passesNeeded() - 1) before rendering
+	 * @return
+	 */
+	public int passesNeeded()
+	{
+		return 1;
 	}
 }

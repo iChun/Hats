@@ -1,5 +1,6 @@
 hats.firstJoin.hatHunting=[Hats] Server is on Hat Hunting Mode! Kill a mob with a hat to unlock it!
 hats.firstJoin.kingOfTheHat.hasKing=[Hats] Server is on King of the Hat Mode! Kill the king and claim his right to wear a hat!
+hats.kingOfTheHat.update.playerJoin=[Hats] Rejoice! %s is now the new King!
 hats.kingOfTheHat.update.playerDied=[Hats] %1$s died! %2$s is now the new King!
 hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s has been slain! %2$s is now the new King!
 hats.kingOfTheHat.update.playerLeft=[Hats] %1$s left the server! %2$s is now the new King!
@@ -163,4 +164,4 @@ hats.gui.helpInfo19.desc2=if mobs have hats? Its in the
 hats.gui.helpInfo19.desc3="Personalize" tab
 
 hats.addon.hatstands.gui.base=Base
-hats.addon.hatstands.gui.stand=Base
+hats.addon.hatstands.gui.stand=Stand

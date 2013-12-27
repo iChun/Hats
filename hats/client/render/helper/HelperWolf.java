@@ -4,6 +4,8 @@ import hats.api.RenderOnEntityHelper;
 import hats.common.Hats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityWolf;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class HelperWolf extends RenderOnEntityHelper {
 
@@ -19,6 +21,7 @@ public class HelperWolf extends RenderOnEntityHelper {
 		return Hats.hatWolf == 1;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public float getRotationRoll(EntityLivingBase living)
 	{
