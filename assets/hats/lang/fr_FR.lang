@@ -1,0 +1,167 @@
+hats.firstJoin.hatHunting=[Hats] serveur est sur le Mode de chasse chapeau ! Tuer un mob avec un chapeau pour le débloquer !
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] serveur est le roi de la Mode du chapeau ! Tuer le roi et revendiquer son droit de porter un chapeau !
+hats.kingOfTheHat.update.playerJoin=[Hats] Réjouissez-vous! %s est maintenant le nouveau roi!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$ s est mort ! %2$ s est maintenant le nouveau roi !
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$ s a été tué ! %2$ s est maintenant le nouveau roi !
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$ s a laissé le serveur ! %2$ s est maintenant le nouveau roi !
+hats.trade.tradeWith=Trading avec %s
+hats.trade.yourHats=Your chapeaux
+hats.trade.yourInventory=Your inventaire
+hats.trade.yourOfferings=Your offres:
+hats.trade.theirOfferings=%s's offres:
+hats.trade.waitingForOffer=Waiting de quelqu'un pour faire une offre.
+hats.trade.tradeNotReady=Not prêt à trader.
+hats.trade.tradeReady=Ready au commerce.
+hats.trade.makeTrade=Make commerce
+hats.trade.waitingForReady=Waiting pour les deux parties préparer le commerce.
+hats.trade.cancelTrade=Cancel le commerce
+hats.Command=commandes de chapeaux
+Hats.Command.Help=type /hats pour la liste complète.
+hats.Command.Help.Send=/hats envoyer <lecteur> <nom chapeau> Envoyer un chapeau au joueur.
+hats.Command.Help.Set=/hats <lecteur> <nom chapeau> jeu un chapeau de joueur.
+hats.Command.Help.Unlock=/hats <lecteur> <nom chapeau> débloque un chapeau pour un joueur.
+hats.command.notOnline=%s n'est pas en ligne !
+hats.command.hatDoesNotExist=%s n'existe pas !
+hats.command.serverDisabledHatSending=Server a désactivé l'envoi de chapeaux !
+hats.command.sendToPlayer=Sending %1$ s %2$ s
+hats.command.setPlayerHat=Setting %1$ s %2$ s
+hats.command.playerIsInCreative=%s est en creative !
+hats.command.unlockHatForPlayer=Unlocking %1$ s %2$ s
+hats.command.adminNotify.unlockHatForPlayer=%1$s débloqué %2$ s pour %3$ s
+hats.command.serverIsNotOnHatHuntingMode=Server n'est pas en Mode chasse chapeau !
+hats.serverOnCommandGiverMode=Server a réglé sur le Mode de commande donneur de chapeaux. Vous ne pouvez pas donner commandes !
+hats.hatUnlocked=Hat débloqué !
+hats.gui.Search=Search
+hats.gui.allHats=All
+hats.gui.addNew=Add nouveau
+hats.gui.firstPerson=First personne
+hats.gui.showHats=Show
+hats.gui.Contributors=Contributors
+hats.gui.Category=Category
+hats.gui.Categories=Categories
+hats.gui.Colorizer=Colorizer
+hats.gui.hatsList=Hats liste
+hats.gui.resetSide=Reset côté ?
+hats.gui.randomobs=RandoMobs
+hats.gui.Personalize=Personalize
+hats.gui.Viewing=viewing
+hats.gui.discardChanges=Discard changements ?
+hats.gui.removeHat=Remove chapeau
+hats.gui.randomHat=Random chapeau
+hats.gui.randomCategory=Random catégorie
+hats.gui.randomColor=Random couleur
+hats.gui.resetColor=Reset couleur
+hats.gui.reloadAllHats=Reload tous les chapeaux ?
+hats.gui.discardAllChanges=This ignore toutes les modifications.
+hats.gui.favorites=favorites
+hats.gui.invalidName=Invalid nom !
+hats.gui.addCategory=Add catégorie
+hats.gui.addToCategory=Add de catégorie
+hats.gui.removeFromCategory=Remove de catégorie
+hats.gui.areYouSure=Are êtes-vous sûr ?
+hats.gui.clickConfirm=Click pour confirmer
+hats.gui.deleteCategory=Delete
+hats.gui.deleteCategory.desc1=This supprimera tous les chapeaux
+hats.gui.deleteCategory.desc2=in cette catégorie et rechargement
+hats.gui.deleteCategory.desc3=the GUI.
+hats.gui.doubleClickConfirm=Double cliquez pour confirmer
+hats.gui.disableHat=Disable chapeau ?
+hats.gui.disableHat.desc1=This désactivera ce chapeau de
+hats.gui.disableHat.desc2=all catégories
+hats.gui.disableHat.desc3=the GUI. Cela ne sera pas
+hats.gui.disableHat.desc4=delete le fichier.
+hats.gui.deleteHat=Delete chapeau ?
+hats.gui.deleteHat.desc1=This supprimera ce chapeau de
+hats.gui.deleteHat.desc2=all catégories
+hats.gui.deleteHat.desc3=the GUI.
+hats.gui.renameCategory=Rename catégorie ?
+hats.gui.renameCategory.desc1=This rechargera le GUI !
+hats.gui.removeFromFavorites=Remove des favoris
+hats.gui.addToFavorites=Add à vos favoris
+hats.gui.resetButtonsOnSide=Reset boutons sur le côté du GUI ?
+ 
+hats.gui.helpInfo1.desc1=Shift cliquez sur le chapeau
+hats.gui.helpInfo1.desc2=button pour plus d'options !
+hats.gui.helpInfo1.desc3=You ne peut pas déplacer cliquez sur
+hats.gui.helpInfo1.desc4=the chapeau que vous portez
+hats.gui.helpInfo1.desc5=however.
+ 
+hats.gui.helpInfo2.desc1=If
+hats.gui.helpInfo2.desc2=the mod, un autre joueur avec le
+hats.gui.helpInfo2.desc3=mod ne sera pas en mesure de voir votre chapeau.
+ 
+hats.gui.helpInfo3.desc1=Did vous savez que vous pouvez obtenir toujours plus de chapeaux ?
+hats.gui.helpInfo3.desc2=Techne en ligne a un tas de
+hats.gui.helpInfo3.desc3=community fait chapeaux que vous
+hats.gui.helpInfo3.desc4=can télécharger et installer.
+ 
+hats.gui.helpInfo4.desc1=You pouvez également faire votre propre chapeau !
+hats.gui.helpInfo4.desc2=You besoin Techne et vous faire un chapeau avec elle.
+hats.gui.helpInfo4.desc3=A est placé au milieu
+hats.gui.helpInfo4.desc4=of le bloc de bois. Sa taille est
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Faire votre chapeau sur elle !
+ 
+hats.gui.helpInfo5.desc1=Did vous savez que vous pouvez faire vos propres catégories ?
+hats.gui.helpInfo5.desc2=Hit le bouton catégories (ou C sur votre clavier)
+hats.gui.helpInfo5.desc3=and cliquez sur le bouton « Nouveau ».
+ 
+hats.gui.helpInfo6.desc1=Did vous savez que si votre ami n'est pas
+hats.gui.helpInfo6.desc2=have le chapeau que vous portez, vous envoyez le chapeau
+hats.gui.helpInfo6.desc3=to le serveur et il est envoyé à votre ami.
+hats.gui.helpInfo6.desc4= (uniquement sur les serveurs avec le mod)
+ 
+hats.gui.helpInfo7.desc1=Shift cliquant sur le bouton aléatoire Hat vous donne
+hats.gui.helpInfo7.desc2=a chapeau aléatoire et couleur !
+ 
+hats.gui.helpInfo8.desc1=Shift cliquant sur le bouton de couleur aléatoire réinitialise
+hats.gui.helpInfo8.desc2=all couleurs.
+ 
+hats.gui.helpInfo9.desc1=You pouvez appuyer sur TAB ou T pour sélectionner rapidement
+hats.gui.helpInfo9.desc2=the barre de recherche.
+ 
+hats.gui.helpInfo10.desc1=Did que vous savez que ce mod a été initialement
+hats.gui.helpInfo10.desc2=made pour un marathon de modding de 96 heures
+hats.gui.helpInfo10.desc3=called ModJam ?
+hats.gui.helpInfo10.desc4=It a remporté la deuxième place et a été effectuée et est
+hats.gui.helpInfo10.desc5=currently maintenu par iChun.
+ 
+hats.gui.helpInfo11.desc1=The ajouté par le ministère de la défense est la
+hats.gui.helpInfo11.desc2=names de certaines personnes qui ont fait une importante
+hats.gui.helpInfo11.desc3=contribution pour le mod, en termes
+hats.gui.helpInfo11.desc4=of développement, tests, contribution de modèle
+hats.gui.helpInfo11.desc5=and soutien.
+hats.gui.helpInfo11.desc6=Direwolf20 est juste un bonus.
+ 
+hats.gui.helpInfo12.desc1=Shift en cliquant sur la liste des chapeaux aura
+hats.gui.helpInfo12.desc2=you d'une catégorie et retour à tous
+hats.gui.helpInfo12.desc3=the.
+ 
+hats.gui.helpInfo13.desc1=You pouvez clic droit sur la barre de recherche
+hats.gui.helpInfo13.desc2=to l'effacer.
+ 
+hats.gui.helpInfo14.desc1=You pouvez désactiver chapeaux plutôt que leur suppression
+hats.gui.helpInfo14.desc2=them. Juste maintenez Maj enfoncée lors de la suppression.
+ 
+hats.gui.helpInfo15.desc1=Hitting Maj-F sera préférée
+hats.gui.helpInfo15.desc2=or unfavorite le chapeau vous
+hats.gui.helpInfo15.desc3=are porter actuellement.
+ 
+hats.gui.helpInfo16.desc1=The touche d'accès rapide pour « Personnaliser » est
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=in cas vous accidentellement
+hats.gui.helpInfo16.desc4=disabled le bouton.
+ 
+hats.gui.helpInfo17.desc1=If vous avez un chapeau de contributeur,
+hats.gui.helpInfo17.desc2=you pouvez l'utiliser dans le chapeau
+hats.gui.helpInfo17.desc3=Hunting Mode.
+ 
+hats.gui.helpInfo18.desc1=The (C) au nom de la hat
+hats.gui.helpInfo18.desc2=represents un chapeau ajouté comme un remerciement
+hats.gui.helpInfo18.desc3=you pour un don pour le mod !
+ 
+hats.gui.helpInfo19.desc1=Did vous savez que vous pouvez personnaliser
+hats.gui.helpInfo19.desc2=if monstres ont des chapeaux ? Ses dans le onglet 
+hats.gui.helpInfo19.desc3="Personalize"
+ 
+hats.addon.hatstands.gui.base=Base
+hats.addon.hatstands.gui.stand=Stand

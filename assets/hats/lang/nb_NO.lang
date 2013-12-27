@@ -1,0 +1,167 @@
+hats.firstJoin.hatHunting=[Hats] Serveren er satt på hatte jakt modus! Drepe et monster med en hatt for å låse den opp!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Serveren er på Kongen av hattene modus! Drep kongen og krev hans/hennes rett på å ha hatten!
+hats.kingOfTheHat.update.playerJoin=[Hats] Gled dere! %s er nå den nye kongen!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$ døde! %2$ er nå den nye Kongen!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$ har blitt drept! %2$ er nå den nye Kongen!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$ forlatte serveren! %2$ er nå den nye Kongen!
+hats.trade.tradeWith=Bytter med %s
+hats.trade.yourHats=Dine hatter
+hats.trade.yourInventory=Din inventar
+hats.trade.yourOfferings=Du tilbyr:
+hats.trade.theirOfferings=%s vil bytte:
+hats.trade.waitingForOffer= Venter for noen til lage et tilbud.
+hats.trade.tradeNotReady=Ikke klar til å bytte.
+hats.trade.tradeReady=Klar til å bytte.
+hats.trade.makeTrade=Gjør handel
+hats.trade.waitingForReady=Venter for begge partiene for Klar til å bytte.
+hats.trade.cancelTrade=Avbryt ytte handel
+hats.command= Hatte kommandoer
+hats.command.help=type /hats for en full liste.
+hats.command.help.send=/hats send <spiller> <hatte navn>  Send hatt til spiller.
+hats.command.help.set=/hats sett <spiller> <hatte navn>   Sett en spillers hatt.
+hats.command.help.unlock=/hats lås opp <spiller> <hatte navn>   Lås opp hatt for spiller.
+hats.command.notOnline=%s er ikke online!
+hats.command.hatDoesNotExist=%s eksisterer ikke!
+hats.command.serverDisabledHatSending=Serveren har tatt av sending av hatter!
+hats.command.sendToPlayer=Sender %1$s til %2$s
+hats.command.setPlayerHat=Setter %1$s på %2$s
+hats.command.playerIsInCreative=%s er i Creative!
+hats.command.unlockHatForPlayer=Låser Opp %1$s for %2$s
+hats.command.adminNotify.unlockHatForPlayer=%1$s låst opp %2$s for %3$s
+hats.command.serverIsNotOnHatHuntingMode=Serveren er ikke i hatte jakt modus!
+hats.serverOnCommandGiverMode=Serveren har Hats sett på Kommand Giver Modus. Du kan ikke gi kommandoer!
+hats.hatUnlocked=Hat Låst Opp!
+hats.gui.search=Søk
+hats.gui.allHats=Alle Hatter
+hats.gui.addNew=Legg til ny
+hats.gui.firstPerson=Første person
+hats.gui.showHats=Vis hatter
+hats.gui.contributors=Medvirkende
+hats.gui.category=Kategori
+hats.gui.categories=kategorier
+hats.gui.colorizer=Farger
+hats.gui.hatsList=Hatte liste
+hats.gui.resetSide=Tilbakestill Side?
+hats.gui.randomobs=Tilfeldig Monster
+hats.gui.personalize=Personifiser
+hats.gui.viewing=Ser på
+hats.gui.discardChanges=Forkast endringer?
+hats.gui.removeHat=Fjern Hatt
+hats.gui.randomHat=Tilfeldig Hatt
+hats.gui.randomCategory=Tilfeldig Kategori
+hats.gui.randomColor=Tilfeldig Farge
+hats.gui.resetColor=Tilbakestill Farge
+hats.gui.reloadAllHats=Oppdater hatter?
+hats.gui.discardAllChanges=Dette vil forkaste alle endringer.
+hats.gui.favorites=Favoritter
+hats.gui.invalidName=Ugyldig navn!
+hats.gui.addCategory=Legg til Kategori
+hats.gui.addToCategory=Legg i kategori
+hats.gui.removeFromCategory=Fjern fra kategori
+hats.gui.areYouSure=er du sikker?
+hats.gui.clickConfirm=Klikk igjen for å bekrefte
+hats.gui.deleteCategory=Fjern kategori
+hats.gui.deleteCategory.desc1=Dette vil fjerne all hattene
+hats.gui.deleteCategory.desc2=i denne kategorien og oppdatere
+hats.gui.deleteCategory.desc3=vinduet.
+hats.gui.doubleClickConfirm=Dobbel klikk for å bekrefte
+hats.gui.disableHat=Deaktivere hatt?
+hats.gui.disableHat.desc1=Dette vil deaktivere denne hatten fra
+hats.gui.disableHat.desc2=alle kategorier og oppdatere
+hats.gui.disableHat.desc3=vinduet. Dette vil ikke
+hats.gui.disableHat.desc4=fjerne filen.
+hats.gui.deleteHat=Slette hatt?
+hats.gui.deleteHat.desc1=Dette vil slette denne hatten fra
+hats.gui.deleteHat.desc2=alle kategorier og oppdatere
+hats.gui.deleteHat.desc3=vinduet.
+hats.gui.renameCategory=Gi nytt navn på kategori?
+hats.gui.renameCategory.desc1=Dette vil oppdatere vinduet!
+hats.gui.removeFromFavorites=Fjern fra Favoritter
+hats.gui.addToFavorites=Legg til i Favoritter
+hats.gui.resetButtonsOnSide=Tilbakestill knapper på siden av vinduet?
+
+hats.gui.helpInfo1.desc1=Shift klikk på hatte
+hats.gui.helpInfo1.desc2=knappen for flere valg!
+hats.gui.helpInfo1.desc3=Du kan ikke shift klikke på
+hats.gui.helpInfo1.desc4=hatten du har på deg
+hats.gui.helpInfo1.desc5=uansett.
+
+hats.gui.helpInfo2.desc1=Hvis du er på en server som ikke har
+hats.gui.helpInfo2.desc2=modifikasjonen, andre spillere med
+hats.gui.helpInfo2.desc3=modifikasjonen vil ikke se din hatt.
+
+hats.gui.helpInfo3.desc1=Viste du at du kan alltid få flere hatter?
+hats.gui.helpInfo3.desc2=Techne Online har mange
+hats.gui.helpInfo3.desc3=hatter som du kan velge mellom som du
+hats.gui.helpInfo3.desc4=kan laste ned og installere.
+
+hats.gui.helpInfo4.desc1=Du kan også lage dine egne hatter!
+hats.gui.helpInfo4.desc2=Du trenger Techne og du lager hatten med den.
+hats.gui.helpInfo4.desc3=Et "hode" modell er plasert i midten
+hats.gui.helpInfo4.desc4=av en tre blokk. Størelsen er
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Lag hatten din oppå "hode"!
+
+hats.gui.helpInfo5.desc1=Visste du at du kan lage dine egne kategorier?
+hats.gui.helpInfo5.desc2=Trykk på katergori knappen (eller C, på tastaturet ditt)
+hats.gui.helpInfo5.desc3=og trykk på "Legg til" knappen.
+
+hats.gui.helpInfo6.desc1=Visste du at hvis vennen din ikke
+hats.gui.helpInfo6.desc2=har hatten du har, kan du sende hatten
+hats.gui.helpInfo6.desc3=til serveren, and blir sent til din venn.
+hats.gui.helpInfo6.desc4=(Bare med servere som har modifikasjonen)
+
+hats.gui.helpInfo7.desc1=Shift klikk på Tilfeldig Hatt knappen velger deg
+hats.gui.helpInfo7.desc2=en tilfeldig hatt OG farge!
+
+hats.gui.helpInfo8.desc1=Shift klikk på Tilfeldig farge knappen og tilbakestill
+hats.gui.helpInfo8.desc2=alle fargene.
+
+hats.gui.helpInfo9.desc1=Du kan trykke på TAB eller T for å kjapt velge
+hats.gui.helpInfo9.desc2=søkefeltet.
+
+hats.gui.helpInfo10.desc1=Visste du at denne modisikasjonen ble
+hats.gui.helpInfo10.desc2=lagd for en 96 timers modifikasjons maraton
+hats.gui.helpInfo10.desc3=som heter ModJam?
+hats.gui.helpInfo10.desc4=Den vant andre plassen og er for
+hats.gui.helpInfo10.desc5=tiden opprettholdt av iChun.
+
+hats.gui.helpInfo11.desc1=Spillerenes hatter er lagt til av modifikasjonen er
+hats.gui.helpInfo11.desc2=navnene til noen folk som har gjort en betydelig 
+hats.gui.helpInfo11.desc3=bidrag til modifikasjonen, på vilkår 
+hats.gui.helpInfo11.desc4=av utviklingen, testing, modell bidrag
+hats.gui.helpInfo11.desc5=og støtte.
+hats.gui.helpInfo11.desc6=Direwolf20 er bare en bonus.
+
+hats.gui.helpInfo12.desc1=Shift klikke på Hatte listen vil ta
+hats.gui.helpInfo12.desc2=deg ut av en kategori og tilbake til alle
+hats.gui.helpInfo12.desc3=hattene.
+
+hats.gui.helpInfo13.desc1=Du kan høyre klikke søkefeltet
+hats.gui.helpInfo13.desc2=for å fjerne all teksten.
+
+hats.gui.helpInfo14.desc1=Du kan deaktivere hatter heller enn å slette
+hats.gui.helpInfo14.desc2=dem. Bare hold shift når du sletter.
+
+hats.gui.helpInfo15.desc1=Trykke Shift-F vil favorisere
+hats.gui.helpInfo15.desc2=eller ufavorisere hatten du
+hats.gui.helpInfo15.desc3=har på deg.
+
+hats.gui.helpInfo16.desc1=Knappen for å "Personalisere" er
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=i det tilfelle du tilfeldigvis
+hats.gui.helpInfo16.desc4=deaktiverte knappen.
+
+hats.gui.helpInfo17.desc1=Hvis du har en Bidgragelses hatt,
+hats.gui.helpInfo17.desc2=kan di bruke hatten i Hatte
+hats.gui.helpInfo17.desc3=Jakt Modus.
+
+hats.gui.helpInfo18.desc1=(C)en i navnet på hattene
+hats.gui.helpInfo18.desc2=representerer en hatt som er lagt til som en takk
+hats.gui.helpInfo18.desc3= for donasjonen do ga til modifikasjonen!
+
+hats.gui.helpInfo19.desc1=Visste du at du kan tilpasse
+hats.gui.helpInfo19.desc2=hvis monsterene har hatter? Det står inni
+hats.gui.helpInfo19.desc3="Personalisere" vinduet
+
+hats.addon.hatstands.gui.base=Bunn
+hats.addon.hatstands.gui.stand=Stå
