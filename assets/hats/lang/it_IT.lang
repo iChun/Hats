@@ -132,36 +132,36 @@ hats.gui.helpInfo11.desc4=di sviluppo, prove, contributo per i modelli
 hats.gui.helpInfo11.desc5=e supporto.
 hats.gui.helpInfo11.desc6=Direwolf20 è solo un bonus però.
 
-hats.gui.helpInfo12.desc1=Shift Clicking on the Hats List will take
-hats.gui.helpInfo12.desc2=you out of a category and back to all
-hats.gui.helpInfo12.desc3=the hats.
+hats.gui.helpInfo12.desc1=Shift Click sulla lista dei cappelli ti farà 
+hats.gui.helpInfo12.desc2=uscire da una categoria e ti riporterà a tutti
+hats.gui.helpInfo12.desc3=i cappelli.
 
-hats.gui.helpInfo13.desc1=You can right click the Search bar
-hats.gui.helpInfo13.desc2=to clear it.
+hats.gui.helpInfo13.desc1=Puoi fare tasto destro sulla barra di ricerca
+hats.gui.helpInfo13.desc2=per ripulirla.
 
-hats.gui.helpInfo14.desc1=You can disable hats rather than deleting
-hats.gui.helpInfo14.desc2=them. Just hold shift when deleting.
+hats.gui.helpInfo14.desc1=Puoi disabilitare cappelli invece che eliminarli
+hats.gui.helpInfo14.desc2=Basta che tieni premuto shift mentre li cancelli.
 
-hats.gui.helpInfo15.desc1=Hitting Shift-F will favorite
-hats.gui.helpInfo15.desc2=or unfavorite the hat you
-hats.gui.helpInfo15.desc3=are currently wearing.
+hats.gui.helpInfo15.desc1=Premere Shift-F metterà o toglierà
+hats.gui.helpInfo15.desc2=dai preferiti il cappello che stai
+hats.gui.helpInfo15.desc3=attualmente indossando.
 
-hats.gui.helpInfo16.desc1=The hot key for "Personalize" is
+hats.gui.helpInfo16.desc1=Il tasto per "Personalizza" è
 hats.gui.helpInfo16.desc2="P"
-hats.gui.helpInfo16.desc3=in case you accidentally
-hats.gui.helpInfo16.desc4=disabled the button.
+hats.gui.helpInfo16.desc3=nel caso tu avessi accidentalmente
+hats.gui.helpInfo16.desc4=disabilitato il bottone.
 
-hats.gui.helpInfo17.desc1=If you have a contributor hat,
-hats.gui.helpInfo17.desc2=you can use it in Hat
-hats.gui.helpInfo17.desc3=Hunting Mode.
+hats.gui.helpInfo17.desc1=Se hai un cappello da contributore,
+hats.gui.helpInfo17.desc2=puoi usarlo nella modalità di
+hats.gui.helpInfo17.desc3="Caccia al cappello".
 
-hats.gui.helpInfo18.desc1=The (C) in the name of the hat
-hats.gui.helpInfo18.desc2=represents a hat added as a thank
-hats.gui.helpInfo18.desc3=you for a donation towards the mod!
+hats.gui.helpInfo18.desc1=La (C) nel nome del cappello
+hats.gui.helpInfo18.desc2=rappresenta un cappello aggiunto per ringraziare
+hats.gui.helpInfo18.desc3=una donazione per la mod!
 
-hats.gui.helpInfo19.desc1=Did you know you can customize
-hats.gui.helpInfo19.desc2=if mobs have hats? Its in the
-hats.gui.helpInfo19.desc3="Personalize" tab
+hats.gui.helpInfo19.desc1=Lo sapevi che puoi impostare il possesso
+hats.gui.helpInfo19.desc2=dei cappelli per i mob? Si trova nella
+hats.gui.helpInfo19.desc3=tab "Personalizza"
 
 hats.addon.hatstands.gui.base=Base
-hats.addon.hatstands.gui.stand=Stand
+hats.addon.hatstands.gui.stand=Supporto
