@@ -1,7 +1,10 @@
-hats.firstJoin.hatHunting[Hats] Servidor es en modo de gorra-cacería! Matar un mob con un gorra para desbloquearlo.
+hats.firstJoin.hatHunting=[Hats] Servidor es en modo de gorra-caceria! Matar un mob con un gorra para desbloquearlo.
 hats.firstJoin.kingOfTheHat.hasKing=[Hats] Servidor es en modo de Rey del Gorra! Matar el rey y reclamar su derecho para la gorra!
+hats.command.help=Escriba /hats para un lista completo.
+hats.command.help.send=/hats send <jugador> <nombre de gorra>  Para mandar un gorra a un jugado.
+hats.command.help.set=/hats set <jugador> <nombre d
 hats.kingOfTheHat.update.playerJoin=[Hats] Disfrute! %s es el nuevo rey!
-hats.kingOfTheHat.update.playerDied=[Hats] %1$s ha murió! %2$s es el nuevo rey!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s ha murio! %2$s es el nuevo rey!
 hats.kingOfTheHat.update.playerLeft=[Hats] %1$s ha dejado el servidor! %2$s es el nuevo rey!
 hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s ha sido asesinado! %2$s es el nuevo rey!
 hats.trade.tradeWith=Comercio con %s
@@ -10,16 +13,13 @@ hats.trade.yourInventory=Su inventario
 hats.trade.yourOfferings=Sus ofertas:
 hats.trade.theirOfferings=%s ofertas:
 hats.trade.waitingForOffer=Esperando a que alguien haga una oferta.
-hats.trade.tradeNotReady=No está listo para la comercio.
+hats.trade.tradeNotReady=No esta listo para la comercio.
 hats.trade.tradeReady=Listo para la comercio.
 hats.trade.makeTrade=Hacer comercio
 hats.trade.waitingForReady=Esperando por las dos partes para prepara el comercio.
 hats.trade.cancelTrade=Cancelar la comercio
-hats.command= Hats comandos
-hats.command.help=Escriba /hats para un lista completo.
-hats.command.help.send=/hats send <jugador> <hat name>  Para mandar un gorra a un jugado.
-hats.command.help.set=/hats set <jugador> <hat name>  Establezca gorra de un jugador.
-hats.command.help.unlock=/hats unlock <jugador> <hat name>  Desbloquea un gorra para un jugador.
+hats.command= Hats comandose gorra>  Establezca gorra de un jugador.
+hats.command.help.unlock=/hats unlock <jugador> <nombre de gorra>  Desbloquea un gorra para un jugador.
 hats.command.notOnline=%s no esta en línea!
 hats.command.hatDoesNotExist=%s no existe!
 hats.command.serverDisabledHatSending=Servidor ha desactivado enviando gorras!
@@ -28,23 +28,23 @@ hats.command.setPlayerHat=Setting %1$s en %2$s
 hats.command.playerIsInCreative=%s es en modo creativo!
 hats.command.unlockHatForPlayer=Desbloqueo %1$s para %2$s
 hats.command.adminNotify.unlockHatForPlayer=%1$s desbloqueado %2$s para %3$s
-hats.command.serverIsNotOnHatHuntingMode=Servidor no es en modo de gorra-cacería!
+hats.command.serverIsNotOnHatHuntingMode=Servidor no es en modo de gorra-caceria!
 hats.serverOnCommandGiverMode=El Servidor esta configurado al modo comando-dador. No puedes ejectar comandos.
 hats.hatUnlocked=Gorra desbloqueado!
-hats.gui.search=Búsqueda
+hats.gui.search=Busqueda
 hats.gui.allHats=Todos los gorras
 hats.gui.addNew=Anadir nuevo
 hats.gui.firstPerson=Primera Persona
 hats.gui.showHats=Mostrar gorras
 hats.gui.contributors=Contribuidores
-hats.gui.category=Categoría
-hats.gui.categories=Categorías
+hats.gui.category=Categoria
+hats.gui.categories=Categorias
 hats.gui.colorizer=Colorear
 hats.gui.hatsList=Listo de gorras
 hats.gui.resetSide=Resetear lado?
 hats.gui.randomobs=Gorras azar para mobs
 hats.gui.personalize=Personalizar
-hats.gui.viewing=Visualización
+hats.gui.viewing=Visualizacion
 hats.gui.discardChanges=Descartar cambios?
 hats.gui.removeHat=Quitar gorra
 hats.gui.randomHat=Gorra aleatoria
@@ -52,9 +52,9 @@ hats.gui.randomCategory=Categoria aleatoria
 hats.gui.randomColor=Color al azar
 hats.gui.resetColor=Resetear Color
 hats.gui.reloadAllHats=Recargar todos los gorras?
-hats.gui.discardAllChanges=Esto descartará todos los cambios.
+hats.gui.discardAllChanges=Esto descartara todos los cambios.
 hats.gui.favorites=Favoritos
-hats.gui.invalidName=Nombre inválido!
+hats.gui.invalidName=Nombre invalido!
 hats.gui.addCategory=Anadir Categoria
 hats.gui.addToCategory=Anadir a la categoria
 hats.gui.removeFromCategory=Quitar de la category
@@ -71,13 +71,13 @@ hats.gui.disableHat.desc2=todos los categorias y refrescar
 hats.gui.disableHat.desc3=la GUI. Esto no
 hats.gui.disableHat.desc4=borrara la archivo
 hats.gui.deleteHat=Borra gorra?
-hats.gui.deleteHat.desc1=Esto borrará este gorra de
+hats.gui.deleteHat.desc1=Esto borrara este gorra de
 hats.gui.deleteHat.desc2=todos los categorias y refrescar
 hats.gui.deleteHat.desc3=la GUI.
 hats.gui.renameCategory=Cambiar el nombre de la Categoria?
 hats.gui.renameCategory.desc1=Esto refresca la GUI!
 hats.gui.removeFromFavorites=Quitar de Favoritos
-hats.gui.addToFavorites=Añadir a Favoritos
+hats.gui.addToFavorites=Anadir a Favoritos
 hats.gui.resetButtonsOnSide=Botones de Resetear a un lado de la GUI?
 
 hats.gui.helpInfo1.desc1=Shift-clic en el boton de
@@ -101,11 +101,11 @@ hats.gui.helpInfo4.desc3=Un modelo de un "cabeza" se pone en el centro
 hats.gui.helpInfo4.desc4=del bloque de madera. El tamano es de
 hats.gui.helpInfo4.desc5=8 x 8 x 8. Hacer su gorra en el!
 
-hats.gui.helpInfo5.desc1=Sabía usted que puedes hacer tus propias categorias?
-hats.gui.helpInfo5.desc2=Pulsa el botón de Categorías (o C, en sus teclado)
+hats.gui.helpInfo5.desc1=Sabia usted que puedes hacer tus propias categorias?
+hats.gui.helpInfo5.desc2=Pulsa el boton de Categorias (o C, en sus teclado)
 hats.gui.helpInfo5.desc3=y pulsa el botón "Anadir nuevo".
 
-hats.gui.helpInfo6.desc1=Sabía usted que si su amigo no tiene
+hats.gui.helpInfo6.desc1=Sabia usted que si su amigo no tiene
 hats.gui.helpInfo6.desc2=un gorra que tenes puesto, lo puedes mandar
 hats.gui.helpInfo6.desc3=al servidor, y es enviado a su amigo.
 hats.gui.helpInfo6.desc4=(Solo con servidors con la modificación)
@@ -117,10 +117,10 @@ hats.gui.helpInfo8.desc1=Shift clic el buton "Color al azar" resetea
 hats.gui.helpInfo8.desc2=todos los colores.
 
 hats.gui.helpInfo9.desc1=Puedes pulsa TAB o T para seleccionar rápidamente
-hats.gui.helpInfo9.desc2=la barra de búsqueda.
+hats.gui.helpInfo9.desc2=la barra de busqueda.
 
-hats.gui.helpInfo10.desc1=Sabía usted que esta modificacion se hizo inicialmente you know that this mod was initially
-hats.gui.helpInfo10.desc2=para el modding maratón de 96 horas
+hats.gui.helpInfo10.desc1=Sabia usted que esta modificacion se hizo inicialmente you know that this mod was initially
+hats.gui.helpInfo10.desc2=para el modding maraton de 96 horas
 hats.gui.helpInfo10.desc3=llamado ModJam?
 hats.gui.helpInfo10.desc4=Gano el segundo lugar y fue hizo y I
 hats.gui.helpInfo10.desc5=actualmente es mantenido por iChun.
@@ -130,17 +130,17 @@ hats.gui.helpInfo11.desc2=lose nombres de personas que han hecho
 hats.gui.helpInfo11.desc3=contribucinoes significativas a la modificacion, en terminos
 hats.gui.helpInfo11.desc4=de desarrollo, las pruebas, la contribucion modelo
 hats.gui.helpInfo11.desc5=y soporte.
-hats.gui.helpInfo11.desc6=Direwolf20 es sólo un bono sin embargo.
+hats.gui.helpInfo11.desc6=Direwolf20 es solo un bono sin embargo.
 
 hats.gui.helpInfo12.desc1=Shift-Clic en la lista gorras te llevara
 hats.gui.helpInfo12.desc2=fuera de la categoria y de nuevo a todos
 hats.gui.helpInfo12.desc3=los gorras.
 
-hats.gui.helpInfo13.desc1=Puedes pulsa el botón derecho del raton 
+hats.gui.helpInfo13.desc1=Puedes pulsa el boton derecho del raton 
 hats.gui.helpInfo13.desc2=la barra de búsqueda para desactivarla.
 
 hats.gui.helpInfo14.desc1=Puedes desactivar gorras en lugar de You can disable hats rather than deleting
-hats.gui.helpInfo14.desc2=eliminarlos. Sólo tienes que pulsar Shift al eliminar.
+hats.gui.helpInfo14.desc2=eliminarlos. Solo tienes que pulsar Shift al eliminar.
 
 hats.gui.helpInfo15.desc1=Pulsando Shift-F sera anadir
 hats.gui.helpInfo15.desc2=quitar la gorra que tienes puesto
@@ -153,13 +153,13 @@ hats.gui.helpInfo16.desc4=el boton accidentalmente.
 
 hats.gui.helpInfo17.desc1=Si tienes un gorra de contribuidores,
 hats.gui.helpInfo17.desc2=usted puedes utilizarlo en modo 
-hats.gui.helpInfo17.desc3=de gorra-cacería.
+hats.gui.helpInfo17.desc3=de gorra-caceria.
 
 hats.gui.helpInfo18.desc1=La (C) en la nombre de un gorra
 hats.gui.helpInfo18.desc2=representa un gorro anadido commo un gracias
-hats.gui.helpInfo18.desc3=una donación para la modificacion!
+hats.gui.helpInfo18.desc3=una donacion para la modificacion!
 
-hats.gui.helpInfo19.desc1=Sabía usted que puedes personalizar
+hats.gui.helpInfo19.desc1=Sabia usted que puedes personalizar
 hats.gui.helpInfo19.desc2=si mobs tiene gorras? Es en la
 hats.gui.helpInfo19.desc3=etiqueta de "Personalizar".
 
