@@ -1,25 +1,8 @@
 package hats.client.core;
 
-import hats.client.gui.GuiHatSelection;
+import hats.client.gui.GuiTradeWindow;
 import hats.client.model.ModelHat;
 import hats.client.render.RenderHat;
-import hats.client.render.helper.HelperBlaze;
-import hats.client.render.helper.HelperChicken;
-import hats.client.render.helper.HelperCow;
-import hats.client.render.helper.HelperCreeper;
-import hats.client.render.helper.HelperEnderman;
-import hats.client.render.helper.HelperGhast;
-import hats.client.render.helper.HelperOcelot;
-import hats.client.render.helper.HelperPig;
-import hats.client.render.helper.HelperPlayer;
-import hats.client.render.helper.HelperSheep;
-import hats.client.render.helper.HelperSkeleton;
-import hats.client.render.helper.HelperSlime;
-import hats.client.render.helper.HelperSpider;
-import hats.client.render.helper.HelperSquid;
-import hats.client.render.helper.HelperVillager;
-import hats.client.render.helper.HelperWolf;
-import hats.client.render.helper.HelperZombie;
 import hats.common.core.CommonProxy;
 import hats.common.core.HatHandler;
 import hats.common.entity.EntityHat;
@@ -38,23 +21,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntitySkeleton;
-import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.passive.EntityChicken;
-import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityOcelot;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntitySheep;
-import net.minecraft.entity.passive.EntitySquid;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.entity.passive.EntityWolf;
-import net.minecraft.entity.player.EntityPlayer;
 
 import org.w3c.dom.Document;
 
@@ -106,7 +72,8 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void openHatsGui()
 	{
-		FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiHatSelection(Minecraft.getMinecraft().thePlayer));
+//		FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiHatSelection(Minecraft.getMinecraft().thePlayer));
+		FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiTradeWindow());
 	}
 
 	@Override

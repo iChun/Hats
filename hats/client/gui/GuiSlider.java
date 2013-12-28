@@ -26,6 +26,8 @@ public class GuiSlider extends GuiButton
     public double maxValue = 5.0D;
     
     public ISlider parent = null;
+    
+    public boolean drawString = true;
 
     public GuiSlider(int id, int xPos, int yPos, String displayStr, double minVal, double maxVal, double currentVal, ISlider par)
     {
@@ -49,6 +51,29 @@ public class GuiSlider extends GuiButton
     	String val = Integer.toString((int)Math.round(sliderValue * (maxValue - minValue) + minValue));
     	
     	displayString = dispString + val + suffix;
+    }
+    
+    public GuiSlider(int id, int xPos, int yPos, String displayStr, double minVal, double maxVal, double currentVal, ISlider par, String suf, boolean drawStr, int width)
+    {
+    	super(id, xPos, yPos, width, 20, displayStr);
+    	
+        minValue = minVal;
+        maxValue = maxVal;
+        sliderValue = (currentVal - minValue) / (maxValue - minValue);
+        dispString = displayStr;
+        parent = par;
+        
+        String val = Integer.toString((int)Math.round(sliderValue * (maxValue - minValue) + minValue));
+        
+    	suffix = suf;
+    	
+    	displayString = dispString + val + suffix;
+
+    	drawString = drawStr;
+    	if(!drawString)
+    	{
+    		displayString = "";
+    	}
     }
 
     /**
@@ -118,7 +143,11 @@ public class GuiSlider extends GuiButton
 
         String val = Integer.toString((int)Math.round(sliderValue * (maxValue - minValue) + minValue));
         
-        displayString = dispString + val + suffix;
+    	if(drawString)
+    	{
+            displayString = dispString + val + suffix;
+    	}
+
         parent.onChangeSliderValue(this);
     }
 
@@ -129,5 +158,10 @@ public class GuiSlider extends GuiButton
     public void mouseReleased(int par1, int par2)
     {
         this.dragging = false;
+    }
+    
+    public double getValue()
+    {
+        return sliderValue * (maxValue - minValue) + minValue;
     }
 }

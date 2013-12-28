@@ -25,7 +25,7 @@ public class HatRendererHelper
 {
 	public static void renderHat(HatInfoClient info, float alpha, float hatScale, float mobRenderScaleX, float mobRenderScaleY, float mobRenderScaleZ, float renderYawOffset, float rotationYaw, float rotationPitch, float rotationRoll, float rotatePointVert, float rotatePointHori, float rotatePointSide, float offsetVert, float offsetHori, float offsetSide, boolean isPlayer, boolean bindTexture, float renderTick)
 	{
-		if(info == null)
+		if(info == null)//hat names are lower case
 		{
 			return;
 		}
@@ -93,7 +93,6 @@ public class HatRendererHelper
 		            {
 		            	ClientProxy.bufferedImageID.put(image, TextureUtil.uploadTextureImage(TextureUtil.glGenTextures(), image));
 		            }
-	
 		            GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.bufferedImageID.get(image));
 		        }
             }

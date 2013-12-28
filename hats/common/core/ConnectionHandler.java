@@ -44,6 +44,7 @@ public class ConnectionHandler
 	
 	public void onClientConnected()
 	{
+		Hats.proxy.tickHandlerClient.isActive = true;
 		SessionState.serverHasMod = false;
 		
 		HatHandler.repopulateHatsList();

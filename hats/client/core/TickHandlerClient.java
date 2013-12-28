@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -138,6 +139,8 @@ public class TickHandlerClient
 		
 		if(clock != world.getWorldTime() || !world.getGameRules().getGameRuleBooleanValue("doDaylightCycle"))
 		{
+//			ScaledResolution reso = new ScaledResolution(mc.gameSettings, mc.displayWidth, mc.displayHeight);
+//			System.out.println(reso.getScaledHeight());
 			clock = world.getWorldTime();
 			if(requestCooldown > 0)
 			{
