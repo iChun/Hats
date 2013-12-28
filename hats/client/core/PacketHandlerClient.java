@@ -3,6 +3,7 @@ package hats.client.core;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
+import hats.common.core.SessionState;
 import hats.common.entity.EntityHat;
 
 import java.io.ByteArrayInputStream;
@@ -33,13 +34,16 @@ public class PacketHandlerClient
 			{
 				case 0:
 				{
-					Hats.proxy.tickHandlerClient.serverHasMod = true;
-					Hats.proxy.tickHandlerClient.serverHatMode = stream.readByte();
-					boolean hasVisited = !stream.readBoolean();
-					Hats.proxy.tickHandlerClient.showJoinMessage = Hats.proxy.tickHandlerClient.serverHatMode == 4 && hasVisited;
+					SessionState.serverHasMod = true;
+					SessionState.serverHatMode = (int)stream.readByte();
+					SessionState.hasVisited = stream.readBoolean();
+					SessionState.serverHat = stream.readUTF();
+					SessionState.currentKing = stream.readUTF();
+					
+					SessionState.showJoinMessage = SessionState.serverHatMode >= 4 && !SessionState.hasVisited;
 					
 					String availHats = stream.readUTF(); //ignored on Free Mode
-					if(Hats.proxy.tickHandlerClient.serverHatMode == 4)
+					if(SessionState.serverHatMode >= 4)
 					{
 						HatHandler.populateHatsList(availHats);
 					}
@@ -98,6 +102,14 @@ public class PacketHandlerClient
 						
 						idd = stream.readInt();
 					}
+					break;
+				}
+				case 4:
+				{
+					SessionState.currentKing = stream.readUTF();
+					
+					HatHandler.populateHatsList(stream.readUTF());
+					
 					break;
 				}
 			}

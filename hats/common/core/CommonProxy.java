@@ -227,6 +227,13 @@ public class CommonProxy
     			saveData.setInteger(e.getKey() + "_colourB", hat.colourB);
     		}
     		
+    		for(Map.Entry<String, TimeActiveInfo> e : tickHandlerServer.playerActivity.entrySet())
+    		{
+    			TimeActiveInfo info = e.getValue();
+    			saveData.setInteger(e.getKey() + "_activityLevels", info.levels);
+    			saveData.setInteger(e.getKey() + "_activityTimeleft", info.timeLeft);
+    		}
+    		
             try
             {
             	if(world.getChunkSaveLocation().exists())

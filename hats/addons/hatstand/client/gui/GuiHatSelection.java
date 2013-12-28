@@ -10,6 +10,7 @@ import hats.client.gui.GuiSlider;
 import hats.client.gui.ISlider;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
+import hats.common.core.SessionState;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -115,7 +116,7 @@ public class GuiHatSelection extends GuiScreen
 	public GuiHatSelection(TileEntityHatStand hatStand)
 	{
 		
-		if(Hats.proxy.tickHandlerClient.serverHatMode == 4)
+		if(SessionState.serverHatMode == 4)
 		{
 			if(Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
 			{

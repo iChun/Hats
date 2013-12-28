@@ -667,7 +667,7 @@ public class HatHandler
 		return new HatInfo(hatNameList.get((new Random()).nextInt(hatNameList.size())), 255, 255, 255);
 	}
 	
-	public static String[] getAllHatsAsArray()
+	public static ArrayList<String> getAllHatsAsList()
 	{
 		ArrayList<String> hatNameList = new ArrayList<String>();
 		
@@ -679,6 +679,13 @@ public class HatHandler
 			hatNameList.add(name);
 		}
 		Collections.sort(hatNameList);
+		
+		return hatNameList;
+	}
+	
+	public static String[] getAllHatsAsArray()
+	{
+		ArrayList<String> hatNameList = getAllHatsAsList();
 		
 		String[] hatNameArray = new String[hatNameList.size()];
 		
@@ -785,6 +792,15 @@ public class HatHandler
 	{
 		Hats.proxy.tickHandlerClient.availableHats.clear();
 		
+		String[] split = s.split(":");
+		for(String name : split)
+		{
+			if(!name.trim().equalsIgnoreCase(""))
+			{
+				Hats.proxy.tickHandlerClient.availableHats.add(name.trim());
+			}
+		}
+		
 		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
 		while(ite.hasNext())
 		{
@@ -795,18 +811,13 @@ public class HatHandler
 					|| name.equalsIgnoreCase("(C) Mr. Haz") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("damien95")
 					|| name.equalsIgnoreCase("(C) Fridgeboy") && Minecraft.getMinecraft().thePlayer.username.equalsIgnoreCase("lacsap32"))
 			{
-				Hats.proxy.tickHandlerClient.availableHats.add(name);
+				if(!Hats.proxy.tickHandlerClient.availableHats.contains(name))
+				{
+					Hats.proxy.tickHandlerClient.availableHats.add(name);
+				}
 			}
 		}
-		
-		String[] split = s.split(":");
-		for(String name : split)
-		{
-			if(!name.trim().equalsIgnoreCase(""))
-			{
-				Hats.proxy.tickHandlerClient.availableHats.add(name.trim());
-			}
-		}
+
 		Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
 		
 		Hats.proxy.tickHandlerClient.serverHats = new ArrayList<String>(Hats.proxy.tickHandlerClient.availableHats);

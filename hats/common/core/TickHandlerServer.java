@@ -10,21 +10,24 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.WeakHashMap;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.packet.Packet131MapData;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
 import cpw.mods.fml.common.network.PacketDispatcher;
@@ -123,6 +126,39 @@ public class TickHandlerServer implements ITickHandler {
 				iterator1.remove();
 			}
 		}
+		
+		for(Map.Entry<String, TimeActiveInfo> e : playerActivity.entrySet())
+		{
+			TimeActiveInfo info = e.getValue();
+			info.tick();
+			
+			if(info.timeLeft == 0 && info.active)
+			{
+				info.levels++;
+				info.timeLeft = Hats.startTime;
+				
+				ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(e.getKey());
+				if(playerHatsList == null)
+				{
+					playerHatsList = new ArrayList<String>();
+					Hats.proxy.tickHandlerServer.playerHats.put(e.getKey(), playerHatsList);
+				}
+
+				ArrayList<String> newHats = HatHandler.getAllHatsAsList();
+				
+				EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(e.getKey());
+				
+				if(player != null && !newHats.isEmpty())
+				{
+					HatHandler.unlockHat(player, newHats.get(player.worldObj.rand.nextInt(newHats.size())));
+				}
+
+				for(int i = 0; i < info.levels; i++)
+				{
+					info.timeLeft *= 1F + Hats.timeIncrement;
+				}
+			}
+		}
 	}
 	
 	public void playerKilledEntity(EntityLivingBase living, EntityPlayer player)
@@ -157,6 +193,121 @@ public class TickHandlerServer implements ITickHandler {
         Hats.proxy.sendPlayerListOfWornHats(player, false, false);
 	}
 	
+	public void updateNewKing(String newKing, EntityPlayer player, boolean send)
+	{
+		if(!SessionState.currentKing.equalsIgnoreCase("") && !SessionState.currentKing.equalsIgnoreCase(newKing))
+		{
+			EntityPlayerMP oldKing = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(SessionState.currentKing);
+			if(oldKing != null)
+			{
+				playerDeath(oldKing);
+			}
+			else if(Hats.proxy.saveData != null)
+			{
+				Hats.proxy.saveData.setString(SessionState.currentKing + "_unlocked", "");
+			}
+			
+			ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(SessionState.currentKing);
+			if(playerHatsList == null)
+			{
+				playerHatsList = new ArrayList<String>();
+				Hats.proxy.tickHandlerServer.playerHats.put(SessionState.currentKing, playerHatsList);
+			}
+
+			Hats.proxy.tickHandlerServer.playerHats.put(SessionState.currentKing, null);
+			
+			Hats.proxy.tickHandlerServer.playerHats.put(newKing, playerHatsList);
+		}
+		if(Hats.proxy.saveData != null && !Hats.proxy.saveData.getString("HatsKingOfTheHill_lastKing").equalsIgnoreCase(newKing))
+		{
+			ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(newKing);
+			if(playerHatsList == null)
+			{
+				playerHatsList = new ArrayList<String>();
+				Hats.proxy.tickHandlerServer.playerHats.put(newKing, playerHatsList);
+			}
+
+			ArrayList<String> newHats = HatHandler.getAllHatsAsList();
+			
+			ArrayList<String> collectors = new ArrayList<String>();
+			
+			if(!SessionState.currentKing.equalsIgnoreCase(""))
+			{
+				for(String s : newHats)
+				{
+					if(s.startsWith("(C) ") && s.substring(4).toLowerCase().startsWith(SessionState.currentKing.toLowerCase())
+							|| s.equalsIgnoreCase("(C) iChun") && SessionState.currentKing.equalsIgnoreCase("ohaiiChun") //special casing for initial contrib hats.
+							|| s.equalsIgnoreCase("(C) Mr. Haz") && SessionState.currentKing.equalsIgnoreCase("damien95")
+							|| s.equalsIgnoreCase("(C) Fridgeboy") && SessionState.currentKing.equalsIgnoreCase("lacsap32"))
+	
+					{
+						collectors.add(s);
+					}
+				}
+			}
+			
+			EntityPlayerMP newKingEnt = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(newKing);
+			
+			if(newKingEnt != null && !newHats.isEmpty())
+			{
+				HatHandler.unlockHat(newKingEnt, newHats.get(newKingEnt.worldObj.rand.nextInt(newHats.size())));
+				for(String s : collectors)
+				{
+					HatHandler.unlockHat(newKingEnt, s);
+				}
+			}
+			
+			Hats.proxy.saveData.setString("HatsKingOfTheHill_lastKing", newKing);
+		}
+		SessionState.currentKing = newKing;
+		if(send)
+		{
+	        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+	        DataOutputStream stream1 = new DataOutputStream(bytes);
+	
+	        try
+	        {
+	        	stream1.writeByte(4);
+	        	stream1.writeUTF(SessionState.currentKing);
+	        	
+	        	if(player != null)
+	        	{
+	        		if(player.username.equalsIgnoreCase(SessionState.currentKing))
+	        		{
+						StringBuilder sb = new StringBuilder();
+	        			ArrayList<String> hats = Hats.proxy.tickHandlerServer.playerHats.get(newKing);
+	        			if(hats != null)
+	        			{
+    						for(int i = 0; i < hats.size(); i++)
+    						{
+    							sb.append(hats.get(i));
+    							if(i < hats.size() - 1)
+    							{
+    								sb.append(":");
+    							}
+    						}
+	        			}
+
+	        			stream1.writeUTF(sb.toString());
+	        			
+	        			PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);
+	        		}
+	        		else
+	        		{
+	        			PacketDispatcher.sendPacketToPlayer(new Packet131MapData((short)Hats.getNetId(), (short)4, bytes.toByteArray()), (Player)player);
+	        		}
+	        	}
+	        	else
+	        	{
+	        		PacketDispatcher.sendPacketToAllPlayers(new Packet131MapData((short)Hats.getNetId(), (short)4, bytes.toByteArray()));
+	        	}
+	        }
+	        catch(IOException e1)
+	        {}
+		}
+	}
+	
 	public WeakHashMap<EntityLivingBase, String> mobHats = new WeakHashMap<EntityLivingBase, String>();
 	public HashMap<String, ArrayList<String>> playerHats = new HashMap<String, ArrayList<String>>();
+	public HashMap<String, TimeActiveInfo> playerActivity = new HashMap<String, TimeActiveInfo>();
 }

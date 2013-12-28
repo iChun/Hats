@@ -9,12 +9,17 @@ import hats.common.core.HatInfo;
 import hats.common.core.LoggerHelper;
 import hats.common.core.MapPacketHandler;
 import hats.common.core.PacketHandlerServer;
+import hats.common.core.SessionState;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.Configuration;
@@ -66,7 +71,9 @@ public class Hats
 	
 	//Server Options
 	public static int playerHatsMode = 4;
-//	public static String defaultHat = "Top Hat";
+	public static String lockedHat = "Straw Hat";
+	public static int startTime = 6000;
+	public static float timeIncrement = 0.0125F;
 	
 	//Client Options
 	public static int renderInFirstPerson = 0;
@@ -131,8 +138,10 @@ public class Hats
 		allowReceivingOfHats = addCommentAndReturnInt(config, "globalOptions", "allowReceivingOfHats", "Enable receiving of model files from the server/client?", allowReceivingOfHats);
 		
 		config.addCustomCategoryComment("serverOptions", "These settings affect only the server that loads the mod.");
-		playerHatsMode = addCommentAndReturnInt(config, "serverOptions", "playerHatsMode", "Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = NOT AVAILABLE YET! Quest Mode, hats are rewarded by achieving certain tasks. NOT AVAILABLE YET!\n3 = Command Giver Mode, what hat you wear is chosen by people who can use commands.\n4 = Hat Hunting Mode, see a mob with a hat, kill it to unlock", playerHatsMode);
-//		defaultHat = addCommentAndReturnString(config, "serverOptions", "defaultHat", "All players are given this hat by default, even in Quest Mode.\nLeave blank for no hat.", defaultHat).toLowerCase();
+		playerHatsMode = addCommentAndReturnInt(config, "serverOptions", "playerHatsMode", "Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = Locked mode, all players must wear the same hat, defined in the config.\n3 = Command Giver Mode, what hat you wear is chosen by people who can use commands.\n4 = Hat Hunting Mode, see a mob with a hat, kill it to unlock\n5 = King of the Hat Mode, only one shall wear a hat. The king has to defend their spot or lose the crown!\n6 = Time Active Mode, players unlock more hats the more time they are active on the server.", playerHatsMode);
+		lockedHat = addCommentAndReturnString(config, "serverOptions", "lockedHat", "What hat do players wear in Locked mode (see playerHatsMode 2).\nIf you want different players to wear different hats, use command giver mode.", lockedHat).toLowerCase();
+		startTime = addCommentAndReturnInt(config, "serverOptions", "startTime", "For playerhatsMode 6:\nTime required to be active on the server to unlock the first hat.(In ticks)", startTime);
+		timeIncrement = (float)addCommentAndReturnInt(config, "serverOptions", "timeIncrement", "For playerhatsMode 6:\nAmount of extra time required to get the next level hat.\nDefault is 125 (1.25%).\nFor 200% time put 20000", (int)Math.floor(timeIncrement * 10000F)) / 10000F;
 		
 		if(isClient)
 		{
@@ -164,7 +173,7 @@ public class Hats
 		}
 		randomMobHat = Math.min(100, Math.max(addCommentAndReturnInt(config, "randoMobOptions", "randomMobHat", "Do mobs have a random chance of having a hat?\n0 = Disabled (0%)\n100 = All mobs (100%)\n(Client)This follows the randomHat setting, meaning if randomHat is 0, all mobs will wear the favouriteHat setting", randomMobHat), 0));
 		useRandomContributorHats = Math.min(100, Math.max(addCommentAndReturnInt(config, "randoMobOptions", "useRandomContributorHats", "Allow the use of contributor hats when getting a random hat?\n0 - 100%", useRandomContributorHats), 0));
-		resetPlayerHatsOnDeath = addCommentAndReturnInt(config, "randoMobOptions", "resetPlayerHatsOnDeath", "Should player hats be reset when they die?\n0 = No\n1 = Yes", resetPlayerHatsOnDeath);
+		resetPlayerHatsOnDeath = addCommentAndReturnInt(config, "randoMobOptions", "resetPlayerHatsOnDeath", "Should player hats be reset when they die?\nOnly in unlockable hats modes\n0 = No\n1 = Yes", resetPlayerHatsOnDeath);
 		
 		hatZombie = addCommentAndReturnInt(config, "randoMobOptions", "hatZombie", "", hatZombie);
 		hatCreeper = addCommentAndReturnInt(config, "randoMobOptions", "hatCreeper", "", hatCreeper);
@@ -327,15 +336,78 @@ public class Hats
 	@ForgeSubscribe
 	public void onLivingDeath(LivingDeathEvent event)
 	{
-		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && playerHatsMode == 4)
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
 		{
-			if(!(event.entityLiving instanceof EntityPlayer) && event.source.getEntity() instanceof EntityPlayer && !((EntityPlayer)event.source.getEntity()).capabilities.isCreativeMode)
+			if(SessionState.serverHatMode >= 4)
 			{
-				proxy.tickHandlerServer.playerKilledEntity(event.entityLiving, (EntityPlayer)event.source.getEntity());
-			}
-			else if(event.entityLiving instanceof EntityPlayer && resetPlayerHatsOnDeath == 1)
-			{
-				proxy.tickHandlerServer.playerDeath((EntityPlayer)event.entityLiving);
+				if(SessionState.serverHatMode == 4)
+				{
+					if(!(event.entityLiving instanceof EntityPlayer) && event.source.getEntity() instanceof EntityPlayer && !((EntityPlayer)event.source.getEntity()).capabilities.isCreativeMode)
+					{
+						proxy.tickHandlerServer.playerKilledEntity(event.entityLiving, (EntityPlayer)event.source.getEntity());
+					}
+				}
+				
+				if(event.entityLiving instanceof EntityPlayer)
+				{
+					EntityPlayer player = (EntityPlayer)event.entityLiving;
+					EntityPlayer executer = null;
+					if(event.source.getEntity() instanceof EntityPlayer)
+					{
+						executer = (EntityPlayer)event.source.getEntity();
+					}
+					if(SessionState.serverHatMode == 5)
+					{
+						//King died
+						if(SessionState.currentKing.equalsIgnoreCase(player.username))
+						{
+							if(executer != null)
+							{
+								Hats.proxy.tickHandlerServer.updateNewKing(executer.username, null, true);
+								Hats.proxy.tickHandlerServer.updateNewKing(executer.username, executer, true);
+								FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(ChatMessageComponent.createFromTranslationWithSubstitutions("hats.kingOfTheHat.update.playerSlayed", new Object[] { player.username, executer.username }));
+							}
+							else
+							{
+								List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
+								List<EntityPlayerMP> list = new ArrayList(players);
+								list.remove(player);
+								if(!list.isEmpty())
+								{
+									EntityPlayer newKing = list.get(player.worldObj.rand.nextInt(list.size()));
+									Hats.proxy.tickHandlerServer.updateNewKing(newKing.username, null, true);
+									Hats.proxy.tickHandlerServer.updateNewKing(newKing.username, newKing, true);
+									FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(ChatMessageComponent.createFromTranslationWithSubstitutions("hats.kingOfTheHat.update.playerDied", new Object[] { player.username, newKing.username }));
+								}
+							}
+						}
+						else if(executer != null && SessionState.currentKing.equalsIgnoreCase(executer.username))
+						{
+							ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(executer.username);
+							if(playerHatsList == null)
+							{
+								playerHatsList = new ArrayList<String>();
+								Hats.proxy.tickHandlerServer.playerHats.put(executer.username, playerHatsList);
+							}
+
+							ArrayList<String> newHats = HatHandler.getAllHatsAsList();
+							
+							newHats.removeAll(playerHatsList);
+
+							EntityPlayerMP newKingEnt = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(executer.username);
+							
+							if(newKingEnt != null && !newHats.isEmpty())
+							{
+								HatHandler.unlockHat(newKingEnt, newHats.get(newKingEnt.worldObj.rand.nextInt(newHats.size())));
+							}
+						}
+					}	
+					
+					if(resetPlayerHatsOnDeath == 1)
+					{
+						proxy.tickHandlerServer.playerDeath((EntityPlayer)event.entityLiving);
+					}
+				}
 			}
 		}
 		proxy.tickHandlerServer.mobHats.remove(event.entityLiving);
@@ -344,6 +416,10 @@ public class Hats
 	@EventHandler
 	public void serverStarting(FMLServerAboutToStartEvent event)
 	{
+		SessionState.serverHasMod = true;
+		SessionState.serverHatMode = playerHatsMode;
+		SessionState.serverHat = lockedHat;
+		
 		proxy.initCommands(event.getServer());
 	}
 	
@@ -357,6 +433,7 @@ public class Hats
 	{
 		proxy.tickHandlerServer.mobHats.clear();
 		proxy.tickHandlerServer.playerHats.clear();
+		proxy.tickHandlerServer.playerActivity.clear();
 		proxy.playerWornHats.clear();
 		proxy.saveData = null;
 	}

@@ -1,11 +1,10 @@
 package hats.client.gui;
 
-import hats.addons.hatstand.client.render.TileRendererHatStand;
 import hats.client.core.HatInfoClient;
-import hats.client.render.HatRendererHelper;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
+import hats.common.core.SessionState;
 import hats.common.entity.EntityHat;
 
 import java.io.ByteArrayOutputStream;
@@ -145,7 +144,7 @@ public class GuiHatSelection extends GuiScreen
 
 	public GuiHatSelection(EntityPlayer ply)
 	{
-		if(Hats.proxy.tickHandlerClient.serverHatMode == 4)
+		if(SessionState.serverHatMode >= 4)
 		{
 			if(Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
 			{
@@ -311,7 +310,7 @@ public class GuiHatSelection extends GuiScreen
 	@Override
 	public void onGuiClosed() 
 	{
-		if(!confirmed)
+		if(!confirmed && hat != null)
 		{
 			hat.hatName = prevHatName;
 			hat.setR(prevColourR);
@@ -1033,7 +1032,7 @@ public class GuiHatSelection extends GuiScreen
     	
 		mc.displayGuiScreen(null);
 		
-		if(!Hats.proxy.tickHandlerClient.serverHasMod)
+		if(!SessionState.serverHasMod)
 		{
     		Hats.favouriteHat = hat.hatName;
     		
@@ -1235,7 +1234,7 @@ public class GuiHatSelection extends GuiScreen
         	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, StatCollector.translateToLocal("hats.gui.firstPerson") + ": " + (Hats.renderInFirstPerson == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"))));
         	buttonList.add(new GuiButton(ID_SHOW_HATS, width / 2 - 6, height / 2 - 78 + (22 * 2), 88, 20, StatCollector.translateToLocal("hats.gui.showHats") + ": " + (Hats.renderHats == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"))));
         	buttonList.add(new GuiButton(ID_RESET_SIDE, width / 2 - 6, height / 2 - 78 + (22 * 5), 88, 20, StatCollector.translateToLocal("hats.gui.resetSide")));
-        	if(Hats.proxy.tickHandlerClient.serverHatMode != 4)
+        	if(SessionState.serverHatMode < 4)
         	{
         		buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 3), StatCollector.translateToLocal("hats.gui.randomobs") + ": ", 0, 100, Hats.randomMobHat, this, "%"));
         	}
@@ -1397,7 +1396,7 @@ public class GuiHatSelection extends GuiScreen
 	    	
 	    	ArrayList<String> hatsCopy = new ArrayList<String>(hatsList);
 	    	
-	    	if(Hats.proxy.tickHandlerClient.serverHatMode == 4 && !mc.thePlayer.capabilities.isCreativeMode)
+	    	if(SessionState.serverHatMode >= 4 && !mc.thePlayer.capabilities.isCreativeMode)
 	    	{
 	    		for(int i = hatsCopy.size() - 1; i >= 0; i--)
 	    		{

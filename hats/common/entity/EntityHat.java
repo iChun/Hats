@@ -1,23 +1,14 @@
 package hats.common.entity;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-
 import hats.client.core.HatInfoClient;
 import hats.common.Hats;
-import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
+import hats.common.core.SessionState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.monster.EntityGhast;
-import net.minecraft.entity.monster.EntitySilverfish;
-import net.minecraft.entity.passive.EntityPig;
-import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.ObfuscationReflectionHelper;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
@@ -120,8 +111,6 @@ public class EntityHat extends Entity
 		lastUpdate = worldObj.getWorldTime();
 
 		validateHatInfo();
-		//TODO check when mobs are sitting
-		
 //		if(!(parent instanceof EntityPlayer))
 //		{
 //			worldObj.spawnParticle("smoke", posX, posY, posZ, 1.0D, 0.0D, 0.0D);
@@ -198,7 +187,7 @@ public class EntityHat extends Entity
 	public void setDead()
 	{
 		super.setDead();
-		if(Hats.proxy.tickHandlerClient.serverHasMod && Hats.proxy.tickHandlerClient.serverHatMode == 4 && parent != null)
+		if(SessionState.serverHasMod && SessionState.serverHatMode == 4 && parent != null)
 		{
 			Hats.proxy.tickHandlerClient.requestedMobHats.remove((Object)parent.entityId);
 		}

@@ -4,20 +4,21 @@ import hats.common.Hats;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Map.Entry;
+import java.util.List;
+import java.util.Map;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.NetLoginHandler;
 import net.minecraft.network.packet.NetHandler;
 import net.minecraft.network.packet.Packet1Login;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ChatMessageComponent;
+import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.IPlayerTracker;
 import cpw.mods.fml.common.network.IConnectionHandler;
@@ -43,7 +44,7 @@ public class ConnectionHandler
 	
 	public void onClientConnected()
 	{
-		Hats.proxy.tickHandlerClient.serverHasMod = false;
+		SessionState.serverHasMod = false;
 		
 		HatHandler.repopulateHatsList();
 	}
@@ -74,6 +75,7 @@ public class ConnectionHandler
 			Hats.proxy.tickHandlerClient.mobHats.clear();
 			Hats.proxy.tickHandlerClient.playerWornHats.clear();
 			Hats.proxy.tickHandlerClient.requestedHats.clear();
+			Hats.proxy.tickHandlerClient.guiHatUnlocked.hatList.clear();
 			Hats.proxy.tickHandlerClient.worldInstance = null;
 		}
 	}
@@ -84,6 +86,12 @@ public class ConnectionHandler
 	@Override
 	public void onPlayerLogin(EntityPlayer player) 
 	{
+		if(SessionState.serverHatMode == 5 && SessionState.currentKing.equalsIgnoreCase(""))
+		{
+			//There is No king around now, so technically no players online
+			Hats.proxy.tickHandlerServer.updateNewKing(player.username, null, false);
+			FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(ChatMessageComponent.createFromTranslationWithSubstitutions("hats.kingOfTheHat.update.playerJoin", new Object[] { player.username }));
+		}
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         DataOutputStream stream = new DataOutputStream(bytes);
 
@@ -91,15 +99,27 @@ public class ConnectionHandler
 		{
 			stream.writeByte(0); //packetID;
 			
-			stream.writeByte((byte)Hats.playerHatsMode);
+			stream.writeByte((byte)SessionState.serverHatMode);
 			
-			stream.writeBoolean(Hats.proxy.saveData.getBoolean(player.username + "_hasVisited"));
+			stream.writeBoolean(Hats.proxy.saveData.getBoolean(player.username + "_hasVisited") && Hats.proxy.saveData.getInteger(player.username + "_hatMode") == SessionState.serverHatMode);
+			
+			stream.writeUTF(SessionState.serverHat);
+			
+			stream.writeUTF(SessionState.currentKing);
 			
 			if(Hats.proxy.saveData != null)
 			{
 				String playerHats = Hats.proxy.saveData.getString(player.username + "_unlocked");
 				
-				stream.writeUTF(Hats.playerHatsMode == 1 ? "" : playerHats); // TODO Quest mode list of available player hats
+				if(SessionState.serverHatMode == 5)
+				{
+					if(!SessionState.currentKing.equalsIgnoreCase(player.username))
+					{
+						playerHats = "";
+					}
+				}
+				
+				stream.writeUTF(SessionState.serverHatMode >= 4 ? playerHats : "");
 				
 				ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(player.username);
 				if(playerHatsList == null)
@@ -141,6 +161,25 @@ public class ConnectionHandler
 				}
 				
 				Hats.proxy.playerWornHats.put(player.username, new HatInfo(hatName, r, g, b));
+				
+				TimeActiveInfo info = Hats.proxy.tickHandlerServer.playerActivity.get(player.username);
+				
+				if(info == null)
+				{
+					info = new TimeActiveInfo();
+					info.timeLeft = Hats.proxy.saveData.getInteger(player.username + "_activityTimeleft");
+					info.levels = Hats.proxy.saveData.getInteger(player.username + "_activityLevels");
+					
+					if(info.levels == 0 && info.timeLeft == 0)
+					{
+						info.levels = 0;
+						info.timeLeft = Hats.startTime;
+					}
+					
+					Hats.proxy.tickHandlerServer.playerActivity.put(player.username, info);
+				}
+				
+				info.active = true;
 			}
 			else
 			{
@@ -152,18 +191,43 @@ public class ConnectionHandler
 			PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);
 			
 			Hats.proxy.saveData.setBoolean(player.username + "_hasVisited", true);
+			Hats.proxy.saveData.setInteger(player.username + "_hatMode", SessionState.serverHatMode);
 		}
 		catch(IOException e)
 		{}
 
-		Hats.proxy.sendPlayerListOfWornHats(player, true);
-		Hats.proxy.sendPlayerListOfWornHats(player, false);
-		
+		if(SessionState.serverHatMode != 2)
+		{
+			Hats.proxy.sendPlayerListOfWornHats(player, true);
+			Hats.proxy.sendPlayerListOfWornHats(player, false);
+		}
 	}
 
 	@Override
 	public void onPlayerLogout(EntityPlayer player) 
 	{
+		if(SessionState.serverHatMode == 5 && SessionState.currentKing.equalsIgnoreCase(player.username))
+		{
+			//King logged out
+			List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
+			List<EntityPlayerMP> list = new ArrayList(players);
+			list.remove(player);
+			if(!list.isEmpty())
+			{
+				EntityPlayer newKing = list.get(player.worldObj.rand.nextInt(list.size()));
+				Hats.proxy.tickHandlerServer.updateNewKing(newKing.username, null, true);
+				Hats.proxy.tickHandlerServer.updateNewKing(newKing.username, newKing, true);
+				FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(ChatMessageComponent.createFromTranslationWithSubstitutions("hats.kingOfTheHat.update.playerLeft", new Object[] { player.username, newKing.username }));
+			}
+		}	
+		
+		TimeActiveInfo info = Hats.proxy.tickHandlerServer.playerActivity.get(player.username);
+
+		if(info != null)
+		{
+			info.active = false;
+		}
+		
 		Hats.proxy.playerWornHats.remove(player.username);
 	}
 

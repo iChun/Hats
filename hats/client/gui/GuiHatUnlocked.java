@@ -1,27 +1,28 @@
 package hats.client.gui;
 
 import hats.client.core.ClientProxy;
+import hats.client.core.HatInfoClient;
 import hats.client.model.ModelHat;
+import hats.client.render.HatRendererHelper;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.stats.Achievement;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class GuiHatUnlocked extends Gui
@@ -41,7 +42,9 @@ public class GuiHatUnlocked extends Gui
 
     private long unlockedTime;
     
-    private ArrayList<String> hatList = new ArrayList<String>(); 
+    public ArrayList<String> hatList = new ArrayList<String>(); 
+    
+    private HatInfoClient info = null;
 
     public GuiHatUnlocked(Minecraft par1Minecraft)
     {
@@ -69,6 +72,7 @@ public class GuiHatUnlocked extends Gui
 	        hatNameText = hatList.get(0);
 	        unlockedTime = Minecraft.getSystemTime();
 	        hatList.remove(0);
+	        info = new HatInfoClient(hatNameText.toLowerCase(), 255, 255, 255);
     	}
     }
 
@@ -101,6 +105,7 @@ public class GuiHatUnlocked extends Gui
      */
     public void updateGui()
     {
+    	GL11.glPushMatrix();
         if (this.unlockedTime != 0L)
         {
             double d0 = (double)(Minecraft.getSystemTime() - this.unlockedTime) / 3000.0D;
@@ -149,61 +154,26 @@ public class GuiHatUnlocked extends Gui
                 GL11.glEnable(GL11.GL_COLOR_MATERIAL);
                 GL11.glEnable(GL11.GL_LIGHTING);
                 
-                //TODO render hat
-                String hatNameLowCase = hatNameText.toLowerCase();
-                ModelHat model = ClientProxy.models.get(hatNameLowCase);
-                if(model != null)
-                {
-			        GL11.glPushMatrix();
-			        
-		            GL11.glEnable(GL11.GL_BLEND);
-		            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		            
-			        BufferedImage image = ClientProxy.bufferedImages.get(hatNameLowCase);
-
-			        if (image != null)
-			        {
-			            if (ClientProxy.bufferedImageID.get(image) == -1)
-			            {
-			            	ClientProxy.bufferedImageID.put(image, TextureUtil.uploadTextureImage(TextureUtil.glGenTextures(), image));
-			            }
-	
-			            GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.bufferedImageID.get(image));
-			        }
-
-			        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			        
-		            GL11.glTranslatef((float)i + 16, (float)j + 26, 50F);
-		            
-		            GL11.glDisable(GL11.GL_CULL_FACE);
-	                GL11.glDepthMask(true);
-	                GL11.glEnable(GL11.GL_DEPTH_TEST);
-
-		            GL11.glScalef(1.0F, 1.0F, -1.0F);
-		            GL11.glScalef(20.0F, 20.0F, 20.0F);
-		            GL11.glRotatef(10.0F, 1.0F, 0.0F, 0.0F);
-		            GL11.glRotatef(-22.5F, 0.0F, 1.0F, 0.0F);
-		            GL11.glRotatef((float)(Minecraft.getSystemTime() - this.unlockedTime) / 6F, 0.0F, 1.0F, 0.0F);
-		            
-			        model.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-		            
-			        GL11.glDisable(GL11.GL_BLEND);
-			        
-			        GL11.glPopMatrix();
-
-                }
-		    	else if(!HatHandler.reloadingHats)
-		    	{
-		    		if(!Hats.proxy.tickHandlerClient.requestedHats.contains(hatNameLowCase))
-		    		{
-		    			HatHandler.requestHat(hatNameLowCase, null);
-		    			Hats.proxy.tickHandlerClient.requestedHats.add(hatNameLowCase);
-		    		}
-		    	}
+                GL11.glTranslatef((float)i + 16, (float)j + 16, 50F);
+                
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                GL11.glDepthMask(true);
+                
+	            GL11.glScalef(1.0F, -1.0F, 1.0F);
+	            GL11.glScalef(20.0F, 20.0F, 20.0F);
+	            GL11.glRotatef(10.0F, 1.0F, 0.0F, 0.0F);
+	            GL11.glRotatef(-22.5F, 0.0F, 1.0F, 0.0F);
+                GL11.glRotatef((float)(Minecraft.getSystemTime() - this.unlockedTime) / 6F, 0.0F, 1.0F, 0.0F);
+                
+                HatRendererHelper.renderHat(info, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.000000000F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, true, true, 1.0F);
+                
+                GL11.glDepthMask(false);
+                GL11.glDisable(GL11.GL_DEPTH_TEST);
 
                 GL11.glDisable(GL11.GL_LIGHTING);
 	            
             }
         }
+        GL11.glPopMatrix();
     }
 }

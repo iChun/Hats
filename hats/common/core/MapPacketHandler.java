@@ -1,6 +1,7 @@
 package hats.common.core;
 
 import hats.client.gui.GuiHatSelection;
+import hats.client.gui.GuiHatUnlocked;
 import hats.common.Hats;
 
 import java.io.ByteArrayInputStream;
@@ -150,6 +151,16 @@ implements ITinyPacketHandler
 	
 					break;
 				}
+				case 4:
+				{
+					TimeActiveInfo info = Hats.proxy.tickHandlerServer.playerActivity.get(player.username);
+					
+					if(info != null)
+					{
+						info.active = stream.readBoolean();
+					}
+					break;
+				}
 			}
 		}
 		catch(IOException e)
@@ -197,6 +208,10 @@ implements ITinyPacketHandler
 					{
 						Hats.proxy.tickHandlerClient.serverHats.add(name);
 						Collections.sort(Hats.proxy.tickHandlerClient.serverHats);
+						if(Hats.proxy.tickHandlerClient.guiHatUnlocked == null)
+						{
+							Hats.proxy.tickHandlerClient.guiHatUnlocked = new GuiHatUnlocked(Minecraft.getMinecraft());
+						}
 						Hats.proxy.tickHandlerClient.guiHatUnlocked.queueHatUnlocked(name);
 					}
 	
@@ -205,6 +220,12 @@ implements ITinyPacketHandler
 				case 3:
 				{
 					HatHandler.populateHatsList("");
+					break;
+				}
+				case 4:
+				{
+					stream.readByte();
+					SessionState.currentKing = stream.readUTF();
 					break;
 				}
 			}

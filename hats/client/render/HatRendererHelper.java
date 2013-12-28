@@ -103,7 +103,6 @@ public class HatRendererHelper
             }
 
 	        GL11.glScalef(-1.0F, -1.0F, 1.0F);
-	        
 	        model.render(0.0625F);
 
 	        GL11.glDisable(GL11.GL_BLEND);
