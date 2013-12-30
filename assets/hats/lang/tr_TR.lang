@@ -163,5 +163,5 @@ hats.gui.helpInfo19.desc1=Mobların şapka takıp takmayacağını
 hats.gui.helpInfo19.desc2=ayarlayabildiğinizi biliyor muydunuz?
 hats.gui.helpInfo19.desc3=Bu ayar "Kişiselleştir" kısmında bulunmaktadır.
  
-Hats.addon.hatstands.gui.Base=Taban
-Hats.addon.hatstands.gui.stand=Destek
+hats.addon.hatstands.gui.base=Taban
+hats.addon.hatstands.gui.stand=Destek
