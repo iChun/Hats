@@ -97,8 +97,8 @@ hats.gui.helpInfo3.desc4=pouvez télécharger et installer.
  
 hats.gui.helpInfo4.desc1=Vous pouvez également faire votre propre chapeau !
 hats.gui.helpInfo4.desc2=Utilisez Techne et faite votre chapeau !
-hats.gui.helpInfo4.desc3=Une "tête" est placé au milieu
-hats.gui.helpInfo4.desc4=d'un bloc de bois. Sa taille est
+hats.gui.helpInfo4.desc3=Une "tête" invisible est placé sur le
+hats.gui.helpInfo4.desc4=bloc de bois. Sa taille est
 hats.gui.helpInfo4.desc5=de 8 x 8 x 8. Faite votre chapeau dessus !
  
 hats.gui.helpInfo5.desc1=Savez-vous que vous pouvez faire vos propres catégories ?
@@ -129,8 +129,8 @@ hats.gui.helpInfo11.desc1=Les chapeaux représentant des joueurs
 hats.gui.helpInfo11.desc2=sont ceux qui ont fait une importante
 hats.gui.helpInfo11.desc3=contribution pour le mod, en termes
 hats.gui.helpInfo11.desc4=de développement, de tests, de contribution de modèle
-hats.gui.helpInfo11.desc5=et de soutien.
-hats.gui.helpInfo11.desc6=Direwolf20 est juste un bonus.
+hats.gui.helpInfo11.desc5=ou de soutien.
+hats.gui.helpInfo11.desc6=Direwolf20 est juste un hommage.
  
 hats.gui.helpInfo12.desc1=Shift-clique sur la liste des chapeaux vous
 hats.gui.helpInfo12.desc2=sortira d'une catégorie et retournera à la
@@ -147,17 +147,17 @@ hats.gui.helpInfo15.desc2=le chapeau que vous portez
 hats.gui.helpInfo15.desc3=actuellement de vos favoris.
  
 hats.gui.helpInfo16.desc1=La touche d'accès rapide pour « Personnaliser » est
-hats.gui.helpInfo16.desc2="P"
-hats.gui.helpInfo16.desc3=Dans le cas où vous désactivez
-hats.gui.helpInfo16.desc4=accidentellement le bouton.
+hats.gui.helpInfo16.desc2="P", utile dans le cas
+hats.gui.helpInfo16.desc3=où vous désactivez accidentellement
+hats.gui.helpInfo16.desc4=le bouton du menu.
  
-hats.gui.helpInfo17.desc1=Si vous avez un chapeau de contributeur,
-hats.gui.helpInfo17.desc2=Vous pouvez l'utiliser dans le mode
+hats.gui.helpInfo17.desc1=Vous pouvez utiliser un chapeau
+hats.gui.helpInfo17.desc2=de contributeur dans le mode
 hats.gui.helpInfo17.desc3="Chasse au chapeau".
  
 hats.gui.helpInfo18.desc1=Le (C) sur le nom d'un chapeau
 hats.gui.helpInfo18.desc2=représente un chapeau ajouté comme un remerciement
-hats.gui.helpInfo18.desc3=pour un don pour le mod !
+hats.gui.helpInfo18.desc3=pour un don sur le mod !
  
 hats.gui.helpInfo19.desc1=Savez-vous que vous pouvez régler le fait
 hats.gui.helpInfo19.desc2=que les monstres ont des chapeaux ? Voir dans le onglet 
