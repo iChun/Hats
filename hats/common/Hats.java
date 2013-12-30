@@ -11,7 +11,10 @@ import hats.common.core.MapPacketHandler;
 import hats.common.core.PacketHandlerServer;
 import hats.common.core.SessionState;
 
+import java.io.DataInput;
+import java.io.DataOutput;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +22,8 @@ import java.util.logging.Level;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatMessageComponent;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -434,9 +439,41 @@ public class Hats
 		proxy.tickHandlerServer.mobHats.clear();
 		proxy.tickHandlerServer.playerHats.clear();
 		proxy.tickHandlerServer.playerActivity.clear();
+		proxy.tickHandlerServer.playerTradeRequests.clear();
+		proxy.tickHandlerServer.activeTrades.clear();
 		proxy.playerWornHats.clear();
 		proxy.saveData = null;
 	}
+	
+    public static NBTTagCompound readNBTTagCompound(DataInput par0DataInput) throws IOException
+    {
+        short short1 = par0DataInput.readShort();
+
+        if (short1 < 0)
+        {
+            return null;
+        }
+        else
+        {
+            byte[] abyte = new byte[short1];
+            par0DataInput.readFully(abyte);
+            return CompressedStreamTools.decompress(abyte);
+        }
+    }
+
+    public static void writeNBTTagCompound(NBTTagCompound par0NBTTagCompound, DataOutput par1DataOutput) throws IOException
+    {
+        if (par0NBTTagCompound == null)
+        {
+            par1DataOutput.writeShort(-1);
+        }
+        else
+        {
+            byte[] abyte = CompressedStreamTools.compress(par0NBTTagCompound);
+            par1DataOutput.writeShort((short)abyte.length);
+            par1DataOutput.write(abyte);
+        }
+    }
 	
     public static int getNetId()
     {

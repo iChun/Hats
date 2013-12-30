@@ -1,6 +1,8 @@
 package hats.common.core;
 
 import hats.common.Hats;
+import hats.common.trade.TradeInfo;
+import hats.common.trade.TradeRequest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -159,6 +161,33 @@ public class TickHandlerServer implements ITickHandler {
 				}
 			}
 		}
+		
+		Iterator<Entry<String, TradeRequest>> ite = playerTradeRequests.entrySet().iterator();
+		
+		while(ite.hasNext())
+		{
+			Entry<String, TradeRequest> e = ite.next();
+			TradeRequest tr = e.getValue();
+			tr.timePending++;
+			if(tr.timePending >= 1200)
+			{
+				ite.remove();
+			}
+		}
+		
+		for(int i = activeTrades.size() - 1; i >= 0; i--)
+		{
+			TradeInfo ti = activeTrades.get(i);
+			ti.update();
+			if(ti.trade1 && ti.trade2)
+			{
+				activeTrades.remove(i);
+			}
+			if(ti.terminate)
+			{
+				activeTrades.remove(i);
+			}
+		}
 	}
 	
 	public void playerKilledEntity(EntityLivingBase living, EntityPlayer player)
@@ -307,7 +336,20 @@ public class TickHandlerServer implements ITickHandler {
 		}
 	}
 	
+	public void initializeTrade(EntityPlayerMP player, EntityPlayerMP plyr) 
+	{
+		if(player == null || plyr == null)
+		{
+			return;
+		}
+		activeTrades.add((new TradeInfo(player, plyr)).initialize());
+	}
+	
 	public WeakHashMap<EntityLivingBase, String> mobHats = new WeakHashMap<EntityLivingBase, String>();
 	public HashMap<String, ArrayList<String>> playerHats = new HashMap<String, ArrayList<String>>();
 	public HashMap<String, TimeActiveInfo> playerActivity = new HashMap<String, TimeActiveInfo>();
+	
+	public HashMap<String, TradeRequest> playerTradeRequests = new HashMap<String, TradeRequest>();
+	
+	public ArrayList<TradeInfo> activeTrades = new ArrayList<TradeInfo>();
 }

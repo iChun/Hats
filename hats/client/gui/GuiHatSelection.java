@@ -42,6 +42,7 @@ import org.lwjgl.opengl.GL12;
 
 import com.google.common.collect.ImmutableList;
 
+import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 
 public class GuiHatSelection extends GuiScreen 
@@ -78,6 +79,9 @@ public class GuiHatSelection extends GuiScreen
 	private final int ID_RESET_SIDE = 24;
 	private final int ID_MOB_SLIDER = 25;
 	private final int ID_SHOW_HATS = 26;
+	
+	private final int ID_MAKE_TRADE = 27;
+	private final int ID_ACCEPT_TRADE = 28;
 	
 	private final int ID_CATEGORIES_START = 30;
 	
@@ -662,6 +666,26 @@ public class GuiHatSelection extends GuiScreen
     @Override
     protected void actionPerformed(GuiButton btn)
     {
+    	if(btn.id == ID_MAKE_TRADE)
+    	{
+    		FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiTradeMaker());
+    		return;
+    	}
+    	else if(btn.id == ID_ACCEPT_TRADE && Hats.proxy.tickHandlerClient.tradeReq != null && Hats.proxy.tickHandlerClient.tradeReqTimeout > 0)
+    	{
+	        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+	        DataOutputStream stream = new DataOutputStream(bytes);
+
+	        try
+	        {
+	        	stream.writeUTF(Hats.proxy.tickHandlerClient.tradeReq);
+	        	
+	        	PacketDispatcher.sendPacketToServer(new Packet131MapData((short)Hats.getNetId(), (short)6, bytes.toByteArray()));
+	        }
+	        catch(IOException e)
+	        {}
+	        return;
+    	}
     	if(btn.id == ID_DONE_SELECT)
     	{
     		if(personalizing)
@@ -1106,7 +1130,7 @@ public class GuiHatSelection extends GuiScreen
         {
             GuiButton btn = (GuiButton)this.buttonList.get(k1);
             
-            if(btn.id >= 5 && btn.id <= 7 || btn.id >= ID_CATEGORIES_START || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE || btn.id == ID_FAVOURITE)
+            if(btn.id >= 5 && btn.id <= 7 || btn.id >= ID_CATEGORIES_START || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE || btn.id == ID_FAVOURITE || btn.id == ID_MAKE_TRADE || btn.id == ID_ACCEPT_TRADE)
             {
             	buttonList.remove(k1);
             }
@@ -1227,6 +1251,14 @@ public class GuiHatSelection extends GuiScreen
 	    		
 	    		currentDisplay = StatCollector.translateToLocal("hats.gui.colorizer");
 	    	}
+	    	
+	    	buttonList.add(new GuiButton(ID_MAKE_TRADE, guiLeft - 21, guiTop + ySize - 23, 20, 20, ""));
+	    	
+	    	GuiButton btn = new GuiButton(ID_ACCEPT_TRADE, guiLeft - 21, guiTop + ySize - 45, 20, 20, "");
+
+	    	btn.enabled = Hats.proxy.tickHandlerClient.tradeReqTimeout > 0;
+	    	
+	    	buttonList.add(btn);
         }
         else
         {
@@ -1707,7 +1739,7 @@ public class GuiHatSelection extends GuiScreen
             	btn.displayString = disp;
             }
             
-            if(btn.id == ID_HAT_COLOUR_SWAP || btn.id == ID_NONE || btn.id == ID_RANDOM || btn.id == ID_HELP || btn.id == ID_RELOAD_HATS || btn.id == ID_FAVOURITES || btn.id == ID_CATEGORIES || btn.id == ID_PERSONALIZE || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE || btn.id == ID_FAVOURITE || btn.id == ID_SEARCH)
+            if(btn.id == ID_HAT_COLOUR_SWAP || btn.id == ID_NONE || btn.id == ID_RANDOM || btn.id == ID_HELP || btn.id == ID_RELOAD_HATS || btn.id == ID_FAVOURITES || btn.id == ID_CATEGORIES || btn.id == ID_PERSONALIZE || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE || btn.id == ID_FAVOURITE || btn.id == ID_SEARCH || btn.id == ID_MAKE_TRADE || btn.id == ID_ACCEPT_TRADE)
             {
             	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 	            GL11.glEnable(GL11.GL_BLEND);
@@ -1780,13 +1812,21 @@ public class GuiHatSelection extends GuiScreen
 	            	{
 	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 128, 0, 16, 16);
 	            	}
+	            	else if(btn.id == ID_MAKE_TRADE)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 82, 45, 16, 16);
+	            	}
+	            	else if(btn.id == ID_ACCEPT_TRADE)
+	            	{
+	            		drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 98, 45, 16, 16);
+	            	}
 	            }
 
             	GL11.glDisable(GL11.GL_BLEND);
             }
         }
         
-        drawString(fontRenderer, StatCollector.translateToLocal("hats.gui.viewing") + ": " + currentDisplay, this.guiLeft, this.guiTop - 9, 0xffffff);
+        drawString(fontRenderer, StatCollector.translateToLocal("hats.gui.viewing") + ": " + currentDisplay, this.guiLeft + 1, this.guiTop - 9, 0xffffff);
     	
         this.mouseX = (float)par1;
         this.mouseY = (float)par2;
@@ -1893,6 +1933,14 @@ public class GuiHatSelection extends GuiScreen
 	            else if(btn.id == ID_RESET_SIDE)
 	            {
 	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.gui.resetButtonsOnSide")}), par1, par2);
+	            }
+	            else if(btn.id == ID_MAKE_TRADE)
+	            {
+	            	drawTooltip(Arrays.asList(new String[] {StatCollector.translateToLocal("hats.trade")}), par1, par2);
+	            }
+	            else if(btn.id == ID_ACCEPT_TRADE)
+	            {
+	            	drawTooltip(Arrays.asList(new String[] { Hats.proxy.tickHandlerClient.tradeReq != null && Hats.proxy.tickHandlerClient.tradeReqTimeout > 0 ? StatCollector.translateToLocalFormatted("hats.trade.acceptRequestSpecific", new Object[] { Hats.proxy.tickHandlerClient.tradeReq, (int)Math.ceil((double)Hats.proxy.tickHandlerClient.tradeReqTimeout / 20D) }) : StatCollector.translateToLocal("hats.trade.acceptRequestGeneral")}), par1, par2);
 	            }
             }
         }

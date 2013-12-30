@@ -1,7 +1,9 @@
 package hats.client.core;
 
 import hats.api.RenderOnEntityHelper;
+import hats.client.gui.GuiHatSelection;
 import hats.client.gui.GuiHatUnlocked;
+import hats.client.gui.GuiTradeReq;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
@@ -18,9 +20,7 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -99,8 +99,7 @@ public class TickHandlerClient
 		if(SessionState.showJoinMessage)
 		{
 			SessionState.showJoinMessage = false;
-			//TODO update this!
-			mc.thePlayer.addChatMessage(SessionState.serverHatMode == 4 ? StatCollector.translateToLocal("hats.firstJoin.hatHunting") : StatCollector.translateToLocal("hats.firstJoin.kingOfTheHat.hasKing"));
+			mc.thePlayer.addChatMessage(SessionState.serverHatMode == 4 ? StatCollector.translateToLocal("hats.firstJoin.hatHunting") : SessionState.serverHatMode == 6 ? StatCollector.translateToLocal("hats.firstJoin.timeActive") : StatCollector.translateToLocal("hats.firstJoin.kingOfTheHat.hasKing"));
 		}
 		if(Hats.enableInServersWithoutMod == 1 && !SessionState.serverHasMod || SessionState.serverHasMod)
 		{
@@ -145,6 +144,19 @@ public class TickHandlerClient
 			if(requestCooldown > 0)
 			{
 				requestCooldown--;
+			}
+			
+			if(tradeReqTimeout > 0)
+			{
+				tradeReqTimeout--;
+				if(tradeReqTimeout == 0)
+				{
+					if(mc.currentScreen instanceof GuiHatSelection)
+					{
+						((GuiHatSelection)mc.currentScreen).updateButtonList();
+					}
+					tradeReq = null;
+				}
 			}
 			
 			if(clock % 5L == 0L && requestCooldown <= 0)
@@ -398,6 +410,11 @@ public class TickHandlerClient
 			guiHatUnlocked = new GuiHatUnlocked(mc);
 		}
 		guiHatUnlocked.updateGui();
+		if(guiNewTradeReq == null)
+		{
+			guiNewTradeReq = new GuiTradeReq(mc);
+		}
+		guiNewTradeReq.updateGui();
 	}
 	
 	public HatInfo getPlayerHat(String s)
@@ -446,4 +463,8 @@ public class TickHandlerClient
 	public int requestCooldown;
 	
 	public GuiHatUnlocked guiHatUnlocked;
+	public GuiTradeReq guiNewTradeReq;
+	
+	public String tradeReq;
+	public int tradeReqTimeout;
 }

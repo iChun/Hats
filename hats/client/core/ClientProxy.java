@@ -1,6 +1,6 @@
 package hats.client.core;
 
-import hats.client.gui.GuiTradeWindow;
+import hats.client.gui.GuiHatSelection;
 import hats.client.model.ModelHat;
 import hats.client.render.RenderHat;
 import hats.common.core.CommonProxy;
@@ -72,8 +72,8 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void openHatsGui()
 	{
-//		FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiHatSelection(Minecraft.getMinecraft().thePlayer));
-		FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiTradeWindow());
+		FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiHatSelection(Minecraft.getMinecraft().thePlayer));
+//		FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiTradeWindow("Kihira"));
 	}
 
 	@Override
