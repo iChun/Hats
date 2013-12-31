@@ -755,7 +755,7 @@ public class HatHandler
 	public static void reloadAndOpenGui()
 	{
 		repopulateHatsList();
-		if(Hats.playerHatsMode == 3)
+		if(SessionState.serverHatMode == 3)
 		{
 	        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 	        DataOutputStream stream = new DataOutputStream(bytes);
@@ -768,7 +768,7 @@ public class HatHandler
 	        catch(IOException e)
 	        {}
 		}
-		else
+		else if(SessionState.serverHatMode == 2)
 		{
 			Hats.proxy.openHatsGui();
 		}
@@ -862,5 +862,4 @@ public class HatHandler
 	public static Random rand = new Random();
 
 	public static boolean obfuscation;
-
-}
+	}

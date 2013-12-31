@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,6 +22,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.Packet131MapData;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
@@ -181,15 +183,162 @@ public class TickHandlerServer implements ITickHandler {
 			ti.update();
 			if(ti.trade1 && ti.trade2)
 			{
+				ArrayList<String> trader1Hats = Hats.proxy.tickHandlerServer.playerHats.get(ti.trader1.username);
+				if(trader1Hats == null)
+				{
+					trader1Hats = new ArrayList<String>();
+					Hats.proxy.tickHandlerServer.playerHats.put(ti.trader1.username, trader1Hats);
+				}
+
+				ArrayList<String> trader2Hats = Hats.proxy.tickHandlerServer.playerHats.get(ti.trader2.username);
+				if(trader2Hats == null)
+				{
+					trader2Hats = new ArrayList<String>();
+					Hats.proxy.tickHandlerServer.playerHats.put(ti.trader2.username, trader2Hats);
+				}
+
+				transferHat(trader1Hats, trader2Hats, ti.trader1Hats);
+				transferHat(trader2Hats, trader1Hats, ti.trader2Hats);
+				
+				StringBuilder sb = new StringBuilder();
+				for(int ii = 0; ii < trader1Hats.size(); ii++)
+				{
+					sb.append(trader1Hats.get(ii));
+					if(ii < trader1Hats.size() - 1)
+					{
+						sb.append(":");
+					}
+				}
+				
+				Hats.proxy.saveData.setString(ti.trader1.username + "_unlocked", sb.toString());
+
+				StringBuilder sb1 = new StringBuilder();
+				for(int ii = 0; ii < trader2Hats.size(); ii++)
+				{
+					sb.append(trader2Hats.get(ii));
+					if(ii < trader2Hats.size() - 1)
+					{
+						sb1.append(":");
+					}
+				}
+				
+				Hats.proxy.saveData.setString(ti.trader2.username + "_unlocked", sb.toString());
+				
+				ConnectionHandler.sendPlayerSessionInfo(ti.trader1);
+				ConnectionHandler.sendPlayerSessionInfo(ti.trader2);
+				
+				removeItems(ti.trader1, ti.trader1Items);
+				removeItems(ti.trader2, ti.trader2Items);
+				
+				for(ItemStack is : ti.trader2Items)
+				{
+					if(!ti.trader1.inventory.addItemStackToInventory(is))
+					{
+						ti.trader1.dropPlayerItemWithRandomChoice(is, false);
+					}
+				}
+
+				for(ItemStack is : ti.trader1Items)
+				{
+					if(!ti.trader2.inventory.addItemStackToInventory(is))
+					{
+						ti.trader2.dropPlayerItemWithRandomChoice(is, false);
+					}
+				}
+				
+		        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+		        DataOutputStream stream1 = new DataOutputStream(bytes);
+
+		        try
+		        {
+		        	stream1.writeByte(0);
+		        	
+		       		PacketDispatcher.sendPacketToPlayer(new Packet131MapData((short)Hats.getNetId(), (short)11, bytes.toByteArray()), (Player)ti.trader1);
+		       		PacketDispatcher.sendPacketToPlayer(new Packet131MapData((short)Hats.getNetId(), (short)11, bytes.toByteArray()), (Player)ti.trader2);
+		        }
+		        catch(IOException e)
+		        {}
+				
+		        Hats.proxy.saveData(DimensionManager.getWorld(0));
+		        
+				ti.terminate = true;
+				
 				activeTrades.remove(i);
 			}
-			if(ti.terminate)
+			else if(ti.terminate)
 			{
 				activeTrades.remove(i);
 			}
 		}
 	}
 	
+	public void transferHat(ArrayList<String> origin, ArrayList<String> destination, ArrayList<String> hatsList) 
+	{
+		origin.removeAll(hatsList);
+		destination.addAll(hatsList);
+		
+		Collections.sort(origin);
+		Collections.sort(destination);
+	}
+	
+	public void removeItems(EntityPlayer origin, ArrayList<ItemStack> itemsList) 
+	{
+		ArrayList<ItemStack> itemsListCopy = new ArrayList<ItemStack>();
+		for(ItemStack is : itemsList)
+		{
+			itemsListCopy.add(is.copy());
+		}
+		
+		for(int i = origin.inventory.mainInventory.length - 1; i >= 0; i--)
+		{
+			ItemStack is = origin.inventory.mainInventory[i];
+			if(is != null)
+			{
+				for(int j = itemsListCopy.size() - 1; j >= 0; j--)
+				{
+					ItemStack is1 = itemsListCopy.get(j);
+					if(is1.isItemEqual(is) && ItemStack.areItemStackTagsEqual(is, is1))
+					{
+						while(is.stackSize > 0 && is1.stackSize > 0)
+						{
+							is.stackSize--;
+							is1.stackSize--;
+						}
+						if(is1.stackSize <= 0)
+						{
+							itemsListCopy.remove(j);
+						}
+					}
+				}
+				if(is.stackSize <= 0)
+				{
+					origin.inventory.mainInventory[i] = null;
+				}
+				origin.inventory.onInventoryChanged();
+			}
+		}
+		
+		for(ItemStack is : itemsListCopy)
+		{
+			for(int i = itemsList.size() - 1; i >= 0; i--)
+			{
+				ItemStack is1 = itemsList.get(i);
+				if(is1.isItemEqual(is) && ItemStack.areItemStackTagsEqual(is, is1))
+				{
+					while(is.stackSize > 0 && is1.stackSize > 0)
+					{
+						is.stackSize--;
+						is1.stackSize--;
+					}
+					if(is1.stackSize <= 0)
+					{
+						itemsList.remove(i);
+					}
+				}
+			}
+		}
+	}
+
 	public void playerKilledEntity(EntityLivingBase living, EntityPlayer player)
 	{
 		String hat = mobHats.get(living);

@@ -426,6 +426,8 @@ implements ITinyPacketHandler
 				{
 					//begin trade session
 					FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiTradeWindow(stream.readUTF()));
+					Hats.proxy.tickHandlerClient.tradeReq = null;
+					Hats.proxy.tickHandlerClient.tradeReqTimeout = 0;
 					break;
 				}
 				case 8:
@@ -537,6 +539,14 @@ implements ITinyPacketHandler
 						trade.pointOfNoReturn = true;
 					}
 					break;
+				}
+				case 11:
+				{
+					if(Minecraft.getMinecraft().currentScreen instanceof GuiTradeWindow)
+					{
+						FMLCommonHandler.instance().showGuiScreen(null);
+						Minecraft.getMinecraft().thePlayer.sendChatToPlayer(ChatMessageComponent.createFromTranslationKey("hats.trade.success"));
+					}
 				}
 			}
 		}

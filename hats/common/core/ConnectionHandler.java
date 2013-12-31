@@ -81,6 +81,48 @@ public class ConnectionHandler
 		}
 	}
 
+	
+	public static void sendPlayerSessionInfo(EntityPlayer player)
+	{
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        DataOutputStream stream = new DataOutputStream(bytes);
+        
+        try
+        {
+			stream.writeByte(0); //packetID;
+			
+			stream.writeByte((byte)SessionState.serverHatMode);
+			
+			stream.writeBoolean(Hats.proxy.saveData != null && Hats.proxy.saveData.getBoolean(player.username + "_hasVisited") && Hats.proxy.saveData.getInteger(player.username + "_hatMode") == SessionState.serverHatMode);
+			
+			stream.writeUTF(SessionState.serverHat);
+			
+			stream.writeUTF(SessionState.currentKing);
+
+			ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(player.username);
+			if(playerHatsList == null)
+			{
+				playerHatsList = new ArrayList<String>();
+				Hats.proxy.tickHandlerServer.playerHats.put(player.username, playerHatsList);
+			}
+			
+			StringBuilder sb = new StringBuilder();
+			for(int i = 0; i < playerHatsList.size(); i++)
+			{
+				sb.append(playerHatsList.get(i));
+				if(i < playerHatsList.size() - 1)
+				{
+					sb.append(":");
+				}
+			}
+			stream.writeUTF(sb.toString());
+			
+			PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);
+        }
+        catch(IOException e)
+        {
+        }
+	}
 
 	//IPlayerTracker area
 	
@@ -93,109 +135,88 @@ public class ConnectionHandler
 			Hats.proxy.tickHandlerServer.updateNewKing(player.username, null, false);
 			FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(ChatMessageComponent.createFromTranslationWithSubstitutions("hats.kingOfTheHat.update.playerJoin", new Object[] { player.username }));
 		}
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        DataOutputStream stream = new DataOutputStream(bytes);
 
-		try
+		if(Hats.proxy.saveData != null)
 		{
-			stream.writeByte(0); //packetID;
+			String playerHats = Hats.proxy.saveData.getString(player.username + "_unlocked");
 			
-			stream.writeByte((byte)SessionState.serverHatMode);
-			
-			stream.writeBoolean(Hats.proxy.saveData.getBoolean(player.username + "_hasVisited") && Hats.proxy.saveData.getInteger(player.username + "_hatMode") == SessionState.serverHatMode);
-			
-			stream.writeUTF(SessionState.serverHat);
-			
-			stream.writeUTF(SessionState.currentKing);
-			
-			if(Hats.proxy.saveData != null)
+			if(SessionState.serverHatMode == 5)
 			{
-				String playerHats = Hats.proxy.saveData.getString(player.username + "_unlocked");
-				
-				if(SessionState.serverHatMode == 5)
+				if(!SessionState.currentKing.equalsIgnoreCase(player.username))
 				{
-					if(!SessionState.currentKing.equalsIgnoreCase(player.username))
-					{
-						playerHats = "";
-					}
+					playerHats = "";
 				}
-				
-				stream.writeUTF(SessionState.serverHatMode >= 4 ? playerHats : "");
-				
-				ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(player.username);
-				if(playerHatsList == null)
-				{
-					playerHatsList = new ArrayList<String>();
-					Hats.proxy.tickHandlerServer.playerHats.put(player.username, playerHatsList);
-				}
-				
-				playerHatsList.clear();
-				String[] hats = playerHats.split(":");
-				for(String hat : hats)
-				{
-					if(!hat.trim().equalsIgnoreCase(""))
-					{
-						boolean has = false;
-						for(String s : playerHatsList)
-						{
-							if(s.equalsIgnoreCase(hat))
-							{
-								has = true;
-								break;
-							}
-						}
-						if(!has)
-						{
-							playerHatsList.add(hat);
-						}
-					}
-				}
-				
-				String hatName = Hats.proxy.saveData.getString(player.username + "_wornHat");
-				int r = Hats.proxy.saveData.getInteger(player.username + "_colourR");
-				int g = Hats.proxy.saveData.getInteger(player.username + "_colourG");
-				int b = Hats.proxy.saveData.getInteger(player.username + "_colourB");
-				
-				if(!HatHandler.hasHat(hatName))
-				{
-					HatHandler.requestHat(hatName, player);
-				}
-				
-				Hats.proxy.playerWornHats.put(player.username, new HatInfo(hatName, r, g, b));
-				
-				TimeActiveInfo info = Hats.proxy.tickHandlerServer.playerActivity.get(player.username);
-				
-				if(info == null)
-				{
-					info = new TimeActiveInfo();
-					info.timeLeft = Hats.proxy.saveData.getInteger(player.username + "_activityTimeleft");
-					info.levels = Hats.proxy.saveData.getInteger(player.username + "_activityLevels");
-					
-					if(info.levels == 0 && info.timeLeft == 0)
-					{
-						info.levels = 0;
-						info.timeLeft = Hats.startTime;
-					}
-					
-					Hats.proxy.tickHandlerServer.playerActivity.put(player.username, info);
-				}
-				
-				info.active = true;
-			}
-			else
-			{
-				stream.writeUTF("");
-				
-				Hats.proxy.playerWornHats.put(player.username, new HatInfo());
 			}
 			
-			PacketDispatcher.sendPacketToPlayer(new Packet250CustomPayload("Hats", bytes.toByteArray()), (Player)player);
+			ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(player.username);
+			if(playerHatsList == null)
+			{
+				playerHatsList = new ArrayList<String>();
+				Hats.proxy.tickHandlerServer.playerHats.put(player.username, playerHatsList);
+			}
 			
-			Hats.proxy.saveData.setBoolean(player.username + "_hasVisited", true);
-			Hats.proxy.saveData.setInteger(player.username + "_hatMode", SessionState.serverHatMode);
+			playerHatsList.clear();
+			String[] hats = playerHats.split(":");
+			for(String hat : hats)
+			{
+				if(!hat.trim().equalsIgnoreCase(""))
+				{
+					boolean has = false;
+					for(String s : playerHatsList)
+					{
+						if(s.equalsIgnoreCase(hat))
+						{
+							has = true;
+							break;
+						}
+					}
+					if(!has)
+					{
+						playerHatsList.add(hat);
+					}
+				}
+			}
+			
+			String hatName = Hats.proxy.saveData.getString(player.username + "_wornHat");
+			int r = Hats.proxy.saveData.getInteger(player.username + "_colourR");
+			int g = Hats.proxy.saveData.getInteger(player.username + "_colourG");
+			int b = Hats.proxy.saveData.getInteger(player.username + "_colourB");
+			
+			if(!HatHandler.hasHat(hatName))
+			{
+				HatHandler.requestHat(hatName, player);
+			}
+			
+			Hats.proxy.playerWornHats.put(player.username, new HatInfo(hatName, r, g, b));
+			
+			TimeActiveInfo info = Hats.proxy.tickHandlerServer.playerActivity.get(player.username);
+			
+			if(info == null)
+			{
+				info = new TimeActiveInfo();
+				info.timeLeft = Hats.proxy.saveData.getInteger(player.username + "_activityTimeleft");
+				info.levels = Hats.proxy.saveData.getInteger(player.username + "_activityLevels");
+				
+				if(info.levels == 0 && info.timeLeft == 0)
+				{
+					info.levels = 0;
+					info.timeLeft = Hats.startTime;
+				}
+				
+				Hats.proxy.tickHandlerServer.playerActivity.put(player.username, info);
+			}
+			
+			info.active = true;
 		}
-		catch(IOException e)
-		{}
+		else
+		{
+			Hats.proxy.playerWornHats.put(player.username, new HatInfo());
+		}
+		
+		sendPlayerSessionInfo(player);
+		
+		Hats.proxy.saveData.setBoolean(player.username + "_hasVisited", true);
+		Hats.proxy.saveData.setInteger(player.username + "_hatMode", SessionState.serverHatMode);
 
 		if(SessionState.serverHatMode != 2)
 		{

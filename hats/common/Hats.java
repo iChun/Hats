@@ -18,8 +18,10 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -129,7 +131,6 @@ public class Hats
 	@SidedProxy(clientSide = "hats.client.core.ClientProxy", serverSide = "hats.common.core.CommonProxy")
 	public static CommonProxy proxy;
 
-	
 	public static void handleConfig()
 	{
 		boolean isClient = proxy instanceof ClientProxy;
@@ -424,7 +425,6 @@ public class Hats
 		SessionState.serverHasMod = true;
 		SessionState.serverHatMode = playerHatsMode;
 		SessionState.serverHat = lockedHat;
-		
 		proxy.initCommands(event.getServer());
 	}
 	
