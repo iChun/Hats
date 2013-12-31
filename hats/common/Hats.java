@@ -65,11 +65,11 @@ import cpw.mods.fml.relauncher.Side;
 			tinyPacketHandler = MapPacketHandler.class,
 			clientPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerClient.class),
 			serverPacketHandlerSpec = @SidedPacketHandler(channels = { "Hats" }, packetHandler = PacketHandlerServer.class),
-			versionBounds = "[2.0.0,2.1.0)"
+			versionBounds = "[2.1.0,2.2.0)"
 				)
 public class Hats 
 {
-	public static final String version = "2.0.2";
+	public static final String version = "2.1.0";
 	
 	//Global Options
 	public static int safeLoad = 1;
