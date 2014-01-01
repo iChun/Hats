@@ -1,0 +1,195 @@
+hats.firstJoin.hatHunting=[Hats] Сервер в режиме добычи шапок. Чтобы получить шапку вы должны убить моба с ней.
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Сервер в режиме "Король Шапок". Чтобы получить шапку, убейте короля.
+hats.firstJoin.timeActive=[Hats] Сервер в режиме "Время". Чтобы получить шапку проведите много времени на сервере.
+hats.kingOfTheHat.update.playerJoin=[Hats] Радуйтесь! %s теперь новый Король Шапок!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s умер! %2$s теперь новый Король!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s был убил! %2$s теперь новый Король!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s покинул сервер! %2$s теперь новый Король!
+hats.kingOfTheHat.notKing=[Hats] Ты не Король Шапок, Король - %s! Ты не можешь одеть шапку!
+hats.lockedMode=[Hats] Сервер в режиме статичных шапок! Вам не разрешено менять шапки!
+hats.trade.tradeWith=Торгуем с %s
+hats.trade.yourHats=Ваши шапки
+hats.trade.yourInventory=Ваш инвентарь
+hats.trade.yourOfferings=Ваши предложения:
+hats.trade.theirOfferings=Предложения %s:
+hats.trade.waitingForOffer=Ждем кого-то, кто предложит шапки
+hats.trade.tradeNotReady=Не готов торговать
+hats.trade.tradeReady=Готов торговать
+hats.trade.makeTrade=Новая сделка
+hats.trade.waitingForReady=Ожидание готовности двух команд
+hats.trade.bothReady=Обе команды готовы торговать
+hats.trade.cancelTrade=Отменить сделку
+hats.trade.waitingForYou=Ожидание вашего согласия
+hats.trade.waitingForThem=Ожидание согласия другой команды
+hats.trade.you=Вы
+hats.trade.added=добавили
+hats.trade.removed=удалили
+hats.trade.ready=Вы готовы
+hats.trade.readyThem=%s готов
+hats.trade.notReady=Вы не готовы
+hats.trade.notReadyThem=%s не готов
+hats.trade.selectTrader=Выберите игрока, с которым хотите торговать
+hats.trade.newTradeRequest=Новый запрос на шапки
+hats.trade.tradeRequestDesc=Ударьте %s для подробностей
+hats.trade=Торговать с игроками рядом
+hats.trade.acceptRequestGeneral=Одобрить сделку
+hats.trade.acceptRequestSpecific=Одобрить сделку от %1$s (%2$s)
+hats.trade.cannotFindTrader=[Hats] Не можем торговать! %s не видим!
+hats.trade.cannotAcceptTrade=[Hats] Не можем одобрить сделку! Ошибка в запросе!
+hats.trade.terminatePrefix=Сделка отменена.
+hats.trade.terminate1=%s умер.
+hats.trade.terminate2=Вы и %s ушли слишком далеко от других!
+hats.trade.terminate3=Кто-то мешает вам идти дальше
+hats.trade.terminate4=%s отключился от сделки.
+hats.trade.terminate5=%s в другом измерении.
+hats.trade.success=[Hats] Успешная торговля.
+hats.command= Hats команды
+hats.command.help=type /hats для полного списка шапок
+hats.command.help.send=/hats send <player> <hat name>  Отправить шапку игроку.
+hats.command.help.set=/hats set <player> <hat name>   Установить шапку игроку.
+hats.command.help.unlock=/hats unlock <player> <hat name>   Открыть шапку для игрока
+hats.command.notOnline=%s не в онлайне!
+hats.command.hatDoesNotExist=Шапка %s не найдена
+hats.command.serverDisabledHatSending=На сервере выключена возможность отправлять шапки
+hats.command.sendToPlayer=Отправка шапки %1$s игроку %2$s
+hats.command.setPlayerHat=Установка шапки %1$s игроку %2$s
+hats.command.playerIsInCreative=%s в Творческом режиме!
+hats.command.unlockHatForPlayer=Открытие шапки %1$s для игрока %2$s
+hats.command.adminNotify.unlockHatForPlayer=Шапка %1$s открыта %2$s для игрока %3$s
+hats.command.serverIsNotOnHatHuntingMode=Сервер не в режиме добычи шапок!
+hats.serverOnCommandGiverMode=Сервер в режиме выдачи команд. Вы не можете выдавать команды!
+hats.hatUnlocked=Шапка открыта!
+hats.gui.search=Искать
+hats.gui.allHats=Все Шапки
+hats.gui.addNew=Добавить новую
+hats.gui.firstPerson=От первого лица
+hats.gui.showHats=Показать шапки
+hats.gui.contributors=Контрибьюторы
+hats.gui.category=Категория
+hats.gui.categories=Категории
+hats.gui.colorizer=Палитра
+hats.gui.hatsList=Список шапок
+hats.gui.resetSide=Сбросить сторону?
+hats.gui.randomobs=RandoMobs
+hats.gui.personalize=Персонализация
+hats.gui.viewing=Просмотр
+hats.gui.discardChanges=Отменить изменения?
+hats.gui.removeHat=Удалить шапку
+hats.gui.randomHat=Случайная шапка
+hats.gui.randomCategory=Случайная категория
+hats.gui.randomColor=Случайный цвет
+hats.gui.resetColor=Сбросить цвет
+hats.gui.reloadAllHats=Перезагрузить шапки?
+hats.gui.discardAllChanges=Это отменит все изменения.
+hats.gui.favorites=Избранные
+hats.gui.invalidName=Неверное имя!
+hats.gui.addCategory=Добавить категорию
+hats.gui.addToCategory=Добавить в категорию
+hats.gui.removeFromCategory=Удалить из категории
+hats.gui.areYouSure=Вы серьезно?
+hats.gui.clickConfirm=Нажмите еще раз, чтобы подтвердить
+hats.gui.deleteCategory=Удалить категорию
+hats.gui.deleteCategory.desc1=Это удалить все шапки
+hats.gui.deleteCategory.desc2=в этой категории и перезагрузит
+hats.gui.deleteCategory.desc3=интерфейс
+hats.gui.doubleClickConfirm=Нажмите дважды, чтобы подтвердить
+hats.gui.disableHat=Отключить шапку?
+hats.gui.disableHat.desc1=Это удалит шапку из
+hats.gui.disableHat.desc2=категорий и перезагрузит
+hats.gui.disableHat.desc3=интерфейс. Но не удалит
+hats.gui.disableHat.desc4=файл.
+hats.gui.deleteHat=Удалить шапку?
+hats.gui.deleteHat.desc1=Это удалит шапку из
+hats.gui.deleteHat.desc2=категорий и перезагрузит
+hats.gui.deleteHat.desc3=интерфейс.
+hats.gui.renameCategory=Переименовать категорию?
+hats.gui.renameCategory.desc1=Это перезагрузит интерфейс!
+hats.gui.removeFromFavorites=Удалить из Избранных
+hats.gui.addToFavorites=Добавить в Избранное
+hats.gui.resetButtonsOnSide=Перезагрузить кнопки в интерфейсе справа?
+
+hats.gui.helpInfo1.desc1=SHIFT-клик на кнопку
+hats.gui.helpInfo1.desc2=шапок для подробностей!
+hats.gui.helpInfo1.desc3=Вы не можете SHIFT-кликнуть на шапку,
+hats.gui.helpInfo1.desc4=которую вы носите сейчас,
+hats.gui.helpInfo1.desc5=никак..
+
+hats.gui.helpInfo2.desc1=Если вы на сервере, на котором нету
+hats.gui.helpInfo2.desc2=мода, другие игроки с этим модом в клиенте
+hats.gui.helpInfo2.desc3=не смогут видеть вашу шапку.
+
+hats.gui.helpInfo3.desc1=Вы знали, что вы всегда можете установить больше шапок?
+hats.gui.helpInfo3.desc2=В Techne Online есть огромное
+hats.gui.helpInfo3.desc3=сообщество, которое делает шапки, которые вы
+hats.gui.helpInfo3.desc4=можете скачать и установить.
+
+hats.gui.helpInfo4.desc1=Вы также можете сделать свою собственную шапку!
+hats.gui.helpInfo4.desc2=Вам понадобится Techne.
+hats.gui.helpInfo4.desc3=Модель головы находится в центре
+hats.gui.helpInfo4.desc4=деревянного блока. Этот размер:
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Делайте свою шапку на нем!
+
+hats.gui.helpInfo5.desc1=Вы знаете, что вы можете создавать свои категории?
+hats.gui.helpInfo5.desc2=Нажмите кнопку "Категории" или С на вашей клавиатуре
+hats.gui.helpInfo5.desc3=и нажмите "Добавить Новую".
+
+hats.gui.helpInfo6.desc1=Вы знали, что у вашего друга нету
+hats.gui.helpInfo6.desc2=шапки, которая есть у вас. Когда вы отправляете
+hats.gui.helpInfo6.desc3=шапку на сервер, она отправляется другу
+hats.gui.helpInfo6.desc4=(Только на серверах с модом)
+
+hats.gui.helpInfo7.desc1=SHIFT-клик на "Случайная шапка" даст вам
+hats.gui.helpInfo7.desc2=случайную шапку, покрашенную в случайный цвет!
+
+hats.gui.helpInfo8.desc1=SHIFT-клик на "Случайный цвет"
+hats.gui.helpInfo8.desc2=перезагружает все цвета
+
+hats.gui.helpInfo9.desc1=Вы можете нажать TAB или T, чтобы быстро выбрать
+hats.gui.helpInfo9.desc2=строку поиска.
+
+hats.gui.helpInfo10.desc1=Вы знали, что этот мод был
+hats.gui.helpInfo10.desc2=сделан на 96-часовом марафоне моддинга,
+hats.gui.helpInfo10.desc3=названном ModJam?
+hats.gui.helpInfo10.desc4=Он занял второе место; был сделан и
+hats.gui.helpInfo10.desc5=сейчас разрабатывается iChun'ом.
+
+hats.gui.helpInfo11.desc1=Шапки игроков, добавленные модом - это
+hats.gui.helpInfo11.desc2=имена людей, которые сделали значительный
+hats.gui.helpInfo11.desc3=в мод, с точки зрения
+hats.gui.helpInfo11.desc4=разработки, тестирования, вклада моделей шапок
+hats.gui.helpInfo11.desc5=и помощи.
+hats.gui.helpInfo11.desc6=Однако, Direwolf20 - бонус.. Как же без него?
+
+hats.gui.helpInfo12.desc1=SHIFT-клик на список шапок выкинет
+hats.gui.helpInfo12.desc2=из категории и вернет в список
+hats.gui.helpInfo12.desc3=шапок.
+
+hats.gui.helpInfo13.desc1=Вы можете нажать ПКМ на
+hats.gui.helpInfo13.desc2=строку поиска, чтобы очистить ее.
+
+hats.gui.helpInfo14.desc1=Вы можете отключить шапки, а не удалять
+hats.gui.helpInfo14.desc2=их. Просто задержите SHIFT, при их удалении.
+
+hats.gui.helpInfo15.desc1=Нажамите SHIFT+F добавит или
+hats.gui.helpInfo15.desc2=удалит шапку, которую
+hats.gui.helpInfo15.desc3=вы сейчас носите из Избранного.
+
+hats.gui.helpInfo16.desc1=Горячая клавиша для "Персонализация"
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=в случае, если вы случайно
+hats.gui.helpInfo16.desc4=отключили кнопку.
+
+hats.gui.helpInfo17.desc1=Если у вас есть шапка Контрибьютора,
+hats.gui.helpInfo17.desc2=вы можете использовать ее
+hats.gui.helpInfo17.desc3=в режиме добычи шапок!
+
+hats.gui.helpInfo18.desc1=(C) в начале имени шапки означает,
+hats.gui.helpInfo18.desc2=что шапка добавлена в знак
+hats.gui.helpInfo18.desc3=благодарности за донейт или вклад!
+
+hats.gui.helpInfo19.desc1=Вы знали, что можете изменять шапки
+hats.gui.helpInfo19.desc2=мобов? Это находится во
+hats.gui.helpInfo19.desc3=вкладке "Персонализация"
+
+hats.addon.hatstands.gui.base=Подставка
+hats.addon.hatstands.gui.stand=Стенд
