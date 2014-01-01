@@ -1,0 +1,195 @@
+hats.firstJoin.hatHunting=[Hats] Server je na opciji Lov na kape! Ubij stvorenje sa kapom za otključavanje kape!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Server je na opciji Kralj kapa! Ubij Kralja i pridobi pravo nošenja kape!
+hats.firstJoin.timeActive=[Hats] Server je na opciji Akrivnost na serveru! Budi aktivan na serveru za otključavanje kapi!
+hats.kingOfTheHat.update.playerJoin=[Hats] Veselite se! %s je sada Kralj!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s je umro! %2$s je sada Kralj!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s je ubijen! %2$s je sada Kralj!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s je napustio server! %2$s je sada Kralj!
+hats.kingOfTheHat.notKing=[Hats] Ti nisi Kralj, %s je! Ti ne možeš nositi kapu!
+hats.lockedMode=[Hats] Server je na opciji Zaključano! Nije ti dopušteno nositi kapu!
+hats.trade.tradeWith=Trgovanje sa %s
+hats.trade.yourHats=Tvoje kape
+hats.trade.yourInventory=Tvoja inventura
+hats.trade.yourOfferings=Tvoje ponude:
+hats.trade.theirOfferings=%s ponude:
+hats.trade.waitingForOffer=Čekanje da netko ponudi nešto.
+hats.trade.tradeNotReady=Nisam spreman za razmjenu.
+hats.trade.tradeReady=Spreman za razmjenu.
+hats.trade.makeTrade=Napravi razmjenu
+hats.trade.waitingForReady=Čekanje obje stranke da budu spremne.
+hats.trade.bothReady=Obje stranke su spremne za razmjenu.
+hats.trade.cancelTrade=Odustani od razmjene
+hats.trade.waitingForYou=Čekanje da potvrdiš
+hats.trade.waitingForThem=Čekanje druge stranke da potvrdi
+hats.trade.you=Ti
+hats.trade.added=si dodao
+hats.trade.removed=si uklonio
+hats.trade.ready=Spreman
+hats.trade.readyThem=%s je spreman
+hats.trade.notReady=Nisi spreman
+hats.trade.notReadyThem=%s nije spreman
+hats.trade.selectTrader=Izaberi  s kojim igračom vršiti zamjenu
+hats.trade.newTradeRequest=Nova zamolba za zamjenom
+hats.trade.tradeRequestDesc=Klikni %s za detalje
+hats.trade=Zamjena sa okolnim igračima
+hats.trade.acceptRequestGeneral=Prihvati zamjenu
+hats.trade.acceptRequestSpecific=Prihvati zamjenu od %1$s (%2$s)
+hats.trade.cannotFindTrader=[Hats] Nemoguća zamjena! %s ne može biti viđen!
+hats.trade.cannotAcceptTrade=[Hats] Nemoguće prihvatiti zamjenu! Zahtijev je sada nevažeć!
+hats.trade.terminatePrefix=Zamjena otkazana.
+hats.trade.terminate1=%s je umro.
+hats.trade.terminate2=Ti i %s ste se puno udaljili!
+hats.trade.terminate3=Nešto vam blokira pogled!
+hats.trade.terminate4=%s je odustao od zamjene.
+hats.trade.terminate5=%s je u drugoj dimenziji.
+hats.trade.success=[Hats] Zamjena uspiješna.
+hats.command= Hats naredbe
+hats.command.help=upiši /hats za cijeli popis.
+hats.command.help.send=/hats send <igrač> <ime kape>  Pošalji kapu igraču.
+hats.command.help.set=/hats set <igrač> <ime kape>   Naredi kapu igraču.
+hats.command.help.unlock=/hats unlock <igrač> <ime kape>   Otključaj kapu za igrača.
+hats.command.notOnline=%s je sada online!
+hats.command.hatDoesNotExist=%s ne postoji!
+hats.command.serverDisabledHatSending=Server je onemogučio slanje kapa!
+hats.command.sendToPlayer=Slanje %1$s  %2$s
+hats.command.setPlayerHat=Postavljane %1$s na %2$s
+hats.command.playerIsInCreative=%s je u opciji Kreativan!
+hats.command.unlockHatForPlayer=Otključavanje %1$s za %2$s
+hats.command.adminNotify.unlockHatForPlayer=%1$s je otključao %2$s ua %3$s
+hats.command.serverIsNotOnHatHuntingMode=Server nije na opciji Lov na kape!
+hats.serverOnCommandGiverMode=Server je postavljen na na opciju Davatelj naredbi. Ne možete dati naredbe!
+hats.hatUnlocked=Kapa otključana!
+hats.gui.search=Traži
+hats.gui.allHats=Sve kape
+hats.gui.addNew=Dodaj novu
+hats.gui.firstPerson=Prvo lice
+hats.gui.showHats=Prikaži kape
+hats.gui.contributors=Suradnici
+hats.gui.category=Kategorija
+hats.gui.categories=Kategorije
+hats.gui.colorizer=Mješanje boja
+hats.gui.hatsList=Popis kapa
+hats.gui.resetSide=Reset Side?
+hats.gui.randomobs=Nasumični izabir
+hats.gui.personalize=Prilagodbe
+hats.gui.viewing=Gledište
+hats.gui.discardChanges=Poništi promjene?
+hats.gui.removeHat=Ukloni kapu
+hats.gui.randomHat=Nasumična kapa
+hats.gui.randomCategory=Nasumična kategorija
+hats.gui.randomColor=Nasumična boja
+hats.gui.resetColor=Resertiraj boju
+hats.gui.reloadAllHats=Ponovno učitaj sve kape?
+hats.gui.discardAllChanges=Ovo će poništiti sve promijene.
+hats.gui.favorites=Najdraže
+hats.gui.invalidName=Netočno ime!
+hats.gui.addCategory=Dodaj kategoriju
+hats.gui.addToCategory=Dodaj u kategoriju
+hats.gui.removeFromCategory=Ukloni iz kategorije
+hats.gui.areYouSure=Da li si siguran?
+hats.gui.clickConfirm=Opet klikni za potvrdu
+hats.gui.deleteCategory=Izbriši kategoriju
+hats.gui.deleteCategory.desc1=Ovo će ukloniti sve kape
+hats.gui.deleteCategory.desc2=u ovoj kategoriji i ponovno
+hats.gui.deleteCategory.desc3=učitati GUI.
+hats.gui.doubleClickConfirm=Dupli klik za potvrdu
+hats.gui.disableHat=Onemoguči kapu?
+hats.gui.disableHat.desc1=Ovo će onemogučiti ovu kapu
+hats.gui.disableHat.desc2=iz svih kategorija i ponovno
+hats.gui.disableHat.desc3=učitati GUI. Ovo neće
+hats.gui.disableHat.desc4=izbrisati datoteku.
+hats.gui.deleteHat=Izbrisati kapu?
+hats.gui.deleteHat.desc1=Ovo će ukloniti kapu iz svih
+hats.gui.deleteHat.desc2=kategorija i ponovno učitati
+hats.gui.deleteHat.desc3=GUI.
+hats.gui.renameCategory=Preimenuj kategoriju?
+hats.gui.renameCategory.desc1=Ovo će ponovno učitati GUI!
+hats.gui.removeFromFavorites=Ukloni iz Najdražih
+hats.gui.addToFavorites=Dodaj u Najdraže
+hats.gui.resetButtonsOnSide=Reset tipke na GUI?
+
+hats.gui.helpInfo1.desc1=Klikni shift na kapi
+hats.gui.helpInfo1.desc2=za dodatne opcije!
+hats.gui.helpInfo1.desc3=Ne možeš kliknuti shift na
+hats.gui.helpInfo1.desc4=na kapi koju
+hats.gui.helpInfo1.desc5=nosiš.
+
+hats.gui.helpInfo2.desc1=Ako si na serveru na kojem nije 
+hats.gui.helpInfo2.desc2=instaliran mod, igrač koji nema mod 
+hats.gui.helpInfo2.desc3=neće biti u mogučnosti vidjeti tvoju kapu
+
+hats.gui.helpInfo3.desc1=Dali znaž da možeš nabaviti više kapa?
+hats.gui.helpInfo3.desc2=Techne Online ima mnogo
+hats.gui.helpInfo3.desc3=kapa koja je napravila zajednica
+hats.gui.helpInfo3.desc4=koje možeš skinuti i instalirati.
+
+hats.gui.helpInfo4.desc1=Također mošeš napraviti vlastitu kapu!
+hats.gui.helpInfo4.desc2=Trebaš Techne s kojim ćeš praviti svoje kape.
+hats.gui.helpInfo4.desc3= "head" model se stavi na sredinu 
+hats.gui.helpInfo4.desc4=drvenog bloka.njegova veličina je
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Napravi svoju kapu na njemu!
+
+hats.gui.helpInfo5.desc1=Znaš li da možeš napraviti vlastite kategorije?
+hats.gui.helpInfo5.desc2=Klikni tipku Kategorije (ili C, na tastaturi)
+hats.gui.helpInfo5.desc3=i klikni  "Dodaj novi" tipku.
+
+hats.gui.helpInfo6.desc1=Znaš li da ako tvoj prijatelj nema kapu
+hats.gui.helpInfo6.desc2=koju ti nosiš, pošalješ kapu na 
+hats.gui.helpInfo6.desc3=server, i ona se pošalje tvome prijatelju.
+hats.gui.helpInfo6.desc4=(Samo na serveru koji ima instaliran mod)
+
+hats.gui.helpInfo7.desc1=Shift klikanje na tipku Nasimični odabir daje ti
+hats.gui.helpInfo7.desc2=nasumičnu kapu i boju!
+
+hats.gui.helpInfo8.desc1=Shift klikanje na tipku Nasumična boja 
+hats.gui.helpInfo8.desc2=restartira sve boje.
+
+hats.gui.helpInfo9.desc1=Možeš kliknuti TAB ili T za brzo otvaranje
+hats.gui.helpInfo9.desc2=bara za pretraživanje.
+
+hats.gui.helpInfo10.desc1=Znaš li da je ovaj mod prvobitno nastao
+hats.gui.helpInfo10.desc2=u 96 sati natjecanja u modingu
+hats.gui.helpInfo10.desc3=zvanom ModJam?
+hats.gui.helpInfo10.desc4=Osvojio je drugo mjesto, napravljen i održavan
+hats.gui.helpInfo10.desc5=od strane iChun.
+
+hats.gui.helpInfo11.desc1=Kape igračakoje se nalaze u modu
+hats.gui.helpInfo11.desc2=su imena ljudi koji su pridonjeli razvoju
+hats.gui.helpInfo11.desc3=ovog moda, u smislu
+hats.gui.helpInfo11.desc4=razvoja, testiranja, modeliranja
+hats.gui.helpInfo11.desc5=i podrške.
+hats.gui.helpInfo11.desc6=Direwolf20 je bonus.
+
+hats.gui.helpInfo12.desc1=Shift klikanje na Listu kapa 
+hats.gui.helpInfo12.desc2=će te vratiti iz kategorija na 
+hats.gui.helpInfo12.desc3=popis svih kapa.
+
+hats.gui.helpInfo13.desc1=Možeš kliknuti desnu tipku miša na Baru
+hats.gui.helpInfo13.desc2=za pretraživanje da ga očistiš.
+
+hats.gui.helpInfo14.desc1=Možeš onemogučiti kape umjesto da ih brišeš
+hats.gui.helpInfo14.desc2=Samo drž Shift dok ih brišeš.
+
+hats.gui.helpInfo15.desc1=Klikanje Shift-F na kapi, prebacuješ ju
+hats.gui.helpInfo15.desc2=u Najdraže ili ih uklanjaš.
+hats.gui.helpInfo15.desc3=
+
+hats.gui.helpInfo16.desc1=Glavna tipka za "Prilagodba" je
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=u slučaju da si slučajno onemogućio
+hats.gui.helpInfo16.desc4=tipku.
+
+hats.gui.helpInfo17.desc1=Ako imaš kapu suradnika,
+hats.gui.helpInfo17.desc2=možeš ju koristiti u
+hats.gui.helpInfo17.desc3=opciji Lov na kape.
+
+hats.gui.helpInfo18.desc1=(C)u imenu kape
+hats.gui.helpInfo18.desc2=predstavlja kapu koja je dodana za zahvalu
+hats.gui.helpInfo18.desc3=igračima koji su donirali.
+
+hats.gui.helpInfo19.desc1=Znaš li da možeš urediti
+hats.gui.helpInfo19.desc2=dali stvorenje ima kapu ili ne? Nalazi se u
+hats.gui.helpInfo19.desc3="Prilagodbe" 
+
+hats.addon.hatstands.gui.base=Baza
+hats.addon.hatstands.gui.stand=Stalak
