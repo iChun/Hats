@@ -1,0 +1,195 @@
+hats.firstJoin.hatHunting=[Hats] Сервер находится в режиме "Охота На Шляпы"! Убейте моба с шляпой, чтобы разблокировать её!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Сервер находится в режиме "Король Шляпы"! Убейте короля и получите его право одевать шляпу!
+hats.firstJoin.timeActive=[Hats] Сервер находится в режиме "Активного времени"! Проводите больше времени на сервере. чтобы разблокировать новые шляпы!
+hats.kingOfTheHat.update.playerJoin=[Hats] Возрадуйтесь! %s - новый король шляпы!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s погиб! %2$s - новый король шляпы!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s был убит! %2$s - новый король шляпы!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s покинул сервер! %2$s - новый король шляпы!
+hats.kingOfTheHat.notKing=[Hats] Вы не король, король -  %s! Вы не можете одеть шляпу!
+hats.lockedMode=[Hats] Сервер находится в режиме "Заблокированный"! Вы не можете менять шляпы!
+hats.trade.tradeWith=Торговля с %s
+hats.trade.yourHats=Выши шляпы
+hats.trade.yourInventory=Ваш инвентарь
+hats.trade.yourOfferings=Ваши предложения:
+hats.trade.theirOfferings=Предложения игрока %s:
+hats.trade.waitingForOffer=Ожидание предложения.
+hats.trade.tradeNotReady=Сделка не готова.
+hats.trade.tradeReady=Все готово к сделке.
+hats.trade.makeTrade=Завершить сделку
+hats.trade.waitingForReady=Ожидание готовности обеих сторон.
+hats.trade.bothReady=Обе стороны готовы к сделке.
+hats.trade.cancelTrade=Отменить сделку
+hats.trade.waitingForYou=Ожидание вышего согласия
+hats.trade.waitingForThem=Ожидание согласия другой стороны
+hats.trade.you=Вы
+hats.trade.added=добавлено
+hats.trade.removed=убрано
+hats.trade.ready=Вы готовы
+hats.trade.readyThem=%s готов(а)
+hats.trade.notReady=Вы не готовы
+hats.trade.notReadyThem=%s не готов(а)
+hats.trade.selectTrader=Выберите игрока для сделки
+hats.trade.newTradeRequest=Запрос новой сделки
+hats.trade.tradeRequestDesc=Нажмите на %s для деталей
+hats.trade=Сделка с игроками поблизости
+hats.trade.acceptRequestGeneral=Подтвердить сделку
+hats.trade.acceptRequestSpecific=Подтвердить сделку от %1$s (%2$s)
+hats.trade.cannotFindTrader=[Hats] Сделка невозможна! %s вне пределов видимости!
+hats.trade.cannotAcceptTrade=[Hats] Невозможно принять сделку! Запрос недействителен
+hats.trade.terminatePrefix=Сделка отменена.
+hats.trade.terminate1=%s мертв.
+hats.trade.terminate2=Вы и %s слишком далеко друг от друга!
+hats.trade.terminate3=Что-то блокирует сделку!
+hats.trade.terminate4=%s отменил сделку.
+hats.trade.terminate5=%s в другом измерении.
+hats.trade.success=[Hats] Сделка проведена успешно.
+hats.command=Команды мода Hats
+hats.command.help=введите /hats для полного списка.
+hats.command.help.send=/hats send <игрок> <название шляпы>  Отправляет шляпу игроку.
+hats.command.help.set=/hats set <игрок> <название шляпы> Устанавливает шляпу игроку.
+hats.command.help.unlock=/hats unlock <игрок> <название шляпы> Разблокирует шляпу для игрока.
+hats.command.notOnline=%s не в сети!
+hats.command.hatDoesNotExist=Шляпы %s не существует!
+hats.command.serverDisabledHatSending=Отправка шляп отключена на этом сервере!
+hats.command.sendToPlayer=Отправка %1$s игроку %2$s
+hats.command.setPlayerHat=Установка %1$s игроку %2$s
+hats.command.playerIsInCreative=%s находится в креативе!
+hats.command.unlockHatForPlayer=Разблокировка %1$s для %2$s
+hats.command.adminNotify.unlockHatForPlayer=%1$s разблокировал %2$s для %3$s
+hats.command.serverIsNotOnHatHuntingMode=Сервер не находится в режиме "Охота На Шляпы"!
+hats.serverOnCommandGiverMode=Сервер находится в режиме "Шляпы - только при помощи команд"! Вы не можете использовать команды для раздачи шляп!
+hats.hatUnlocked=Шляпа разблокирована!
+hats.gui.search=Поиск
+hats.gui.allHats=Все шляпы
+hats.gui.addNew=Добавить новую
+hats.gui.firstPerson=От первого лица
+hats.gui.showHats=Показать шляпы
+hats.gui.contributors=Соучастники
+hats.gui.category=Категория
+hats.gui.categories=Категории
+hats.gui.colorizer=Раскрашиватель
+hats.gui.hatsList=Список шляп
+hats.gui.resetSide=Восстановить сторону?
+hats.gui.randomobs=РандоМобы
+hats.gui.personalize=Персонализация
+hats.gui.viewing=Просмотр
+hats.gui.discardChanges=Отменить изменения?
+hats.gui.removeHat=Убрать шляпу
+hats.gui.randomHat=Случайная шляпа
+hats.gui.randomCategory=Случайная категория
+hats.gui.randomColor=Случайный цвет
+hats.gui.resetColor=Восстановить цвет
+hats.gui.reloadAllHats=Перезагрузить все шляпы?
+hats.gui.discardAllChanges=Это отменит все изменения.
+hats.gui.favorites=Избранное
+hats.gui.invalidName=Недействительное имя!
+hats.gui.addCategory=Добавить категорию
+hats.gui.addToCategory=Добавить в каатегорию
+hats.gui.removeFromCategory=Убрать из категории
+hats.gui.areYouSure=Вы уверены?
+hats.gui.clickConfirm=Щелкните еще раз для подтверждения
+hats.gui.deleteCategory=Удалить категорию
+hats.gui.deleteCategory.desc1=Это удалит все шляпы
+hats.gui.deleteCategory.desc2=которые были в этой категории
+hats.gui.deleteCategory.desc3=и перезагрузить ГИП.
+hats.gui.doubleClickConfirm=Двойной щелчок для подтверждения
+hats.gui.disableHat=Отключить шляпу?
+hats.gui.disableHat.desc1=Это отключит шляпу из
+hats.gui.disableHat.desc2=всех категорий и перезагрузит
+hats.gui.disableHat.desc3=ГИП. Это не
+hats.gui.disableHat.desc4=удалить файл.
+hats.gui.deleteHat=Удалить шляпу?
+hats.gui.deleteHat.desc1=Это удалит шляпу из
+hats.gui.deleteHat.desc2=всех категорий и перезагрузит
+hats.gui.deleteHat.desc3=ГИП.
+hats.gui.renameCategory=Переименовать категорию?
+hats.gui.renameCategory.desc1=Это перезагрузит ГИП!
+hats.gui.removeFromFavorites=Убрать из Избранного
+hats.gui.addToFavorites=Добавить в Избранное
+hats.gui.resetButtonsOnSide=Восстановить кнопки на стороне ГИП?
+
+hats.gui.helpInfo1.desc1=Shift click on the Hat
+hats.gui.helpInfo1.desc2=button for more options!
+hats.gui.helpInfo1.desc3=You can't shift click on
+hats.gui.helpInfo1.desc4=the hat you're wearing
+hats.gui.helpInfo1.desc5=however.
+
+hats.gui.helpInfo2.desc1=If you're on a server that doesn't have
+hats.gui.helpInfo2.desc2=the mod, another player with the
+hats.gui.helpInfo2.desc3=mod won't be able to see your hat.
+
+hats.gui.helpInfo3.desc1=Did you know you can always get more hats?
+hats.gui.helpInfo3.desc2=Techne Online has a bunch of
+hats.gui.helpInfo3.desc3=community made hats that you
+hats.gui.helpInfo3.desc4=can download and install.
+
+hats.gui.helpInfo4.desc1=You can also make your own hat!
+hats.gui.helpInfo4.desc2=You need Techne and you make a hat with it.
+hats.gui.helpInfo4.desc3=A "head" model is placed in the middle
+hats.gui.helpInfo4.desc4=of the wood block. It's size is
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Make your hat on it!
+
+hats.gui.helpInfo5.desc1=Did you know you can make your own categories?
+hats.gui.helpInfo5.desc2=Hit the Categories button (or C, on your keyboard)
+hats.gui.helpInfo5.desc3=and hit the "Add New" button.
+
+hats.gui.helpInfo6.desc1=Did you know that if your friend doesn't
+hats.gui.helpInfo6.desc2=have the hat you're wearing, you send the hat
+hats.gui.helpInfo6.desc3=to the server, and it gets sent to your friend.
+hats.gui.helpInfo6.desc4=(Only on servers with the mod)
+
+hats.gui.helpInfo7.desc1=Shift clicking the Random Hat button gives you
+hats.gui.helpInfo7.desc2=a random hat AND colour!
+
+hats.gui.helpInfo8.desc1=Shift clicking the Random Colour button resets
+hats.gui.helpInfo8.desc2=all colours.
+
+hats.gui.helpInfo9.desc1=You can hit TAB or T to quickly select
+hats.gui.helpInfo9.desc2=the search bar.
+
+hats.gui.helpInfo10.desc1=Did you know that this mod was initially
+hats.gui.helpInfo10.desc2=made for a 96 hour modding marathon
+hats.gui.helpInfo10.desc3=called ModJam?
+hats.gui.helpInfo10.desc4=It won second place and was made and is
+hats.gui.helpInfo10.desc5=currently maintained by iChun.
+
+hats.gui.helpInfo11.desc1=The player hats added by the mod are the
+hats.gui.helpInfo11.desc2=names of some people who made a significant
+hats.gui.helpInfo11.desc3=contribution to the mod, in terms
+hats.gui.helpInfo11.desc4=of development, testing, model contribution
+hats.gui.helpInfo11.desc5=and support.
+hats.gui.helpInfo11.desc6=Direwolf20 is just a bonus however.
+
+hats.gui.helpInfo12.desc1=Shift Clicking on the Hats List will take
+hats.gui.helpInfo12.desc2=you out of a category and back to all
+hats.gui.helpInfo12.desc3=the hats.
+
+hats.gui.helpInfo13.desc1=You can right click the Search bar
+hats.gui.helpInfo13.desc2=to clear it.
+
+hats.gui.helpInfo14.desc1=You can disable hats rather than deleting
+hats.gui.helpInfo14.desc2=them. Just hold shift when deleting.
+
+hats.gui.helpInfo15.desc1=Hitting Shift-F will favorite
+hats.gui.helpInfo15.desc2=or unfavorite the hat you
+hats.gui.helpInfo15.desc3=are currently wearing.
+
+hats.gui.helpInfo16.desc1=The hot key for "Personalize" is
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=in case you accidentally
+hats.gui.helpInfo16.desc4=disabled the button.
+
+hats.gui.helpInfo17.desc1=If you have a contributor hat,
+hats.gui.helpInfo17.desc2=you can use it in Hat
+hats.gui.helpInfo17.desc3=Hunting Mode.
+
+hats.gui.helpInfo18.desc1=The (C) in the name of the hat
+hats.gui.helpInfo18.desc2=represents a hat added as a thank
+hats.gui.helpInfo18.desc3=you for a donation towards the mod!
+
+hats.gui.helpInfo19.desc1=Did you know you can customize
+hats.gui.helpInfo19.desc2=if mobs have hats? Its in the
+hats.gui.helpInfo19.desc3="Personalize" tab
+
+hats.addon.hatstands.gui.base=База
+hats.addon.hatstands.gui.stand=Стенд
