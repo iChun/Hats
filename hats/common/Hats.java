@@ -78,6 +78,7 @@ public class Hats
 	
 	//Server Options
 	public static int playerHatsMode = 4;
+	public static int firstJoinMessage = 1;
 	public static String lockedHat = "Straw Hat";
 	public static int startTime = 6000;
 	public static float timeIncrement = 0.0125F;
@@ -145,6 +146,7 @@ public class Hats
 		
 		config.addCustomCategoryComment("serverOptions", "These settings affect only the server that loads the mod.");
 		playerHatsMode = addCommentAndReturnInt(config, "serverOptions", "playerHatsMode", "Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = Locked mode, all players must wear the same hat, defined in the config.\n3 = Command Giver Mode, what hat you wear is chosen by people who can use commands.\n4 = Hat Hunting Mode, see a mob with a hat, kill it to unlock\n5 = King of the Hat Mode, only one shall wear a hat. The king has to defend their spot or lose the crown!\n6 = Time Active Mode, players unlock more hats the more time they are active on the server.", playerHatsMode);
+		firstJoinMessage = addCommentAndReturnInt(config, "serverOptions", "firstJoinMessage", "Send a \"First join\" message to the player when they connect to a server for the first time?", firstJoinMessage);
 		lockedHat = addCommentAndReturnString(config, "serverOptions", "lockedHat", "What hat do players wear in Locked mode (see playerHatsMode 2).\nIf you want different players to wear different hats, use command giver mode.", lockedHat).toLowerCase();
 		startTime = addCommentAndReturnInt(config, "serverOptions", "startTime", "For playerhatsMode 6:\nTime required to be active on the server to unlock the first hat.(In ticks)", startTime);
 		timeIncrement = (float)addCommentAndReturnInt(config, "serverOptions", "timeIncrement", "For playerhatsMode 6:\nAmount of extra time required to get the next level hat.\nDefault is 125 (1.25%).\nFor 200% time put 20000", (int)Math.floor(timeIncrement * 10000F)) / 10000F;

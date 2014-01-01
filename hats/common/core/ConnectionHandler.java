@@ -93,7 +93,7 @@ public class ConnectionHandler
 			
 			stream.writeByte((byte)SessionState.serverHatMode);
 			
-			stream.writeBoolean(Hats.proxy.saveData != null && Hats.proxy.saveData.getBoolean(player.username + "_hasVisited") && Hats.proxy.saveData.getInteger(player.username + "_hatMode") == SessionState.serverHatMode);
+			stream.writeBoolean(Hats.proxy.saveData != null && Hats.proxy.saveData.getBoolean(player.username + "_hasVisited") && Hats.proxy.saveData.getInteger(player.username + "_hatMode") == SessionState.serverHatMode || Hats.firstJoinMessage != 1);
 			
 			stream.writeUTF(SessionState.serverHat);
 			
