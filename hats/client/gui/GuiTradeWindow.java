@@ -1054,18 +1054,22 @@ public class GuiTradeWindow extends GuiScreen
         
         GL11.glPushMatrix();
         
+		final int stencilBit = MinecraftForgeClient.reserveStencilBit();
+
+		final int stencilMask = stencilBit >= 0 ? (1 << stencilBit ) : 0xff;
+        
         GL11.glEnable(GL11.GL_STENCIL_TEST);
         GL11.glColorMask(false, false, false, false);
 
-        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+        GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);  // draw 1s on test fail (always)
-        GL11.glStencilMask(0xFF);
+        GL11.glStencilMask(stencilMask);
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
 
         drawSolidRect(guiLeft + 6, guiTop + 29, 108, 36, 0xffffff, 1.0F);//Inv area
         
 		GL11.glStencilMask(0x00);
-		GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
+		GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
 
         GL11.glColorMask(true, true, true, true);
         
@@ -1146,15 +1150,15 @@ public class GuiTradeWindow extends GuiScreen
         
         GL11.glColorMask(false, false, false, false);
 
-        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+        GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);  // draw 1s on test fail (always)
-        GL11.glStencilMask(0xFF);
+        GL11.glStencilMask(stencilMask);
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
 
         drawSolidRect(guiLeft + 125, guiTop + 17, 108, 54, 0xffffff, 1.0F);//Inv area
         
 		GL11.glStencilMask(0x00);
-		GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
+		GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
 
         GL11.glColorMask(true, true, true, true);
          
@@ -1226,15 +1230,15 @@ public class GuiTradeWindow extends GuiScreen
         
         GL11.glColorMask(false, false, false, false);
 
-        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+        GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);  // draw 1s on test fail (always)
-        GL11.glStencilMask(0xFF);
+        GL11.glStencilMask(stencilMask);
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
 
         drawSolidRect(guiLeft + 125, guiTop + 116, 108, 54, 0xffffff, 1.0F);//Inv area
         
 		GL11.glStencilMask(0x00);
-		GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
+		GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
 
         GL11.glColorMask(true, true, true, true);
          
@@ -1303,6 +1307,8 @@ public class GuiTradeWindow extends GuiScreen
         GL11.glPopMatrix();
         
         GL11.glDisable(GL11.GL_STENCIL_TEST);
+        
+        MinecraftForgeClient.releaseStencilBit(stencilBit);
         
         this.mc.getTextureManager().bindTexture(texTradeWindow);
         this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
@@ -1485,18 +1491,22 @@ public class GuiTradeWindow extends GuiScreen
 	    	chatBar.drawTextBox();
     	}
     	
+		final int stencilBit = MinecraftForgeClient.reserveStencilBit();
+
+		final int stencilMask = stencilBit >= 0 ? (1 << stencilBit ) : 0xff;
+    	
         GL11.glEnable(GL11.GL_STENCIL_TEST);
         GL11.glColorMask(false, false, false, false);
 
-        GL11.glStencilFunc(GL11.GL_ALWAYS, 1, 0xFF);
+        GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
         GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);  // draw 1s on test fail (always)
-        GL11.glStencilMask(0xFF);
+        GL11.glStencilMask(stencilMask);
         GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
 
     	drawSolidRect(guiLeft + 6, guiTop + 113, 101, 97, 0xffffff, 1.0F);
     	
 		GL11.glStencilMask(0x00);
-		GL11.glStencilFunc(GL11.GL_EQUAL, 1, 0xFF);
+		GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
 
         GL11.glColorMask(true, true, true, true);
     	
@@ -1570,6 +1580,8 @@ public class GuiTradeWindow extends GuiScreen
     	
         GL11.glDisable(GL11.GL_STENCIL_TEST);
     	
+        MinecraftForgeClient.releaseStencilBit(stencilBit);
+        
     	GL11.glPopMatrix();
     	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     	if(lines > 19)
