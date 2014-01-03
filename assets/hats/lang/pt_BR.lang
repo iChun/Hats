@@ -1,0 +1,198 @@
+hats.firstJoin.hatHunting=[Hats] Server is on Hat Hunting Mode! Kill a mob with a hat to unlock it!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Server is on King of the Hat Mode! Kill the king and claim his right to wear a hat!
+hats.firstJoin.timeActive=[Hats] Server is on Time Active Mode! Spend time active on the server to unlock hats!
+hats.firstJoin.hatHunting=[Hats] O servidor está no modo de Caça ao Chapéu! Mate um mob com um chapéu para desbloquear!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] O servidor está no modo do Rei do Chapéu! Mate o rei e reivindique o seu direito de usar o chapéu!
+hats.firstJoin.timeActive=[Hats] O servidor está no modo Tempo Ativo! Fique logado no server para desbloquear chapéus!
+hats.kingOfTheHat.update.playerJoin=[Hats] Viva! %s é o novo Rei!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s morreu! %2$s é o novo Rei!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s foi morto! %2$s é o novo Rei!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s saiu do servidor! %2$s é o novo Rei!
+hats.kingOfTheHat.notKing=[Hats] Você não é o rei, %s é! Você não pode usar um chapéu!
+hats.lockedMode=[Hats] O servidor está no modo trancado! Você não tem permissão para trocar de chapéu!
+hats.trade.tradeWith=Trocando com %s
+hats.trade.yourHats=Seus chapéus
+hats.trade.yourInventory=Seu inventário
+hats.trade.yourOfferings=Suas ofertas:
+hats.trade.theirOfferings=%s está oferecendo:
+hats.trade.waitingForOffer=Esperando por alguém para fazer uma oferta.
+hats.trade.tradeNotReady=Não esta pronto para trocar.
+hats.trade.tradeReady=Pronto para trocar.
+hats.trade.makeTrade=Fazer troca
+hats.trade.waitingForReady=Esperando os dois partidos ficarem prontos.
+hats.trade.bothReady=Os dois partidos estão prontos para trocar.
+hats.trade.cancelTrade=Cancelar a troca
+hats.trade.waitingForYou=Esperando você confirmar
+hats.trade.waitingForThem=Esperando o outro jogador confirmar
+hats.trade.you=Você
+hats.trade.added=adicionou
+hats.trade.removed=removeu
+hats.trade.ready=Você está pronto
+hats.trade.readyThem=%s está pronto
+hats.trade.notReady=Você não está pronto
+hats.trade.notReadyThem=%s não está pronto
+hats.trade.selectTrader=Selecione o jogador para trocar
+hats.trade.newTradeRequest=Novo pedido de troca
+hats.trade.tradeRequestDesc=Clique %s para detalhes
+hats.trade=Trocar com jogadores próximos
+hats.trade.acceptRequestGeneral=Aceitar troca
+hats.trade.acceptRequestSpecific=Aceitar troca de %1$s (%2$s)
+hats.trade.cannotFindTrader=[Hats] Não pode trocar! %s não pode ser visto!
+hats.trade.cannotAcceptTrade=[Hats] Não pode aceitar! Pedido inválido!
+hats.trade.terminatePrefix=Troca cancelada.
+hats.trade.terminate1=%s morreu.
+hats.trade.terminate2=Você e %s estão muito longe um do outro!
+hats.trade.terminate3=Algo está bloqueando seu caminho!
+hats.trade.terminate4=%s concluiu a troca.
+hats.trade.terminate5=%s está em outra dimensão.
+hats.trade.success=[Hats] Troca com êxito.
+hats.command= Hats comandos
+hats.command.help=escreva /hats para a lista completa.
+hats.command.help.send=/hats send <jogador> <nome do chapéu>  Enviar um chapéu a um jogador.
+hats.command.help.set=/hats set <jogador> <nome do chapéu>   Determinar o chapéu de um jogador.
+hats.command.help.unlock=/hats unlock <jogador> <nome do chapéu>   Desbloqueia um chapéu para um jogador.
+hats.command.notOnline=%s não está online!
+hats.command.hatDoesNotExist=%s não existe!
+hats.command.serverDisabledHatSending=O servidor desativou o envio de chapéus!
+hats.command.sendToPlayer=Enviando %1$s para %2$s
+hats.command.setPlayerHat=Definindo %1$s em %2$s
+hats.command.playerIsInCreative=%s está no modo criativo!
+hats.command.unlockHatForPlayer=Desbloqueando %1$s para %2$s
+hats.command.adminNotify.unlockHatForPlayer=%1$s desbloqueou %2$s para %3$s
+hats.command.serverIsNotOnHatHuntingMode=O servidor não está no modo Caça aos Chapéu!
+hats.serverOnCommandGiverMode=Server has hats set to Command Giver Mode. You can not give commands!
+hats.hatUnlocked=Chapéu desbloqueado!
+hats.gui.search=Procurar
+hats.gui.allHats=Todos os chapéus
+hats.gui.addNew=Adicionar Novo
+hats.gui.firstPerson=Primeira pessoa
+hats.gui.showHats=Mostrar chapeús
+hats.gui.contributors=Contribuidores
+hats.gui.category=Categoria
+hats.gui.categories=Categorias
+hats.gui.colorizer=Colorir
+hats.gui.hatsList=Lista de chapéus
+hats.gui.resetSide=Resetar lado?
+hats.gui.randomobs=RandoMobs
+hats.gui.personalize=Personalize
+hats.gui.viewing=Observando
+hats.gui.discardChanges=Descartar mudanças?
+hats.gui.removeHat=Remover Chapéu
+hats.gui.randomHat=Chapéu Aleatório
+hats.gui.randomCategory=Categoria Aleatória
+hats.gui.randomColor=Cor Aleatória
+hats.gui.resetColor=Resetar Cor
+hats.gui.reloadAllHats=Carregar todos os chapéus?
+hats.gui.discardAllChanges=Isso vai descartar todas as mudanças.
+hats.gui.favorites=Favoritos
+hats.gui.invalidName=Nome inválido!
+hats.gui.addCategory=Adicionar categoria
+hats.gui.addToCategory=Adicionar para categoria
+hats.gui.removeFromCategory=Remover da categoria
+hats.gui.areYouSure=Você tem certeza?
+hats.gui.clickConfirm=Clique de novo para confirmar
+hats.gui.deleteCategory=Remover categoria
+hats.gui.deleteCategory.desc1=Isso vai remover todos os chapéus
+hats.gui.deleteCategory.desc2=nesta categoria e recarregar
+hats.gui.deleteCategory.desc3=o GUI.
+hats.gui.doubleClickConfirm=Clique duas vezes para confirmar.
+hats.gui.disableHat=Desativar chapéu?
+hats.gui.disableHat.desc1=Isso vai desativar este chapéu de
+hats.gui.disableHat.desc2=todas as categorias e recarregar
+hats.gui.disableHat.desc3=o GUI. Isto não vai
+hats.gui.disableHat.desc4=deletar o arquivo.
+hats.gui.deleteHat=Remover chapéu?
+hats.gui.deleteHat.desc1=Isso vai remover o chapéu de
+hats.gui.deleteHat.desc2=todas as categorias e recarregar
+hats.gui.deleteHat.desc3=o GUI.
+hats.gui.renameCategory=Renomear categoria?
+hats.gui.renameCategory.desc1=Isso vai recarregar o GUI!
+hats.gui.removeFromFavorites=Remover dos Favoritos
+hats.gui.addToFavorites=Adicionar aos Favoritos
+hats.gui.resetButtonsOnSide=Resetar botões do lado do GUI?
+
+hats.gui.helpInfo1.desc1=Clique com o Shift no botão
+hats.gui.helpInfo1.desc2=do chapéu para mais opções!
+hats.gui.helpInfo1.desc3=Você não pode clicar com o Shift
+hats.gui.helpInfo1.desc4=no chapéu que você está
+hats.gui.helpInfo1.desc5=usando.
+
+hats.gui.helpInfo2.desc1=Se você está em um servidor que não tem
+hats.gui.helpInfo2.desc2=o mod, outros jogadores com o
+hats.gui.helpInfo2.desc3=mod não serão capazes de ver o seu chapéu.
+
+hats.gui.helpInfo3.desc1=Você sabia que pode sempre ganhar novos chapéus?
+hats.gui.helpInfo3.desc2=Techne Online tem várias comunidades
+hats.gui.helpInfo3.desc3=que fazem chapéus que você
+hats.gui.helpInfo3.desc4=pode fazer download e instalar.
+
+hats.gui.helpInfo4.desc1=Você também pode fazer seu próprio chapéu!
+hats.gui.helpInfo4.desc2=Você precisa do Techne e pode fazer um chapéu.
+hats.gui.helpInfo4.desc3=Um modelo de "cabeça" é colocada no centro
+hats.gui.helpInfo4.desc4=de um bloco de madeira. O tamanho é de
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Faça seu próprio chapéu!
+
+hats.gui.helpInfo5.desc1=Você sabia que pode fazer suas próprias categorias?
+hats.gui.helpInfo5.desc2=Aperte o botão Categorias (ou C, no seu teclado)
+hats.gui.helpInfo5.desc3=e aperte o botão "Adicionar novo".
+
+hats.gui.helpInfo6.desc1=Você sabia que se o seu amigo não
+hats.gui.helpInfo6.desc2=tem o chapéu que você está usando, você manda o chapéu
+hats.gui.helpInfo6.desc3=para o servidor, e este manda para o seu amigo.
+hats.gui.helpInfo6.desc4=(Apenas servidores com o mod)
+
+hats.gui.helpInfo7.desc1=Clicando com o Shift no botão "Chapéu Aleatório" você ganha
+hats.gui.helpInfo7.desc2=um chapéu aleatório e uma cor!
+
+hats.gui.helpInfo8.desc1=Clicando com o Shift no botão "Cor Aleatória" reseta
+hats.gui.helpInfo8.desc2=todas as cores.
+
+hats.gui.helpInfo9.desc1=Você pode apertar TAB ou T para selecionar
+hats.gui.helpInfo9.desc2=a barra de pesquisa.
+
+hats.gui.helpInfo10.desc1=Você sabia que esse mod foi feito
+hats.gui.helpInfo10.desc2=para uma maratona de mods de 96 horas
+hats.gui.helpInfo10.desc3=chamada ModJam?
+hats.gui.helpInfo10.desc4=O Mod ficou em segundo lugar, foi feito e é
+hats.gui.helpInfo10.desc5=atualmente mantido por iChun.
+
+hats.gui.helpInfo11.desc1=Os chapéus dos jogadores adicionados pelo mod
+hats.gui.helpInfo11.desc2=são os nomes das pessoas que fizeram uma contribuição
+hats.gui.helpInfo11.desc3=significante para o mod, em termos
+hats.gui.helpInfo11.desc4=de desenvolvimento, testando, contribuindo com modelos
+hats.gui.helpInfo11.desc5=and suporte.
+hats.gui.helpInfo11.desc6=Direwolf20 é apenas um bonus.
+
+hats.gui.helpInfo12.desc1=Se você clicar com Shift na lista de chapéus vai 
+hats.gui.helpInfo12.desc2=sair da categoria atual e voltar para
+hats.gui.helpInfo12.desc3=todos os chapéus.
+
+hats.gui.helpInfo13.desc1=Você pode clicar com o botão direito na barra de pesquisa
+hats.gui.helpInfo13.desc2=para limpar.
+
+hats.gui.helpInfo14.desc1=Você pode desativar as preferencias dos chapéus e
+hats.gui.helpInfo14.desc2=excluí-las. Apenas segure o Shift quando for excluir.
+
+hats.gui.helpInfo15.desc1=Apertando Shift-F vai adicionar
+hats.gui.helpInfo15.desc2=ou remover o chapéu que você está
+hats.gui.helpInfo15.desc3=usando dos seus favoritos.
+
+hats.gui.helpInfo16.desc1=O atalho para "Personalizar" é
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=no caso de você
+hats.gui.helpInfo16.desc4=desativar o botão.
+
+hats.gui.helpInfo17.desc1=Se você tem um chapéu de contribuidor,
+hats.gui.helpInfo17.desc2=você pode usar ele no modo
+hats.gui.helpInfo17.desc3=Caça ao Chapéu.
+
+hats.gui.helpInfo18.desc1=O (C) no nome do chapéu
+hats.gui.helpInfo18.desc2=representa o chapéu adicionado como um
+hats.gui.helpInfo18.desc3=agradecimento pela sua doação.
+
+hats.gui.helpInfo19.desc1=Você sabia que pode customizar
+hats.gui.helpInfo19.desc2=se mobs podem ter chapéus? Está na
+hats.gui.helpInfo19.desc3=aba "Personalizar"
+
+hats.addon.hatstands.gui.base=Base
+hats.addon.hatstands.gui.stand=Suporte
