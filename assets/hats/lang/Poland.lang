@@ -1,0 +1,195 @@
+hats.firstJoin.hatHunting=[Hats] Server is on Hat Hunting Mode! Kill a mob with a hat to unlock it!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Serwer jest w modzie króla czapek! Zabij króla i otrzymaj koronę!
+hats.firstJoin.timeActive=[Hats] Serwer jest w modzie aktywnego czasu! Spędzaj czas aktywnie, by dostać nowe czapki!
+hats.kingOfTheHat.update.playerJoin=[Hats] Radujcie się! %s jest teraz nowym Królem!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s zginął! %2$s jest teraz nowym Królem!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s został zamordowany! %2$s jest teraz nowym Królem!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s opuścił serwer! %2$s jest teraz nowym Królem!
+hats.kingOfTheHat.notKing=[Hats] NIE jesteś teraz Królem, %s jest! Nie możesz nosić tej czapki, korony!
+hats.lockedMode=[Hats] Serwer jest teraz w trybie zablokowanym! Nie możesz zmienić czapki!
+hats.trade.tradeWith=Handlujesz z %s
+hats.trade.yourHats=Twoje czapki
+hats.trade.yourInventory=Twój ekwipunek
+hats.trade.yourOfferings=oferujesz:
+hats.trade.theirOfferings=%s oferuje:
+hats.trade.waitingForOffer=Czekasz na kogoś z ofertą.
+hats.trade.tradeNotReady=Nie jesteś gotów handlować.
+hats.trade.tradeReady=Jesteś gotów handlować.
+hats.trade.makeTrade=Dokonaj Wymiany
+hats.trade.waitingForReady=czekaj na obie strony.
+hats.trade.bothReady= obie strony są gotów handlować.
+hats.trade.cancelTrade=Anuluj Handel
+hats.trade.waitingForYou=Czeka na akceptacje
+hats.trade.waitingForThem=czekasz na akceptacje
+hats.trade.you=Ty
+hats.trade.added=dodano
+hats.trade.removed=usunięto
+hats.trade.ready=Jesteś gotów
+hats.trade.readyThem=%s jest gotów
+hats.trade.notReady=Nie jesteś gotów
+hats.trade.notReadyThem=%s nie jest gotów
+hats.trade.selectTrader=Wybierz z kim handlować
+hats.trade.newTradeRequest=Nowa prośba o handel
+hats.trade.tradeRequestDesc=udzerz %s by zobaczyć informacje
+hats.trade=Handel z pobliskimi graczami
+hats.trade.acceptRequestGeneral=Akceptuj handel
+hats.trade.acceptRequestSpecific=zaakceptował wymianę %1$s (%2$s)
+hats.trade.cannotFindTrader=[Hats] Nie możesz handlować! Nie widzisz gracza %s !
+hats.trade.cannotAcceptTrade=[Hats] Nie można handlować! Prośba jest nie prawidłowa!
+hats.trade.terminatePrefix=Handel anulowany.
+hats.trade.terminate1=%s zmarł.
+hats.trade.terminate2=Ty i %s za bardzo się oddaliliście!
+hats.trade.terminate3=Coś cię blokuje na drodze!
+hats.trade.terminate4=%s zakończył handel.
+hats.trade.terminate5=%s jest w innym wymiarze.
+hats.trade.success=[Hats] Wymiana się powiodła.
+hats.command= Komendy czapek
+hats.command.help=napisz /hats by ujrzeć listę czapek.
+hats.command.help.send=/hats send <gracz> <nazwa czapki>  wyślij czapkę do gracza.
+hats.command.help.set=/hats set <gracz> <nazwa czapki>   wybierz czapkę gracza.
+hats.command.help.unlock=/hats unlock <gracz> <nazwa czapki>   odblokuj czapkę dla gracza.
+hats.command.notOnline=%s nie jest online!
+hats.command.hatDoesNotExist=%s nie istnieje!
+hats.command.serverDisabledHatSending=Serwer zablokował wysyłanie czapek!
+hats.command.sendToPlayer=Wysyłanie %1$s do %2$s
+hats.command.setPlayerHat=Ustawianie %1$s na %2$s
+hats.command.playerIsInCreative=%s jest w trybie Kreatywnym!
+hats.command.unlockHatForPlayer=Odblokowywanie %1$s dla %2$s
+hats.command.adminNotify.unlockHatForPlayer=%1$s odblokował %2$s dla %3$s
+hats.command.serverIsNotOnHatHuntingMode=Serwer nie jset w trybie polowania czapek!
+hats.serverOnCommandGiverMode=Serwer ma ustawione czapki na Command Giver Mode. Nie możesz dawać komend!
+hats.hatUnlocked=Czapka Odblokowana!
+hats.gui.search=szukanie
+hats.gui.allHats=Wszystkie Czapki
+hats.gui.addNew=dodaj nowe
+hats.gui.firstPerson=Pierwsza Osoba
+hats.gui.showHats=Pokazuj Czapki
+hats.gui.contributors=Dostawcy
+hats.gui.category=Kategoria
+hats.gui.categories=Kategorie
+hats.gui.colorizer=Koloryzator
+hats.gui.hatsList=Lista Czapek
+hats.gui.resetSide=Zresetować strone?
+hats.gui.randomobs=RandoMobs
+hats.gui.personalize=Personalizuj
+hats.gui.viewing=Sprawdzanie
+hats.gui.discardChanges=usuń zmiany?
+hats.gui.removeHat=Usuń czapkę
+hats.gui.randomHat=randomowa czapka
+hats.gui.randomCategory=Randomowa Kategoria
+hats.gui.randomColor=Randomowy Kolor
+hats.gui.resetColor=Resetuj Kolor
+hats.gui.reloadAllHats=Załaduj od nowa czapki?
+hats.gui.discardAllChanges=To usunie wszystkie zmiany!
+hats.gui.favorites=Ulubione
+hats.gui.invalidName=Nie prawidłowa nazwa!
+hats.gui.addCategory=Dodaj kategorię
+hats.gui.addToCategory=Dodaj do kategorii
+hats.gui.removeFromCategory=Usuń z kategorii
+hats.gui.areYouSure=Jesteś pewien?
+hats.gui.clickConfirm=naciśnij ponownie, by zaakceptową
+hats.gui.deleteCategory=Usuń Kategorię
+hats.gui.deleteCategory.desc1=To usunie wszystkie czapki
+hats.gui.deleteCategory.desc2=in tą kategorię i zresetuje
+hats.gui.deleteCategory.desc3=the GUI.
+hats.gui.doubleClickConfirm=wciśnij dwa razy by zaakceptować
+hats.gui.disableHat=wyłączyć czapki?
+hats.gui.disableHat.desc1=To usunie tą czapkę z 
+hats.gui.disableHat.desc2=wszystkich kategorii i
+hats.gui.disableHat.desc3=zresetuje GUI. To nie
+hats.gui.disableHat.desc4=usunie pliku.
+hats.gui.deleteHat=Usunąć Czapkę?
+hats.gui.deleteHat.desc1=To usunie tę czapkę z
+hats.gui.deleteHat.desc2=wszystkich Kategorii i
+hats.gui.deleteHat.desc3=zresetuje GUI.
+hats.gui.renameCategory=Zmienić nazwę kategorii?
+hats.gui.renameCategory.desc1=To zresetuje GUI!
+hats.gui.removeFromFavorites=Usunięcie z ulubionych
+hats.gui.addToFavorites=Dodaj do Ulubionych
+hats.gui.resetButtonsOnSide=zresetować przyciski ze strony GUI?
+
+hats.gui.helpInfo1.desc1=naciśnij shift i przycisk
+hats.gui.helpInfo1.desc2=czapki po więcej opcji!
+hats.gui.helpInfo1.desc3=Nie możesz zobaczyć więcej
+hats.gui.helpInfo1.desc4=opcji noszącej czapki
+hats.gui.helpInfo1.desc5=ale,
+
+hats.gui.helpInfo2.desc1=Jeśli jesteś na serwerze bez tego
+hats.gui.helpInfo2.desc2=moda, inny gracz z tym modem
+hats.gui.helpInfo2.desc3=nie będzie widział twojej czapki.
+
+hats.gui.helpInfo3.desc1=Czy wiedziałeś czy możesz zdobyć
+hats.gui.helpInfo3.desc2=więcej czapek? Techne Online ma
+hats.gui.helpInfo3.desc3=kilka swoich czapek, które
+hats.gui.helpInfo3.desc4=możesz ściągnąć i zainstalować.
+
+hats.gui.helpInfo4.desc1=Możesz zrobić także swoje czapki!
+hats.gui.helpInfo4.desc2=Potrzebujesz Techne i możesz na nim je zrobić.
+hats.gui.helpInfo4.desc3=Model głowy jest zrobiony w środku
+hats.gui.helpInfo4.desc4=drewnianego klocka. Jego wielkość to
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Zrub na nim swoje czapki!
+
+hats.gui.helpInfo5.desc1=Did you know you can make your own categories?
+hats.gui.helpInfo5.desc2=Hit the Categories button (or C, on your keyboard)
+hats.gui.helpInfo5.desc3=and hit the "Add New" button.
+
+hats.gui.helpInfo6.desc1=Czy wiesz, że jeśli kolega nie ma czapki którą,
+hats.gui.helpInfo6.desc2=nosisz, możesz mu ją wysłać
+hats.gui.helpInfo6.desc3=na serwerze.
+hats.gui.helpInfo6.desc4=(Tylko na serwerach z zainstalowanym modem)
+
+hats.gui.helpInfo7.desc1=naciskanie na przycisk randomowej czapki z shiftem
+hats.gui.helpInfo7.desc2=daje ci randomową czapkę i KOLOR!
+
+hats.gui.helpInfo8.desc1=naciskanie na przycisk randomowego koloru z shiftem
+hats.gui.helpInfo8.desc2=resetuje wszystkie kolory.
+
+hats.gui.helpInfo9.desc1=możesz nacisnąć TAB lub T by szybko
+hats.gui.helpInfo9.desc2=wybrać szukanie czapek.
+
+hats.gui.helpInfo10.desc1=Czy wiesz że ten mod został
+hats.gui.helpInfo10.desc2=stworzony w 96 godzinnym maratonem modowania
+hats.gui.helpInfo10.desc3=nazywany ModJam'em?
+hats.gui.helpInfo10.desc4=Wygrał drugie miejsce
+hats.gui.helpInfo10.desc5=które otzymał iChun.
+
+hats.gui.helpInfo11.desc1=The player hats added by the mod are the
+hats.gui.helpInfo11.desc2=names of some people who made a significant
+hats.gui.helpInfo11.desc3=contribution to the mod, in terms
+hats.gui.helpInfo11.desc4=of development, testing, model contribution
+hats.gui.helpInfo11.desc5=and support.
+hats.gui.helpInfo11.desc6=Direwolf20 is just a bonus however.
+
+hats.gui.helpInfo12.desc1=klikanie z shiftem na listę czapek wywali cie
+hats.gui.helpInfo12.desc2=z kategorii i powrócisz do
+hats.gui.helpInfo12.desc3=twoich czapek.
+
+hats.gui.helpInfo13.desc1=Możesz nacisnąć prawym na psek szukania
+hats.gui.helpInfo13.desc2=aby go wyczyścić.
+
+hats.gui.helpInfo14.desc1=Możesz usunąć więcej czapek na raz
+hats.gui.helpInfo14.desc2=Po prostu trzymaj shift podczas usuwania.
+
+hats.gui.helpInfo15.desc1=naciskając shift-F doda lub
+hats.gui.helpInfo15.desc2=usunie z ulubiony czapkę którą
+hats.gui.helpInfo15.desc3=właśnie nosisz.
+
+hats.gui.helpInfo16.desc1=Przycisk na Personalizacje to
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=w przypadku gdy przypadkowo
+hats.gui.helpInfo16.desc4=wyłączysz przycisk.
+
+hats.gui.helpInfo17.desc1=Jeśli masz czapkę współpracownika,
+hats.gui.helpInfo17.desc2=możesz ją użyć w trybie
+hats.gui.helpInfo17.desc3=Hunting Mode.
+
+hats.gui.helpInfo18.desc1=(C) w nazwie czapki reprezentuje
+hats.gui.helpInfo18.desc2=czapkę dodaną w podarunku za
+hats.gui.helpInfo18.desc3=you pomoc w modowi!
+
+hats.gui.helpInfo19.desc1=Czy wiesz że możesz dostosować
+hats.gui.helpInfo19.desc2=czy moby mają czapki? ta opcja
+hats.gui.helpInfo19.desc3=jest w Personalizacji
+
+hats.addon.hatstands.gui.base=Baza
+hats.addon.hatstands.gui.stand=Stojak
