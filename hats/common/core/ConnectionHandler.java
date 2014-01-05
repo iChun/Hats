@@ -189,24 +189,27 @@ public class ConnectionHandler
 			
 			Hats.proxy.playerWornHats.put(player.username, new HatInfo(hatName, r, g, b));
 			
-			TimeActiveInfo info = Hats.proxy.tickHandlerServer.playerActivity.get(player.username);
-			
-			if(info == null)
+			if(SessionState.serverHatMode == 6)
 			{
-				info = new TimeActiveInfo();
-				info.timeLeft = Hats.proxy.saveData.getInteger(player.username + "_activityTimeleft");
-				info.levels = Hats.proxy.saveData.getInteger(player.username + "_activityLevels");
+				TimeActiveInfo info = Hats.proxy.tickHandlerServer.playerActivity.get(player.username);
 				
-				if(info.levels == 0 && info.timeLeft == 0)
+				if(info == null)
 				{
-					info.levels = 0;
-					info.timeLeft = Hats.startTime;
+					info = new TimeActiveInfo();
+					info.timeLeft = Hats.proxy.saveData.getInteger(player.username + "_activityTimeleft");
+					info.levels = Hats.proxy.saveData.getInteger(player.username + "_activityLevels");
+					
+					if(info.levels == 0 && info.timeLeft == 0)
+					{
+						info.levels = 0;
+						info.timeLeft = Hats.startTime;
+					}
+					
+					Hats.proxy.tickHandlerServer.playerActivity.put(player.username, info);
 				}
 				
-				Hats.proxy.tickHandlerServer.playerActivity.put(player.username, info);
+				info.active = true;
 			}
-			
-			info.active = true;
 		}
 		else
 		{

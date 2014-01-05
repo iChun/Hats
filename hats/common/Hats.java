@@ -247,6 +247,7 @@ public class Hats
 		
 		handleConfig();
 		
+		HatHandler.obfuscation = true;
         try
         {
             Field[] fields = World.class.getDeclaredFields();
@@ -256,7 +257,7 @@ public class Hats
             	if(f.getName().equalsIgnoreCase("loadedEntityList"))
             	{
             		HatHandler.obfuscation = false;
-            		return;
+            		break;
             	}
             }
         }
