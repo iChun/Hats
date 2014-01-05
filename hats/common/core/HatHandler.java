@@ -768,7 +768,7 @@ public class HatHandler
 	        catch(IOException e)
 	        {}
 		}
-		else if(SessionState.serverHatMode == 2)
+		else if(SessionState.serverHatMode != 2)
 		{
 			Hats.proxy.openHatsGui();
 		}
