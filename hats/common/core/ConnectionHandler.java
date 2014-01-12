@@ -76,7 +76,14 @@ public class ConnectionHandler
 			Hats.proxy.tickHandlerClient.mobHats.clear();
 			Hats.proxy.tickHandlerClient.playerWornHats.clear();
 			Hats.proxy.tickHandlerClient.requestedHats.clear();
-			Hats.proxy.tickHandlerClient.guiHatUnlocked.hatList.clear();
+			if(Hats.proxy.tickHandlerClient.guiHatUnlocked != null)
+			{
+				Hats.proxy.tickHandlerClient.guiHatUnlocked.hatList.clear();
+			}
+			if(Hats.proxy.tickHandlerClient.guiNewTradeReq != null)
+			{
+				Hats.proxy.tickHandlerClient.guiNewTradeReq.hatList.clear();
+			}
 			Hats.proxy.tickHandlerClient.worldInstance = null;
 		}
 	}

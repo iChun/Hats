@@ -85,6 +85,11 @@ public class ThreadReadHats extends Thread
 				while((entry = zipStream.getNextEntry()) != null)
 				{
 					File file = new File(hatsFolder, entry.getName());
+					if(entry.isDirectory() && !file.exists())
+					{
+						file.mkdirs();
+						continue;
+					}
 					if(file.exists() && file.length() > 3L)
 					{
 						continue;

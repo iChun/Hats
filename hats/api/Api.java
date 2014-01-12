@@ -34,6 +34,15 @@ public final class Api
 		}
 	}
 	
+	public static Object getRandomHatInfo(int r, int g, int b)
+	{
+		try {
+			return (Object)Class.forName("hats.common.core.ApiHandler").getDeclaredMethod("getRandomHatInfo", int.class, int.class, int.class).invoke(null, r, g, b);
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 	/**
 	 * Renders the Hat using the provided hat info.
 	 * You have to pre-translate to the hat position first before translation.
