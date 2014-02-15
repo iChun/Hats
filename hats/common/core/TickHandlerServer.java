@@ -42,6 +42,10 @@ public class TickHandlerServer implements ITickHandler {
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) 
 	{
+		if (type.equals(EnumSet.of(TickType.SERVER)))
+        {
+        	serverTick();
+        }
 	}
 
 	@Override
@@ -50,10 +54,6 @@ public class TickHandlerServer implements ITickHandler {
         if (type.equals(EnumSet.of(TickType.WORLD)))
         {
         	worldTick((WorldServer)tickData[0]);
-        }
-        else if (type.equals(EnumSet.of(TickType.SERVER)))
-        {
-        	serverTick();
         }
 	}
 
