@@ -620,7 +620,7 @@ public class GuiHatSelection extends GuiScreen
 	        {
 	        	pageCount = 1;
 	        }
-	        currentDisplay = StatCollector.translateToLocal("hats.gui.allHat") + " (" + (pageNumber + 1) + "/" + (pageCount) + ")";
+	        currentDisplay = StatCollector.translateToLocal("hats.gui.allHats") + " (" + (pageNumber + 1) + "/" + (pageCount) + ")";
     	}
     	else if(view == VIEW_COLOURIZER)
     	{
