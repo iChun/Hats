@@ -1391,6 +1391,7 @@ public class GuiTradeWindow extends GuiScreen
         		GL11.glTranslatef(0.0F, 0.0F, -50.0F);
         	}
         	GL11.glTranslatef(0.0F, 0.0F, -50.0F);
+        	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
     
