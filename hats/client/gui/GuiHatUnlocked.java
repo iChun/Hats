@@ -167,8 +167,8 @@ public class GuiHatUnlocked extends Gui
                 
                 HatRendererHelper.renderHat(info, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.000000000F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, true, true, 1.0F);
                 
-                GL11.glDepthMask(false);
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
+                GL11.glDepthMask(true);
+                GL11.glEnable(GL11.GL_DEPTH_TEST);
 
                 GL11.glDisable(GL11.GL_LIGHTING);
 	            
