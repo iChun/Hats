@@ -215,7 +215,7 @@ public class TickHandlerServer implements ITickHandler {
 				StringBuilder sb1 = new StringBuilder();
 				for(int ii = 0; ii < trader2Hats.size(); ii++)
 				{
-					sb.append(trader2Hats.get(ii));
+					sb1.append(trader2Hats.get(ii));
 					if(ii < trader2Hats.size() - 1)
 					{
 						sb1.append(":");
