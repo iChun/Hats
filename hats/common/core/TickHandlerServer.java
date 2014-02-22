@@ -71,6 +71,19 @@ public class TickHandlerServer implements ITickHandler {
 
 	public void worldTick(WorldServer world)
 	{
+		if(world.provider.dimensionId == 0)
+		{
+			Iterator<Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
+			
+			while(iterator1.hasNext())
+			{
+				Entry<EntityLivingBase, String> e = iterator1.next();
+				if(e.getKey().isDead || e.getKey().isChild())
+				{
+					iterator1.remove();
+				}
+			}
+		}
 		for(int i = 0; i < world.loadedEntityList.size(); i++)
 		{
 			Entity ent = (Entity)world.loadedEntityList.get(i);
@@ -120,17 +133,6 @@ public class TickHandlerServer implements ITickHandler {
 	
 	public void serverTick()
 	{
-		Iterator<Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
-		
-		while(iterator1.hasNext())
-		{
-			Entry<EntityLivingBase, String> e = iterator1.next();
-			if(e.getKey().isDead || e.getKey().isChild())
-			{
-				iterator1.remove();
-			}
-		}
-		
 		for(Map.Entry<String, TimeActiveInfo> e : playerActivity.entrySet())
 		{
 			TimeActiveInfo info = e.getValue();

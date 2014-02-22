@@ -69,7 +69,7 @@ import cpw.mods.fml.relauncher.Side;
 				)
 public class Hats 
 {
-	public static final String version = "2.1.2";
+	public static final String version = "2.1.3";
 	
 	//Global Options
 	public static int safeLoad = 1;
