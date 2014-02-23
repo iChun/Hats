@@ -69,7 +69,7 @@ import cpw.mods.fml.relauncher.Side;
 				)
 public class Hats 
 {
-	public static final String version = "2.1.3";
+	public static final String version = "2.1.4";
 	
 	//Global Options
 	public static int safeLoad = 1;
@@ -419,7 +419,7 @@ public class Hats
 				}
 			}
 		}
-		proxy.tickHandlerServer.mobHats.remove(event.entityLiving);
+		proxy.tickHandlerServer.mobHatsToRemove.add(event.entityLiving);
 	}
 
 	@EventHandler
@@ -439,6 +439,7 @@ public class Hats
 	@EventHandler
 	public void serverStopped(FMLServerStoppedEvent event)
 	{
+		proxy.tickHandlerServer.mobHatsToRemove.clear();
 		proxy.tickHandlerServer.mobHats.clear();
 		proxy.tickHandlerServer.playerHats.clear();
 		proxy.tickHandlerServer.playerActivity.clear();

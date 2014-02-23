@@ -71,19 +71,6 @@ public class TickHandlerServer implements ITickHandler {
 
 	public void worldTick(WorldServer world)
 	{
-		if(world.provider.dimensionId == 0)
-		{
-			Iterator<Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
-			
-			while(iterator1.hasNext())
-			{
-				Entry<EntityLivingBase, String> e = iterator1.next();
-				if(e.getKey().isDead || e.getKey().isChild())
-				{
-					iterator1.remove();
-				}
-			}
-		}
 		for(int i = 0; i < world.loadedEntityList.size(); i++)
 		{
 			Entity ent = (Entity)world.loadedEntityList.get(i);
@@ -133,6 +120,23 @@ public class TickHandlerServer implements ITickHandler {
 	
 	public void serverTick()
 	{
+		for(EntityLivingBase living : mobHatsToRemove)
+		{
+			mobHats.remove(living);
+		}
+		mobHatsToRemove.clear();
+		
+		Iterator<Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
+		
+		while(iterator1.hasNext())
+		{
+			Entry<EntityLivingBase, String> e = iterator1.next();
+			if(e.getKey().isDead || e.getKey().isChild())
+			{
+				iterator1.remove();
+			}
+		}
+		
 		for(Map.Entry<String, TimeActiveInfo> e : playerActivity.entrySet())
 		{
 			TimeActiveInfo info = e.getValue();
@@ -348,7 +352,7 @@ public class TickHandlerServer implements ITickHandler {
 		{
 			HatHandler.unlockHat(player, hat);
 		}
-		mobHats.remove(living);
+		mobHatsToRemove.add(living);
 	}
 	
 	public void playerDeath(EntityPlayer player)
@@ -496,6 +500,7 @@ public class TickHandlerServer implements ITickHandler {
 		activeTrades.add((new TradeInfo(player, plyr)).initialize());
 	}
 	
+	public ArrayList<EntityLivingBase> mobHatsToRemove = new ArrayList<EntityLivingBase>();
 	public WeakHashMap<EntityLivingBase, String> mobHats = new WeakHashMap<EntityLivingBase, String>();
 	public HashMap<String, ArrayList<String>> playerHats = new HashMap<String, ArrayList<String>>();
 	public HashMap<String, TimeActiveInfo> playerActivity = new HashMap<String, TimeActiveInfo>();
