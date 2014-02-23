@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -496,7 +496,7 @@ public class TickHandlerServer implements ITickHandler {
 		activeTrades.add((new TradeInfo(player, plyr)).initialize());
 	}
 	
-	public WeakHashMap<EntityLivingBase, String> mobHats = new WeakHashMap<EntityLivingBase, String>();
+	public Map<EntityLivingBase, String> mobHats = new ConcurrentHashMap<EntityLivingBase, String>();
 	public HashMap<String, ArrayList<String>> playerHats = new HashMap<String, ArrayList<String>>();
 	public HashMap<String, TimeActiveInfo> playerActivity = new HashMap<String, TimeActiveInfo>();
 	
