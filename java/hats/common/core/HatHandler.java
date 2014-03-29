@@ -8,6 +8,7 @@ import hats.api.RenderOnEntityHelper;
 import hats.common.Hats;
 import hats.common.packet.*;
 import ichun.core.network.PacketHandler;
+import ichun.core.util.MD5Checksum;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
