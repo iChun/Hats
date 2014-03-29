@@ -79,7 +79,7 @@ public class CommonProxy
                 PacketMobHatsList.class,
                 PacketKingOfTheHatInfo.class,
                 PacketTradeOffers.class,
-                PacketHatFile.class
+                PacketHatFragment.class
         ));
 
     }

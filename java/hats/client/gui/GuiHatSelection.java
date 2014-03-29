@@ -190,6 +190,7 @@ public class GuiHatSelection extends GuiScreen
 	@Override
 	public void initGui()
 	{
+        super.initGui();
 		if(hat == null || player == null)
 		{
 			mc.displayGuiScreen(null);

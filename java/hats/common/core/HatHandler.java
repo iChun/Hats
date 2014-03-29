@@ -6,10 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import hats.api.RenderOnEntityHelper;
 import hats.common.Hats;
-import hats.common.packet.PacketHatFile;
-import hats.common.packet.PacketPing;
-import hats.common.packet.PacketRequestHat;
-import hats.common.packet.PacketString;
+import hats.common.packet.*;
 import ichun.core.network.PacketHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -361,98 +358,131 @@ public class HatHandler
 		}
 		try
 		{
-			String hatName = ByteBufUtils.readUTF8String(buffer);
-            int fileSize = buffer.readInt();
+            String hatName = ByteBufUtils.readUTF8String(buffer);
+            byte packets = buffer.readByte();
+            byte packetNumber = buffer.readByte();
+            int bytesSize = buffer.readInt();
 
-			byte[] byteValues = new byte[fileSize];
+            byte[] byteValues = new byte[bytesSize];
 
             buffer.readBytes(byteValues);
 
-			boolean hasAllInfo = true;
-
-            File file = new File(hatsFolder, hatName + ".tcn");
-
-            if(file.exists())
+            ArrayList<byte[]> byteArray = hatParts.get(hatName);
+            if(byteArray == null)
             {
-                Hats.console(file.getName() + " already exists! Will not save.");
-                return;
+                byteArray = new ArrayList<byte[]>();
+
+                hatParts.put(hatName, byteArray);
+
+                for(int i = 0; i < packets; i++)
+                {
+                    byteArray.add(new byte[0]);
+                }
             }
 
-            FileOutputStream fis = new FileOutputStream(file);
+            byteArray.set(packetNumber, byteValues);
 
-            fis.write(byteValues);
+            boolean hasAllInfo = true;
 
-            fis.close();
-
-            String md5 = MD5Checksum.getMD5Checksum(file);
-
-            boolean newHat = HatHandler.checksums.get(md5) == null;
-
-            if(readHatFromFile(file))
+            for(int i = 0; i < byteArray.size(); i++)
             {
-                if(isServer)
+                byte[] byteList = byteArray.get(i);
+                if(byteList.length == 0)
                 {
-                    ArrayList<String> queuedLists = queuedHats.get(hatName.toLowerCase());
-                    if(queuedLists != null)
+                    hasAllInfo = false;
+                }
+            }
+
+            if(hasAllInfo)
+            {
+                File file = new File(hatsFolder, hatName + ".tcn");
+
+                if(file.exists())
+                {
+                    Hats.console(file.getName() + " already exists! Will not save.");
+                    return;
+                }
+
+                FileOutputStream fis = new FileOutputStream(file);
+
+                for(int i = 0; i < byteArray.size(); i++)
+                {
+                    byte[] byteList = byteArray.get(i);
+                    fis.write(byteList);
+                }
+
+                fis.close();
+
+                String md5 = MD5Checksum.getMD5Checksum(file);
+
+                boolean newHat = HatHandler.checksums.get(md5) == null;
+
+                if(readHatFromFile(file))
+                {
+                    if(isServer)
                     {
-                        queuedHats.remove(hatName);
-                        for(String name : queuedLists)
+                        ArrayList<String> queuedLists = queuedHats.get(hatName.toLowerCase());
+                        if(queuedLists != null)
                         {
-                            EntityPlayer player1 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
-                            if(player1 != null)
+                            queuedHats.remove(hatName);
+                            for(String name : queuedLists)
                             {
-                                sendHat(hatName, player1);
+                                EntityPlayer player1 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
+                                if(player1 != null)
+                                {
+                                    sendHat(hatName, player1);
+                                }
+                            }
+                        }
+
+                        if(newHat)
+                        {
+                            Hats.console("Received " + file.getName() + " from " + player.getCommandSenderName());
+                        }
+                        else
+                        {
+                            Hats.proxy.remap(file.getName().substring(0, file.getName().length() - 4).toLowerCase(), HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase());
+                            Hats.console("Deleting " + file.getName() + " from " + (isServer ? player.getCommandSenderName() : "server") + "! Duplicate hat file with different name. Remapping hat to original file.", true);
+                            if(!file.delete())
+                            {
+                                Hats.console("Failed to delete file! We're doomed!", true);
+                            }
+
+                            HatInfo info = Hats.proxy.playerWornHats.get(player.getCommandSenderName());
+                            Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo(HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase(), info.colourR, info.colourG, info.colourB));
+                        }
+
+                        Hats.proxy.saveData(DimensionManager.getWorld(0));
+
+                        Hats.proxy.sendPlayerListOfWornHats(player, false);
+                    }
+                    else
+                    {
+                        Hats.proxy.tickHandlerClient.requestedHats.remove(hatName.toLowerCase());
+
+                        if(newHat)
+                        {
+                            Hats.console("Received " + file.getName() + " from server.");
+                            HatHandler.repopulateHatsList();
+                        }
+                        else
+                        {
+                            Hats.proxy.remap(file.getName().substring(0, file.getName().length() - 4).toLowerCase(), HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase());
+                            Hats.console("Deleting " + file.getName() + " from " + (isServer ? player.getCommandSenderName() : "server") + "! Duplicate hat file with different name. Remapping hat to original file.", true);
+                            if(!file.delete())
+                            {
+                                Hats.console("Failed to delete file! We're doomed!", true);
                             }
                         }
                     }
-
-                    if(newHat)
-                    {
-                        Hats.console("Received " + file.getName() + " from " + player.getCommandSenderName());
-                    }
-                    else
-                    {
-                        Hats.proxy.remap(file.getName().substring(0, file.getName().length() - 4).toLowerCase(), HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase());
-                        Hats.console("Deleting " + file.getName() + " from " + (isServer ? player.getCommandSenderName() : "server") + "! Duplicate hat file with different name. Remapping hat to original file.", true);
-                        if(!file.delete())
-                        {
-                            Hats.console("Failed to delete file! We're doomed!", true);
-                        }
-
-                        HatInfo info = Hats.proxy.playerWornHats.get(player.getCommandSenderName());
-                        Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo(HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase(), info.colourR, info.colourG, info.colourB));
-                    }
-
-                    Hats.proxy.saveData(DimensionManager.getWorld(0));
-
-                    Hats.proxy.sendPlayerListOfWornHats(player, false);
                 }
                 else
                 {
-                    Hats.proxy.tickHandlerClient.requestedHats.remove(hatName.toLowerCase());
-
-                    if(newHat)
+                    Hats.console("Deleting " + file.getName() + " from " + (isServer ? player.getCommandSenderName() : "server") + "! SafeLoad is on, and the Model file contains files which are not XML or PNG files.", true);
+                    if(!file.delete())
                     {
-                        Hats.console("Received " + file.getName() + " from server.");
-                        HatHandler.repopulateHatsList();
+                        Hats.console("Failed to delete file! We're doomed!", true);
                     }
-                    else
-                    {
-                        Hats.proxy.remap(file.getName().substring(0, file.getName().length() - 4).toLowerCase(), HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase());
-                        Hats.console("Deleting " + file.getName() + " from " + (isServer ? player.getCommandSenderName() : "server") + "! Duplicate hat file with different name. Remapping hat to original file.", true);
-                        if(!file.delete())
-                        {
-                            Hats.console("Failed to delete file! We're doomed!", true);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                Hats.console("Deleting " + file.getName() + " from " + (isServer ? player.getCommandSenderName() : "server") + "! SafeLoad is on, and the Model file contains files which are not XML or PNG files.", true);
-                if(!file.delete())
-                {
-                    Hats.console("Failed to delete file! We're doomed!", true);
                 }
             }
 		}
@@ -460,7 +490,7 @@ public class HatHandler
 		{
 		}
 	}
-	
+
 	public static void sendHat(String hatName, EntityPlayer player)
 	{
 		if(Hats.allowSendingOfHats != 1)
@@ -495,15 +525,36 @@ public class HatHandler
 
             Hats.console("Sending " + file.getName() + " to " + (player == null ? "the server" : player.getCommandSenderName()));
 
-            //TODO test this and make sure it doesn't fuck up on large files
+            try
+            {
+                FileInputStream fis = new FileInputStream(file);
 
-            if(player != null)
-            {
-                PacketHandler.sendToPlayer(Hats.channels, new PacketHatFile(file.getName().substring(0, file.getName().length() - 4), file), player);
+                String hatFullName = file.getName().substring(0, file.getName().length() - 4);
+                int packetsToSend = (int)Math.ceil((float)fileSize / 32000F);
+
+                int packetCount = 0;
+                while(fileSize > 0)
+                {
+                    byte[] fileBytes = new byte[fileSize > 32000 ? 32000 : fileSize];
+                    fis.read(fileBytes);
+
+                    if(player != null)
+                    {
+                        PacketHandler.sendToPlayer(Hats.channels, new PacketHatFragment(hatFullName, packetsToSend, packetCount, fileSize > 32000 ? 32000 : fileSize, fileBytes), player);
+                    }
+                    else
+                    {
+                        PacketHandler.sendToServer(Hats.channels, new PacketHatFragment(hatFullName, packetsToSend, packetCount, fileSize > 32000 ? 32000 : fileSize, fileBytes));
+                    }
+
+                    packetCount++;
+                    fileSize -= 32000;
+                }
+
+                fis.close();
             }
-            else
+            catch(IOException e)
             {
-                PacketHandler.sendToServer(Hats.channels, new PacketHatFile(file.getName().substring(0, file.getName().length() - 4), file));
             }
 		}
 		else if(player != null)
