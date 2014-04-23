@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.Side;
 import hats.client.gui.GuiTradeWindow;
 import hats.common.Hats;
 import hats.common.trade.TradeInfo;
-import ichun.core.network.AbstractPacket;
+import ichun.common.core.network.AbstractPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,9 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class PacketTradeOffers extends AbstractPacket

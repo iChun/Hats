@@ -2,7 +2,7 @@ package hats.client.gui;
 
 import hats.common.Hats;
 import hats.common.packet.PacketString;
-import ichun.core.network.PacketHandler;
+import ichun.common.core.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;

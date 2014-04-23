@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.Side;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
-import ichun.core.network.AbstractPacket;
+import ichun.common.core.network.AbstractPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.common.DimensionManager;

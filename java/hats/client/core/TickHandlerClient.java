@@ -13,7 +13,7 @@ import hats.common.core.SessionState;
 import hats.common.entity.EntityHat;
 import hats.common.packet.PacketPing;
 import hats.common.packet.PacketRequestMobHats;
-import ichun.core.network.PacketHandler;
+import ichun.common.core.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
@@ -85,7 +85,6 @@ public class TickHandlerClient
         }
     }
 
-    //TODO check to make sure you can't send a player a trade request when the server doesn't have the mod
     //TODO " I would have to double check what exactly but it was like you looping through lists twice or creating a list then immediately looping through it and removing stuff from it instead of just not adding them in the first place"
     @SubscribeEvent
     public void worldTick(TickEvent.ClientTickEvent event)

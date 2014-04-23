@@ -4,7 +4,7 @@ import hats.common.Hats;
 import hats.common.packet.PacketString;
 import hats.common.packet.PacketTradeOffers;
 import hats.common.packet.PacketTradeReadyInfo;
-import ichun.core.network.PacketHandler;
+import ichun.common.core.network.PacketHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;

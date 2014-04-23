@@ -7,7 +7,7 @@ import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import hats.common.Hats;
 import hats.common.packet.PacketSession;
-import ichun.core.network.PacketHandler;
+import ichun.common.core.network.PacketHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentTranslation;
@@ -114,8 +114,8 @@ public class EventHandler
                     }
                 }
             }
+            Hats.proxy.tickHandlerServer.mobHatsToRemove.add(event.entityLiving);
         }
-        Hats.proxy.tickHandlerServer.mobHatsToRemove.add(event.entityLiving);
     }
 
     @SubscribeEvent

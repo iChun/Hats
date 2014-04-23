@@ -8,7 +8,7 @@ import hats.common.packet.PacketKingOfTheHatInfo;
 import hats.common.packet.PacketPing;
 import hats.common.trade.TradeInfo;
 import hats.common.trade.TradeRequest;
-import ichun.core.network.PacketHandler;
+import ichun.common.core.network.PacketHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -149,6 +149,7 @@ public class TickHandlerServer
                 }
             }
 
+            //TODO move this to TradeInfo.. kinda confusing that this is here..
             for(int i = activeTrades.size() - 1; i >= 0; i--)
             {
                 TradeInfo ti = activeTrades.get(i);
@@ -194,7 +195,7 @@ public class TickHandlerServer
                         }
                     }
 
-                    Hats.proxy.saveData.setString(ti.trader2.getCommandSenderName() + "_unlocked", sb.toString());
+                    Hats.proxy.saveData.setString(ti.trader2.getCommandSenderName() + "_unlocked", sb1.toString());
 
                     EventHandler.sendPlayerSessionInfo(ti.trader1);
                     EventHandler.sendPlayerSessionInfo(ti.trader2);

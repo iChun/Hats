@@ -5,7 +5,7 @@ import cpw.mods.fml.relauncher.Side;
 import hats.common.Hats;
 import hats.common.core.HatInfo;
 import hats.common.entity.EntityHat;
-import ichun.core.network.AbstractPacket;
+import ichun.common.core.network.AbstractPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;

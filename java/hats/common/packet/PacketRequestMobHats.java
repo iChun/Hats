@@ -2,16 +2,13 @@ package hats.common.packet;
 
 import cpw.mods.fml.relauncher.Side;
 import hats.common.Hats;
-import ichun.core.network.AbstractPacket;
-import ichun.core.network.PacketHandler;
+import ichun.common.core.network.AbstractPacket;
+import ichun.common.core.network.PacketHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class PacketRequestMobHats extends AbstractPacket

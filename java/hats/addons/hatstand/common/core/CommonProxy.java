@@ -6,17 +6,15 @@ import hats.addons.hatstand.common.block.BlockHatStand;
 import hats.addons.hatstand.common.item.ItemHatStand;
 import hats.addons.hatstand.common.packet.PacketStandHatInfo;
 import hats.addons.hatstand.common.tileentity.TileEntityHatStand;
-import ichun.core.network.ChannelHandler;
+import ichun.common.core.network.ChannelHandler;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public class CommonProxy 
 {

@@ -10,17 +10,12 @@ import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.TimeActiveInfo;
 import hats.common.trade.TradeInfo;
-import ichun.core.network.AbstractPacket;
-import ichun.core.network.PacketHandler;
+import ichun.common.core.network.AbstractPacket;
+import ichun.common.core.network.PacketHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.StatCollector;
-
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 
 public class PacketPing extends AbstractPacket
 {

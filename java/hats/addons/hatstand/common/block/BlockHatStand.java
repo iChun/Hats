@@ -22,7 +22,6 @@ import java.util.List;
 public class BlockHatStand extends Block 
 	implements ITileEntityProvider
 {
-    //TODO check out what are the ID changes
 	public BlockHatStand(Material par2Material)
 	{
 		super(par2Material);
@@ -216,7 +215,6 @@ public class BlockHatStand extends Block
     	return HatStand.renderHatStandID;
     }
 
-    //TODO check that this is same texture
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister par1IconRegister)

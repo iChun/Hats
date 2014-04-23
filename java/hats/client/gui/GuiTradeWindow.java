@@ -6,7 +6,9 @@ import hats.common.Hats;
 import hats.common.packet.PacketPing;
 import hats.common.packet.PacketString;
 import hats.common.packet.PacketTradeOffers;
-import ichun.core.network.PacketHandler;
+import ichun.client.gui.GuiSlider;
+import ichun.client.gui.ISlider;
+import ichun.common.core.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -173,7 +175,7 @@ public class GuiTradeWindow extends GuiScreen
         buttonList.clear();
         
         buttonList.add(new GuiButton(ID_TOGGLE_HATINV, guiLeft + 6, guiTop + 6, 108, 20, showInv ? StatCollector.translateToLocal("hats.trade.yourInventory") : StatCollector.translateToLocal("hats.trade.yourHats")));
-        buttonList.add(new GuiSlider(ID_SLIDER_INV, guiLeft + 6, guiTop + 65, "", 0D, 1D, sliderProg, this, "", false, 108));
+        buttonList.add(new GuiSlider(ID_SLIDER_INV, guiLeft + 6, guiTop + 65, 108, "", "", 0D, 1D, sliderProg, false, false, this));
         
         buttonList.add(new GuiButton(ID_MAKE_READY, guiLeft + 128, guiTop + 77, 120, 20, ""));//text is custom rendered
         buttonList.add(new GuiButton(ID_MAKE_TRADE, guiLeft + 148, guiTop + ySize - 32, 80, 20, StatCollector.translateToLocal("hats.trade.makeTrade")));

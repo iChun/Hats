@@ -10,7 +10,9 @@ import hats.common.core.SessionState;
 import hats.common.entity.EntityHat;
 import hats.common.packet.PacketPlayerHatSelection;
 import hats.common.packet.PacketString;
-import ichun.core.network.PacketHandler;
+import ichun.client.gui.GuiSlider;
+import ichun.client.gui.ISlider;
+import ichun.common.core.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
@@ -1239,7 +1241,7 @@ public class GuiHatSelection extends GuiScreen
         	buttonList.add(new GuiButton(ID_RESET_SIDE, width / 2 - 6, height / 2 - 78 + (22 * 5), 88, 20, StatCollector.translateToLocal("hats.gui.resetSide")));
         	if(SessionState.serverHatMode < 4)
         	{
-        		buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 3), StatCollector.translateToLocal("hats.gui.randomobs") + ": ", 0, 100, Hats.randomMobHat, this, "%"));
+        		buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 3), 88, StatCollector.translateToLocal("hats.gui.randomobs") + ": ", "%", 0, 100, Hats.randomMobHat, false, true, this));
         	}
         	
         	currentDisplay = StatCollector.translateToLocal("hats.gui.personalize");
