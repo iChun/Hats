@@ -120,46 +120,4 @@ public class HatRendererHelper
     		}
     	}
 	}
-	
-	public static float interpolateRotation(float par1, float par2, float par3)
-    {
-        float f3;
-
-        for (f3 = par2 - par1; f3 < -180.0F; f3 += 360.0F)
-        {
-            ;
-        }
-
-        while (f3 >= 180.0F)
-        {
-            f3 -= 360.0F;
-        }
-
-        return par1 + par3 * f3;
-    }
-
-    //TODO move to iChunUtil
-	public static final String preRenderCallbackObf = "func_77041_b";
-	public static final String preRenderCallbackDeobf = "preRenderCallback";
-	
-	public static void invokePreRenderCallback(Render rend, Class clz, EntityLivingBase ent, float rendTick)
-	{
-		try
-		{
-			Method m = clz.getDeclaredMethod(HatHandler.obfuscation ? preRenderCallbackObf : preRenderCallbackDeobf, EntityLivingBase.class, float.class);
-			m.setAccessible(true);
-			m.invoke(rend, ent, rendTick);
-		}
-		catch(NoSuchMethodException e)
-		{
-			if(clz != RendererLivingEntity.class)
-			{
-				invokePreRenderCallback(rend, clz.getSuperclass(), ent, rendTick);
-			}
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-	}
 }

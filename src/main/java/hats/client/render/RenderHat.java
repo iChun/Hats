@@ -5,6 +5,8 @@ import hats.client.gui.GuiHatSelection;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.entity.EntityHat;
+import ichun.common.core.EntityHelperBase;
+import ichun.common.core.util.ObfHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
@@ -69,7 +71,7 @@ public class RenderHat extends Render
 	    		GL11.glPushMatrix();
 	    		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
 	    		Render rend = RenderManager.instance.getEntityRenderObject(hat.renderingParent);
-	    		HatRendererHelper.invokePreRenderCallback(rend, rend.getClass(), hat.renderingParent, renderTick);
+	    		ObfHelper.invokePreRenderCallback(rend, rend.getClass(), hat.renderingParent, renderTick);
 	    		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer1);
 	    		GL11.glPopMatrix();
 
@@ -98,7 +100,7 @@ public class RenderHat extends Render
 		    		    		GL11.glPushMatrix();
 		    		    		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, bufferr);
 		    		    		Render rend1 = RenderManager.instance.getEntityRenderObject(prevMorph);
-		    		    		HatRendererHelper.invokePreRenderCallback(rend1, rend1.getClass(), prevMorph, renderTick);
+                                ObfHelper.invokePreRenderCallback(rend1, rend1.getClass(), prevMorph, renderTick);
 		    		    		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, bufferr1);
 		    		    		GL11.glPopMatrix();
 		
@@ -168,9 +170,9 @@ public class RenderHat extends Render
     				}
 	    			
 	    			float hatScale = helper.getHatScale(hat.renderingParent);
-	    			float renderYaw = HatRendererHelper.interpolateRotation(helper.getPrevRenderYaw(hat.renderingParent), helper.getRenderYaw(hat.renderingParent), renderTick);
-	    			float rotationYaw = HatRendererHelper.interpolateRotation(helper.getPrevRotationYaw(hat.renderingParent), helper.getRotationYaw(hat.renderingParent), renderTick);
-	    			float rotationPitch = HatRendererHelper.interpolateRotation(helper.getPrevRotationPitch(hat.renderingParent), helper.getRotationPitch(hat.renderingParent), renderTick);
+	    			float renderYaw = EntityHelperBase.interpolateRotation(helper.getPrevRenderYaw(hat.renderingParent), helper.getRenderYaw(hat.renderingParent), renderTick);
+	    			float rotationYaw = EntityHelperBase.interpolateRotation(helper.getPrevRotationYaw(hat.renderingParent), helper.getRotationYaw(hat.renderingParent), renderTick);
+	    			float rotationPitch = EntityHelperBase.interpolateRotation(helper.getPrevRotationPitch(hat.renderingParent), helper.getRotationPitch(hat.renderingParent), renderTick);
 	    			float rotationRoll = helper.getRotationRoll(hat.renderingParent);
 	    			float posVert = helper.getRotatePointVert(hat.renderingParent);
 	    			float posHori = helper.getRotatePointHori(hat.renderingParent);
@@ -209,9 +211,9 @@ public class RenderHat extends Render
 		    	    				}
 		    	    				
 			    	    			float ahatScale = helper1.getHatScale(prevMorph);
-			    	    			float arenderYaw = HatRendererHelper.interpolateRotation(helper1.getPrevRenderYaw(prevMorph), helper1.getRenderYaw(prevMorph), renderTick);
-			    	    			float arotationYaw = HatRendererHelper.interpolateRotation(helper1.getPrevRotationYaw(prevMorph), helper1.getRotationYaw(prevMorph), renderTick);
-			    	    			float arotationPitch = HatRendererHelper.interpolateRotation(helper1.getPrevRotationPitch(prevMorph), helper1.getRotationPitch(prevMorph), renderTick);
+			    	    			float arenderYaw = EntityHelperBase.interpolateRotation(helper1.getPrevRenderYaw(prevMorph), helper1.getRenderYaw(prevMorph), renderTick);
+			    	    			float arotationYaw = EntityHelperBase.interpolateRotation(helper1.getPrevRotationYaw(prevMorph), helper1.getRotationYaw(prevMorph), renderTick);
+			    	    			float arotationPitch = EntityHelperBase.interpolateRotation(helper1.getPrevRotationPitch(prevMorph), helper1.getRotationPitch(prevMorph), renderTick);
 			    	    			float arotationRoll = helper1.getRotationRoll(prevMorph);
 			    	    			float aposVert = helper1.getRotatePointVert(prevMorph);
 			    	    			float aposHori = helper1.getRotatePointHori(prevMorph);
