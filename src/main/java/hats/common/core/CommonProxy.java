@@ -66,7 +66,6 @@ public class CommonProxy
 		CommonProxy.renderHelpers.put(EntityZombie.class		, new HelperZombie());
 		CommonProxy.renderHelpers.put(EntityWither.class		, new HelperWither());
 
-        //TODO remember to add packets to register.
         Hats.channels = NetworkRegistry.INSTANCE.newChannel("Hats", new ChannelHandler("Hats",
                 PacketPlayerHatSelection.class,
                 PacketRequestHat.class,

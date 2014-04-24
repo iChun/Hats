@@ -17,7 +17,6 @@ public class ThreadReadHats extends Thread
 	
 	public boolean loadGuiOnEnd;
 
-    //TODO look into replacing this with stuff from iChunUtil
 	public ThreadReadHats(File dir, CommonProxy prox, boolean gui)
 	{
 		setName("Hats Mod Hat Hunting Thread");

@@ -85,7 +85,6 @@ public class TickHandlerClient
         }
     }
 
-    //TODO " I would have to double check what exactly but it was like you looping through lists twice or creating a list then immediately looping through it and removing stuff from it instead of just not adding them in the first place"
     @SubscribeEvent
     public void worldTick(TickEvent.ClientTickEvent event)
     {

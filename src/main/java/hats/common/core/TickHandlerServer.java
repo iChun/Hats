@@ -149,7 +149,6 @@ public class TickHandlerServer
                 }
             }
 
-            //TODO move this to TradeInfo.. kinda confusing that this is here..
             for(int i = activeTrades.size() - 1; i >= 0; i--)
             {
                 TradeInfo ti = activeTrades.get(i);
