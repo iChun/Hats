@@ -95,7 +95,7 @@ public class HatHandler
 				return false;
 			}
 			
-			if(Hats.safeLoad == 1 && !isSafe)
+			if(Hats.config.getInt("safeLoad") == 1 && !isSafe)
 			{
 				Hats.console("Rejecting " + file.getName() + "! It contains files which are not XML or PNG files!", true);
 				return false;
@@ -353,7 +353,7 @@ public class HatHandler
     //TODO make sure hats are sent accurately!
 	public static void receiveHatData(ByteBuf buffer, EntityPlayer player, boolean isServer)
 	{
-		if(Hats.allowReceivingOfHats != 1)
+		if(Hats.config.getInt("allowReceivingOfHats") != 1)
 		{
 			return;
 		}
@@ -494,7 +494,7 @@ public class HatHandler
 
 	public static void sendHat(String hatName, EntityPlayer player)
 	{
-		if(Hats.allowSendingOfHats != 1)
+		if(Hats.config.getInt("allowSendingOfHats") != 1)
 		{
 			return;
 		}
@@ -606,7 +606,7 @@ public class HatHandler
 		while(ite.hasNext())
 		{
 			Entry<File, String> e = ite.next();
-			if(e.getValue().startsWith("(C)".toLowerCase()) && rand.nextFloat() < ((float)Hats.useRandomContributorHats / 100F))
+			if(e.getValue().startsWith("(C)".toLowerCase()) && rand.nextFloat() < ((float)Hats.config.getInt("useRandomContributorHats") / 100F))
 			{
 				continue;
 			}
@@ -700,11 +700,11 @@ public class HatHandler
 	public static void reloadAndOpenGui()
 	{
 		repopulateHatsList();
-		if(SessionState.serverHatMode == 3)
+		if(Hats.config.getSessionInt("playerHatsMode") == 3)
 		{
             PacketHandler.sendToServer(Hats.channels, new PacketPing(0, false));
 		}
-		else if(SessionState.serverHatMode != 2)
+		else if(Hats.config.getSessionInt("playerHatsMode") != 2)
 		{
 			Hats.proxy.openHatsGui();
 		}
@@ -796,6 +796,4 @@ public class HatHandler
 	public static HashMap<String, ArrayList<String>> categories = new HashMap<String, ArrayList<String>>();
 	
 	public static Random rand = new Random();
-
-	public static boolean obfuscation;
 	}

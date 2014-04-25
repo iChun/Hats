@@ -18,7 +18,7 @@ public class HelperWolf extends RenderOnEntityHelper {
 	@Override
 	public boolean canWearHat(EntityLivingBase living)
 	{
-		return Hats.hatWolf == 1;
+		return Hats.config.getInt("hatWolf") == 1;
 	}
 
 	@SideOnly(Side.CLIENT)

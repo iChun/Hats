@@ -3,7 +3,6 @@ package hats.common.entity;
 import hats.client.core.HatInfoClient;
 import hats.common.Hats;
 import hats.common.core.HatInfo;
-import hats.common.core.SessionState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -125,7 +124,7 @@ public class EntityHat extends Entity
 	@Override
     public int getBrightnessForRender(float par1)
     {
-		if(Hats.renderHats == 13131)
+		if(Hats.config.getSessionInt("renderHats") == 13131)
 		{
 			return 15728880;
 		}
@@ -187,7 +186,7 @@ public class EntityHat extends Entity
 	public void setDead()
 	{
 		super.setDead();
-		if(SessionState.serverHasMod && SessionState.serverHatMode == 4 && parent != null)
+		if(Hats.config.getSessionInt("serverHasMod") == 1 && Hats.config.getSessionInt("playerHatsMode") == 4 && parent != null)
 		{
 			Hats.proxy.tickHandlerClient.requestedMobHats.remove((Object)parent.getEntityId());
 		}

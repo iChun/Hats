@@ -13,11 +13,11 @@ public class HelperOcelot extends RenderOnEntityHelper {
 		return EntityOcelot.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatOcelot == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatOcelot") == 1;
+    }
 
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)

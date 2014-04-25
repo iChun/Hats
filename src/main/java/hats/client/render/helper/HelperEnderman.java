@@ -1,6 +1,7 @@
 package hats.client.render.helper;
 
 import hats.api.RenderOnEntityHelper;
+import hats.common.Hats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityEnderman;
 
@@ -12,11 +13,11 @@ public class HelperEnderman extends RenderOnEntityHelper {
 		return EntityEnderman.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return true;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatEnderman") == 1;
+    }
 
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)

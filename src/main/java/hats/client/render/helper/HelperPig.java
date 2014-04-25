@@ -14,11 +14,11 @@ public class HelperPig extends RenderOnEntityHelper
 		return EntityPig.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatPig == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatPig") == 1;
+    }
 
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)

@@ -10,7 +10,6 @@ import hats.addons.hatstand.common.tileentity.TileEntityHatStand;
 import hats.client.core.HatInfoClient;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
-import hats.common.core.SessionState;
 import ichun.client.gui.GuiSlider;
 import ichun.client.gui.ISlider;
 import ichun.common.core.network.PacketHandler;
@@ -106,7 +105,7 @@ public class GuiHatSelection extends GuiScreen
 	public GuiHatSelection(TileEntityHatStand hatStand)
 	{
 		
-		if(SessionState.serverHatMode == 4)
+		if(Hats.config.getSessionInt("playerHatsMode") == 4)
 		{
 			if(Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
 			{

@@ -30,7 +30,7 @@ public class CommandHats extends CommandBase {
 	@Override
     public List getCommandAliases()
     {
-		return Arrays.asList(new String[] {"hat"});
+		return Arrays.asList("hat");
     }
 
 	@Override
@@ -84,43 +84,43 @@ public class CommandHats extends CommandBase {
 				EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(playerName);
 				if(player == null)
 				{
-					icommandsender.addChatMessage(new ChatComponentTranslation("\u00A7c" + StatCollector.translateToLocalFormatted("hats.command.notOnline", new Object[] { playerName })));
+					icommandsender.addChatMessage(new ChatComponentTranslation("\u00A7c" + StatCollector.translateToLocalFormatted("hats.command.notOnline", playerName)));
 					return;
 				}
 				if(!HatHandler.hasHat(hatName))
 				{
-					icommandsender.addChatMessage(new ChatComponentTranslation("\u00A7c" + StatCollector.translateToLocalFormatted("hats.command.hatDoesNotExist", new Object[] { hatName })));
+					icommandsender.addChatMessage(new ChatComponentTranslation("\u00A7c" + StatCollector.translateToLocalFormatted("hats.command.hatDoesNotExist", hatName)));
 					return;
 				}
-				
+
 				if("send".startsWith(command.toLowerCase()))
 				{
-					if(Hats.allowSendingOfHats == 0)
+					if(Hats.config.getInt("allowSendingOfHats") == 0)
 					{
 						icommandsender.addChatMessage(new ChatComponentTranslation("\u00A7c" + StatCollector.translateToLocal("hats.command.serverDisabledHatSending")));
 						return;
 					}
-					icommandsender.addChatMessage(new ChatComponentTranslation("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.sendToPlayer", new Object[] { hatName, player.getCommandSenderName() })));
+					icommandsender.addChatMessage(new ChatComponentTranslation("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.sendToPlayer", hatName, player.getCommandSenderName())));
 					HatHandler.sendHat(hatName, player);
 				}
 				else if("set".startsWith(command.toLowerCase()))
 				{
-					icommandsender.addChatMessage(new ChatComponentTranslation("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.setPlayerHat", new Object[] { hatName, player.getCommandSenderName() })));
+					icommandsender.addChatMessage(new ChatComponentTranslation("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.setPlayerHat", hatName, player.getCommandSenderName())));
 					Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo(hatName.toLowerCase(), 255, 255, 255));
 					Hats.proxy.sendPlayerListOfWornHats(player, false, false);
 				}
 				else if("unlock".startsWith(command.toLowerCase()))
 				{
-					if(Hats.playerHatsMode == 4)
+					if(Hats.config.getSessionInt("playerHatsMode") == 4)
 					{
 						if(player.capabilities.isCreativeMode)
 						{
-							icommandsender.addChatMessage(new ChatComponentTranslation("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.playerIsInCreative", new Object[] { player.getCommandSenderName() })));
+							icommandsender.addChatMessage(new ChatComponentTranslation("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.playerIsInCreative", player.getCommandSenderName())));
 						}
 						else
 						{
-							icommandsender.addChatMessage(new ChatComponentTranslation("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.unlockHatForPlayer", new Object[] { hatName, player.getCommandSenderName() })));
-							Hats.console(StatCollector.translateToLocalFormatted("hats.command.adminNotify.unlockHatForPlayer", new Object[] {icommandsender.getCommandSenderName(), hatName, player.getCommandSenderName()}));
+							icommandsender.addChatMessage(new ChatComponentTranslation("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.unlockHatForPlayer", hatName, player.getCommandSenderName())));
+							Hats.console(StatCollector.translateToLocalFormatted("hats.command.adminNotify.unlockHatForPlayer", icommandsender.getCommandSenderName(), hatName, player.getCommandSenderName()));
 							HatHandler.unlockHat(player, hatName);
 						}
 					}
@@ -130,11 +130,10 @@ public class CommandHats extends CommandBase {
 					}
 				}
 			}
-			return;
-		}
+        }
 		else
 		{
-			throw new WrongUsageException(getUsageString(), new Object[0]);
+			throw new WrongUsageException(getUsageString());
 		}
 
 	}
@@ -142,7 +141,7 @@ public class CommandHats extends CommandBase {
 	@Override
     public List addTabCompletionOptions(ICommandSender par1ICommandSender, String[] args)
     {
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, new String[] {"set", "send", "unlock"}) : args.length == 2 ? getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames()) : args.length == 3 ? getListOfStringsMatchingLastWord(args, HatHandler.getAllHatsAsArray()) : null;
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "set", "send", "unlock") : args.length == 2 ? getListOfStringsMatchingLastWord(args, MinecraftServer.getServer().getAllUsernames()) : args.length == 3 ? getListOfStringsMatchingLastWord(args, HatHandler.getAllHatsAsArray()) : null;
     }
 	
 	public String getUsageString()

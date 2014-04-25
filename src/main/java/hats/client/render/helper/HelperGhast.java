@@ -13,11 +13,11 @@ public class HelperGhast extends RenderOnEntityHelper {
 		return EntityGhast.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatGhast == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatGhast") == 1;
+    }
 
 	@Override
 	public float getPrevRotationYaw(EntityLivingBase living)

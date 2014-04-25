@@ -14,11 +14,11 @@ public class HelperSkeleton extends RenderOnEntityHelper {
 		return EntitySkeleton.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatSkeleton == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatSkeleton") == 1;
+    }
 
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)

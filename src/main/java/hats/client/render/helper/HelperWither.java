@@ -19,7 +19,7 @@ public class HelperWither extends RenderOnEntityHelper {
 	@Override
 	public boolean canWearHat(EntityLivingBase living)
 	{
-		return Hats.hatWither == 1;
+		return Hats.config.getInt("hatWither") == 1;
 	}
 
 	@SideOnly(Side.CLIENT)

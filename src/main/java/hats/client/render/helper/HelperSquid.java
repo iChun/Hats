@@ -13,11 +13,11 @@ public class HelperSquid extends RenderOnEntityHelper {
 		return EntitySquid.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatSquid == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatSquid") == 1;
+    }
 
 	@Override
 	public float getPrevRotationYaw(EntityLivingBase living)

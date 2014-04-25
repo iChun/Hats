@@ -1,6 +1,7 @@
 package hats.client.render.helper;
 
 import hats.api.RenderOnEntityHelper;
+import hats.common.Hats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityBlaze;
 
@@ -15,7 +16,7 @@ public class HelperBlaze extends RenderOnEntityHelper {
 	@Override
 	public boolean canWearHat(EntityLivingBase living)
 	{
-		return true;
+		return Hats.config.getInt("hatBlaze") == 1;
 	}
 
 	@Override

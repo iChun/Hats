@@ -6,13 +6,14 @@ import hats.client.core.HatInfoClient;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
-import hats.common.core.SessionState;
 import hats.common.entity.EntityHat;
 import hats.common.packet.PacketPlayerHatSelection;
 import hats.common.packet.PacketString;
 import ichun.client.gui.GuiSlider;
 import ichun.client.gui.ISlider;
+import ichun.client.keybind.KeyBind;
 import ichun.common.core.network.PacketHandler;
+import ichun.common.iChunUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
@@ -138,7 +139,7 @@ public class GuiHatSelection extends GuiScreen
 
 	public GuiHatSelection(EntityPlayer ply)
 	{
-		if(SessionState.serverHatMode >= 4)
+		if(Hats.config.getSessionInt("playerHatsMode") >= 4)
 		{
 			if(Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
 			{
@@ -157,7 +158,7 @@ public class GuiHatSelection extends GuiScreen
 		
 		for(int i = list.size() - 1; i >= 0; i--)
 		{
-			if(Hats.allowContributorHats == 0 && list.get(i).startsWith("(C) "))
+			if(Hats.config.getInt("showContributorHatsInGui") == 0 && list.get(i).startsWith("(C) "))
 			{
 				list.remove(i);
 			}
@@ -201,7 +202,7 @@ public class GuiHatSelection extends GuiScreen
 		{
 	        Keyboard.enableRepeatEvents(true);
 
-	        String[] enabledBtn = Hats.enabled.split(" ");
+	        String[] enabledBtn = Hats.config.getString("personalizeEnabled").split(" ");
         	enabledButtons.clear();
 	        for(int i = 0; i < enabledBtn.length; i++)
 	        {
@@ -320,7 +321,14 @@ public class GuiHatSelection extends GuiScreen
     {
     	if(settingKey)
     	{
-    		Hats.guiKeyBind = i;
+            KeyBind oriKeyBind = Hats.config.keyBindMap.get("guiKeyBind");
+
+            KeyBind bind = new KeyBind(i, false, false, false, false);
+
+            Hats.config.keyBindMap.put("guiKeyBind", iChunUtil.proxy.registerKeyBind(bind, oriKeyBind));
+
+            Hats.config.get("guiKeyBind").set(i);
+
     		for(int i1 = 0; i1 < buttonList.size(); i1++)
     		{
     			GuiButton btn = (GuiButton)buttonList.get(i1);
@@ -330,8 +338,8 @@ public class GuiHatSelection extends GuiScreen
     				break;
     			}
     		}
-    		settingKey = false;
-    		Hats.handleConfig();
+            settingKey = false;
+            Hats.config.config.save();
     	}
     	else if(!personalizing)
     	{
@@ -461,18 +469,25 @@ public class GuiHatSelection extends GuiScreen
     {
     	if(settingKey)
     	{
-    		Hats.guiKeyBind = par3 - 100;
+            KeyBind oriKeyBind = Hats.config.keyBindMap.get("guiKeyBind");
+
+            KeyBind bind = new KeyBind(par3 - 100, false, false, false, false);
+
+            Hats.config.keyBindMap.put("guiKeyBind", iChunUtil.proxy.registerKeyBind(bind, oriKeyBind));
+
+            Hats.config.get("guiKeyBind").set(par3 - 100);
+
     		for(int i = 0; i < buttonList.size(); i++)
     		{
     			GuiButton btn = (GuiButton)buttonList.get(i);
     			if(btn.id == ID_SET_KEY)
     			{
-    				btn.displayString = "GUI: " + Mouse.getButtonName(par3);
+    				btn.displayString = "GUI: " + GameSettings.getKeyDisplayString(par3 - 100);
     				break;
     			}
     		}
     		settingKey = false;
-    		Hats.handleConfig();
+    		Hats.config.config.save();
     	}
     	else
     	{
@@ -698,13 +713,14 @@ public class GuiHatSelection extends GuiScreen
 	    	}
 	    	else if(btn.id == ID_SET_FP)
 	    	{
-	    		Hats.renderInFirstPerson = (Hats.renderInFirstPerson == 1 ? 0 : 1);
-	    		btn.displayString = StatCollector.translateToLocal("hats.gui.firstPerson") + ": " + (Hats.renderInFirstPerson == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"));
+                Hats.config.get("renderInFirstPerson").set((Hats.config.getInt("renderInFirstPerson") == 1 ? 0 : 1));
+	    		btn.displayString = StatCollector.translateToLocal("hats.gui.firstPerson") + ": " + (Hats.config.getInt("renderInFirstPerson") == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"));
 	    	}
 	    	else if(btn.id == ID_SHOW_HATS)
 	    	{
-	    		Hats.renderHats = (Hats.renderHats == 1 ? 0 : 1);
-	    		btn.displayString = StatCollector.translateToLocal("hats.gui.showHats") + ": " + (Hats.renderHats == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"));
+	    		Hats.config.get("renderHats").set((Hats.config.getInt("renderHats") == 1 ? 0 : 1));
+                Hats.config.updateSession("renderHats", Hats.config.getInt("renderHats"));
+	    		btn.displayString = StatCollector.translateToLocal("hats.gui.showHats") + ": " + (Hats.config.getInt("renderHats") == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"));
 	    	}
 	    	else if(btn.id == ID_RESET_SIDE)
 	    	{
@@ -1038,9 +1054,9 @@ public class GuiHatSelection extends GuiScreen
     	
 		mc.displayGuiScreen(null);
 		
-		if(!SessionState.serverHasMod)
+		if(Hats.config.getInt("serverHasMod") == 1)
 		{
-    		Hats.favouriteHat = hat.hatName;
+    		Hats.config.get("favouriteHat").set(hat.hatName);
     		
     		String r = Integer.toHexString(colourR);
     		String b = Integer.toHexString(colourG);
@@ -1061,11 +1077,11 @@ public class GuiHatSelection extends GuiScreen
     		
     		String name = "#" + r + g + b; 
     		
-    		Hats.favouriteHatColourizer = name;
+    		Hats.config.get("favouriteHatColourizer").set(name);
     		
     		Hats.favouriteHatInfo = new HatInfo(hat.hatName, colourR, colourG, colourB);
     		
-    		Hats.handleConfig();
+    		Hats.config.config.save();
 		}
 		else if(!(player == null || player.isDead || !player.isEntityAlive()))
 		{
@@ -1223,7 +1239,7 @@ public class GuiHatSelection extends GuiScreen
 
             GuiButton btn = new GuiButton(ID_MAKE_TRADE, guiLeft - 21, guiTop + ySize - 23, 20, 20, "");
 
-            btn.enabled = SessionState.serverHasMod;
+            btn.enabled = Hats.config.getInt("serverHasMod") == 1;
 
 	    	buttonList.add(btn);
 	    	
@@ -1235,13 +1251,13 @@ public class GuiHatSelection extends GuiScreen
         }
         else
         {
-        	buttonList.add(new GuiButton(ID_SET_KEY, width / 2 - 6, height / 2 - 78, 88, 20, "GUI: " + (Hats.guiKeyBind < 0 ? Mouse.getButtonName(Hats.guiKeyBind + 100) : Keyboard.getKeyName(Hats.guiKeyBind))));
-        	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, StatCollector.translateToLocal("hats.gui.firstPerson") + ": " + (Hats.renderInFirstPerson == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"))));
-        	buttonList.add(new GuiButton(ID_SHOW_HATS, width / 2 - 6, height / 2 - 78 + (22 * 2), 88, 20, StatCollector.translateToLocal("hats.gui.showHats") + ": " + (Hats.renderHats == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"))));
+        	buttonList.add(new GuiButton(ID_SET_KEY, width / 2 - 6, height / 2 - 78, 88, 20, "GUI: " + GameSettings.getKeyDisplayString(Hats.config.getKeyBind("guiKeyBind").keyIndex)));
+        	buttonList.add(new GuiButton(ID_SET_FP, width / 2 - 6, height / 2 - 78 + 22, 88, 20, StatCollector.translateToLocal("hats.gui.firstPerson") + ": " + (Hats.config.getInt("renderInFirstPerson") == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"))));
+        	buttonList.add(new GuiButton(ID_SHOW_HATS, width / 2 - 6, height / 2 - 78 + (22 * 2), 88, 20, StatCollector.translateToLocal("hats.gui.showHats") + ": " + (Hats.config.getInt("renderHats") == 1 ? StatCollector.translateToLocal("gui.yes") : StatCollector.translateToLocal("gui.no"))));
         	buttonList.add(new GuiButton(ID_RESET_SIDE, width / 2 - 6, height / 2 - 78 + (22 * 5), 88, 20, StatCollector.translateToLocal("hats.gui.resetSide")));
-        	if(SessionState.serverHatMode < 4)
+        	if(Hats.config.getSessionInt("playerHatsMode") < 4)
         	{
-        		buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 3), 88, StatCollector.translateToLocal("hats.gui.randomobs") + ": ", "%", 0, 100, Hats.randomMobHat, false, true, this));
+        		buttonList.add(new GuiSlider(ID_MOB_SLIDER, width / 2 - 6, height / 2 - 78 + (22 * 3), 88, StatCollector.translateToLocal("hats.gui.randomobs") + ": ", "%", 0, 100, Hats.config.getInt("randomMobHat"), false, true, this));
         	}
         	
         	currentDisplay = StatCollector.translateToLocal("hats.gui.personalize");
@@ -1401,7 +1417,7 @@ public class GuiHatSelection extends GuiScreen
 	    	
 	    	ArrayList<String> hatsCopy = new ArrayList<String>(hatsList);
 	    	
-	    	if(SessionState.serverHatMode >= 4 && !mc.thePlayer.capabilities.isCreativeMode)
+	    	if(Hats.config.getSessionInt("playerHatsMode") >= 4 && !mc.thePlayer.capabilities.isCreativeMode)
 	    	{
 	    		for(int i = hatsCopy.size() - 1; i >= 0; i--)
 	    		{
@@ -1539,7 +1555,7 @@ public class GuiHatSelection extends GuiScreen
     	{
     		personalizing = true;
     		
-    		randoMob = Hats.randomMobHat;
+    		randoMob = Hats.config.getInt("randomMobHat");
     		
     		for(int i = buttonList.size() - 1; i >= 0 ; i--)
     		{
@@ -1594,10 +1610,10 @@ public class GuiHatSelection extends GuiScreen
     			sb.append("9");
     		}
     		
-    		Hats.enabled = sb.toString().trim();
-    		Hats.randomMobHat = randoMob;
+    		Hats.config.get("personalizeEnabled").set(sb.toString().trim());
+            Hats.config.get("randomMobHat").set(randoMob);
     		
-    		Hats.handleConfig();
+    		Hats.config.config.save();
     		
     		updateButtonList();
     	}
@@ -2038,8 +2054,8 @@ public class GuiHatSelection extends GuiScreen
 	        RenderManager.instance.renderEntityWithPosYaw(hat.renderingParent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
 	        
 	        Tessellator.instance.setBrightness(240);
-	        int rend = Hats.renderHats;
-	        Hats.renderHats = 13131;
+	        int rend = Hats.config.getSessionInt("renderHats");
+	        Hats.config.updateSession("renderHats", 13131);
 //	        GL11.glTranslatef(0.0F, (float)(hat.lastTickPosY - hat.parent.lastTickPosY) + (float)((hat.parent.boundingBox.minY + hat.parent.yOffset) - (hat.parent.posY)), 0.0F);
 	        
 	        Hats.proxy.tickHandlerClient.updateHatPosAndAngle(hat, hat.renderingParent);
@@ -2064,8 +2080,8 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        hat.info = info;
 
-	        Hats.renderHats = rend;
-	        
+            Hats.config.updateSession("renderHats", rend);
+
 	        hat.renderingParent.renderYawOffset = f2;
 	        hat.renderingParent.rotationYaw = f3;
 	        hat.renderingParent.rotationPitch = f4;

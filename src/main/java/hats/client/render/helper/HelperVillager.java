@@ -13,11 +13,11 @@ public class HelperVillager extends RenderOnEntityHelper {
 		return EntityVillager.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatVillager == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatVillager") == 1;
+    }
 
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)

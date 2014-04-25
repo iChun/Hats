@@ -134,7 +134,7 @@ public class GuiTradeReq extends Gui
                 this.drawTexturedModalRect(i, j, 96, 202, 160, 32);
 
                 this.theGame.fontRenderer.drawString(this.headerText, i + 30, j + 7, -256);
-                this.theGame.fontRenderer.drawString(StatCollector.translateToLocalFormatted("hats.trade.tradeRequestDesc", new Object[] { theGame.gameSettings.getKeyDisplayString(Hats.guiKeyBind) }), i + 30, j + 18, -1);
+                this.theGame.fontRenderer.drawString(StatCollector.translateToLocalFormatted("hats.trade.tradeRequestDesc", new Object[] { theGame.gameSettings.getKeyDisplayString(Hats.config.getKeyBind("guiKeyBind").keyIndex) }), i + 30, j + 18, -1);
                 
                 ResourceLocation rl = null;
                 for(int ii = 0; ii < theGame.theWorld.playerEntities.size(); ii++)

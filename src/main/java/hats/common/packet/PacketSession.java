@@ -2,8 +2,8 @@ package hats.common.packet;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
+import hats.common.Hats;
 import hats.common.core.HatHandler;
-import hats.common.core.SessionState;
 import ichun.common.core.network.AbstractPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,16 +41,16 @@ public class PacketSession extends AbstractPacket
     @Override
     public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
     {
-        SessionState.serverHasMod = true;
-        SessionState.serverHatMode = buffer.readInt();
-        SessionState.hasVisited = buffer.readBoolean();
-        SessionState.serverHat = ByteBufUtils.readUTF8String(buffer);
-        SessionState.currentKing = ByteBufUtils.readUTF8String(buffer);
+        Hats.config.updateSession("serverHasMod", 1);
+        Hats.config.updateSession("playerHatsMode", buffer.readInt());
+        Hats.config.updateSession("hasVisited", buffer.readBoolean() ? 1 : 0);
+        Hats.config.updateSession("lockedHat", ByteBufUtils.readUTF8String(buffer));
+        Hats.config.updateSession("currentKing", ByteBufUtils.readUTF8String(buffer));
 
-        SessionState.showJoinMessage = SessionState.serverHatMode >= 4 && !SessionState.hasVisited;
+        Hats.config.updateSession("showJoinMessage", Hats.config.getSessionInt("playerHatsMode") >= 4 && Hats.config.getSessionInt("hasVisited") == 0);
 
         String availHats = ByteBufUtils.readUTF8String(buffer); //ignored on Free Mode
-        if(SessionState.serverHatMode >= 4)
+        if(Hats.config.getSessionInt("playerHatsMode") >= 4)
         {
             HatHandler.populateHatsList(availHats);
         }

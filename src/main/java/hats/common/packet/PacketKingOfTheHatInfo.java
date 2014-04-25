@@ -2,8 +2,8 @@ package hats.common.packet;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
+import hats.common.Hats;
 import hats.common.core.HatHandler;
-import hats.common.core.SessionState;
 import ichun.common.core.network.AbstractPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,7 +31,7 @@ public class PacketKingOfTheHatInfo extends AbstractPacket
     @Override
     public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
     {
-        SessionState.currentKing = ByteBufUtils.readUTF8String(buffer);
+        Hats.config.updateSession("currentKing", ByteBufUtils.readUTF8String(buffer));
 
         hatsList = ByteBufUtils.readUTF8String(buffer);
 

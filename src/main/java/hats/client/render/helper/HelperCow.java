@@ -13,11 +13,11 @@ public class HelperCow extends RenderOnEntityHelper {
 		return EntityCow.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatCow == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatCow") == 1;
+    }
 
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)

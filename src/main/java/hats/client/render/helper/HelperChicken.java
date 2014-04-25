@@ -16,7 +16,7 @@ public class HelperChicken extends RenderOnEntityHelper {
 	@Override
 	public boolean canWearHat(EntityLivingBase living)
 	{
-		return Hats.hatChicken == 1;
+		return Hats.config.getInt("hatChicken") == 1;
 	}
 
 	@Override

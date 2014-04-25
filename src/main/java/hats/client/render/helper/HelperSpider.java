@@ -13,11 +13,11 @@ public class HelperSpider extends RenderOnEntityHelper {
 		return EntitySpider.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatSpider == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatSpider") == 1;
+    }
 
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)

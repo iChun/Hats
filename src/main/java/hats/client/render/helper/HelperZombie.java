@@ -14,11 +14,11 @@ public class HelperZombie extends RenderOnEntityHelper {
 		return EntityZombie.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatZombie == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatZombie") == 1;
+    }
 
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)

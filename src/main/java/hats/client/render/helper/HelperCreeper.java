@@ -1,6 +1,7 @@
 package hats.client.render.helper;
 
 import hats.api.RenderOnEntityHelper;
+import hats.common.Hats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityCreeper;
 
@@ -12,11 +13,11 @@ public class HelperCreeper extends RenderOnEntityHelper {
 		return EntityCreeper.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return true;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatCreeper") == 1;
+    }
 
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)

@@ -15,11 +15,11 @@ public class HelperHorse extends RenderOnEntityHelper {
 		return EntityHorse.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatHorse == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatHorse") == 1;
+    }
 
 	@Override
 	public float getPrevRotationYaw(EntityLivingBase living)

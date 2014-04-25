@@ -13,11 +13,11 @@ public class HelperSheep extends RenderOnEntityHelper {
 		return EntitySheep.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatSheep == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatSheep") == 1;
+    }
 	
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)

@@ -33,7 +33,7 @@ public class HatRendererHelper
     	
     	if(model != null)
     	{
-    		if(Hats.proxy.tickHandlerClient.currentHatRenders >= Hats.maxHatRenders && !isPlayer)
+    		if(Hats.proxy.tickHandlerClient.currentHatRenders >= Hats.config.getInt("maxHatRenders") && !isPlayer)
     		{
     			return;
     		}

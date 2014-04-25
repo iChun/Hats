@@ -74,7 +74,7 @@ public class TickHandlerServer
                             }
                         }
                     }
-                    HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.randomMobHat / 100F) && !fromSpawner ? HatHandler.getRandomHat() : new HatInfo();
+                    HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.config.getInt("randomMobHat") / 100F) && !fromSpawner ? HatHandler.getRandomHat() : new HatInfo();
                     mobHats.put(living, hatInfo.hatName);
                 }
             }
@@ -111,7 +111,7 @@ public class TickHandlerServer
                 if(info.timeLeft == 0 && info.active)
                 {
                     info.levels++;
-                    info.timeLeft = Hats.startTime;
+                    info.timeLeft = Hats.config.getInt("startTime");
 
                     ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(e.getKey());
                     if(playerHatsList == null)
@@ -131,7 +131,7 @@ public class TickHandlerServer
 
                     for(int i = 0; i < info.levels; i++)
                     {
-                        info.timeLeft *= 1F + Hats.timeIncrement;
+                        info.timeLeft *= 1F + (float)Hats.config.getInt("timeIncrement") / 10000F;
                     }
                 }
             }
@@ -326,26 +326,26 @@ public class TickHandlerServer
 	
 	public void updateNewKing(String newKing, EntityPlayer player, boolean send)
 	{
-		if(!SessionState.currentKing.equalsIgnoreCase("") && !SessionState.currentKing.equalsIgnoreCase(newKing))
+		if(!Hats.config.getSessionString("currentKing").equalsIgnoreCase("") && !Hats.config.getSessionString("currentKing").equalsIgnoreCase(newKing))
 		{
-			EntityPlayerMP oldKing = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(SessionState.currentKing);
+			EntityPlayerMP oldKing = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(Hats.config.getSessionString("currentKing"));
 			if(oldKing != null)
 			{
 				playerDeath(oldKing);
 			}
 			else if(Hats.proxy.saveData != null)
 			{
-				Hats.proxy.saveData.setString(SessionState.currentKing + "_unlocked", "");
+				Hats.proxy.saveData.setString(Hats.config.getSessionString("currentKing") + "_unlocked", "");
 			}
 			
-			ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(SessionState.currentKing);
+			ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(Hats.config.getSessionString("currentKing"));
 			if(playerHatsList == null)
 			{
 				playerHatsList = new ArrayList<String>();
-				Hats.proxy.tickHandlerServer.playerHats.put(SessionState.currentKing, playerHatsList);
+				Hats.proxy.tickHandlerServer.playerHats.put(Hats.config.getSessionString("currentKing"), playerHatsList);
 			}
 
-			Hats.proxy.tickHandlerServer.playerHats.put(SessionState.currentKing, null);
+			Hats.proxy.tickHandlerServer.playerHats.put(Hats.config.getSessionString("currentKing"), null);
 			
 			Hats.proxy.tickHandlerServer.playerHats.put(newKing, playerHatsList);
 		}
@@ -362,14 +362,14 @@ public class TickHandlerServer
 			
 			ArrayList<String> collectors = new ArrayList<String>();
 			
-			if(!SessionState.currentKing.equalsIgnoreCase(""))
+			if(!Hats.config.getSessionString("currentKing").equalsIgnoreCase(""))
 			{
 				for(String s : newHats)
 				{
-					if(s.startsWith("(C) ") && s.substring(4).toLowerCase().startsWith(SessionState.currentKing.toLowerCase())
-							|| s.equalsIgnoreCase("(C) iChun") && SessionState.currentKing.equalsIgnoreCase("ohaiiChun") //special casing for initial contrib hats.
-							|| s.equalsIgnoreCase("(C) Mr. Haz") && SessionState.currentKing.equalsIgnoreCase("damien95")
-							|| s.equalsIgnoreCase("(C) Fridgeboy") && SessionState.currentKing.equalsIgnoreCase("lacsap32"))
+					if(s.startsWith("(C) ") && s.substring(4).toLowerCase().startsWith(Hats.config.getSessionString("currentKing").toLowerCase())
+							|| s.equalsIgnoreCase("(C) iChun") && Hats.config.getSessionString("currentKing").equalsIgnoreCase("ohaiiChun") //special casing for initial contrib hats.
+							|| s.equalsIgnoreCase("(C) Mr. Haz") && Hats.config.getSessionString("currentKing").equalsIgnoreCase("damien95")
+							|| s.equalsIgnoreCase("(C) Fridgeboy") && Hats.config.getSessionString("currentKing").equalsIgnoreCase("lacsap32"))
 	
 					{
 						collectors.add(s);
@@ -390,12 +390,12 @@ public class TickHandlerServer
 			
 			Hats.proxy.saveData.setString("HatsKingOfTheHill_lastKing", newKing);
 		}
-		SessionState.currentKing = newKing;
+		Hats.config.updateSession("currentKing", newKing);
 		if(send)
 		{
             if(player != null)
             {
-                if(player.getCommandSenderName().equalsIgnoreCase(SessionState.currentKing))
+                if(player.getCommandSenderName().equalsIgnoreCase(Hats.config.getSessionString("currentKing")))
                 {
                     StringBuilder sb = new StringBuilder();
                     ArrayList<String> hats = Hats.proxy.tickHandlerServer.playerHats.get(newKing);
@@ -411,16 +411,16 @@ public class TickHandlerServer
                         }
                     }
 
-                    PacketHandler.sendToPlayer(Hats.channels, new PacketKingOfTheHatInfo(SessionState.currentKing, sb.toString()), player);
+                    PacketHandler.sendToPlayer(Hats.channels, new PacketKingOfTheHatInfo(Hats.config.getSessionString("currentKing"), sb.toString()), player);
                 }
                 else
                 {
-                    PacketHandler.sendToPlayer(Hats.channels, new PacketKingOfTheHatInfo(SessionState.currentKing, ""), player);
+                    PacketHandler.sendToPlayer(Hats.channels, new PacketKingOfTheHatInfo(Hats.config.getSessionString("currentKing"), ""), player);
                 }
             }
             else
             {
-                PacketHandler.sendToAll(Hats.channels, new PacketKingOfTheHatInfo(SessionState.currentKing, ""));
+                PacketHandler.sendToAll(Hats.channels, new PacketKingOfTheHatInfo(Hats.config.getSessionString("currentKing"), ""));
             }
 		}
 	}

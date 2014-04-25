@@ -13,11 +13,11 @@ public class HelperSlime extends RenderOnEntityHelper {
 		return EntitySlime.class;
 	}
 
-	@Override
-	public boolean canWearHat(EntityLivingBase living)
-	{
-		return Hats.hatSlime == 1;
-	}
+    @Override
+    public boolean canWearHat(EntityLivingBase living)
+    {
+        return Hats.config.getInt("hatSlime") == 1;
+    }
 
 	@Override
 	public float getPrevRotationYaw(EntityLivingBase living)
