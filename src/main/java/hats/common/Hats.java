@@ -8,14 +8,15 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.relauncher.Side;
 import hats.client.core.ClientProxy;
-import hats.common.core.*;
+import hats.common.core.CommonProxy;
+import hats.common.core.EventHandler;
+import hats.common.core.HatHandler;
+import hats.common.core.HatInfo;
 import ichun.common.core.config.Config;
 import ichun.common.core.config.ConfigHandler;
 import ichun.common.core.config.IConfigUser;
 import ichun.common.iChunUtil;
-import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -23,7 +24,6 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.EnumMap;
 
 @Mod(modid = "Hats", name = "Hats",
