@@ -1012,11 +1012,6 @@ public class GuiTradeWindow extends GuiScreen
         
         GL11.glPushMatrix();
 
-        //TODO use the scissors helper in iChunUtil instead
-		final int stencilBit = MinecraftForgeClient.reserveStencilBit();
-
-		final int stencilMask = stencilBit >= 0 ? (1 << stencilBit ) : 0xff;
-
         RendererHelper.startGlScissor(guiLeft + 6, guiTop + 29, 108, 36);
 
         if(mc.thePlayer != null)
@@ -1389,26 +1384,9 @@ public class GuiTradeWindow extends GuiScreen
     	{
 	    	chatBar.drawTextBox();
     	}
-    	
-		final int stencilBit = MinecraftForgeClient.reserveStencilBit();
 
-		final int stencilMask = stencilBit >= 0 ? (1 << stencilBit ) : 0xff;
-    	
-        GL11.glEnable(GL11.GL_STENCIL_TEST);
-        GL11.glColorMask(false, false, false, false);
+        RendererHelper.startGlScissor(guiLeft + 6, guiTop + 113, 101, 97);
 
-        GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
-        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);  // draw 1s on test fail (always)
-        GL11.glStencilMask(stencilMask);
-        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-
-    	drawSolidRect(guiLeft + 6, guiTop + 113, 101, 97, 0xffffff, 1.0F);
-    	
-		GL11.glStencilMask(0x00);
-		GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
-
-        GL11.glColorMask(true, true, true, true);
-    	
 		GL11.glPushMatrix();
 		float scale = 0.5F; 
         GL11.glScalef(scale, scale, scale);
@@ -1476,11 +1454,9 @@ public class GuiTradeWindow extends GuiScreen
     	   		lines++;
     		}
     	}
-    	
-        GL11.glDisable(GL11.GL_STENCIL_TEST);
-    	
-        MinecraftForgeClient.releaseStencilBit(stencilBit);
-        
+
+        RendererHelper.endGlScissor();
+
     	GL11.glPopMatrix();
     	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
     	if(lines > 19)
