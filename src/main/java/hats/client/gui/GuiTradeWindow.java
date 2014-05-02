@@ -8,6 +8,7 @@ import hats.common.packet.PacketString;
 import hats.common.packet.PacketTradeOffers;
 import ichun.client.gui.GuiSlider;
 import ichun.client.gui.ISlider;
+import ichun.client.render.RendererHelper;
 import ichun.common.core.network.PacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -36,8 +37,6 @@ public class GuiTradeWindow extends GuiScreen
 {
 	public static final ResourceLocation texIcons = new ResourceLocation("hats", "textures/gui/icons.png");
 	public static final ResourceLocation texTradeWindow = new ResourceLocation("hats", "textures/gui/tradewindow.png");
-	
-	public static boolean hasStencilBits = MinecraftForgeClient.getStencilBits() > 0;
 	
 	private final int ID_TOGGLE_HATINV = 1;
 	private final int ID_SLIDER_INV = 2;
@@ -98,8 +97,6 @@ public class GuiTradeWindow extends GuiScreen
     public float chatScroll;
     
     public boolean chatScrolling;
-    
-    public boolean tradeSuccess;
     
     public boolean updateOffers;
     
@@ -774,7 +771,7 @@ public class GuiTradeWindow extends GuiScreen
 		        		}
 		        		if(guiLeft + 6 + (size * i) <= startX + mouseProg && guiLeft + 6 + (size * i) + size > startX + mouseProg)
 		        		{
-		        			drawTooltip(Arrays.asList(new String[] { hatsList.get(i) }), x, y);
+		        			drawTooltip(Arrays.asList(hatsList.get(i)), x, y);
 		        			break;
 		        		}
 		        	}
@@ -813,7 +810,7 @@ public class GuiTradeWindow extends GuiScreen
 	        		if(guiTop + 17 + (size * (int)Math.floor((float)i / 3F)) <= startY + mouseProg && guiTop + 17 + (size * (int)Math.floor((float)i / 3F)) + size > startY + mouseProg && (x < guiLeft + 125 + size && i % 3 == 0 || x < guiLeft + 125 + size + size && i % 3 == 1 || x >= guiLeft + 125 + size + size && i % 3 == 2))
 	        		{
 	        			String hatName = ourHatsForTrade.get(i);
-	        			drawTooltip(Arrays.asList(new String[] { ourHatsForTrade.get(i) }), x, y);
+	        			drawTooltip(Arrays.asList(ourHatsForTrade.get(i)), x, y);
 	        			clicked = true;
 	        			break;
 	        		}
@@ -872,7 +869,7 @@ public class GuiTradeWindow extends GuiScreen
 	        		if(guiTop + 116 + (size * (int)Math.floor((float)i / 3F)) <= startY + mouseProg && guiTop + 116 + (size * (int)Math.floor((float)i / 3F)) + size > startY + mouseProg && (x < guiLeft + 125 + size && i % 3 == 0 || x < guiLeft + 125 + size + size && i % 3 == 1 || x >= guiLeft + 125 + size + size && i % 3 == 2))
 	        		{
 	        			String hatName = theirHatsForTrade.get(i);
-	        			drawTooltip(Arrays.asList(new String[] { theirHatsForTrade.get(i) }), x, y);
+	        			drawTooltip(Arrays.asList(theirHatsForTrade.get(i)), x, y);
 	        			clicked = true;
 	        			break;
 	        		}
@@ -1019,22 +1016,9 @@ public class GuiTradeWindow extends GuiScreen
 		final int stencilBit = MinecraftForgeClient.reserveStencilBit();
 
 		final int stencilMask = stencilBit >= 0 ? (1 << stencilBit ) : 0xff;
-        
-        GL11.glEnable(GL11.GL_STENCIL_TEST);
-        GL11.glColorMask(false, false, false, false);
 
-        GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
-        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);  // draw 1s on test fail (always)
-        GL11.glStencilMask(stencilMask);
-        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+        RendererHelper.startGlScissor(guiLeft + 6, guiTop + 29, 108, 36);
 
-        drawSolidRect(guiLeft + 6, guiTop + 29, 108, 36, 0xffffff, 1.0F);//Inv area
-        
-		GL11.glStencilMask(0x00);
-		GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
-
-        GL11.glColorMask(true, true, true, true);
-        
         if(mc.thePlayer != null)
         {
 	        int size = showInv ? 18 : 36;
@@ -1107,23 +1091,9 @@ public class GuiTradeWindow extends GuiScreen
 	        }
         }
         GL11.glPopMatrix();
-        
-        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-        
-        GL11.glColorMask(false, false, false, false);
 
-        GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
-        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);  // draw 1s on test fail (always)
-        GL11.glStencilMask(stencilMask);
-        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+        RendererHelper.startGlScissor(guiLeft + 125, guiTop + 17, 108, 54);
 
-        drawSolidRect(guiLeft + 125, guiTop + 17, 108, 54, 0xffffff, 1.0F);//Inv area
-        
-		GL11.glStencilMask(0x00);
-		GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
-
-        GL11.glColorMask(true, true, true, true);
-         
         int size = 36;
         int columnWidth = 108 / size;
         int slotsToDraw = ourHatsForTrade.size();
@@ -1185,25 +1155,11 @@ public class GuiTradeWindow extends GuiScreen
 	        	this.mc.getTextureManager().bindTexture(texIcons);
         	}
         }
-        
+
         GL11.glPopMatrix();
-        
-        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-        
-        GL11.glColorMask(false, false, false, false);
 
-        GL11.glStencilFunc(GL11.GL_ALWAYS, stencilMask, stencilMask);
-        GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_REPLACE);  // draw 1s on test fail (always)
-        GL11.glStencilMask(stencilMask);
-        GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-
-        drawSolidRect(guiLeft + 125, guiTop + 116, 108, 54, 0xffffff, 1.0F);//Inv area
+        RendererHelper.startGlScissor(guiLeft + 125, guiTop + 116, 108, 54);
         
-		GL11.glStencilMask(0x00);
-		GL11.glStencilFunc(GL11.GL_EQUAL, stencilMask, stencilMask);
-
-        GL11.glColorMask(true, true, true, true);
-         
         size = 36;
         columnWidth = 108 / size;
         slotsToDraw = theirHatsForTrade.size();
@@ -1267,11 +1223,9 @@ public class GuiTradeWindow extends GuiScreen
         }
 
         GL11.glPopMatrix();
-        
-        GL11.glDisable(GL11.GL_STENCIL_TEST);
-        
-        MinecraftForgeClient.releaseStencilBit(stencilBit);
-        
+
+        RendererHelper.endGlScissor();
+
         this.mc.getTextureManager().bindTexture(texTradeWindow);
         this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
          
@@ -1288,7 +1242,7 @@ public class GuiTradeWindow extends GuiScreen
         super.drawScreen(par1, par2, par3);
         
         fontRendererObj.drawString(StatCollector.translateToLocal("hats.trade.yourOfferings"), (int)(guiLeft + 125), (int)(guiTop + 6), 0x2c2c2c, false);
-        fontRendererObj.drawString(StatCollector.translateToLocalFormatted("hats.trade.theirOfferings", new Object[] { trader }), (int)(guiLeft + 125), (int)(guiTop + 105), 0x2c2c2c, false);
+        fontRendererObj.drawString(StatCollector.translateToLocalFormatted("hats.trade.theirOfferings", trader ), (int)(guiLeft + 125), (int)(guiTop + 105), 0x2c2c2c, false);
         
         fontRendererObj.drawString(selfReady ? StatCollector.translateToLocal("hats.trade.tradeReady") : StatCollector.translateToLocal("hats.trade.tradeNotReady"), (int)((guiLeft + 187) - (fontRendererObj.getStringWidth(selfReady ? StatCollector.translateToLocal("hats.trade.tradeReady") : StatCollector.translateToLocal("hats.trade.tradeNotReady")) / 2)), (int)((guiTop + 83)), selfReady ? 0x81b63a : 0x790000, false); //0x790000
         

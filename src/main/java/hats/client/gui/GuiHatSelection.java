@@ -1054,7 +1054,7 @@ public class GuiHatSelection extends GuiScreen
     	
 		mc.displayGuiScreen(null);
 		
-		if(Hats.config.getInt("serverHasMod") == 1)
+		if(Hats.config.getSessionInt("serverHasMod") == 1)
 		{
     		Hats.config.get("favouriteHat").set(hat.hatName);
     		
@@ -1239,7 +1239,7 @@ public class GuiHatSelection extends GuiScreen
 
             GuiButton btn = new GuiButton(ID_MAKE_TRADE, guiLeft - 21, guiTop + ySize - 23, 20, 20, "");
 
-            btn.enabled = Hats.config.getInt("serverHasMod") == 1;
+            btn.enabled = Hats.config.getSessionInt("serverHasMod") == 1;
 
 	    	buttonList.add(btn);
 	    	

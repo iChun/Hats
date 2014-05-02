@@ -143,6 +143,7 @@ public class Hats
         FMLCommonHandler.instance().bus().register(eventHandler);
 		MinecraftForge.EVENT_BUS.register(eventHandler);
 	}
+    //TODO redo the read-hats thread to pull off servers instead of being included in the zip, which causes issues with updates sometimes.
 	
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event)
@@ -163,7 +164,6 @@ public class Hats
 	@Mod.EventHandler
 	public void serverStarting(FMLServerAboutToStartEvent event)
 	{
-        //TODO remove SessionState class
         Hats.config.resetSession();
         Hats.config.updateSession("serverHasMod", 1);
         Hats.config.updateSession("currentKing", "");

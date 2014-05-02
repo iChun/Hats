@@ -187,7 +187,8 @@ public class CommonProxy
     		Hats.console("Failed to read save data!");
     	}
     }
-    
+
+    //TODO move this info to player persistent?
     public void saveData(WorldServer world)
     {
     	if(saveData != null)
