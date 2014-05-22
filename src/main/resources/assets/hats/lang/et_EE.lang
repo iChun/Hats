@@ -1,0 +1,197 @@
+hats.firstJoin.hatHunting=[Hats] Server on Mütsi Jahtimis Moodis! Tapa koletis mütsiga, et see lahti saada!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Server on nüüd Mütsi Kuninga Moodis! Tapa Kuningas ja saa tema õigus kanda mütsi endale!
+hats.firstJoin.timeActive=[Hats] Server on nüüd Aja Aktiivsus Moodis! Kuluta aega serveris aktiivsele olemisele ja saa mütse!
+hats.kingOfTheHat.update.playerJoin=[Hats] Rõõmustage! %s on nüüd uus Kuningas!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s suri! %2$s on nüüd uus Kuningas!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s on tapetud! %2$s on nüüd uus Kuningas!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s lahkus serverist! %2$s on nüüd uus Kuningas!
+hats.kingOfTheHat.notKing=[Hats] Sa ei ole Kuningas, %s on! Sa ei saa seda mütsi kanda!
+hats.lockedMode=[Hats] Server on Lukustatud režiimil! Sul ei ole lubatud mütse vahetada!
+hats.trade.tradeWith=%s-ga vahetamine
+hats.trade.yourHats=Sinu mütsid
+hats.trade.yourInventory=Sinu seljakott
+hats.trade.yourOfferings=Sinu pakkumised:
+hats.trade.theirOfferings=%s's pakkumised:
+hats.trade.waitingForOffer=Ootamine kuni keegi teeb pakkumise.
+hats.trade.tradeNotReady=Ei ole valmis vahetama.
+hats.trade.tradeReady=Valmis vahetama.
+hats.trade.makeTrade=Vaheta
+hats.trade.waitingForReady=Mõlema poole valmis oleku ootamine.
+hats.trade.bothReady=Mõlemad pooled on valmis vahetama.
+hats.trade.cancelTrade=Tühista vahetus
+hats.trade.waitingForYou=Sinu kinnituse ootamine
+hats.trade.waitingForThem=Teise poole kinnituse ootamine
+hats.trade.you=Sina
+hats.trade.added=lisatud
+hats.trade.removed=eemaldatud
+hats.trade.ready=Sa oled valmis
+hats.trade.readyThem=%s on valmis
+hats.trade.notReady=Sa ei ole valmis
+hats.trade.notReadyThem=%s ei ole valmis
+hats.trade.selectTrader=Vali millise mängijaga vahetada
+hats.trade.newTradeRequest=Uus vahetus kutse
+hats.trade.tradeRequestDesc=Vajuta %s detailide jaoks
+hats.trade=Vaheta lähedal olevate mängijatega
+hats.trade.acceptRequestGeneral=Võta vastu vahetus
+hats.trade.acceptRequestSpecific=Võta vastu vahetus %1$s poolt (%2$s)
+hats.trade.cannotFindTrader=[Hats] Ei saa vahetada! %s ei ole näha!
+hats.trade.cannotAcceptTrade=[Hats] Ei saa vahetada! Kutse on nüüd kehtetu!
+hats.trade.terminatePrefix=Vahetus tühistatud.
+hats.trade.terminate1=%s suri.
+hats.trade.terminate2=Sina ja %s olete liiga kaugel üksteisest!
+hats.trade.terminate3=Miski blokeerib sinu teed!
+hats.trade.terminate4=%s katkestas vahetuse.
+hats.trade.terminate5=%s on teises dimensioonis.
+hats.trade.success=[Hats] Vahetus õnnestus.
+hats.command= Mütsid käsud
+hats.command.help=kirjuta /hats kogu nimekirja jaoks.
+hats.command.help.send=/hats send <mängija> <mütsi nimi>  Saadab mütsi mängijale.
+hats.command.help.set=/hats set <mängija> <mütsi nimi>   Seab mängija mütsi.
+hats.command.help.unlock=/hats unlock <mängija> <mütsi nimi>   Avab mütsi mängijale.
+hats.command.notOnline=%s ei ole sees!
+hats.command.hatDoesNotExist=%s pole olemas!
+hats.command.serverDisabledHatSending=Server on keelanud mütside saatmise!
+hats.command.sendToPlayer=%1$s saatmine %2$s-le
+hats.command.setPlayerHat=%1$s seadmine %2$s-le
+hats.command.playerIsInCreative=%s on loomingulises moodis!
+hats.command.unlockHatForPlayer=%1$s avamine %2$s-le
+hats.command.adminNotify.unlockHatForPlayer=%1$s unlocked %2$s for %3$s
+hats.command.serverIsNotOnHatHuntingMode=Server pole Mütsi Jahtimis Moodis!
+hats.serverOnCommandGiverMode=Server on sättinud mütsid Käsu Jagaja Moodile. Sa ei saa anda käske!
+hats.hatUnlocked=Müts lahti saadud!
+hats.gui.search=Otsing
+hats.gui.allHats=Kõik mütsid
+hats.gui.addNew=Lisa uus
+hats.gui.firstPerson=First Person
+hats.gui.showHats=Näita mütse
+hats.gui.contributors=Toetajad
+hats.gui.category=Kategooria
+hats.gui.categories=Kategooriad
+hats.gui.colorizer=Värvistaja
+hats.gui.hatsList=Mütside nimekiri
+hats.gui.resetSide=Lähtesta külg?
+hats.gui.randomobs=JuhusKoletised
+hats.gui.personalize=Isikupärasta
+hats.gui.viewing=Vaatamine
+hats.gui.discardChanges=Tühista muudatused?
+hats.gui.removeHat=Eemalda müts
+hats.gui.randomHat=Juhuslik müts
+hats.gui.randomCategory=Juhuslik kategooria
+hats.gui.randomColor=Juhuslik värv
+hats.gui.resetColor=Lähtesta värv
+hats.gui.reloadAllHats=Lae uuesti kõik mütsid?
+hats.gui.discardAllChanges=See tühistab kõik muudatused.
+hats.gui.favorites=Lemmikud
+hats.gui.invalidName=Vigane nimi!
+hats.gui.addCategory=Lisa kategooria
+hats.gui.addToCategory=Lisa kategooriasse
+hats.gui.removeFromCategory=Eemalda kategooriast
+hats.gui.areYouSure=Oled sa kindel?
+hats.gui.clickConfirm=Klikka uuesti kinnitamiseks
+hats.gui.deleteCategory=Kustuta kategooria
+hats.gui.deleteCategory.desc1=See eemaldab kõik mütsid
+hats.gui.deleteCategory.desc2=selles kategoorias ja laeb
+hats.gui.deleteCategory.desc3=uuesti GUI.
+hats.gui.doubleClickConfirm=Tee topelt klõps kinnitamiseks
+hats.gui.disableHat=Keela müts?
+hats.gui.disableHat.desc1=See keelab mütsi kõikidest
+hats.gui.disableHat.desc2=kategooriates ja laeb
+hats.gui.disableHat.desc3=uuesti GUI. See ei
+hats.gui.disableHat.desc4=kustuta faili.
+hats.gui.deleteHat=Kustuta müts?
+hats.gui.deleteHat.desc1=See eemaldab mütsi
+hats.gui.deleteHat.desc2=kõikidest kategooriates
+hats.gui.deleteHat.desc3=ja laeb uuesti GUI.
+hats.gui.renameCategory=Nimeta ümber kategooria?
+hats.gui.renameCategory.desc1=See laeb uuesti GUI!
+hats.gui.removeFromFavorites=Eemalda lemmikutest
+hats.gui.addToFavorites=Lisa lemmikutesse
+hats.gui.resetButtonsOnSide=Lähtesta nupud GUI kõrval?
+
+hats.gui.helpInfo1.desc1=Shift klikki mütsil
+hats.gui.helpInfo1.desc2=rohkemate valikute jaoks!
+hats.gui.helpInfo1.desc3=Sa ei saa shift klikkida
+hats.gui.helpInfo1.desc4=mida sa hetkel kannad,
+hats.gui.helpInfo1.desc5=siiski.
+
+hats.gui.helpInfo2.desc1=Kui sa oled serveris kus pole
+hats.gui.helpInfo2.desc2=modi, teine mängija modiga ei
+hats.gui.helpInfo2.desc3=näe sinu mütsi.
+
+hats.gui.helpInfo3.desc1=Kas sa teadsid, et sa saad hankida mütse juurde?
+hats.gui.helpInfo3.desc2=Techne Online-s on palju
+hats.gui.helpInfo3.desc3=inimeste poolt tehtud mütse mida
+hats.gui.helpInfo3.desc4=sa saad allalaadida ja installida.
+
+hats.gui.helpInfo4.desc1=Sa saad teha ka oma mütsi!
+hats.gui.helpInfo4.desc2=Sa vajad Techne't ja sa teed mütsi sellega.
+hats.gui.helpInfo4.desc3="pea" mudel pannakse puidu blokki peale
+hats.gui.helpInfo4.desc4=Selle suurus on 8 x 8 x 8.
+hats.gui.helpInfo4.desc5=Tee oma müts sellele!
+
+hats.gui.helpInfo5.desc1=Kas teadsid, et saad oma kategooriaid teha?
+hats.gui.helpInfo5.desc2=Vajuta kategooriated nuppu (või C, sinu klaviatuuril)
+hats.gui.helpInfo5.desc3=ja klikka "Lisa uus" nuppu.
+
+hats.gui.helpInfo6.desc1=Kas sa teadsid, et kui sinu sõbral pole
+hats.gui.helpInfo6.desc2=mütsi, mida sa kannad, saada müts
+hats.gui.helpInfo6.desc3=serverisse ja see saadetakse sinu sõbrale.
+hats.gui.helpInfo6.desc4=(Ainult serveritel modiga)
+
+hats.gui.helpInfo7.desc1=Shift klikkamine Juhusliku mütsi nupule annab sulle
+hats.gui.helpInfo7.desc2=juhusliku mütsi JA värvi!
+
+hats.gui.helpInfo8.desc1=Shift klikkamine Juhusliku värvi nupule lähtestab
+hats.gui.helpInfo8.desc2=kõik värvid.
+
+hats.gui.helpInfo9.desc1=Sa võid vajutada TAB'i või T'd, et kiiresti valida
+hats.gui.helpInfo9.desc2=otsingu riba.
+
+hats.gui.helpInfo10.desc1=Kas sa teadsid, et see mod tehti algselt
+hats.gui.helpInfo10.desc2=96-tunnisele modimis maratoni jaoks
+hats.gui.helpInfo10.desc3=ModJam?
+hats.gui.helpInfo10.desc4=See võitis teise koha ja on hetkel
+hats.gui.helpInfo10.desc5=hooldatud iChun'i poolt.
+
+hats.gui.helpInfo11.desc1=Mängija mütsid lisatud modi poolt on
+hats.gui.helpInfo11.desc2=nimed mõndade inimeste kohta, kes aitasid
+hats.gui.helpInfo11.desc3=suuresti kaasa modile, näiteks
+hats.gui.helpInfo11.desc4=arendamises, testimises, mudeli panustega
+hats.gui.helpInfo11.desc5=ja abiga.
+hats.gui.helpInfo11.desc6=Direwolf20 on siiski ainult boonus.
+
+hats.gui.helpInfo12.desc1=Shift klikkamine Mütside loendile viib
+hats.gui.helpInfo12.desc2=sind välja kategooriast ja tagasi
+hats.gui.helpInfo12.desc3=kõikide mütside juurde.
+
+hats.gui.helpInfo13.desc1=Sa saad parema klikkiga tühjendada
+hats.gui.helpInfo13.desc2=otsingu riba.
+
+hats.gui.helpInfo14.desc1=Sa saad keelata mütsi, nende kustutamise
+hats.gui.helpInfo14.desc2=asemel. Lihtsalt hoia shifti kustutamise ajal.
+
+hats.gui.helpInfo15.desc1=Shift+F vajutamine lemmikustab
+hats.gui.helpInfo15.desc2=või mitte-lemmikustab mütsi,
+hats.gui.helpInfo15.desc3=mida sa hetkel kannad.
+
+hats.gui.helpInfo16.desc1=Kiirklahv "Isikustamise"-le on
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=kui sa juhuslikult keelasid
+hats.gui.helpInfo16.desc4=nupu.
+
+hats.gui.helpInfo17.desc1=Kui sul on aitaja müts, siis
+hats.gui.helpInfo17.desc2=sa saad seda kasuta Mütsi
+hats.gui.helpInfo17.desc3=Jahtimis Moodis.
+
+hats.gui.helpInfo18.desc1=(C) mütsi nimes näitab, et
+hats.gui.helpInfo18.desc2=see lisati kellegi tänamiseks
+hats.gui.helpInfo18.desc3=modile annetamise pärast!
+
+hats.gui.helpInfo19.desc1=Kas sa teadsid, et sa saad valida
+hats.gui.helpInfo19.desc2=kas loomadel on mütsid? See on
+hats.gui.helpInfo19.desc3="Isikustamise" aknas
+
+hats.addon.hatstands.gui.base=Alus
+hats.addon.hatstands.gui.stand=Tugi
+
+tile.hats.addon.hatstands.block.name=Mütsi nagi
