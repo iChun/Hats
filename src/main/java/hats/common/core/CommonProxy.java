@@ -40,7 +40,8 @@ public class CommonProxy
 			handler.registerCommand(new CommandHats());
 		}
 	}
-	
+
+    //TODO make generic helpers..? or allow players to override them.
 	public void initMod()
 	{
 		getHats();

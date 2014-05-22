@@ -350,7 +350,6 @@ public class HatHandler
         }
 	}
 
-    //TODO make sure hats are sent accurately!
 	public static void receiveHatData(ByteBuf buffer, EntityPlayer player, boolean isServer)
 	{
 		if(Hats.config.getInt("allowReceivingOfHats") != 1)

@@ -159,7 +159,6 @@ public class PacketString extends AbstractPacket
                 Hats.proxy.tickHandlerClient.tradeReq = pingString;
                 Hats.proxy.tickHandlerClient.tradeReqTimeout = 1200;
 
-                //TODO make sure this ding sound works
                 Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("random.successful_hit"), 1.0F));
 
                 Hats.proxy.tickHandlerClient.guiNewTradeReq.queueHatUnlocked(Hats.proxy.tickHandlerClient.tradeReq);

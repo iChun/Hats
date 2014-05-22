@@ -15,11 +15,11 @@ import java.util.EnumMap;
 
 @Mod(modid = "HatStand", name = "HatStand",
 			version = HatStand.version,
-			dependencies = "required-after:Hats@[" + iChunUtil.versionMC + ".1.0,)"
+			dependencies = "required-after:Hats@[" + iChunUtil.versionMC + ".0.0,)"
 				)
 public class HatStand
 {
-	public static final String version = iChunUtil.versionMC + ".1.0";
+	public static final String version = iChunUtil.versionMC + ".0.0";
 
     public static EnumMap<Side, FMLEmbeddedChannel> channels;
 

@@ -31,7 +31,8 @@ public class RenderHat extends Render
 	{
 		shadowSize = 0.0F;
 	}
-	
+
+    //TODO do rotate corpse??
     public void renderHat(EntityHat hat, double par2, double par4, double par6, float par8, float par9)
     {
     	if(hat.info != null && !hat.info.hatName.equalsIgnoreCase("") && !hat.renderingParent.isPlayerSleeping() && hat.renderingParent.isEntityAlive() && (Hats.config.getSessionInt("renderHats") == 1 || Hats.config.getSessionInt("renderHats") == 13131) && hat.render)
@@ -81,7 +82,7 @@ public class RenderHat extends Render
     			
     			int passesNeeded = helper.passesNeeded();
     			
-    			if(Hats.hasMorphMod && hat.parent instanceof EntityPlayer)
+    			if(Hats.hasMorphMod && hat.parent instanceof EntityPlayer && Hats.config.getSessionInt("renderHats") != 13131)
     			{
     				EntityPlayer player = (EntityPlayer)hat.parent;
     				if(morph.api.Api.hasMorph(player.getCommandSenderName(), true) && morph.api.Api.morphProgress(player.getCommandSenderName(), true) < 1.0F)
@@ -186,7 +187,7 @@ public class RenderHat extends Render
 	    			ResourceLocation skinLoc = AbstractClientPlayer.locationStevePng;
 	    			float skinAlpha = alpha;
 	    			
-	    			if(Hats.hasMorphMod && hat.parent instanceof EntityPlayer)
+	    			if(Hats.hasMorphMod && hat.parent instanceof EntityPlayer && Hats.config.getSessionInt("renderHats") != 13131)
 	    			{
 	    				EntityPlayer player = (EntityPlayer)hat.parent;
 	    				if(morph.api.Api.hasMorph(player.getCommandSenderName(), true) && morph.api.Api.morphProgress(player.getCommandSenderName(), true) < 1.0F)

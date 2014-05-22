@@ -28,12 +28,12 @@ import java.util.EnumMap;
 
 @Mod(modid = "Hats", name = "Hats",
 			version = Hats.version,
-            dependencies = "required-after:iChunUtil@[" + iChunUtil.versionMC +".5.0,)"
+            dependencies = "required-after:iChunUtil@[" + iChunUtil.versionMC +".0.0,)"
                 )
 public class Hats
     implements IConfigUser
 {
-	public static final String version = iChunUtil.versionMC +".1.4";
+	public static final String version = iChunUtil.versionMC +".0.0";
 
     private static Logger logger = LogManager.getLogger("Hats");
 
@@ -57,6 +57,7 @@ public class Hats
         return true;
     }
 
+    //TODO implement something like Hats+ support. Download JSON files with information for classes.
 	@Mod.EventHandler
 	public void preLoad(FMLPreInitializationEvent event)
 	{
