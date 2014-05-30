@@ -15,6 +15,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -122,7 +123,9 @@ public class TickHandlerServer
                         }
                     }
 
-                    ti.trader1.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_unlocked", sb.toString());
+                    NBTTagCompound persistentTag = ti.trader1.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+                    persistentTag.setString("Hats_unlocked", sb.toString());
+                    ti.trader1.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
 
                     StringBuilder sb1 = new StringBuilder();
                     for(int ii = 0; ii < trader2Hats.size(); ii++)
@@ -134,7 +137,9 @@ public class TickHandlerServer
                         }
                     }
 
-                    ti.trader2.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_unlocked", sb1.toString());
+                    persistentTag = ti.trader2.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+                    persistentTag.setString("Hats_unlocked", sb1.toString());
+                    ti.trader2.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
 
                     EventHandler.sendPlayerSessionInfo(ti.trader1);
                     EventHandler.sendPlayerSessionInfo(ti.trader2);
@@ -252,7 +257,9 @@ public class TickHandlerServer
 	
 	public void playerDeath(EntityPlayer player)
 	{
-        player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_unlocked", "");
+        NBTTagCompound persistentTag = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+        persistentTag.setString("Hats_unlocked", "");
+        player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
 
 		Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo());
 		

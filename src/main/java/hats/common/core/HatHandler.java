@@ -13,6 +13,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
 
 import java.io.*;
@@ -681,10 +682,11 @@ public class HatHandler
 						}
 					}
 
-                    player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_unlocked", sb.toString());
+                    NBTTagCompound persistentTag = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+                    persistentTag.setString("Hats_unlocked", sb.toString());
+                    player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
 
                     PacketHandler.sendToPlayer(Hats.channels, new PacketString(0, name), player);
-
 
 					break;
 				}

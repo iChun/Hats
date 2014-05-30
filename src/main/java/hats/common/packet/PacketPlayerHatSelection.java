@@ -8,6 +8,7 @@ import hats.common.core.HatInfo;
 import ichun.common.core.network.AbstractPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
 
 public class PacketPlayerHatSelection extends AbstractPacket
@@ -51,10 +52,12 @@ public class PacketPlayerHatSelection extends AbstractPacket
 
         if(HatHandler.hasHat(hatName))
         {
-            player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_wornHat", hatName);
-            player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_colourR", r);
-            player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_colourG", g);
-            player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_colourB", b);
+            NBTTagCompound persistentTag = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+            persistentTag.setString("Hats_wornHat", hatName);
+            persistentTag.setInteger("Hats_colourR", r);
+            persistentTag.setInteger("Hats_colourG", g);
+            persistentTag.setInteger("Hats_colourB", b);
+            player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
 
             Hats.proxy.sendPlayerListOfWornHats(player, false);
         }

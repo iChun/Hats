@@ -1,0 +1,21 @@
+[
+{
+  "modid" : "Hats",
+  "name" : "Hats",
+  "version" : "2.1.2",
+  "url" : "http://ichun.us/mods/hats/",
+  "credits" : "",
+  "authors": [
+    "iChun"
+  ],
+  "description": "Adds a bunch of hats, as wells as the ability to add more, into Minecraft",
+  "logoFile" : "hatslogo.png",
+  "updateUrl" : "",
+  "parent" : "",
+  "screenshots": [
+  ],
+  "dependancies": [
+    "Forge"
+  ]
+}
+]

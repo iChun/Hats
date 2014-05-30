@@ -19,6 +19,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -255,6 +256,8 @@ public class EventHandler
 			FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("hats.kingOfTheHat.update.playerJoin", event.player.getCommandSenderName()));
 		}
 
+        System.out.println(event.player.getEntityData());
+
         String playerHats = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getString("Hats_unlocked");
 
         if(Hats.config.getSessionInt("playerHatsMode") == 5)
@@ -262,7 +265,9 @@ public class EventHandler
             if(!Hats.config.getSessionString("currentKing").equalsIgnoreCase(event.player.getCommandSenderName()))
             {
                 playerHats = "";
-                event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_unlocked", playerHats);
+                NBTTagCompound persistentTag = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+                persistentTag.setString("Hats_unlocked", playerHats);
+                event.player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
             }
         }
 
@@ -331,8 +336,10 @@ public class EventHandler
 
 		sendPlayerSessionInfo(event.player);
 
-        event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setBoolean("Hats_hasVisited", true);
-        event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_hatMode", Hats.config.getSessionInt("playerHatsMode"));
+        NBTTagCompound persistentTag = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+        persistentTag.setBoolean("Hats_hasVisited", true);
+        persistentTag.setInteger("Hats_hatMode", Hats.config.getSessionInt("playerHatsMode"));
+        event.player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
 
 		if(Hats.config.getSessionInt("playerHatsMode") != 2)
 		{
@@ -363,8 +370,10 @@ public class EventHandler
 
 		if(info != null)
 		{
-            event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_activityLevels", info.levels);
-            event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_activityTimeleft", info.timeLeft);
+            NBTTagCompound persistentTag = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+            persistentTag.setInteger("Hats_activityLevels", info.levels);
+            persistentTag.setInteger("Hats_activityTimeleft", info.timeLeft);
+            event.player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
 
             info.active = false;
 		}
