@@ -41,6 +41,7 @@ public class PacketSession extends AbstractPacket
     @Override
     public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
     {
+
         Hats.config.updateSession("serverHasMod", 1);
         Hats.config.updateSession("playerHatsMode", buffer.readInt());
         Hats.config.updateSession("hasVisited", buffer.readBoolean() ? 1 : 0);

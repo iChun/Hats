@@ -452,8 +452,6 @@ public class HatHandler
                             Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo(HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase(), info.colourR, info.colourG, info.colourB));
                         }
 
-                        Hats.proxy.saveData(DimensionManager.getWorld(0));
-
                         Hats.proxy.sendPlayerListOfWornHats(player, false);
                     }
                     else
@@ -682,9 +680,8 @@ public class HatHandler
 							sb.append(":");
 						}
 					}
-					
-					Hats.proxy.saveData.setString(player.getCommandSenderName() + "_unlocked", sb.toString());
-					Hats.proxy.saveData(DimensionManager.getWorld(0));
+
+                    player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_unlocked", sb.toString());
 
                     PacketHandler.sendToPlayer(Hats.channels, new PacketString(0, name), player);
 
@@ -741,10 +738,7 @@ public class HatHandler
 		{
 			Entry<File, String> e = ite.next();
 			String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
-			if(name.startsWith("(C)") && name.toLowerCase().contains(Minecraft.getMinecraft().thePlayer.getCommandSenderName().toLowerCase())
-					|| name.equalsIgnoreCase("(C) iChun") && Minecraft.getMinecraft().thePlayer.getCommandSenderName().equalsIgnoreCase("ohaiiChun") //special casing for initial contrib hats.
-					|| name.equalsIgnoreCase("(C) Mr. Haz") && Minecraft.getMinecraft().thePlayer.getCommandSenderName().equalsIgnoreCase("damien95")
-					|| name.equalsIgnoreCase("(C) Fridgeboy") && Minecraft.getMinecraft().thePlayer.getCommandSenderName().equalsIgnoreCase("lacsap32"))
+			if(isPlayersContributorHat(name, Minecraft.getMinecraft().thePlayer.getCommandSenderName()))
 			{
 				if(!Hats.proxy.tickHandlerClient.availableHats.contains(name))
 				{
@@ -757,6 +751,14 @@ public class HatHandler
 		
 		Hats.proxy.tickHandlerClient.serverHats = new ArrayList<String>(Hats.proxy.tickHandlerClient.availableHats);
 	}
+
+    public static boolean isPlayersContributorHat(String hatName, String playerName)
+    {
+        return hatName.toLowerCase().startsWith("(c)") && hatName.toLowerCase().contains(playerName.toLowerCase())
+                || hatName.equalsIgnoreCase("(C) iChun") && playerName.equalsIgnoreCase("ohaiiChun") //special casing for initial contrib hats.
+                || hatName.equalsIgnoreCase("(C) Mr. Haz") && playerName.equalsIgnoreCase("damien95")
+                || hatName.equalsIgnoreCase("(C) Fridgeboy") && playerName.equalsIgnoreCase("lacsap32");
+    }
 
 	public static boolean canMobHat(EntityLivingBase ent)
 	{

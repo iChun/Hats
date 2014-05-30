@@ -598,7 +598,7 @@ public class GuiHatSelection extends GuiScreen
     		
     		for(int i = 0; i < 3; i++)
     		{
-                GuiButton btn = new GuiSlider(5 + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, i == 0 ? StatCollector.translateToLocal("item.fireworksCharge.red") + ": " : i == 1 ? StatCollector.translateToLocal("item.fireworksCharge.green") + ": " : StatCollector.translateToLocal("item.fireworksCharge.blue") + ": ", "", 0, 255, i == 0 ? colourR : i == 1 ? colourG : colourB, true, true, this);
+                GuiButton btn = new GuiSlider(5 + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, i == 0 ? StatCollector.translateToLocal("item.fireworksCharge.red") + ": " : i == 1 ? StatCollector.translateToLocal("item.fireworksCharge.green") + ": " : StatCollector.translateToLocal("item.fireworksCharge.blue") + ": ", "", 0, 255, i == 0 ? colourR : i == 1 ? colourG : colourB, false, true, this);
     			buttonList.add(btn);
     			
     			button++;

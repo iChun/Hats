@@ -51,7 +51,10 @@ public class PacketPlayerHatSelection extends AbstractPacket
 
         if(HatHandler.hasHat(hatName))
         {
-            Hats.proxy.saveData(DimensionManager.getWorld(0));
+            player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_wornHat", hatName);
+            player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_colourR", r);
+            player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_colourG", g);
+            player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_colourB", b);
 
             Hats.proxy.sendPlayerListOfWornHats(player, false);
         }

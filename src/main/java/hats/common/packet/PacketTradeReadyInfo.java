@@ -2,6 +2,7 @@ package hats.common.packet;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import hats.client.gui.GuiTradeWindow;
 import ichun.common.core.network.AbstractPacket;
 import io.netty.buffer.ByteBuf;
@@ -36,7 +37,6 @@ public class PacketTradeReadyInfo extends AbstractPacket
         buffer.writeBoolean(trader2Ready);
     }
 
-    //TODO as usual, test if it breaks cause of the Minecraft ref.
     @Override
     public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
     {
@@ -45,7 +45,16 @@ public class PacketTradeReadyInfo extends AbstractPacket
         trader2Name = ByteBufUtils.readUTF8String(buffer);
         trader2Ready = buffer.readBoolean();
 
-        if(side.isClient() && Minecraft.getMinecraft().currentScreen instanceof GuiTradeWindow)
+        if(side.isClient())
+        {
+            handleClient(buffer, player);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void handleClient(ByteBuf buffer, EntityPlayer player)
+    {
+        if(Minecraft.getMinecraft().currentScreen instanceof GuiTradeWindow)
         {
             GuiTradeWindow trade = (GuiTradeWindow)Minecraft.getMinecraft().currentScreen;
 
@@ -73,6 +82,6 @@ public class PacketTradeReadyInfo extends AbstractPacket
                 trade.clickedMakeTrade = false;
             }
         }
-
     }
+
 }

@@ -181,6 +181,7 @@ public class PacketString extends AbstractPacket
             }
             case 3: //Begin Trade session
             {
+                System.out.println(pingString);
                 FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiTradeWindow(pingString));
                 Hats.proxy.tickHandlerClient.tradeReq = null;
                 Hats.proxy.tickHandlerClient.tradeReqTimeout = 0;

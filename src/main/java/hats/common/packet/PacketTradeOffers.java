@@ -2,6 +2,7 @@ package hats.common.packet;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import hats.client.gui.GuiTradeWindow;
 import hats.common.Hats;
 import hats.common.trade.TradeInfo;
@@ -47,7 +48,6 @@ public class PacketTradeOffers extends AbstractPacket
         }
     }
 
-    //TODO Side only???
     @Override
     public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
     {
@@ -86,60 +86,66 @@ public class PacketTradeOffers extends AbstractPacket
         }
         else
         {
-            if(Minecraft.getMinecraft().currentScreen instanceof GuiTradeWindow)
+            handleClient(buffer, player);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void handleClient(ByteBuf buffer, EntityPlayer player)
+    {
+        if(Minecraft.getMinecraft().currentScreen instanceof GuiTradeWindow)
+        {
+            GuiTradeWindow trade = (GuiTradeWindow)Minecraft.getMinecraft().currentScreen;
+
+            tradeHats = new ArrayList<String>();
+            tradeItems = new ArrayList<ItemStack>();
+
+            int hatCount = buffer.readInt();
+
+            for(int i = 0; i < hatCount; i++)
             {
-                GuiTradeWindow trade = (GuiTradeWindow)Minecraft.getMinecraft().currentScreen;
+                tradeHats.add(ByteBufUtils.readUTF8String(buffer));
+            }
 
-                tradeHats = new ArrayList<String>();
-                tradeItems = new ArrayList<ItemStack>();
+            int itemCount = buffer.readInt();
 
-                int hatCount = buffer.readInt();
-
-                for(int i = 0; i < hatCount; i++)
+            for(int i = 0; i < itemCount; i++)
+            {
+                ItemStack is = ItemStack.loadItemStackFromNBT(ByteBufUtils.readTag(buffer));
+                if(is != null)
                 {
-                    tradeHats.add(ByteBufUtils.readUTF8String(buffer));
+                    tradeItems.add(is);
                 }
+            }
 
-                int itemCount = buffer.readInt();
+            ArrayList<String> oldHats = new ArrayList<String>(trade.theirHatsForTrade);
+            ArrayList<ItemStack> oldItems = new ArrayList<ItemStack>(trade.theirItemsForTrade);
 
-                for(int i = 0; i < itemCount; i++)
+            trade.theirHatsForTrade = tradeHats;
+            trade.theirItemsForTrade = tradeItems;
+
+            int tradeSize = oldItems.size();
+            int hatsSize = oldHats.size();
+
+            trade.theirCanScroll = trade.theirHatsForTrade.size() > 3 || trade.theirItemsForTrade.size() > 6;
+            if(!trade.theirCanScroll)
+            {
+                trade.theirScrollProg = 0.0F;
+            }
+            else if(tradeSize != trade.theirItemsForTrade.size() && (trade.theirItemsForTrade.size() % 6 == 1 && tradeSize % 6 == 0 || trade.theirItemsForTrade.size() % 6 == 0 && tradeSize % 6 == 1))
+            {
+                float currentBoxes = (float)Math.ceil((float)Math.max(trade.theirHatsForTrade.size(), 3) / 3F) * 2 + (float)Math.ceil((float)Math.max(tradeSize, 6) / 6F) - 3;
+                if(currentBoxes > 0)
                 {
-                    ItemStack is = ItemStack.loadItemStackFromNBT(ByteBufUtils.readTag(buffer));
-                    if(is != null)
-                    {
-                        tradeItems.add(is);
-                    }
+                    trade.theirScrollProg = MathHelper.clamp_float(trade.theirScrollProg * (trade.theirItemsForTrade.size() > tradeSize ? ((currentBoxes) / (currentBoxes + 1)) : ((currentBoxes) / (currentBoxes - 1))), 0.0F, 1.0F);
                 }
-
-                ArrayList<String> oldHats = new ArrayList<String>(trade.theirHatsForTrade);
-                ArrayList<ItemStack> oldItems = new ArrayList<ItemStack>(trade.theirItemsForTrade);
-
-                trade.theirHatsForTrade = tradeHats;
-                trade.theirItemsForTrade = tradeItems;
-
-                int tradeSize = oldItems.size();
-                int hatsSize = oldHats.size();
-
-                trade.theirCanScroll = trade.theirHatsForTrade.size() > 3 || trade.theirItemsForTrade.size() > 6;
-                if(!trade.theirCanScroll)
+            }
+            else if(hatsSize != trade.theirHatsForTrade.size() && (trade.theirHatsForTrade.size() % 3 == 1 && hatsSize % 3 == 0 || trade.theirHatsForTrade.size() % 3 == 0 && hatsSize % 3 == 1))
+            {
+                float currentBoxes = (float)Math.ceil((float)Math.max(hatsSize, 3) / 3F) * 2 + (float)Math.ceil((float)Math.max(trade.theirItemsForTrade.size(), 6) / 6F) - 3;
+                if(currentBoxes > 0)
                 {
-                    trade.theirScrollProg = 0.0F;
-                }
-                else if(tradeSize != trade.theirItemsForTrade.size() && (trade.theirItemsForTrade.size() % 6 == 1 && tradeSize % 6 == 0 || trade.theirItemsForTrade.size() % 6 == 0 && tradeSize % 6 == 1))
-                {
-                    float currentBoxes = (float)Math.ceil((float)Math.max(trade.theirHatsForTrade.size(), 3) / 3F) * 2 + (float)Math.ceil((float)Math.max(tradeSize, 6) / 6F) - 3;
-                    if(currentBoxes > 0)
-                    {
-                        trade.theirScrollProg = MathHelper.clamp_float(trade.theirScrollProg * (trade.theirItemsForTrade.size() > tradeSize ? ((currentBoxes) / (currentBoxes + 1)) : ((currentBoxes) / (currentBoxes - 1))), 0.0F, 1.0F);
-                    }
-                }
-                else if(hatsSize != trade.theirHatsForTrade.size() && (trade.theirHatsForTrade.size() % 3 == 1 && hatsSize % 3 == 0 || trade.theirHatsForTrade.size() % 3 == 0 && hatsSize % 3 == 1))
-                {
-                    float currentBoxes = (float)Math.ceil((float)Math.max(hatsSize, 3) / 3F) * 2 + (float)Math.ceil((float)Math.max(trade.theirItemsForTrade.size(), 6) / 6F) - 3;
-                    if(currentBoxes > 0)
-                    {
-                        trade.theirScrollProg = MathHelper.clamp_float(trade.theirScrollProg * (trade.theirHatsForTrade.size() > hatsSize ? ((currentBoxes) / (currentBoxes + 2)) : ((currentBoxes) / (currentBoxes - 2))), 0.0F, 1.0F);
-                    }
+                    trade.theirScrollProg = MathHelper.clamp_float(trade.theirScrollProg * (trade.theirHatsForTrade.size() > hatsSize ? ((currentBoxes) / (currentBoxes + 2)) : ((currentBoxes) / (currentBoxes - 2))), 0.0F, 1.0F);
                 }
             }
         }

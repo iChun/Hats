@@ -137,118 +137,6 @@ public class CommonProxy
 		}
 	}
 	
-	//Left for backwards compatibility. Will be removed next MC version.
-	@Deprecated
-	public HatInfo getRandomHat()
-	{
-		return HatHandler.getRandomHat();
-	}
-	
-    public void loadData(WorldServer world)
-    {
-    	try
-    	{
-    		File file = new File(world.getChunkSaveLocation(), "hats.dat");
-    		if(!file.exists())
-    		{
-    			saveData = new NBTTagCompound();
-    			Hats.console("Save data does not exist!");
-    			return;
-    		}
-    		saveData = CompressedStreamTools.readCompressed(new FileInputStream(file));
-    	}
-    	catch(EOFException e)
-    	{
-    		Hats.console("Save data is corrupted! Attempting to read from backup.");
-    		try
-    		{
-	    		File file = new File(world.getChunkSaveLocation(), "hats_backup.dat");
-	    		if(!file.exists())
-	    		{
-	    			saveData = new NBTTagCompound();
-	    			Hats.console("No backup detected!");
-	    			return;
-	    		}
-	    		saveData = CompressedStreamTools.readCompressed(new FileInputStream(file));
-	    		
-	    		File file1 = new File(world.getChunkSaveLocation(), "hats.dat");
-	    		file1.delete();
-	    		file.renameTo(file1);
-	    		Hats.console("Restoring data from backup.");
-    		}
-    		catch(Exception e1)
-    		{
-    			saveData = new NBTTagCompound();
-    			Hats.console("Even your backup data is corrupted. What have you been doing?!", true);
-    		}
-    	}
-    	catch(IOException e)
-    	{
-    		saveData = new NBTTagCompound();
-    		Hats.console("Failed to read save data!");
-    	}
-    }
-
-    //TODO move this info to player persistent?
-    public void saveData(WorldServer world)
-    {
-    	if(saveData != null)
-    	{
-    		for(Map.Entry<String, HatInfo> e : playerWornHats.entrySet())
-    		{
-    			HatInfo hat = e.getValue();
-    			saveData.setString(e.getKey() + "_wornHat", hat.hatName);
-    			saveData.setInteger(e.getKey() + "_colourR", hat.colourR);
-    			saveData.setInteger(e.getKey() + "_colourG", hat.colourG);
-    			saveData.setInteger(e.getKey() + "_colourB", hat.colourB);
-    		}
-    		
-    		for(Map.Entry<String, TimeActiveInfo> e : tickHandlerServer.playerActivity.entrySet())
-    		{
-    			TimeActiveInfo info = e.getValue();
-    			saveData.setInteger(e.getKey() + "_activityLevels", info.levels);
-    			saveData.setInteger(e.getKey() + "_activityTimeleft", info.timeLeft);
-    		}
-    		
-            try
-            {
-            	if(world.getChunkSaveLocation().exists())
-            	{
-	                File file = new File(world.getChunkSaveLocation(), "hats.dat");
-	                if(file.exists())
-	                {
-	                	File file1 = new File(world.getChunkSaveLocation(), "hats_backup.dat");
-	                	if(file1.exists())
-	                	{
-	                		if(file1.delete())
-	                		{
-	                			file.renameTo(file1);
-	                		}
-	                		else
-	                		{
-	                			Hats.console("Failed to delete mod backup data!", true);
-	                		}
-	                	}
-	                	else
-	                	{
-	                		file.renameTo(file1);
-	                	}
-	                }
-	                CompressedStreamTools.writeCompressed(saveData, new FileOutputStream(file));
-            	}
-            }
-            catch(IOException ioexception)
-            {
-                ioexception.printStackTrace();
-                throw new RuntimeException("Failed to save hat data");
-            }
-    	}
-    	else
-    	{
-    		Hats.console("Mod data is null! This is a problem!", true);
-    	}
-    }
-    
     public void sendPlayerListOfWornHats(EntityPlayer player, boolean sendAllPlayerHatInfo)
     {
     	this.sendPlayerListOfWornHats(player, sendAllPlayerHatInfo, true);
@@ -288,8 +176,6 @@ public class CommonProxy
         }
     }
     
-	public static NBTTagCompound saveData = null;
-	
 	public static HashMap<String, HatInfo> playerWornHats = new HashMap<String, HatInfo>();
 	
 	public static TickHandlerClient tickHandlerClient;

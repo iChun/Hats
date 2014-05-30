@@ -2,6 +2,7 @@ package hats.common.packet;
 
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import hats.common.Hats;
 import hats.common.core.HatInfo;
 import hats.common.entity.EntityHat;
@@ -49,9 +50,14 @@ public class PacketMobHatsList extends AbstractPacket
         buffer.writeInt(-2);
     }
 
-    //TODO check for side.client???
     @Override
     public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    {
+        handleClient(buffer, player);
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void handleClient(ByteBuf buffer, EntityPlayer player)
     {
         int id = buffer.readInt();
         String name;

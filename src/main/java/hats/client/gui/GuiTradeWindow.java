@@ -3,6 +3,7 @@ package hats.client.gui;
 import hats.client.core.HatInfoClient;
 import hats.client.render.HatRendererHelper;
 import hats.common.Hats;
+import hats.common.core.HatHandler;
 import hats.common.packet.PacketPing;
 import hats.common.packet.PacketString;
 import hats.common.packet.PacketTradeOffers;
@@ -133,10 +134,7 @@ public class GuiTradeWindow extends GuiScreen
     	for(int i = hats.size() - 1; i >= 0; i--)
     	{
     		String hatName = hats.get(i);
-    		if(hatName.startsWith("(C) ") && hatName.substring(4).startsWith(mc.thePlayer.getCommandSenderName())
-					|| hatName.equalsIgnoreCase("(C) iChun") && mc.thePlayer.getCommandSenderName().equalsIgnoreCase("ohaiiChun") //special casing for initial contrib hats.
-					|| hatName.equalsIgnoreCase("(C) Mr. Haz") && mc.thePlayer.getCommandSenderName().equalsIgnoreCase("damien95")
-					|| hatName.equalsIgnoreCase("(C) Fridgeboy") && mc.thePlayer.getCommandSenderName().equalsIgnoreCase("lacsap32"))
+    		if(HatHandler.isPlayersContributorHat(hatName, mc.thePlayer.getCommandSenderName()))
     		{
     			hats.remove(i);
     		}

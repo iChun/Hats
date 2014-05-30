@@ -96,7 +96,6 @@ public class Hats
             int clr = config.createColourProperty("favouriteHatColourizer", "Favourite Hat Colouriser", "Do you want to apply a colourizer to your favourite hat?\nIf no, leave as #ffffff\n(Google \"hex color codes\" if you don\'t understand)\nFormat: #<colour index>\nEg: #ffffff for white", true, false, 0xffffff);
             favouriteHatInfo = new HatInfo(favHat.toLowerCase(), clr >> 16 & 255, clr >> 8 & 255, clr & 255);
 
-            //TODO keybinds! check that this doesn't crash server?
             config.createKeybindProperty("guiKeyBind", "Open Hats Gui", "Key bind to open the Hat Selection GUI?", Keyboard.KEY_H, false, false, false, false, 0, true);
             config.createStringProperty("personalizeEnabled", "Personalize Categories", "This config is for your GUI personalization.\nPlease don't change this if you don't know what you're doing.", true, false, "1 2 3 4 5 6 7 8 9");
             config.createIntProperty("maxHatRenders", "Max Hat Renders", "Max number of hats to render in one tick", true, false, 300, 0, 5000);
@@ -191,7 +190,6 @@ public class Hats
 		proxy.tickHandlerServer.playerTradeRequests.clear();
 		proxy.tickHandlerServer.activeTrades.clear();
 		proxy.playerWornHats.clear();
-		proxy.saveData = null;
 	}
 
     public static void console(String s, boolean warning)

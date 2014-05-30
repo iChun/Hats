@@ -55,24 +55,6 @@ public class EventHandler
     }
 
     @SubscribeEvent
-    public void onWorldLoad(WorldEvent.Load event)
-    {
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && event.world.provider.dimensionId == 0)
-        {
-            Hats.proxy.loadData((WorldServer)event.world);
-        }
-    }
-
-    @SubscribeEvent
-    public void onWorldUnload(WorldEvent.Unload event)
-    {
-        if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER && event.world.provider.dimensionId == 0)
-        {
-            Hats.proxy.saveData((WorldServer)event.world);
-        }
-    }
-
-    @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event)
     {
         if(FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER)
@@ -206,10 +188,10 @@ public class EventHandler
             }
         }
 
-        PacketHandler.sendToPlayer(Hats.channels, new PacketSession(Hats.config.getSessionInt("playerHatsMode"), Hats.proxy.saveData != null && Hats.proxy.saveData.getBoolean(player.getCommandSenderName() + "_hasVisited") && Hats.proxy.saveData.getInteger(player.getCommandSenderName() + "_hatMode") == Hats.config.getSessionInt("playerHatsMode") || Hats.config.getInt("firstJoinMessage") != 1, Hats.config.getSessionString("lockedHat"), Hats.config.getSessionString("currentKing"), sb.toString()), player);
+        PacketHandler.sendToPlayer(Hats.channels, new PacketSession(Hats.config.getSessionInt("playerHatsMode"), player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getBoolean("Hats_hasVisited") && player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_hatMode") == Hats.config.getSessionInt("playerHatsMode") || Hats.config.getInt("firstJoinMessage") != 1, Hats.config.getSessionString("lockedHat"), Hats.config.getSessionString("currentKing"), sb.toString()), player);
 	}
 
-	@SubscribeEvent
+    @SubscribeEvent
 	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
 	{
 		if(Hats.config.getSessionInt("playerHatsMode") == 5 && Hats.config.getSessionString("currentKing").equalsIgnoreCase(""))
@@ -219,90 +201,84 @@ public class EventHandler
 			FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("hats.kingOfTheHat.update.playerJoin", event.player.getCommandSenderName()));
 		}
 
-		if(Hats.proxy.saveData != null)
-		{
-			String playerHats = Hats.proxy.saveData.getString(event.player.getCommandSenderName() + "_unlocked");
-			
-			if(Hats.config.getSessionInt("playerHatsMode") == 5)
-			{
-				if(!Hats.config.getSessionString("currentKing").equalsIgnoreCase(event.player.getCommandSenderName()))
-				{
-					playerHats = "";
-				}
-			}
-			
-			ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(event.player.getCommandSenderName());
-			if(playerHatsList == null)
-			{
-				playerHatsList = new ArrayList<String>();
-				Hats.proxy.tickHandlerServer.playerHats.put(event.player.getCommandSenderName(), playerHatsList);
-			}
-			
-			playerHatsList.clear();
-			String[] hats = playerHats.split(":");
-			for(String hat : hats)
-			{
-				if(!hat.trim().equalsIgnoreCase(""))
-				{
-					boolean has = false;
-					for(String s : playerHatsList)
-					{
-						if(s.equalsIgnoreCase(hat))
-						{
-							has = true;
-							break;
-						}
-					}
-					if(!has)
-					{
-						playerHatsList.add(hat);
-					}
-				}
-			}
-			
-			String hatName = Hats.proxy.saveData.getString(event.player.getCommandSenderName() + "_wornHat");
-			int r = Hats.proxy.saveData.getInteger(event.player.getCommandSenderName() + "_colourR");
-			int g = Hats.proxy.saveData.getInteger(event.player.getCommandSenderName() + "_colourG");
-			int b = Hats.proxy.saveData.getInteger(event.player.getCommandSenderName() + "_colourB");
-			
-			if(!HatHandler.hasHat(hatName))
-			{
-				HatHandler.requestHat(hatName, event.player);
-			}
-			
-			Hats.proxy.playerWornHats.put(event.player.getCommandSenderName(), new HatInfo(hatName, r, g, b));
-			
-			if(Hats.config.getSessionInt("playerHatsMode") == 6)
-			{
-				TimeActiveInfo info = Hats.proxy.tickHandlerServer.playerActivity.get(event.player.getCommandSenderName());
-				
-				if(info == null)
-				{
-					info = new TimeActiveInfo();
-					info.timeLeft = Hats.proxy.saveData.getInteger(event.player.getCommandSenderName() + "_activityTimeleft");
-					info.levels = Hats.proxy.saveData.getInteger(event.player.getCommandSenderName() + "_activityLevels");
-					
-					if(info.levels == 0 && info.timeLeft == 0)
-					{
-						info.levels = 0;
-						info.timeLeft = Hats.config.getInt("startTime");
-					}
-					
-					Hats.proxy.tickHandlerServer.playerActivity.put(event.player.getCommandSenderName(), info);
-				}
-				
-				info.active = true;
-			}
-		}
-		else
-		{
-			Hats.proxy.playerWornHats.put(event.player.getCommandSenderName(), new HatInfo());
-		}
-		
+        String playerHats = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getString("Hats_unlocked");
+
+        if(Hats.config.getSessionInt("playerHatsMode") == 5)
+        {
+            if(!Hats.config.getSessionString("currentKing").equalsIgnoreCase(event.player.getCommandSenderName()))
+            {
+                playerHats = "";
+                event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_unlocked", playerHats);
+            }
+        }
+
+        ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(event.player.getCommandSenderName());
+        if(playerHatsList == null)
+        {
+            playerHatsList = new ArrayList<String>();
+            Hats.proxy.tickHandlerServer.playerHats.put(event.player.getCommandSenderName(), playerHatsList);
+        }
+
+        playerHatsList.clear();
+        String[] hats = playerHats.split(":");
+        for(String hat : hats)
+        {
+            if(!hat.trim().equalsIgnoreCase(""))
+            {
+                boolean has = false;
+                for(String s : playerHatsList)
+                {
+                    if(s.equalsIgnoreCase(hat))
+                    {
+                        has = true;
+                        break;
+                    }
+                }
+                if(!has)
+                {
+                    playerHatsList.add(hat);
+                }
+            }
+        }
+
+        String hatName = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getString("Hats_wornHat");
+        int r = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_colourR");
+        int g = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_colourG");
+        int b = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_colourB");
+
+        if(!HatHandler.hasHat(hatName))
+        {
+            HatHandler.requestHat(hatName, event.player);
+        }
+
+        Hats.proxy.playerWornHats.put(event.player.getCommandSenderName(), new HatInfo(hatName, r, g, b));
+
+        if(Hats.config.getSessionInt("playerHatsMode") == 6)
+        {
+            TimeActiveInfo info = Hats.proxy.tickHandlerServer.playerActivity.get(event.player.getCommandSenderName());
+
+            if(info == null)
+            {
+                info = new TimeActiveInfo();
+                info.timeLeft = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_activityTimeleft");
+                info.levels = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_activityLevels");
+
+                if(info.levels == 0 && info.timeLeft == 0)
+                {
+                    info.levels = 0;
+                    info.timeLeft = Hats.config.getInt("startTime");
+                }
+
+                Hats.proxy.tickHandlerServer.playerActivity.put(event.player.getCommandSenderName(), info);
+            }
+
+            info.active = true;
+        }
+
 		sendPlayerSessionInfo(event.player);
-		
-		Hats.proxy.saveData.setBoolean(event.player.getCommandSenderName() + "_hasVisited", true);
-		Hats.proxy.saveData.setInteger(event.player.getCommandSenderName() + "_hatMode", Hats.config.getSessionInt("playerHatsMode"));
+
+        event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setBoolean("Hats_hasVisited", true);
+        event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_hatMode", Hats.config.getSessionInt("playerHatsMode"));
 
 		if(Hats.config.getSessionInt("playerHatsMode") != 2)
 		{
@@ -333,7 +309,10 @@ public class EventHandler
 
 		if(info != null)
 		{
-			info.active = false;
+            event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_activityLevels", info.levels);
+            event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_activityTimeleft", info.timeLeft);
+
+            info.active = false;
 		}
 		
 		Hats.proxy.playerWornHats.remove(event.player.getCommandSenderName());

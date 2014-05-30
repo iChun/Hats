@@ -182,7 +182,7 @@ public class TickHandlerServer
                         }
                     }
 
-                    Hats.proxy.saveData.setString(ti.trader1.getCommandSenderName() + "_unlocked", sb.toString());
+                    ti.trader1.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_unlocked", sb.toString());
 
                     StringBuilder sb1 = new StringBuilder();
                     for(int ii = 0; ii < trader2Hats.size(); ii++)
@@ -194,7 +194,7 @@ public class TickHandlerServer
                         }
                     }
 
-                    Hats.proxy.saveData.setString(ti.trader2.getCommandSenderName() + "_unlocked", sb1.toString());
+                    ti.trader2.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_unlocked", sb1.toString());
 
                     EventHandler.sendPlayerSessionInfo(ti.trader1);
                     EventHandler.sendPlayerSessionInfo(ti.trader2);
@@ -220,8 +220,6 @@ public class TickHandlerServer
 
                     PacketHandler.sendToPlayer(Hats.channels, new PacketPing(3, false), ti.trader1);
                     PacketHandler.sendToPlayer(Hats.channels, new PacketPing(3, false), ti.trader2);
-
-                    Hats.proxy.saveData(DimensionManager.getWorld(0));
 
                     ti.terminate = true;
 
@@ -314,11 +312,10 @@ public class TickHandlerServer
 	
 	public void playerDeath(EntityPlayer player)
 	{
-		Hats.proxy.saveData.setString(player.getCommandSenderName() + "_unlocked", "");
+        player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setString("Hats_unlocked", "");
+
 		Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo());
 		
-		Hats.proxy.saveData(DimensionManager.getWorld(0));
-
         PacketHandler.sendToPlayer(Hats.channels, new PacketPing(1, false), player);
 
         Hats.proxy.sendPlayerListOfWornHats(player, false, false);
@@ -333,11 +330,7 @@ public class TickHandlerServer
 			{
 				playerDeath(oldKing);
 			}
-			else if(Hats.proxy.saveData != null)
-			{
-				Hats.proxy.saveData.setString(Hats.config.getSessionString("currentKing") + "_unlocked", "");
-			}
-			
+
 			ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(Hats.config.getSessionString("currentKing"));
 			if(playerHatsList == null)
 			{
@@ -348,47 +341,6 @@ public class TickHandlerServer
 			Hats.proxy.tickHandlerServer.playerHats.put(Hats.config.getSessionString("currentKing"), null);
 			
 			Hats.proxy.tickHandlerServer.playerHats.put(newKing, playerHatsList);
-		}
-		if(Hats.proxy.saveData != null && !Hats.proxy.saveData.getString("HatsKingOfTheHill_lastKing").equalsIgnoreCase(newKing))
-		{
-			ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(newKing);
-			if(playerHatsList == null)
-			{
-				playerHatsList = new ArrayList<String>();
-				Hats.proxy.tickHandlerServer.playerHats.put(newKing, playerHatsList);
-			}
-
-			ArrayList<String> newHats = HatHandler.getAllHatsAsList();
-			
-			ArrayList<String> collectors = new ArrayList<String>();
-			
-			if(!Hats.config.getSessionString("currentKing").equalsIgnoreCase(""))
-			{
-				for(String s : newHats)
-				{
-					if(s.startsWith("(C) ") && s.substring(4).toLowerCase().startsWith(Hats.config.getSessionString("currentKing").toLowerCase())
-							|| s.equalsIgnoreCase("(C) iChun") && Hats.config.getSessionString("currentKing").equalsIgnoreCase("ohaiiChun") //special casing for initial contrib hats.
-							|| s.equalsIgnoreCase("(C) Mr. Haz") && Hats.config.getSessionString("currentKing").equalsIgnoreCase("damien95")
-							|| s.equalsIgnoreCase("(C) Fridgeboy") && Hats.config.getSessionString("currentKing").equalsIgnoreCase("lacsap32"))
-	
-					{
-						collectors.add(s);
-					}
-				}
-			}
-			
-			EntityPlayerMP newKingEnt = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(newKing);
-			
-			if(newKingEnt != null && !newHats.isEmpty())
-			{
-				HatHandler.unlockHat(newKingEnt, newHats.get(newKingEnt.worldObj.rand.nextInt(newHats.size())));
-				for(String s : collectors)
-				{
-					HatHandler.unlockHat(newKingEnt, s);
-				}
-			}
-			
-			Hats.proxy.saveData.setString("HatsKingOfTheHill_lastKing", newKing);
 		}
 		Hats.config.updateSession("currentKing", newKing);
 		if(send)
