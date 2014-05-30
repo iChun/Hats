@@ -183,7 +183,6 @@ public class Hats
 	@Mod.EventHandler
 	public void serverStopped(FMLServerStoppedEvent event)
 	{
-		proxy.tickHandlerServer.mobHatsToRemove.clear();
 		proxy.tickHandlerServer.mobHats.clear();
 		proxy.tickHandlerServer.playerHats.clear();
 		proxy.tickHandlerServer.playerActivity.clear();

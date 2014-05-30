@@ -28,76 +28,16 @@ import java.util.Map.Entry;
 public class TickHandlerServer
 {
     @SubscribeEvent
-	public void worldTick(TickEvent.WorldTickEvent event)
-	{
-        if(event.phase == TickEvent.Phase.END && event.side.isServer())
-        {
-            WorldServer world = (WorldServer)event.world;
-            for(int i = 0; i < world.loadedEntityList.size(); i++)
-            {
-                Entity ent = (Entity)world.loadedEntityList.get(i);
-                if(!(ent instanceof EntityLivingBase) || !HatHandler.canMobHat((EntityLivingBase)ent) || mobHats.containsKey(ent))
-                {
-                    continue;
-                }
-
-                EntityLivingBase living = (EntityLivingBase)ent;
-
-                String hat = mobHats.get(living);
-                if(hat == null)
-                {
-                    boolean fromSpawner = false;
-                    for(int k = 0; k < world.loadedTileEntityList.size(); k++)
-                    {
-                        TileEntity te = (TileEntity)world.loadedTileEntityList.get(k);
-                        if(!(te instanceof TileEntityMobSpawner))
-                        {
-                            continue;
-                        }
-
-                        TileEntityMobSpawner spawner = (TileEntityMobSpawner)te;
-                        MobSpawnerBaseLogic logic = spawner.func_145881_a();
-                        if(logic.isActivated())
-                        {
-                            Entity entity = EntityList.createEntityByName(logic.getEntityNameToSpawn(), logic.getSpawnerWorld());
-                            if(entity != null)
-                            {
-                                if(living.getClass() == entity.getClass())
-                                {
-                                    List list = logic.getSpawnerWorld().getEntitiesWithinAABB(entity.getClass(), AxisAlignedBB.getAABBPool().getAABB((double)logic.getSpawnerX(), (double)logic.getSpawnerY(), (double)logic.getSpawnerZ(), (double)(logic.getSpawnerX() + 1), (double)(logic.getSpawnerY() + 1), (double)(logic.getSpawnerZ() + 1)).expand((double)(4 * 2), 4.0D, (double)(4 * 2)));
-                                    if(list.contains(living))
-                                    {
-                                        fromSpawner = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.config.getInt("randomMobHat") / 100F) && !fromSpawner ? HatHandler.getRandomHat() : new HatInfo();
-                    mobHats.put(living, hatInfo.hatName);
-                }
-            }
-        }
-	}
-
-    @SubscribeEvent
 	public void serverTick(TickEvent.ServerTickEvent event)
 	{
         if(event.phase == TickEvent.Phase.START)
         {
-            for(EntityLivingBase living : mobHatsToRemove)
-            {
-                mobHats.remove(living);
-            }
-            mobHatsToRemove.clear();
-
             Iterator<Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
 
             while(iterator1.hasNext())
             {
                 Entry<EntityLivingBase, String> e = iterator1.next();
-                if(e.getKey().isDead || e.getKey().isChild())
+                if(e.getKey().isDead)
                 {
                     iterator1.remove();
                 }
@@ -307,7 +247,7 @@ public class TickHandlerServer
 		{
 			HatHandler.unlockHat(player, hat);
 		}
-		mobHatsToRemove.add(living);
+        mobHats.remove(living);
 	}
 	
 	public void playerDeath(EntityPlayer player)
@@ -386,7 +326,6 @@ public class TickHandlerServer
 		activeTrades.add((new TradeInfo(player, plyr)).initialize());
 	}
 	
-	public ArrayList<EntityLivingBase> mobHatsToRemove = new ArrayList<EntityLivingBase>();
 	public WeakHashMap<EntityLivingBase, String> mobHats = new WeakHashMap<EntityLivingBase, String>();
 	public HashMap<String, ArrayList<String>> playerHats = new HashMap<String, ArrayList<String>>();
 	public HashMap<String, TimeActiveInfo> playerActivity = new HashMap<String, TimeActiveInfo>();

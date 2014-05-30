@@ -35,7 +35,7 @@ public class RenderHat extends Render
     //TODO do rotate corpse??
     public void renderHat(EntityHat hat, double par2, double par4, double par6, float par8, float par9)
     {
-    	if(hat.info != null && !hat.info.hatName.equalsIgnoreCase("") && !hat.renderingParent.isPlayerSleeping() && hat.renderingParent.isEntityAlive() && (Hats.config.getSessionInt("renderHats") == 1 || Hats.config.getSessionInt("renderHats") == 13131) && hat.render)
+    	if(hat.info != null && !hat.info.hatName.equalsIgnoreCase("") && !hat.renderingParent.isPlayerSleeping() && hat.renderingParent.isEntityAlive() && !hat.renderingParent.isChild() && (Hats.config.getSessionInt("renderHats") == 1 || Hats.config.getSessionInt("renderHats") == 13131) && hat.render)
     	{
     		boolean firstPerson = (hat.parent == Minecraft.getMinecraft().renderViewEntity && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0 && !((Minecraft.getMinecraft().currentScreen instanceof GuiInventory || Minecraft.getMinecraft().currentScreen instanceof GuiContainerCreative || Minecraft.getMinecraft().currentScreen instanceof GuiHatSelection) && RenderManager.instance.playerViewY == 180.0F));
 

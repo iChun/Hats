@@ -1,6 +1,7 @@
 package hats.common.core;
 
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.network.ByteBufUtils;
@@ -13,10 +14,18 @@ import hats.common.packet.PacketSession;
 import ichun.client.keybind.KeyEvent;
 import ichun.common.core.network.PacketHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 
@@ -51,6 +60,51 @@ public class EventHandler
                     Hats.proxy.openHatsGui();
                 }
             }
+        }
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onEntitySpawn(EntityJoinWorldEvent event)
+    {
+        if(FMLCommonHandler.instance().getEffectiveSide().isClient() || !(event.entity instanceof EntityLivingBase) || !HatHandler.canMobHat((EntityLivingBase)event.entity) || Hats.proxy.tickHandlerServer.mobHats.containsKey(event.entity))
+        {
+            return;
+        }
+
+        EntityLivingBase living = (EntityLivingBase)event.entity;
+
+        boolean fromSpawner = false;
+        for(int k = 0; k < event.entity.worldObj.loadedTileEntityList.size(); k++)
+        {
+            TileEntity te = (TileEntity)event.entity.worldObj.loadedTileEntityList.get(k);
+            if(!(te instanceof TileEntityMobSpawner))
+            {
+                continue;
+            }
+
+            TileEntityMobSpawner spawner = (TileEntityMobSpawner)te;
+            MobSpawnerBaseLogic logic = spawner.func_145881_a();
+            if(logic.isActivated())
+            {
+                Entity entity = EntityList.createEntityByName(logic.getEntityNameToSpawn(), logic.getSpawnerWorld());
+                if(entity != null)
+                {
+                    if(living.getClass() == entity.getClass())
+                    {
+                        List list = logic.getSpawnerWorld().getEntitiesWithinAABB(entity.getClass(), AxisAlignedBB.getAABBPool().getAABB((double)logic.getSpawnerX(), (double)logic.getSpawnerY(), (double)logic.getSpawnerZ(), (double)(logic.getSpawnerX() + 1), (double)(logic.getSpawnerY() + 1), (double)(logic.getSpawnerZ() + 1)).expand((double)(4 * 2), 4.0D, (double)(4 * 2)));
+                        if(list.contains(living))
+                        {
+                            fromSpawner = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.config.getInt("randomMobHat") / 100F) && !fromSpawner ? HatHandler.getRandomHat() : new HatInfo();
+        if(!hatInfo.hatName.isEmpty())
+        {
+            Hats.proxy.tickHandlerServer.mobHats.put(living, hatInfo.hatName);
         }
     }
 
@@ -130,7 +184,7 @@ public class EventHandler
                     }
                 }
             }
-            Hats.proxy.tickHandlerServer.mobHatsToRemove.add(event.entityLiving);
+            Hats.proxy.tickHandlerServer.mobHats.remove(event.entityLiving);
         }
     }
 
