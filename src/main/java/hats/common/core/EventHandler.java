@@ -256,8 +256,6 @@ public class EventHandler
 			FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("hats.kingOfTheHat.update.playerJoin", event.player.getCommandSenderName()));
 		}
 
-        System.out.println(event.player.getEntityData());
-
         String playerHats = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getString("Hats_unlocked");
 
         if(Hats.config.getSessionInt("playerHatsMode") == 5)

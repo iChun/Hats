@@ -2,7 +2,7 @@
 {
   "modid" : "Hats",
   "name" : "Hats",
-  "version" : "2.1.2",
+  "version" : ${version},
   "url" : "http://ichun.us/mods/hats/",
   "credits" : "",
   "authors": [
