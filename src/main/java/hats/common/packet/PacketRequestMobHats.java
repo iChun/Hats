@@ -33,13 +33,24 @@ public class PacketRequestMobHats extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
+    {
+        entIds = new ArrayList<Integer>();
+        int id = buffer.readInt();
+        while(id != -2)
+        {
+            entIds.add(id);
+            id = buffer.readInt();
+        }
+    }
+
+    @Override
+    public void execute(Side side, EntityPlayer player)
     {
         ArrayList<Integer> ids = new ArrayList<Integer>();
         ArrayList<String> names = new ArrayList<String>();
 
-        int id = buffer.readInt();
-        while(id != -2)
+        for(Integer id : entIds)
         {
             Entity ent = player.worldObj.getEntityByID(id);
             if(ent instanceof EntityLivingBase)
@@ -51,7 +62,6 @@ public class PacketRequestMobHats extends AbstractPacket
                     names.add(hatName.trim());
                 }
             }
-            id = buffer.readInt();
         }
         ids.add(-2);
 

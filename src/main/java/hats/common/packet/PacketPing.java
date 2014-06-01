@@ -38,11 +38,15 @@ public class PacketPing extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
     {
         pingId = buffer.readInt();
         pingFlag = buffer.readBoolean();
+    }
 
+    @Override
+    public void execute(Side side, EntityPlayer player)
+    {
         if(side.isServer())
         {
             switch(pingId)

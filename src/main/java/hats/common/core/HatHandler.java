@@ -351,7 +351,7 @@ public class HatHandler
         }
 	}
 
-	public static void receiveHatData(ByteBuf buffer, EntityPlayer player, boolean isServer)
+	public static void receiveHatData(String hatName, byte packets, byte packetNumber, byte[] byteValues, EntityPlayer player, boolean isServer)
 	{
 		if(Hats.config.getInt("allowReceivingOfHats") != 1)
 		{
@@ -359,15 +359,6 @@ public class HatHandler
 		}
 		try
 		{
-            String hatName = ByteBufUtils.readUTF8String(buffer);
-            byte packets = buffer.readByte();
-            byte packetNumber = buffer.readByte();
-            int bytesSize = buffer.readInt();
-
-            byte[] byteValues = new byte[bytesSize];
-
-            buffer.readBytes(byteValues);
-
             ArrayList<byte[]> byteArray = hatParts.get(hatName);
             if(byteArray == null)
             {

@@ -49,7 +49,32 @@ public class PacketTradeOffers extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
+    {
+        tradeHats = new ArrayList<String>();
+        tradeItems = new ArrayList<ItemStack>();
+
+        int hatCount = buffer.readInt();
+
+        for(int i = 0; i < hatCount; i++)
+        {
+            tradeHats.add(ByteBufUtils.readUTF8String(buffer));
+        }
+
+        int itemCount = buffer.readInt();
+
+        for(int i = 0; i < itemCount; i++)
+        {
+            ItemStack is = ItemStack.loadItemStackFromNBT(ByteBufUtils.readTag(buffer));
+            if(is != null)
+            {
+                tradeItems.add(is);
+            }
+        }
+    }
+
+    @Override
+    public void execute(Side side, EntityPlayer player)
     {
         if(side.isServer())
         {
@@ -57,27 +82,6 @@ public class PacketTradeOffers extends AbstractPacket
             {
                 if(ti.isPlayerInTrade(player))
                 {
-                    tradeHats = new ArrayList<String>();
-                    tradeItems = new ArrayList<ItemStack>();
-
-                    int hatCount = buffer.readInt();
-
-                    for(int i = 0; i < hatCount; i++)
-                    {
-                        tradeHats.add(ByteBufUtils.readUTF8String(buffer));
-                    }
-
-                    int itemCount = buffer.readInt();
-
-                    for(int i = 0; i < itemCount; i++)
-                    {
-                        ItemStack is = ItemStack.loadItemStackFromNBT(ByteBufUtils.readTag(buffer));
-                        if(is != null)
-                        {
-                            tradeItems.add(is);
-                        }
-                    }
-
                     ti.receiveTradeInfo(tradeHats, tradeItems, (EntityPlayerMP)player);
 
                     break;
@@ -86,37 +90,16 @@ public class PacketTradeOffers extends AbstractPacket
         }
         else
         {
-            handleClient(buffer, player);
+            handleClient(side, player);
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public void handleClient(ByteBuf buffer, EntityPlayer player)
+    public void handleClient(Side side, EntityPlayer player)
     {
         if(Minecraft.getMinecraft().currentScreen instanceof GuiTradeWindow)
         {
             GuiTradeWindow trade = (GuiTradeWindow)Minecraft.getMinecraft().currentScreen;
-
-            tradeHats = new ArrayList<String>();
-            tradeItems = new ArrayList<ItemStack>();
-
-            int hatCount = buffer.readInt();
-
-            for(int i = 0; i < hatCount; i++)
-            {
-                tradeHats.add(ByteBufUtils.readUTF8String(buffer));
-            }
-
-            int itemCount = buffer.readInt();
-
-            for(int i = 0; i < itemCount; i++)
-            {
-                ItemStack is = ItemStack.loadItemStackFromNBT(ByteBufUtils.readTag(buffer));
-                if(is != null)
-                {
-                    tradeItems.add(is);
-                }
-            }
 
             ArrayList<String> oldHats = new ArrayList<String>(trade.theirHatsForTrade);
             ArrayList<ItemStack> oldItems = new ArrayList<ItemStack>(trade.theirItemsForTrade);

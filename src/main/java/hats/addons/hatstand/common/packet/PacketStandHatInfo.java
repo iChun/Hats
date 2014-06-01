@@ -55,32 +55,40 @@ public class PacketStandHatInfo extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
     {
         x = buffer.readInt();
         y = buffer.readInt();
         z = buffer.readInt();
 
+        hatName = ByteBufUtils.readUTF8String(buffer);
+
+        r = buffer.readInt();
+        g = buffer.readInt();
+        b = buffer.readInt();
+
+        headType = buffer.readInt();
+        hasBase = buffer.readBoolean();
+        hasStand = buffer.readBoolean();
+    }
+
+    @Override
+    public void execute(Side side, EntityPlayer player)
+    {
         TileEntity te = DimensionManager.getWorld(player.dimension).getTileEntity(x, y, z);
 
         if(te instanceof TileEntityHatStand)
         {
             TileEntityHatStand stand = (TileEntityHatStand)te;
 
-            hatName = ByteBufUtils.readUTF8String(buffer);
-
-            r = buffer.readInt();
-            g = buffer.readInt();
-            b = buffer.readInt();
-
             stand.hatName = hatName;
             stand.colourR = r;
             stand.colourG = g;
             stand.colourB = b;
 
-            stand.head = buffer.readInt();
-            stand.hasBase = buffer.readBoolean();
-            stand.hasStand = buffer.readBoolean();
+            stand.head = headType;
+            stand.hasBase = hasBase;
+            stand.hasStand = hasStand;
 
             if(stand.head == 4)
             {
@@ -98,6 +106,5 @@ public class PacketStandHatInfo extends AbstractPacket
 
             DimensionManager.getWorld(player.dimension).markBlockForUpdate(x, y, z);
         }
-
     }
 }

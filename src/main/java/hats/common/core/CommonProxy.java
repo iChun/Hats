@@ -67,7 +67,7 @@ public class CommonProxy
 		CommonProxy.renderHelpers.put(EntityZombie.class		, new HelperZombie());
 		CommonProxy.renderHelpers.put(EntityWither.class		, new HelperWither());
 
-        Hats.channels = NetworkRegistry.INSTANCE.newChannel("Hats", new ChannelHandler("Hats",
+        Hats.channels = ChannelHandler.getChannelHandlers("Hats",
                 PacketPlayerHatSelection.class,
                 PacketRequestHat.class,
                 PacketPing.class,
@@ -80,7 +80,7 @@ public class CommonProxy
                 PacketKingOfTheHatInfo.class,
                 PacketTradeOffers.class,
                 PacketHatFragment.class
-        ));
+        );
 
     }
 	

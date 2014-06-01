@@ -30,7 +30,7 @@ public class CommonProxy
 
 		registerTileEntity(TileEntityHatStand.class, "Hats_Stand");
 
-        HatStand.channels = NetworkRegistry.INSTANCE.newChannel("HatStand", new ChannelHandler("HatStand", PacketStandHatInfo.class));
+        HatStand.channels = ChannelHandler.getChannelHandlers("HatStand", PacketStandHatInfo.class);
     }
 	
 	public void registerTileEntity(Class clz, String id)

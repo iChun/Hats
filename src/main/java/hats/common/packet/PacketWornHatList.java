@@ -42,7 +42,7 @@ public class PacketWornHatList extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
     {
         String name = ByteBufUtils.readUTF8String(buffer);
         while(!name.equalsIgnoreCase("#endPacket"))
@@ -69,6 +69,8 @@ public class PacketWornHatList extends AbstractPacket
 
             name = ByteBufUtils.readUTF8String(buffer);
         }
-
     }
+
+    @Override
+    public void execute(Side side, EntityPlayer player){}//hacky fix
 }

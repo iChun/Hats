@@ -38,21 +38,25 @@ public class PacketTradeReadyInfo extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
     {
         trader1Name = ByteBufUtils.readUTF8String(buffer);
         trader1Ready = buffer.readBoolean();
         trader2Name = ByteBufUtils.readUTF8String(buffer);
         trader2Ready = buffer.readBoolean();
+    }
 
+    @Override
+    public void execute(Side side, EntityPlayer player)
+    {
         if(side.isClient())
         {
-            handleClient(buffer, player);
+            handleClient(side, player);
         }
     }
 
     @SideOnly(Side.CLIENT)
-    public void handleClient(ByteBuf buffer, EntityPlayer player)
+    public void handleClient(Side side, EntityPlayer player)
     {
         if(Minecraft.getMinecraft().currentScreen instanceof GuiTradeWindow)
         {

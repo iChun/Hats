@@ -25,10 +25,14 @@ public class PacketRequestHat extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
     {
         hatName = ByteBufUtils.readUTF8String(buffer);
+    }
 
+    @Override
+    public void execute(Side side, EntityPlayer player)
+    {
         HatHandler.sendHat(hatName, side.isServer() ? player : null);
     }
 }

@@ -72,60 +72,61 @@ public class Hats
 
         config = ConfigHandler.createConfig(event.getSuggestedConfigurationFile(), "hats", "Hats", logger, instance);
 
-        config.setCurrentCategory("globalOptions", "Global Options", "These settings affect both servers and clients that loads the mod.");
-        config.createIntBoolProperty("safeLoad", "Safe Load", "Enable safe load?\nSafe load forces the mod to reject Techne Model Files that have files other than xml and png files.", true, false, true);
-        config.createIntBoolProperty("allowSendingOfHats", "Allow Sending Of Hats", "Enable sending of model files to the server/client?", true, false, true);
-        config.createIntBoolProperty("allowReceivingOfHats", "Allow Receiving Of Hats", "Enable receiving of model files to the server/client?", true, false, true);
+        config.setCurrentCategory("globalOptions", "hats.config.cat.globalOptions.name", "hats.config.cat.globalOptions.comment");
+        config.createIntBoolProperty("safeLoad", "hats.config.prop.safeLoad.name", "hats.config.prop.safeLoad.comment", true, false, true);
+        config.createIntBoolProperty("allowSendingOfHats", "hats.config.prop.allowSendingOfHats.name", "hats.config.prop.allowSendingOfHats.comment", true, false, true);
+        config.createIntBoolProperty("allowReceivingOfHats", "hats.config.prop.allowReceivingOfHats.name", "hats.config.prop.allowReceivingOfHats.comment", true, false, true);
 
-        config.setCurrentCategory("serverOptions", "Server Options", "These settings affect only the server that loads the mod.");
-        config.createIntProperty("playerHatsMode", "Player Hats Mode", "Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = Locked mode, all players must wear the same hat, defined in the config.\n3 = Command Giver Mode, what hat you wear is chosen by people who can use commands.\n4 = Hat Hunting Mode, see a mob with a hat, kill it to unlock\n5 = King of the Hat Mode, only one shall wear a hat. The king has to defend their spot or lose the crown!\n6 = Time Active Mode, players unlock more hats the more time they are active on the server.", true, true, 4, 1, 6);
-        config.createIntBoolProperty("firstJoinMessage", "First Join Message", "Send a \"First join\" message to the player when they connect to a server for the first time?", true, false, true);
-        config.createStringProperty("lockedHat", "Locked Hat", "What hat do players wear in Locked mode (see playerHatsMode 2).\nIf you want different players to wear different hats, use command giver mode.", true, true, "Straw Hat");
-        config.createIntProperty("startTime", "Start Time", "For playerHatsMode 6:\nTime required to be active on the server to unlock the first hat.(In ticks)", false, false, 6000, 10, Integer.MAX_VALUE);
-        config.createIntProperty("timeIncrement", "Time Increment", "For playerHatsMode 6:\nAmount of extra time required to get the next level hat.\nDefault is 125 (1.25%).\nFor 200% time put 20000", false, false, 125, 0, Integer.MAX_VALUE);
-        config.createIntBoolProperty("resetPlayerHatsOnDeath", "Reset Player Hats On Death", "Should player hats be reset when they die?\nOnly in unlockable hats modes", true, false, false);
+        config.setCurrentCategory("serverOptions", "hats.config.cat.serverOptions.name", "hats.config.cat.serverOptions.comment");
+        config.createIntProperty("playerHatsMode", "hats.config.prop.playerHatsMode.name", "hats.config.prop.playerHatsMode.comment", true, true, 4, 1, 6);
+        config.createIntBoolProperty("firstJoinMessage", "hats.config.prop.firstJoinMessage.name", "hats.config.prop.firstJoinMessage.comment", true, false, true);
+        config.createStringProperty("lockedHat", "hats.config.prop.lockedHat.name", "hats.config.prop.lockedHat.comment", true, true, "Straw Hat");
+        config.createIntProperty("startTime", "hats.config.prop.startTime.name", "hats.config.prop.startTime.comment", false, false, 6000, 10, Integer.MAX_VALUE);
+        config.createIntProperty("timeIncrement", "hats.config.prop.timeIncrement.name", "hats.config.prop.timeIncrement.comment", false, false, 125, 0, Integer.MAX_VALUE);
+        config.createIntBoolProperty("resetPlayerHatsOnDeath", "hats.config.prop.resetPlayerHatsOnDeath.name", "hats.config.prop.resetPlayerHatsOnDeath.comment", true, false, false);
 
         if(isClient)
         {
-            config.setCurrentCategory("clientOnly", "Client Only", "These settings affect only the client that loads the mod.");
-            config.createIntBoolProperty("renderInFirstPerson", "Render In First Person", "Should your hat render in first person?", true, false, false);
-            config.createIntBoolProperty("enableInServersWithoutMod", "Enable In Servers Without Mod", "Enable hats in servers without the mod?", true, false, true);
-            config.createIntBoolProperty("shouldOtherPlayersHaveHats", "Should Other Players Have Hats", "Do other players have hats? Only when enabled on servers without the mod.", true, false, true);
-            config.createIntProperty("randomHat", "Random Hat", "Should each player have a random hat?\nThey randomly change from time to time.\n0 = No\n1 = Yes\n2 = Yes, but not the player!\nOnly when enabled on servers without the mod", true, false, 2, 0, 2);
-            String favHat = config.createStringProperty("favouriteHat", "Favourite Hat", "What hat do you want to use on servers without the mod? Only when randomHat = 0", true, false, "Top Hat");
-            int clr = config.createColourProperty("favouriteHatColourizer", "Favourite Hat Colouriser", "Do you want to apply a colourizer to your favourite hat?\nIf no, leave as #ffffff\n(Google \"hex color codes\" if you don\'t understand)\nFormat: #<colour index>\nEg: #ffffff for white", true, false, 0xffffff);
+            config.setCurrentCategory("clientOnly", "hats.config.cat.clientOnly.name", "hats.config.cat.clientOnly.comment");
+            config.createIntBoolProperty("renderInFirstPerson", "hats.config.prop.renderInFirstPerson.name", "hats.config.prop.renderInFirstPerson.comment", true, false, false);
+            config.createIntBoolProperty("enableInServersWithoutMod", "hats.config.prop.enableInServersWithoutMod.name", "hats.config.prop.enableInServersWithoutMod.comment", true, false, true);
+            config.createIntBoolProperty("shouldOtherPlayersHaveHats", "hats.config.prop.shouldOtherPlayersHaveHats.name", "hats.config.prop.shouldOtherPlayersHaveHats.comment", true, false, true);
+            config.createIntProperty("randomHat", "hats.config.prop.randomHat.name", "hats.config.prop.randomHat.comment", true, false, 2, 0, 2);
+
+            String favHat = config.createStringProperty("favouriteHat", "hats.config.prop.favouriteHat.name", "hats.config.prop.favouriteHat.comment", true, false, "Top Hat");
+            int clr = config.createColourProperty("favouriteHatColourizer", "hats.config.prop.favouriteHatColourizer.name", "hats.config.prop.favouriteHatColourizer.comment", true, false, 0xffffff);
             favouriteHatInfo = new HatInfo(favHat.toLowerCase(), clr >> 16 & 255, clr >> 8 & 255, clr & 255);
 
-            config.createKeybindProperty("guiKeyBind", "Open Hats Gui", "Key bind to open the Hat Selection GUI?", Keyboard.KEY_H, false, false, false, false, 0, true);
-            config.createStringProperty("personalizeEnabled", "Personalize Categories", "This config is for your GUI personalization.\nPlease don't change this if you don't know what you're doing.", true, false, "1 2 3 4 5 6 7 8 9");
-            config.createIntProperty("maxHatRenders", "Max Hat Renders", "Max number of hats to render in one tick", true, false, 300, 0, 5000);
-            config.createIntBoolProperty("showContributorHatsInGui", "Show Contributor Hats In Gui", "Show Contributor Hats in the GUI?", true, false, true);
+            config.createKeybindProperty("guiKeyBind", "hats.config.prop.guiKeyBind.name", "hats.config.prop.guiKeyBind.comment", Keyboard.KEY_H, false, false, false, false, 0, true);
+            config.createStringProperty("personalizeEnabled", "hats.config.prop.personalizeEnabled.name", "hats.config.prop.personalizeEnabled.comment", true, false, "1 2 3 4 5 6 7 8 9");
+            config.createIntProperty("maxHatRenders", "hats.config.prop.maxHatRenders.name", "hats.config.prop.maxHatRenders.comment", true, false, 300, 0, 5000);
+            config.createIntBoolProperty("showContributorHatsInGui", "hats.config.prop.showContributorHatsInGui.name", "hats.config.prop.showContributorHatsInGui.comment", true, false, true);
 
-            config.createIntBoolProperty("renderHats", "Render Hats", "Render Hats?", true, true, true);
+            config.createIntBoolProperty("renderHats", "hats.config.prop.renderHats.name", "hats.config.prop.renderHats.comment", true, true, true);
         }
 
-        config.setCurrentCategory("randoMobOptions", "RandoMob Options", "These settings affect either the client on randoMob settings or Mob Hunting Mode.");
-        config.createIntProperty("randomMobHat", "Random Mob Hat", "Do mobs have a random chance of having a hat?\n0 = Disabled (0%)\n100 = All mobs (100%)\n(Client)This follows the randomHat setting, meaning if randomHat is 0, all mobs will wear the favouriteHat setting", true, false, config.getInt("playerHatsMode") != 4 && isClient ? 0 : 10, 0, 100);
-        config.createIntProperty("useRandomContributorHats", "Use Random Contributor Hats", "Allow the use of contributor hats when getting a random hat?\n0 - 100%", true, false, 10, 0, 100);
+        config.setCurrentCategory("randoMobOptions", "hats.config.cat.randoMobOptions.name", "hats.config.cat.randoMobOptions.comment");
+        config.createIntProperty("randomMobHat", "hats.config.prop.randomMobHat.name", "hats.config.prop.randomMobHat.comment", true, false, config.getInt("playerHatsMode") != 4 && isClient ? 0 : 10, 0, 100);
+        config.createIntProperty("useRandomContributorHats", "hats.config.prop.useRandomContributorHats.name", "hats.config.prop.useRandomContributorHats.comment", true, false, 10, 0, 100);
 
-        config.createIntBoolProperty("hatBlaze"     , "Blaze Hats"      , "", true, false, true);
-        config.createIntBoolProperty("hatChicken"   , "Chicken Hats"    , "", true, false, true);
-        config.createIntBoolProperty("hatCow"       , "Cow Hats"        , "", true, false, true);
-        config.createIntBoolProperty("hatCreeper"   , "Creeper Hats"    , "", true, false, true);
-        config.createIntBoolProperty("hatEnderman"  , "Enderman Hats"   , "", true, false, true);
-        config.createIntBoolProperty("hatGhast"     , "Ghast Hats"      , "", true, false, true);
-        config.createIntBoolProperty("hatHorse"     , "Horse Hats"      , "", true, false, true);
-        config.createIntBoolProperty("hatOcelot"    , "Ocelot Hats"     , "", true, false, true);
-        config.createIntBoolProperty("hatPig"       , "Pig Hats"        , "", true, false, true);
-        config.createIntBoolProperty("hatSheep"     , "Sheep Hats"      , "", true, false, true);
-        config.createIntBoolProperty("hatSkeleton"  , "Skeleton Hats"   , "", true, false, true);
-        config.createIntBoolProperty("hatSlime"     , "Slime Hats"      , "", true, false, true);
-        config.createIntBoolProperty("hatSpider"    , "Spider Hats"     , "", true, false, true);
-        config.createIntBoolProperty("hatSquid"     , "Squid Hats"      , "", true, false, true);
-        config.createIntBoolProperty("hatVillager"  , "Villager Hats"   , "", true, false, true);
-        config.createIntBoolProperty("hatWither"    , "Wither Hats"     , "", true, false, true);
-        config.createIntBoolProperty("hatWolf"      , "Wolf Hats"       , "", true, false, true);
-        config.createIntBoolProperty("hatZombie"    , "Zombie Hats"     , "", true, false, true);
+        config.createIntBoolProperty("hatBlaze"     , "hats.config.prop.hatBlaze.name"      , "hats.config.prop.hatBlaze.comment"   , true, false, true);
+        config.createIntBoolProperty("hatChicken"   , "hats.config.prop.hatChicken.name"    , "hats.config.prop.hatChicken.comment" , true, false, true);
+        config.createIntBoolProperty("hatCow"       , "hats.config.prop.hatCow.name"        , "hats.config.prop.hatCow.comment"     , true, false, true);
+        config.createIntBoolProperty("hatCreeper"   , "hats.config.prop.hatCreeper.name"    , "hats.config.prop.hatCreeper.comment" , true, false, true);
+        config.createIntBoolProperty("hatEnderman"  , "hats.config.prop.hatEnderman.name"   , "hats.config.prop.hatEnderman.comment", true, false, true);
+        config.createIntBoolProperty("hatGhast"     , "hats.config.prop.hatGhast.name"      , "hats.config.prop.hatGhast.comment"   , true, false, true);
+        config.createIntBoolProperty("hatHorse"     , "hats.config.prop.hatHorse.name"      , "hats.config.prop.hatHorse.comment"   , true, false, true);
+        config.createIntBoolProperty("hatOcelot"    , "hats.config.prop.hatOcelot.name"     , "hats.config.prop.hatOcelot.comment"  , true, false, true);
+        config.createIntBoolProperty("hatPig"       , "hats.config.prop.hatPig.name"        , "hats.config.prop.hatPig.comment"     , true, false, true);
+        config.createIntBoolProperty("hatSheep"     , "hats.config.prop.hatSheep.name"      , "hats.config.prop.hatSheep.comment"   , true, false, true);
+        config.createIntBoolProperty("hatSkeleton"  , "hats.config.prop.hatSkeleton.name"   , "hats.config.prop.hatSkeleton.comment", true, false, true);
+        config.createIntBoolProperty("hatSlime"     , "hats.config.prop.hatSlime.name"      , "hats.config.prop.hatSlime.comment"   , true, false, true);
+        config.createIntBoolProperty("hatSpider"    , "hats.config.prop.hatSpider.name"     , "hats.config.prop.hatSpider.comment"  , true, false, true);
+        config.createIntBoolProperty("hatSquid"     , "hats.config.prop.hatSquid.name"      , "hats.config.prop.hatSquid.comment"   , true, false, true);
+        config.createIntBoolProperty("hatVillager"  , "hats.config.prop.hatVillager.name"   , "hats.config.prop.hatVillager.comment", true, false, true);
+        config.createIntBoolProperty("hatWither"    , "hats.config.prop.hatWither.name"     , "hats.config.prop.hatWither.comment"  , true, false, true);
+        config.createIntBoolProperty("hatWolf"      , "hats.config.prop.hatWolf.name"       , "hats.config.prop.hatWolf.comment"    , true, false, true);
+        config.createIntBoolProperty("hatZombie"    , "hats.config.prop.hatZombie.name"     , "hats.config.prop.hatZombie.comment"  , true, false, true);
 
         //		handleConfig();
 	}

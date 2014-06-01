@@ -40,14 +40,18 @@ public class PacketPlayerHatSelection extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
     {
         //should always be serverside
         hatName = ByteBufUtils.readUTF8String(buffer);
         r = buffer.readInt();
         g = buffer.readInt();
         b = buffer.readInt();
+    }
 
+    @Override
+    public void execute(Side side, EntityPlayer player)
+    {
         Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo(hatName, r, g, b));
 
         if(HatHandler.hasHat(hatName))

@@ -29,12 +29,16 @@ public class PacketKingOfTheHatInfo extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
     {
         Hats.config.updateSession("currentKing", ByteBufUtils.readUTF8String(buffer));
 
         hatsList = ByteBufUtils.readUTF8String(buffer);
+    }
 
+    @Override
+    public void execute(Side side, EntityPlayer player)
+    {
         if(!hatsList.isEmpty())
         {
             HatHandler.populateHatsList(hatsList);

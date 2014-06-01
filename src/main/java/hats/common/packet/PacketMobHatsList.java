@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 public class PacketMobHatsList extends AbstractPacket
 {
-    public ArrayList<Integer> mobIds;
-    public ArrayList<String> hatNames;
+    public ArrayList<Integer> mobIds = new ArrayList<Integer>();
+    public ArrayList<String> hatNames = new ArrayList<String>();
 
     public PacketMobHatsList(){}
 
@@ -51,30 +51,36 @@ public class PacketMobHatsList extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
     {
-        handleClient(buffer, player);
+        int id = buffer.readInt();
+        while(id != -2)
+        {
+            mobIds.add(id);
+            hatNames.add(ByteBufUtils.readUTF8String(buffer));
+            id = buffer.readInt();
+        }
+    }
+
+    @Override
+    public void execute(Side side, EntityPlayer player)
+    {
+        handleClient(side, player);
     }
 
     @SideOnly(Side.CLIENT)
-    public void handleClient(ByteBuf buffer, EntityPlayer player)
+    public void handleClient(Side side, EntityPlayer player)
     {
-        int id = buffer.readInt();
-        String name;
-        while(id != -2)
+        for(int i = 0; i < Math.min(mobIds.size(), hatNames.size()); i++)
         {
-            name = ByteBufUtils.readUTF8String(buffer);
-
-            Entity ent = Minecraft.getMinecraft().theWorld.getEntityByID(id);
+            Entity ent = Minecraft.getMinecraft().theWorld.getEntityByID(mobIds.get(i));
             if(ent != null && ent instanceof EntityLivingBase)
             {
-                HatInfo hatInfo = new HatInfo(name);
+                HatInfo hatInfo = new HatInfo(hatNames.get(i));
                 EntityHat hat = new EntityHat(ent.worldObj, (EntityLivingBase)ent, hatInfo);
                 Hats.proxy.tickHandlerClient.mobHats.put(ent.getEntityId(), hat);
                 ent.worldObj.spawnEntityInWorld(hat);
             }
-
-            id = buffer.readInt();
         }
     }
 }

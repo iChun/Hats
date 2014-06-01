@@ -37,8 +37,21 @@ public class PacketHatFragment extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
     {
-        HatHandler.receiveHatData(buffer, side.isServer() ? player : null, side.isServer());
+        hatName = ByteBufUtils.readUTF8String(buffer);
+        packetTotal = buffer.readByte();
+        packetNumber = buffer.readByte();
+        fileSize = buffer.readInt();
+
+        data = new byte[fileSize];
+
+        buffer.readBytes(data);
+    }
+
+    @Override
+    public void execute(Side side, EntityPlayer player)
+    {
+        HatHandler.receiveHatData(hatName, packetTotal, packetNumber, data, side.isServer() ? player : null, side.isServer());
     }
 }

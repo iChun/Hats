@@ -39,7 +39,7 @@ public class PacketSession extends AbstractPacket
     }
 
     @Override
-    public void readFrom(ByteBuf buffer, Side side, EntityPlayer player)
+    public void readFrom(ByteBuf buffer, Side side)
     {
 
         Hats.config.updateSession("serverHasMod", 1);
@@ -57,4 +57,7 @@ public class PacketSession extends AbstractPacket
         }
 
     }
+
+    @Override
+    public void execute(Side side, EntityPlayer player){} //Hacky fix
 }
