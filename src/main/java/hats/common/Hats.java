@@ -15,6 +15,8 @@ import hats.common.core.HatInfo;
 import ichun.common.core.config.Config;
 import ichun.common.core.config.ConfigHandler;
 import ichun.common.core.config.IConfigUser;
+import ichun.common.core.updateChecker.ModVersionChecker;
+import ichun.common.core.updateChecker.ModVersionInfo;
 import ichun.common.iChunUtil;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Property;
@@ -28,7 +30,8 @@ import java.util.EnumMap;
 
 @Mod(modid = "Hats", name = "Hats",
 			version = Hats.version,
-            dependencies = "required-after:iChunUtil@[" + iChunUtil.versionMC +".0.0,)"
+            dependencies = "required-after:iChunUtil@[" + iChunUtil.versionMC +".0.0,)",
+            acceptableRemoteVersions = "[" + iChunUtil.versionMC +".0.0," + iChunUtil.versionMC + ".1.0)"
                 )
 public class Hats
     implements IConfigUser
@@ -129,6 +132,8 @@ public class Hats
         config.createIntBoolProperty("hatZombie"    , "hats.config.prop.hatZombie.name"     , "hats.config.prop.hatZombie.comment"  , true, false, true);
 
         //		handleConfig();
+
+        ModVersionChecker.register_iChunMod(new ModVersionInfo("Hats", "1.7", version, false));
 	}
 	
 	@Mod.EventHandler
