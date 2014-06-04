@@ -35,7 +35,7 @@ public class HelperPig extends RenderOnEntityHelper
 	@Override
 	public float getOffsetPointVert(EntityLivingBase ent)
 	{
-		return 4F/16F;
+		return 3.8F/16F;
 	}
 
 	@Override

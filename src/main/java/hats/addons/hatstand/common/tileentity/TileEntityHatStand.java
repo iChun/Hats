@@ -101,7 +101,8 @@ public class TileEntityHatStand extends TileEntity
 		
 		info = new HatInfoClient(hatName, colourR, colourG, colourB);
     }
-	
+
+    //TODO do not use getAABBPool!
     @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getRenderBoundingBox()

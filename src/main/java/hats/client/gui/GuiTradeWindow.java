@@ -1252,6 +1252,7 @@ public class GuiTradeWindow extends GuiScreen
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glTranslatef(0.0F, 0.0F, 75F);
+        zLevel += 100F;
         if(selfReady)
         {
         	drawSolidRect(guiLeft + 6, guiTop + 29, 108, 36, 0, 0.4F);
@@ -1261,6 +1262,7 @@ public class GuiTradeWindow extends GuiScreen
         {
         	drawSolidRect(guiLeft + 125, guiTop + 116, 108, 54, 0, 0.4F);
         }
+        zLevel -= 100F;
         GL11.glTranslatef(0.0F, 0.0F, -75F);
         GL11.glDisable(GL11.GL_BLEND);
         
