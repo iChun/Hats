@@ -6,6 +6,7 @@ import hats.api.RenderOnEntityHelper;
 import hats.client.gui.GuiHatSelection;
 import hats.client.gui.GuiHatUnlocked;
 import hats.client.gui.GuiTradeReq;
+import hats.client.render.helper.HelperGeneric;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.core.HatInfo;
@@ -269,15 +270,6 @@ public class TickHandlerClient
         }
     }
 
-    public static boolean isPressed(int key)
-    {
-    	if(key < 0)
-    	{
-    		return Mouse.isButtonDown(key + 100);
-    	}
-    	return Keyboard.isKeyDown(key);
-    }
-
 	public void updateHatPosAndAngle(EntityHat hat, EntityLivingBase parent)
 	{
 		hat.lastTickPosX = hat.parent.lastTickPosX;
@@ -293,7 +285,7 @@ public class TickHandlerClient
 		hat.posZ = hat.parent.posZ;
 		
 		RenderOnEntityHelper helper = HatHandler.getRenderHelper(parent.getClass());
-		
+
 		if(helper != null)
 		{
 			hat.prevRotationPitch = helper.getPrevRotationPitch(parent);

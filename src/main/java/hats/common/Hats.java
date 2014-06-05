@@ -1,5 +1,8 @@
 package hats.common;
 
+import com.google.common.io.ByteStreams;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
@@ -8,6 +11,7 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.relauncher.Side;
 import hats.client.core.ClientProxy;
+import hats.client.render.helper.HelperGeneric;
 import hats.common.core.CommonProxy;
 import hats.common.core.EventHandler;
 import hats.common.core.HatHandler;
@@ -26,7 +30,12 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 @Mod(modid = "Hats", name = "Hats",
 			version = Hats.version,
@@ -148,7 +157,7 @@ public class Hats
 
         FMLCommonHandler.instance().bus().register(eventHandler);
 		MinecraftForge.EVENT_BUS.register(eventHandler);
-	}
+    }
     //TODO redo the read-hats thread to pull off servers instead of being included in the zip, which causes issues with updates sometimes.
 	
 	@Mod.EventHandler
@@ -165,7 +174,89 @@ public class Hats
 	        {
 	        }
 		}
-	}
+
+        //GSON gen test
+
+//        Map<String, Map<String, Object>> className = new HashMap<String, Map<String, Object>>();
+//
+//        Map<String, Object> props = new HashMap<String, Object>();
+//
+//        props.put("rotatePointVert", 20.2F/16F);
+//        props.put("rotatePointHori", 8F/16F);
+//        props.put("offsetPointVert", 4F/16F);
+//        props.put("offsetPointHori", 2F/16F);
+//
+//        className.put("net.minecraft.entity.passive.EntityCow", props);
+//
+//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+//        String jsonOutput = gson.toJson(className);
+//
+//        System.out.println(jsonOutput);
+
+        try
+        {
+            Gson gson = new Gson();
+            InputStream con = new FileInputStream(new File(HatHandler.hatsFolder, "HatModMobSupport.json"));
+            String data = new String(ByteStreams.toByteArray(con));
+            con.close();
+
+            Map<String, Object> json = gson.fromJson(data, Map.class);
+            for(Map.Entry<String, Object> e : json.entrySet())
+            {
+                try
+                {
+                    Class clz = Class.forName(e.getKey());
+                    Map<String, Object> vars = (Map<String, Object>)e.getValue();
+                    HelperGeneric helperGeneric = new HelperGeneric(clz);
+                    helperGeneric.prevRenderYawOffset = getVar(vars.get("prevRenderYawOffset"));
+                    helperGeneric.renderYawOffset = getVar(vars.get("renderYawOffset"));
+                    helperGeneric.prevRotationYawHead = getVar(vars.get("prevRotationYawHead"));
+                    helperGeneric.rotationYawHead = getVar(vars.get("rotationYawHead"));
+                    helperGeneric.prevRotationPitch = getVar(vars.get("prevRotationPitch"));
+                    helperGeneric.rotationPitch = getVar(vars.get("rotationPitch"));
+
+                    helperGeneric.rotatePointVert = getVar(vars.get("rotatePointVert"));
+                    helperGeneric.rotatePointHori = getVar(vars.get("rotatePointHori"));
+                    helperGeneric.rotatePointSide = getVar(vars.get("rotatePointSide"));
+
+                    helperGeneric.offsetPointVert = getVar(vars.get("offsetPointVert"));
+                    helperGeneric.offsetPointHori = getVar(vars.get("offsetPointHori"));
+                    helperGeneric.offsetPointSide = getVar(vars.get("offsetPointSide"));
+
+                    helperGeneric.hatScale = getVar(vars.get("hatScale"));
+
+                    CommonProxy.renderHelpers.put(clz, helperGeneric);
+
+                    System.out.println("registered " + clz.getName());
+                }
+                catch(ClassNotFoundException e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public static Object getVar(Object obj)
+    {
+        if(obj == null)
+        {
+            return null;
+        }
+        try
+        {
+            return Float.parseFloat(obj.toString());
+        }
+        catch(NumberFormatException e)
+        {
+            e.printStackTrace();
+            return obj.toString();
+        }
+    }
 
 	@Mod.EventHandler
 	public void serverStarting(FMLServerAboutToStartEvent event)

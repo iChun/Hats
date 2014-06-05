@@ -2,6 +2,7 @@ package hats.client.render;
 
 import hats.api.RenderOnEntityHelper;
 import hats.client.gui.GuiHatSelection;
+import hats.client.render.helper.HelperGeneric;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
 import hats.common.entity.EntityHat;
@@ -49,7 +50,12 @@ public class RenderHat extends Render
     			}
     			
     			RenderOnEntityHelper helper = HatHandler.getRenderHelper(hat.renderingParent.getClass());
-    			
+
+                if(helper instanceof HelperGeneric)
+                {
+                    ((HelperGeneric)helper).update(hat.renderingParent);
+                }
+
     			float alpha = 1.0F;
     			if(helper == null)
     			{
