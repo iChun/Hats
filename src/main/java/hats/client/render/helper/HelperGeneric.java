@@ -3,15 +3,13 @@ package hats.client.render.helper;
 import hats.api.RenderOnEntityHelper;
 import net.minecraft.entity.EntityLivingBase;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-
 /**
  * This class is really ugly and uses a lot of reflection but I don't know how else I would have done it.
  */
 public class HelperGeneric extends RenderOnEntityHelper
 {
     public final Class entityClass;
+    public final boolean canUnlockHat;
 
     public float entPrevRenderYawOffset;
     public float entRenderYawOffset;
@@ -37,15 +35,22 @@ public class HelperGeneric extends RenderOnEntityHelper
 
     public Object hatScale;
 
-    public HelperGeneric(Class entityClass)
+    public HelperGeneric(Class entityClass, boolean canUnlockHat)
     {
         this.entityClass = entityClass;
+        this.canUnlockHat = canUnlockHat;
     }
 
     @Override
     public Class helperForClass()
     {
         return entityClass;
+    }
+
+    @Override
+    public boolean canUnlockHat(EntityLivingBase living)
+    {
+        return canUnlockHat;
     }
 
     public void update(EntityLivingBase living)
@@ -138,27 +143,70 @@ public class HelperGeneric extends RenderOnEntityHelper
 
     public float getValue(String s)
     {
-        try
+        Object obj = null;
+        if(s.equalsIgnoreCase("prevRenderYawOffset"))
         {
-            Field f = this.getClass().getDeclaredField(s);
-            f.setAccessible(true);
-            Object obj = f.get(this);
+            obj = prevRenderYawOffset;
+        }
+        else if(s.equalsIgnoreCase("renderYawOffset"))
+        {
+            obj = renderYawOffset;
+        }
+        else if(s.equalsIgnoreCase("prevRotationYawHead"))
+        {
+            obj = prevRotationYawHead;
+        }
+        else if(s.equalsIgnoreCase("rotationYawHead"))
+        {
+            obj = rotationYawHead;
+        }
+        else if(s.equalsIgnoreCase("prevRotationPitch"))
+        {
+            obj = prevRotationPitch;
+        }
+        else if(s.equalsIgnoreCase("rotationPitch"))
+        {
+            obj = rotationPitch;
+        }
+        else if(s.equalsIgnoreCase("rotatePointVert"))
+        {
+            obj = rotatePointVert;
+        }
+        else if(s.equalsIgnoreCase("rotatePointHori"))
+        {
+            obj = rotatePointHori;
+        }
+        else if(s.equalsIgnoreCase("rotatePointSide"))
+        {
+            obj = rotatePointSide;
+        }
+        else if(s.equalsIgnoreCase("offsetPointVert"))
+        {
+            obj = offsetPointVert;
+        }
+        else if(s.equalsIgnoreCase("offsetPointHori"))
+        {
+            obj = offsetPointHori;
+        }
+        else if(s.equalsIgnoreCase("offsetPointSide"))
+        {
+            obj = offsetPointSide;
+        }
+        else if(s.equalsIgnoreCase("hatScale"))
+        {
+            obj = hatScale;
+        }
+
+        if(obj != null || !s.equalsIgnoreCase("hatScale"))
+        {
             if(obj instanceof Float)
             {
                 return (Float)obj;
             }
             else if(obj instanceof String || obj == null)
             {
-                Field f1 = stringToFieldMap.get(obj == null ? s : (String)obj);
-                if(f1 != null)
-                {
-                    f1.setAccessible(true);
-                    return f1.getFloat(this);
-                }
+                return getEntValue(obj == null ? s : (String)obj);
             }
-        }
-        catch(Exception e)
-        {
         }
         if(s.equals("hatScale"))
         {
@@ -167,19 +215,32 @@ public class HelperGeneric extends RenderOnEntityHelper
         return 0.0F;
     }
 
-    public static HashMap<String, Field> stringToFieldMap = new HashMap<String, Field>() {{
-        try
+    public float getEntValue(String s)
+    {
+        if(s.equalsIgnoreCase("prevRenderYawOffset"))
         {
-            put("prevRenderYawOffset", HelperGeneric.class.getDeclaredField("entPrevRenderYawOffset"));
-            put("renderYawOffset", HelperGeneric.class.getDeclaredField("entRenderYawOffset"));
-            put("prevRotationYawHead", HelperGeneric.class.getDeclaredField("entPrevRotationYawHead"));
-            put("rotationYawHead", HelperGeneric.class.getDeclaredField("entRotationYawHead"));
-            put("prevRotationPitch", HelperGeneric.class.getDeclaredField("entPrevRotationPitch"));
-            put("rotationPitch", HelperGeneric.class.getDeclaredField("entRotationPitch"));
+            return entPrevRenderYawOffset;
         }
-        catch(Exception e)
+        else if(s.equalsIgnoreCase("renderYawOffset"))
         {
-            e.printStackTrace();
+            return entRenderYawOffset;
         }
-    }};
+        else if(s.equalsIgnoreCase("prevRotationYawHead"))
+        {
+            return entPrevRotationYawHead;
+        }
+        else if(s.equalsIgnoreCase("rotationYawHead"))
+        {
+            return entRotationYawHead;
+        }
+        else if(s.equalsIgnoreCase("prevRotationPitch"))
+        {
+            return entPrevRotationPitch;
+        }
+        else if(s.equalsIgnoreCase("rotationPitch"))
+        {
+            return entRotationPitch;
+        }
+        return 0.0F;
+    }
 }

@@ -3,6 +3,7 @@ package hats.common.core;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import hats.api.RenderOnEntityHelper;
 import hats.common.Hats;
 import hats.common.packet.PacketKingOfTheHatInfo;
 import hats.common.packet.PacketPing;
@@ -248,7 +249,10 @@ public class TickHandlerServer
 	public void playerKilledEntity(EntityLivingBase living, EntityPlayer player)
 	{
 		String hat = mobHats.get(living);
-		if(hat != null)
+
+        RenderOnEntityHelper helper = HatHandler.getRenderHelper(living.getClass());
+
+		if((helper == null || helper.canUnlockHat(living)) && hat != null)
 		{
 			HatHandler.unlockHat(player, hat);
 		}

@@ -29,7 +29,19 @@ public abstract class RenderOnEntityHelper
 	public boolean canWearHat(EntityLivingBase living)
 	{
 		return true;
-	}
+	}//TODO can unlock hat
+
+    /**
+     * Used to check if the mob will unlock a hat if killed.
+     * Recommend you disable if the mob that wears the hat can be spawned.
+     * EG: Portalgun turrets.
+     * @param living
+     * @return canUnlockHat
+     */
+    public boolean canUnlockHat(EntityLivingBase living)
+    {
+        return true;
+    }
 	
 	/**
 	 * The following are mostly self explanatory.

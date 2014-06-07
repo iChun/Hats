@@ -159,6 +159,7 @@ public class Hats
 		MinecraftForge.EVENT_BUS.register(eventHandler);
     }
     //TODO redo the read-hats thread to pull off servers instead of being included in the zip, which causes issues with updates sometimes.
+    //TODO see if model is readable before redownloading if file size is different
 	
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event)
@@ -207,7 +208,12 @@ public class Hats
                 {
                     Class clz = Class.forName(e.getKey());
                     Map<String, Object> vars = (Map<String, Object>)e.getValue();
-                    HelperGeneric helperGeneric = new HelperGeneric(clz);
+                    Boolean bool = (Boolean)vars.get("canUnlockHat");
+                    if(bool == null)
+                    {
+                        bool = true;
+                    }
+                    HelperGeneric helperGeneric = new HelperGeneric(clz, bool);
                     helperGeneric.prevRenderYawOffset = getVar(vars.get("prevRenderYawOffset"));
                     helperGeneric.renderYawOffset = getVar(vars.get("renderYawOffset"));
                     helperGeneric.prevRotationYawHead = getVar(vars.get("prevRotationYawHead"));
@@ -227,7 +233,7 @@ public class Hats
 
                     CommonProxy.renderHelpers.put(clz, helperGeneric);
 
-                    System.out.println("registered " + clz.getName());
+                    Hats.console("Registered " + clz.getName() + " with hat mod mappings.");
                 }
                 catch(ClassNotFoundException e1)
                 {
