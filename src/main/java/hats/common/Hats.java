@@ -88,6 +88,8 @@ public class Hats
         config.createIntBoolProperty("safeLoad", "hats.config.prop.safeLoad.name", "hats.config.prop.safeLoad.comment", true, false, true);
         config.createIntBoolProperty("allowSendingOfHats", "hats.config.prop.allowSendingOfHats.name", "hats.config.prop.allowSendingOfHats.comment", true, false, true);
         config.createIntBoolProperty("allowReceivingOfHats", "hats.config.prop.allowReceivingOfHats.name", "hats.config.prop.allowReceivingOfHats.comment", true, false, true);
+        config.createIntBoolProperty("modMobSupport", "hats.config.prop.modMobSupport.name", "hats.config.prop.modMobSupport.comment", true, false, true);
+        config.createIntBoolProperty("readLocalModMobSupport", "hats.config.prop.readLocalModMobSupport.name", "hats.config.prop.readLocalModMobSupport.comment", true, false, false);
 
         config.setCurrentCategory("serverOptions", "hats.config.cat.serverOptions.name", "hats.config.cat.serverOptions.comment");
         config.createIntProperty("playerHatsMode", "hats.config.prop.playerHatsMode.name", "hats.config.prop.playerHatsMode.comment", true, true, 4, 1, 6);
@@ -158,7 +160,6 @@ public class Hats
         FMLCommonHandler.instance().bus().register(eventHandler);
 		MinecraftForge.EVENT_BUS.register(eventHandler);
     }
-    //TODO redo the read-hats thread to pull off servers instead of being included in the zip, which causes issues with updates sometimes.
     //TODO see if model is readable before redownloading if file size is different
 	
 	@Mod.EventHandler
@@ -194,74 +195,6 @@ public class Hats
 //
 //        System.out.println(jsonOutput);
 
-        try
-        {
-            Gson gson = new Gson();
-            InputStream con = new FileInputStream(new File(HatHandler.hatsFolder, "HatModMobSupport.json"));
-            String data = new String(ByteStreams.toByteArray(con));
-            con.close();
-
-            Map<String, Object> json = gson.fromJson(data, Map.class);
-            for(Map.Entry<String, Object> e : json.entrySet())
-            {
-                try
-                {
-                    Class clz = Class.forName(e.getKey());
-                    Map<String, Object> vars = (Map<String, Object>)e.getValue();
-                    Boolean bool = (Boolean)vars.get("canUnlockHat");
-                    if(bool == null)
-                    {
-                        bool = true;
-                    }
-                    HelperGeneric helperGeneric = new HelperGeneric(clz, bool);
-                    helperGeneric.prevRenderYawOffset = getVar(vars.get("prevRenderYawOffset"));
-                    helperGeneric.renderYawOffset = getVar(vars.get("renderYawOffset"));
-                    helperGeneric.prevRotationYawHead = getVar(vars.get("prevRotationYawHead"));
-                    helperGeneric.rotationYawHead = getVar(vars.get("rotationYawHead"));
-                    helperGeneric.prevRotationPitch = getVar(vars.get("prevRotationPitch"));
-                    helperGeneric.rotationPitch = getVar(vars.get("rotationPitch"));
-
-                    helperGeneric.rotatePointVert = getVar(vars.get("rotatePointVert"));
-                    helperGeneric.rotatePointHori = getVar(vars.get("rotatePointHori"));
-                    helperGeneric.rotatePointSide = getVar(vars.get("rotatePointSide"));
-
-                    helperGeneric.offsetPointVert = getVar(vars.get("offsetPointVert"));
-                    helperGeneric.offsetPointHori = getVar(vars.get("offsetPointHori"));
-                    helperGeneric.offsetPointSide = getVar(vars.get("offsetPointSide"));
-
-                    helperGeneric.hatScale = getVar(vars.get("hatScale"));
-
-                    CommonProxy.renderHelpers.put(clz, helperGeneric);
-
-                    Hats.console("Registered " + clz.getName() + " with hat mod mappings.");
-                }
-                catch(ClassNotFoundException e1)
-                {
-                    e1.printStackTrace();
-                }
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public static Object getVar(Object obj)
-    {
-        if(obj == null)
-        {
-            return null;
-        }
-        try
-        {
-            return Float.parseFloat(obj.toString());
-        }
-        catch(NumberFormatException e)
-        {
-            e.printStackTrace();
-            return obj.toString();
-        }
     }
 
 	@Mod.EventHandler

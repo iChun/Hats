@@ -25,12 +25,65 @@ import java.util.zip.ZipFile;
 public class HatHandler 
 {
 
-	public static boolean readHatFromFile(File file)
+    public static boolean isHatReadable(File file)
+    {
+        if(file.getName().endsWith(".tcn"))
+        {
+            boolean hasTexture = false;
+            boolean hasXml = false;
+            try
+            {
+                ZipFile zipFile = new ZipFile(file);
+                Enumeration entries = zipFile.entries();
+
+                while(entries.hasMoreElements())
+                {
+                    ZipEntry entry = (ZipEntry)entries.nextElement();
+                    if(!entry.isDirectory())
+                    {
+                        if(entry.getName().endsWith(".png"))
+                        {
+                            hasTexture = true;
+                        }
+                        else if(entry.getName().endsWith(".xml"))
+                        {
+                            hasXml = false;
+                        }
+                    }
+                }
+
+                zipFile.close();
+
+            }
+            catch(EOFException e1)
+            {
+                return false;
+            }
+            catch(IOException e1)
+            {
+                return false;
+            }
+            catch (Exception e1)
+            {
+                e1.printStackTrace();
+                return false;
+            }
+
+            if(hasTexture && hasXml)
+            {
+                Hats.proxy.loadHatFile(file);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean readHatFromFile(File file)
 	{
 		return readHatFromFile(file, false);
 	}
-	
-	public static boolean readHatFromFile(File file, boolean category)
+
+    public static boolean readHatFromFile(File file, boolean category)
 	{
 		String md5 = MD5Checksum.getMD5Checksum(file);
 		
@@ -771,9 +824,6 @@ public class HatHandler
 		}
 		return null;
 	}
-	
-	public static boolean threadLoadComplete = true;
-	public static boolean threadContribComplete = true;
 	
 	public static boolean reloadingHats;
 	

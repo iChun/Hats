@@ -1,13 +1,13 @@
 package hats.common.core;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.NetworkRegistry;
 import hats.api.RenderOnEntityHelper;
 import hats.client.core.TickHandlerClient;
 import hats.client.render.helper.*;
 import hats.common.Hats;
 import hats.common.packet.*;
-import hats.common.thread.ThreadReadHats;
+import hats.common.thread.ThreadGetModMobSupport;
+import hats.common.thread.ThreadHatsReader;
 import ichun.common.core.network.ChannelHandler;
 import ichun.common.core.network.PacketHandler;
 import net.minecraft.command.CommandHandler;
@@ -16,12 +16,9 @@ import net.minecraft.entity.boss.EntityWither;
 import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.WorldServer;
 
-import java.io.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -41,11 +38,10 @@ public class CommonProxy
 		}
 	}
 
-    //TODO make generic helpers..? or allow players to override them.
 	public void initMod()
 	{
 		getHats();
-		
+
 		CommonProxy.renderHelpers.put(EntityBlaze.class			, new HelperBlaze());
 		CommonProxy.renderHelpers.put(EntityChicken.class		, new HelperChicken());
 		CommonProxy.renderHelpers.put(EntityCow.class			, new HelperCow());
@@ -67,6 +63,8 @@ public class CommonProxy
 		CommonProxy.renderHelpers.put(EntityZombie.class		, new HelperZombie());
 		CommonProxy.renderHelpers.put(EntityWither.class		, new HelperWither());
 
+        getHatMobModSupport();//Done after initial mapping so that the new JSON can override the mod's vanilla helpers.
+
         Hats.channels = ChannelHandler.getChannelHandlers("Hats",
                 PacketPlayerHatSelection.class,
                 PacketRequestHat.class,
@@ -83,8 +81,16 @@ public class CommonProxy
         );
 
     }
-	
-	public void initRenderersAndTextures() {}
+
+    public void getHatMobModSupport()
+    {
+        if(Hats.config.getInt("modMobSupport") == 1)
+        {
+            (new ThreadGetModMobSupport()).start();
+        }
+    }
+
+    public void initRenderersAndTextures() {}
 	
 	public void initSounds() {}
 	
@@ -96,10 +102,10 @@ public class CommonProxy
 	
 	public void getHats()
 	{
-		((Thread)new ThreadReadHats(HatHandler.hatsFolder, this, false)).start();
+		(new ThreadHatsReader(HatHandler.hatsFolder, true, false)).start();
 	}
 	
-	public void getHatsAndOpenGui()
+    public void getHatsAndOpenGui()
 	{
 	}
 	

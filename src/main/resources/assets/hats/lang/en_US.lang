@@ -209,6 +209,8 @@ hats.config.cat.randoMobOptions.comment=These settings affect either the client 
 hats.config.prop.safeLoad.name=Safe Load
 hats.config.prop.allowSendingOfHats.name=Allow Sending Of Hats
 hats.config.prop.allowReceivingOfHats.name=Allow Receiving Of Hats
+hats.config.prop.modMobSupport.name=Hat Mod Mob Support
+hats.config.prop.readLocalModMobSupport.name=Read Local Mod Mob Support
 hats.config.prop.playerHatsMode.name=Player Hats Mode
 hats.config.prop.firstJoinMessage.name=First Join Message
 hats.config.prop.lockedHat.name=Locked Hat
@@ -250,6 +252,8 @@ hats.config.prop.hatZombie.name=Zombie Hats
 hats.config.prop.safeLoad.comment=Enable safe load?\nSafe load forces the mod to reject Techne Model Files that have files other than xml and png files.
 hats.config.prop.allowSendingOfHats.comment=Enable sending of model files to the server/client?
 hats.config.prop.allowReceivingOfHats.comment=Enable receiving of model files to the server/client?
+hats.config.prop.modMobSupport.comment=Enable mod mob support for Hats?
+hats.config.prop.readLocalModMobSupport.comment=Read the local mod mob support file (HatModMobSupport.json) from the /hats/ folder?\nIf turned off, it'll pull the online GitHub version.\nUse this to do testing with custom mob hats.
 hats.config.prop.playerHatsMode.comment=Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = Locked mode, all players must wear the same hat, defined in the config.\n3 = Command Giver Mode, what hat you wear is chosen by people who can use commands.\n4 = Hat Hunting Mode, see a mob with a hat, kill it to unlock\n5 = King of the Hat Mode, only one shall wear a hat. The king has to defend their spot or lose the crown!\n6 = Time Active Mode, players unlock more hats the more time they are active on the server.
 hats.config.prop.firstJoinMessage.comment=Send a "First join" message to the player when they connect to a server for the first time?
 hats.config.prop.lockedHat.comment=What hat do players wear in Locked mode (see playerHatsMode 2).\nIf you want different players to wear different hats, use command giver mode.
