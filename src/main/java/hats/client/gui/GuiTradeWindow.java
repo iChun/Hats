@@ -4,6 +4,7 @@ import hats.client.core.HatInfoClient;
 import hats.client.render.HatRendererHelper;
 import hats.common.Hats;
 import hats.common.core.HatHandler;
+import hats.common.entity.EntityHat;
 import hats.common.packet.PacketPing;
 import hats.common.packet.PacketString;
 import hats.common.packet.PacketTradeOffers;
@@ -127,12 +128,14 @@ public class GuiTradeWindow extends GuiScreen
             invSlots = 12;
         }
 
+        EntityHat hatEnt = Hats.proxy.tickHandlerClient.hats.get(mc.thePlayer.getCommandSenderName());
+
         hatSlots = 0;
         Iterator<Map.Entry<String, Integer>> ite = hats.entrySet().iterator();
         while(ite.hasNext())
         {
             Map.Entry<String, Integer> e = ite.next();
-            if(HatHandler.isPlayersContributorHat(e.getKey(), mc.thePlayer.getCommandSenderName()))
+            if(HatHandler.isPlayersContributorHat(e.getKey(), mc.thePlayer.getCommandSenderName()) || hatEnt != null && e.getKey().equalsIgnoreCase(hatEnt.info.hatName))
             {
                 e.setValue(e.getValue() - 1);
                 if(e.getValue() <= 0)
