@@ -6,6 +6,7 @@ import hats.client.render.helper.HelperGeneric;
 import hats.common.Hats;
 import hats.common.core.CommonProxy;
 import hats.common.core.HatHandler;
+import net.minecraft.entity.EntityLivingBase;
 
 import java.io.*;
 import java.net.URL;
@@ -44,6 +45,10 @@ public class ThreadGetModMobSupport extends Thread
                 try
                 {
                     Class clz = Class.forName(e.getKey());
+                    if(!EntityLivingBase.class.isAssignableFrom(clz))
+                    {
+                        continue;
+                    }
                     Map<String, Object> vars = (Map<String, Object>)e.getValue();
                     Boolean bool = (Boolean)vars.get("canUnlockHat");
                     if(bool == null)
@@ -74,7 +79,6 @@ public class ThreadGetModMobSupport extends Thread
                 }
                 catch(ClassNotFoundException e1)
                 {
-                    e1.printStackTrace();
                 }
             }
         }

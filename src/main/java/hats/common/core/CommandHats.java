@@ -146,10 +146,10 @@ public class CommandHats extends CommandBase {
 	
 	public String getUsageString()
 	{
-		return StatCollector.translateToLocal("hats.command") + "\n" +
-				StatCollector.translateToLocal("hats.command.help.send") + "\n" +
-				StatCollector.translateToLocal("hats.command.help.set") + "\n" +
-				StatCollector.translateToLocal("hats.command.help.send");
+		return StatCollector.translateToLocal("hats.command") + " \n" +
+				StatCollector.translateToLocal("hats.command.help.send") + " \n" +
+				StatCollector.translateToLocal("hats.command.help.set") + " \n" +
+				StatCollector.translateToLocal("hats.command.help.unlock");
 	}
 
 }

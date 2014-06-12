@@ -1,20 +1,21 @@
 package hats.common.core;
 
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import hats.api.RenderOnEntityHelper;
 import hats.common.Hats;
-import hats.common.packet.*;
+import hats.common.packet.PacketHatFragment;
+import hats.common.packet.PacketPing;
+import hats.common.packet.PacketRequestHat;
+import hats.common.packet.PacketString;
 import ichun.common.core.network.PacketHandler;
 import ichun.common.core.util.MD5Checksum;
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.DimensionManager;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.io.*;
 import java.util.*;
@@ -22,7 +23,7 @@ import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-public class HatHandler 
+public class HatHandler
 {
 
     public static boolean isHatReadable(File file)
@@ -71,7 +72,6 @@ public class HatHandler
 
             if(hasTexture && hasXml)
             {
-                Hats.proxy.loadHatFile(file);
                 return true;
             }
         }
@@ -79,321 +79,321 @@ public class HatHandler
     }
 
     public static boolean readHatFromFile(File file)
-	{
-		return readHatFromFile(file, false);
-	}
+    {
+        return readHatFromFile(file, false);
+    }
 
     public static boolean readHatFromFile(File file, boolean category)
-	{
-		String md5 = MD5Checksum.getMD5Checksum(file);
-		
-		if(HatHandler.checksums.get(md5) == null)
-		{
-			HatHandler.checksums.put(md5, file);
-		}
-		else
-		{
-			if(!category)
-			{
-				Hats.console("Rejecting " + file.getName() + "! Identical to " + HatHandler.checksums.get(md5).getName(), true);
-			}
-			else
-			{
-				return false;
-			}
-			return true;
-		}
+    {
+        String md5 = MD5Checksum.getMD5Checksum(file);
 
-		if(file.getName().endsWith(".tcn"))
-		{
-			boolean hasTexture = false;
-			boolean isSafe = true;
-			try
-			{
-				ZipFile zipFile = new ZipFile(file);
-				Enumeration entries = zipFile.entries();
-				
-				while(entries.hasMoreElements())
-				{
-					ZipEntry entry = (ZipEntry)entries.nextElement();
-					if(!entry.isDirectory())
-					{
-						if(entry.getName().endsWith(".png"))
-						{
-							hasTexture = true;
-						}
-						else if(!entry.getName().endsWith(".xml"))
-						{
-							isSafe = false;
-						}
-					}
-				}
-				
-				zipFile.close();
+        if(HatHandler.checksums.get(md5) == null)
+        {
+            HatHandler.checksums.put(md5, file);
+        }
+        else
+        {
+            if(!category)
+            {
+                Hats.console("Rejecting " + file.getName() + "! Identical to " + HatHandler.checksums.get(md5).getName(), true);
+            }
+            else
+            {
+                return false;
+            }
+            return true;
+        }
 
-			}
-			catch(EOFException e1)
-			{
-				Hats.console("Failed to load: " + file.getName() + " is corrupted!", true);
-				return false;
-			}
-			catch(IOException e1)
-			{
-				Hats.console("Failed to load: " + file.getName() + " cannot be read!", true);
-				return false;
-			} 
-			catch (Exception e1) 
-			{
-				Hats.console("Failed to load: " + file.getName() + " threw a generic exception!", true);
-				e1.printStackTrace();
-				return false;
-			}
-			
-			if(Hats.config.getInt("safeLoad") == 1 && !isSafe)
-			{
-				Hats.console("Rejecting " + file.getName() + "! It contains files which are not XML or PNG files!", true);
-				return false;
-			}
-			
-			if(hasTexture)
-			{
-				Hats.proxy.loadHatFile(file);
-				return true;
-			}
-			else
-			{
-				Hats.console("Failed to load: " + file.getName() + " has no texture!", true);
-			}
-		}
-		return false;
-	}
-	
-	public static int loadCategory(File dir)
-	{
-		int hatCount = 0;
-		if(dir.isDirectory())
-		{
-			ArrayList<String> hatsToLoad = new ArrayList<String>();
-			ArrayList<String> categoryHats = new ArrayList<String>();
-			File[] files = dir.listFiles();
-			for(File file : files)
-			{
-				if(file.getName().endsWith(".tcn"))
-				{
-					String hatName = file.getName().substring(0, file.getName().length() - 4);
-					hatsToLoad.add(hatName.toLowerCase());
-					categoryHats.add(hatName);
-					for(Map.Entry<File, String> e : HatHandler.hatNames.entrySet())
-					{
-						String hatEntryName = e.getValue();
-						for(int i = hatsToLoad.size() - 1; i >= 0; i--)
-						{
-							String hatCategoryEntryName = hatsToLoad.get(i);
-							if(hatCategoryEntryName.equalsIgnoreCase(hatEntryName))
-							{
-								hatsToLoad.remove(i);
-								break;
-							}
-						}
-					}
-					if(!file.isDirectory() && HatHandler.readHatFromFile(file, true) && !dir.getName().equalsIgnoreCase("Favourites"))
-					{
-						hatCount++;	
-					}
-				}
-			}
-			
-			categories.put(dir.getName(), categoryHats);
-		}
-		return hatCount;
-	}
-	
-	public static void deleteHat(String hatName, boolean disable)
-	{
-		deleteHat(hatsFolder, hatName, disable);
-	}
-	
-	public static void deleteHat(File dir, String hatName, boolean disable)
-	{
-		File[] files = dir.listFiles();
-		for(File file : files)
-		{
-			if(!file.isDirectory() && file.getName().equalsIgnoreCase(hatName + ".tcn"))
-			{
-				if(disable)
-				{
-					File disabledDir = new File(dir, "/Disabled");
-					if(!disabledDir.exists())
-					{
-						disabledDir.mkdirs();
-					}
-					File disabledName = new File(disabledDir, hatName + ".tcn");
-					if(disabledName.exists())
-					{
-						disabledName.delete();
-					}
-					if(!file.renameTo(disabledName))
-					{
-						Hats.console("Failed to disable hat: " + file.getName());
-					}
-				}
-				else
-				{
-					if(!file.delete())
-					{
-						Hats.console("Failed to delete hat: " + file.getName());
-					}
-				}
-				break;
-			}
-		}
-		files = dir.listFiles();
-		for(File file : files)
-		{
-			if(file.isDirectory() && !file.getName().equalsIgnoreCase("Disabled"))
-			{
-				deleteHat(file, hatName, disable);
-			}
-		}
-	}
-	
-	public static boolean isInFavourites(String hatName)
-	{
-		return isInCategory(hatName, "Favourites");
-	}
-	
-	public static boolean isInCategory(String hatName, String category)
-	{
-		if(category.equalsIgnoreCase("Contributors"))
-		{
-			return false;
-		}
-		ArrayList<String> favs = categories.get(category);
-		if(favs != null)
-		{
-			for(String s : favs)
-			{
-				if(s.equalsIgnoreCase(hatName))
-				{
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static boolean isContributor(String hatName)
-	{
-		ArrayList<String> favs = categories.get("Contributors");
-		if(favs != null)
-		{
-			for(String s : favs)
-			{
-				if(s.equalsIgnoreCase(hatName))
-				{
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	public static void addToCategory(String hatName, String category)
-	{
-		ArrayList<String> favs = categories.get(category);
-		if(favs != null)
-		{
-			boolean contained = false;
-			for(int i = favs.size() - 1; i >= 0; i--)
-			{
-				String fav = favs.get(i);
-				if(fav.equalsIgnoreCase(hatName))
-				{
-					contained = true;
-					break;
-				}
-			}
-			if(!contained)
-			{
-				for(Map.Entry<File, String> e : hatNames.entrySet())
-				{
-					if(hatName.toLowerCase().equalsIgnoreCase(e.getValue()))
-					{
-						File favFile = new File(hatsFolder, "/" + category + "/" + hatName + ".tcn");
-						
-				    	InputStream inStream = null;
-				    	OutputStream outStream = null;
-	
-				    	try
-				    	{
-				    		inStream = new FileInputStream(e.getKey());
-				    		outStream = new FileOutputStream(favFile);
-				    		
-				    		byte[] buffer = new byte[1024];
-				    		
-				    		int length;
-				    		
-				    		while ((length = inStream.read(buffer)) > 0)
-				    		{
-				    	    	outStream.write(buffer, 0, length);
-				    	    }
-				    	}
-				    	catch(Exception e1){}
-				    	
-				    	try
-				    	{
-					    	if(inStream != null)
-					    	{
-					    		inStream.close();
-					    	}
-				    	}
-				    	catch(IOException e1){}
-				    	try
-				    	{
-				    		if(outStream != null)
-				    		{
-				    			outStream.close();
-				    		}
-				    	}
-				    	catch(IOException e1){}
-	
-						favs.add(hatName);
-						break;
-					}
-				}
-			}
-		}
-	}
-	
-	public static void removeFromCategory(String hatName, String category)
-	{
-		ArrayList<String> favs = categories.get(category);
-		if(favs != null)
-		{
-			for(int i = favs.size() - 1; i >= 0; i--)
-			{
-				String fav = favs.get(i);
-				if(fav.equalsIgnoreCase(hatName))
-				{
-					File favFile = new File(hatsFolder, "/" + category +"/" + hatName + ".tcn");
-					File hatFile = new File(hatsFolder, hatName + ".tcn");
-					if(!hatFile.exists())
-					{
-						favFile.renameTo(hatFile);
-					}
-					else
-					{
-						favFile.delete();
-					}
-					favs.remove(i);
-					break;
-				}
-			}
-		}
-	}
-	
-	public static void requestHat(String name, EntityPlayer player)
-	{
+        if(file.getName().endsWith(".tcn"))
+        {
+            boolean hasTexture = false;
+            boolean isSafe = true;
+            try
+            {
+                ZipFile zipFile = new ZipFile(file);
+                Enumeration entries = zipFile.entries();
+
+                while(entries.hasMoreElements())
+                {
+                    ZipEntry entry = (ZipEntry)entries.nextElement();
+                    if(!entry.isDirectory())
+                    {
+                        if(entry.getName().endsWith(".png"))
+                        {
+                            hasTexture = true;
+                        }
+                        else if(!entry.getName().endsWith(".xml"))
+                        {
+                            isSafe = false;
+                        }
+                    }
+                }
+
+                zipFile.close();
+
+            }
+            catch(EOFException e1)
+            {
+                Hats.console("Failed to load: " + file.getName() + " is corrupted!", true);
+                return false;
+            }
+            catch(IOException e1)
+            {
+                Hats.console("Failed to load: " + file.getName() + " cannot be read!", true);
+                return false;
+            }
+            catch (Exception e1)
+            {
+                Hats.console("Failed to load: " + file.getName() + " threw a generic exception!", true);
+                e1.printStackTrace();
+                return false;
+            }
+
+            if(Hats.config.getInt("safeLoad") == 1 && !isSafe)
+            {
+                Hats.console("Rejecting " + file.getName() + "! It contains files which are not XML or PNG files!", true);
+                return false;
+            }
+
+            if(hasTexture)
+            {
+                Hats.proxy.loadHatFile(file);
+                return true;
+            }
+            else
+            {
+                Hats.console("Failed to load: " + file.getName() + " has no texture!", true);
+            }
+        }
+        return false;
+    }
+
+    public static int loadCategory(File dir)
+    {
+        int hatCount = 0;
+        if(dir.isDirectory())
+        {
+            ArrayList<String> hatsToLoad = new ArrayList<String>();
+            ArrayList<String> categoryHats = new ArrayList<String>();
+            File[] files = dir.listFiles();
+            for(File file : files)
+            {
+                if(file.getName().endsWith(".tcn"))
+                {
+                    String hatName = file.getName().substring(0, file.getName().length() - 4);
+                    hatsToLoad.add(hatName.toLowerCase());
+                    categoryHats.add(hatName);
+                    for(Map.Entry<File, String> e : HatHandler.hatNames.entrySet())
+                    {
+                        String hatEntryName = e.getValue();
+                        for(int i = hatsToLoad.size() - 1; i >= 0; i--)
+                        {
+                            String hatCategoryEntryName = hatsToLoad.get(i);
+                            if(hatCategoryEntryName.equalsIgnoreCase(hatEntryName))
+                            {
+                                hatsToLoad.remove(i);
+                                break;
+                            }
+                        }
+                    }
+                    if(!file.isDirectory() && HatHandler.readHatFromFile(file, true) && !dir.getName().equalsIgnoreCase("Favourites"))
+                    {
+                        hatCount++;
+                    }
+                }
+            }
+
+            categories.put(dir.getName(), categoryHats);
+        }
+        return hatCount;
+    }
+
+    public static void deleteHat(String hatName, boolean disable)
+    {
+        deleteHat(hatsFolder, hatName, disable);
+    }
+
+    public static void deleteHat(File dir, String hatName, boolean disable)
+    {
+        File[] files = dir.listFiles();
+        for(File file : files)
+        {
+            if(!file.isDirectory() && file.getName().equalsIgnoreCase(hatName + ".tcn"))
+            {
+                if(disable)
+                {
+                    File disabledDir = new File(dir, "/Disabled");
+                    if(!disabledDir.exists())
+                    {
+                        disabledDir.mkdirs();
+                    }
+                    File disabledName = new File(disabledDir, hatName + ".tcn");
+                    if(disabledName.exists())
+                    {
+                        disabledName.delete();
+                    }
+                    if(!file.renameTo(disabledName))
+                    {
+                        Hats.console("Failed to disable hat: " + file.getName());
+                    }
+                }
+                else
+                {
+                    if(!file.delete())
+                    {
+                        Hats.console("Failed to delete hat: " + file.getName());
+                    }
+                }
+                break;
+            }
+        }
+        files = dir.listFiles();
+        for(File file : files)
+        {
+            if(file.isDirectory() && !file.getName().equalsIgnoreCase("Disabled"))
+            {
+                deleteHat(file, hatName, disable);
+            }
+        }
+    }
+
+    public static boolean isInFavourites(String hatName)
+    {
+        return isInCategory(hatName, "Favourites");
+    }
+
+    public static boolean isInCategory(String hatName, String category)
+    {
+        if(category.equalsIgnoreCase("Contributors"))
+        {
+            return false;
+        }
+        ArrayList<String> favs = categories.get(category);
+        if(favs != null)
+        {
+            for(String s : favs)
+            {
+                if(s.equalsIgnoreCase(hatName))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isContributor(String hatName)
+    {
+        ArrayList<String> favs = categories.get("Contributors");
+        if(favs != null)
+        {
+            for(String s : favs)
+            {
+                if(s.equalsIgnoreCase(hatName))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static void addToCategory(String hatName, String category)
+    {
+        ArrayList<String> favs = categories.get(category);
+        if(favs != null)
+        {
+            boolean contained = false;
+            for(int i = favs.size() - 1; i >= 0; i--)
+            {
+                String fav = favs.get(i);
+                if(fav.equalsIgnoreCase(hatName))
+                {
+                    contained = true;
+                    break;
+                }
+            }
+            if(!contained)
+            {
+                for(Map.Entry<File, String> e : hatNames.entrySet())
+                {
+                    if(hatName.toLowerCase().equalsIgnoreCase(e.getValue()))
+                    {
+                        File favFile = new File(hatsFolder, "/" + category + "/" + hatName + ".tcn");
+
+                        InputStream inStream = null;
+                        OutputStream outStream = null;
+
+                        try
+                        {
+                            inStream = new FileInputStream(e.getKey());
+                            outStream = new FileOutputStream(favFile);
+
+                            byte[] buffer = new byte[1024];
+
+                            int length;
+
+                            while ((length = inStream.read(buffer)) > 0)
+                            {
+                                outStream.write(buffer, 0, length);
+                            }
+                        }
+                        catch(Exception e1){}
+
+                        try
+                        {
+                            if(inStream != null)
+                            {
+                                inStream.close();
+                            }
+                        }
+                        catch(IOException e1){}
+                        try
+                        {
+                            if(outStream != null)
+                            {
+                                outStream.close();
+                            }
+                        }
+                        catch(IOException e1){}
+
+                        favs.add(hatName);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public static void removeFromCategory(String hatName, String category)
+    {
+        ArrayList<String> favs = categories.get(category);
+        if(favs != null)
+        {
+            for(int i = favs.size() - 1; i >= 0; i--)
+            {
+                String fav = favs.get(i);
+                if(fav.equalsIgnoreCase(hatName))
+                {
+                    File favFile = new File(hatsFolder, "/" + category +"/" + hatName + ".tcn");
+                    File hatFile = new File(hatsFolder, hatName + ".tcn");
+                    if(!hatFile.exists())
+                    {
+                        favFile.renameTo(hatFile);
+                    }
+                    else
+                    {
+                        favFile.delete();
+                    }
+                    favs.remove(i);
+                    break;
+                }
+            }
+        }
+    }
+
+    public static void requestHat(String name, EntityPlayer player)
+    {
         if(player != null)
         {
             PacketHandler.sendToPlayer(Hats.channels, new PacketRequestHat(name), player);
@@ -402,16 +402,16 @@ public class HatHandler
         {
             PacketHandler.sendToServer(Hats.channels, new PacketRequestHat(name));
         }
-	}
+    }
 
-	public static void receiveHatData(String hatName, byte packets, byte packetNumber, byte[] byteValues, EntityPlayer player, boolean isServer)
-	{
-		if(Hats.config.getInt("allowReceivingOfHats") != 1)
-		{
-			return;
-		}
-		try
-		{
+    public static void receiveHatData(String hatName, byte packets, byte packetNumber, byte[] byteValues, EntityPlayer player, boolean isServer)
+    {
+        if(Hats.config.getInt("allowReceivingOfHats") != 1)
+        {
+            return;
+        }
+        try
+        {
             ArrayList<byte[]> byteArray = hatParts.get(hatName);
             if(byteArray == null)
             {
@@ -528,31 +528,31 @@ public class HatHandler
                     }
                 }
             }
-		}
-		catch(IOException e)
-		{
-		}
-	}
+        }
+        catch(IOException e)
+        {
+        }
+    }
 
-	public static void sendHat(String hatName, EntityPlayer player)
-	{
-		if(Hats.config.getInt("allowSendingOfHats") != 1)
-		{
-			return;
-		}
+    public static void sendHat(String hatName, EntityPlayer player)
+    {
+        if(Hats.config.getInt("allowSendingOfHats") != 1)
+        {
+            return;
+        }
 
-		File file = null;
-		
-		for(Entry<File, String> e : hatNames.entrySet())
-		{
-			if(e.getValue().equalsIgnoreCase(hatName))
-			{
-				file = e.getKey();
-			}
-		}
+        File file = null;
 
-		if(file != null)
-		{
+        for(Entry<File, String> e : hatNames.entrySet())
+        {
+            if(e.getValue().equalsIgnoreCase(hatName))
+            {
+                file = e.getKey();
+            }
+        }
+
+        if(file != null)
+        {
             int fileSize = (int)file.length();
 
             if(fileSize > 250000)
@@ -599,204 +599,316 @@ public class HatHandler
             catch(IOException e)
             {
             }
-		}
-		else if(player != null)
-		{
-			ArrayList<String> queuedLists = queuedHats.get(hatName.toLowerCase());
-			if(queuedLists == null)
-			{
-				queuedLists = new ArrayList<String>();
-				queuedHats.put(hatName, queuedLists);
-			}
-			queuedLists.add(player.getCommandSenderName());
-		}
-	}
-	
-	public static boolean hasHat(String name)
-	{
-		if(name.equalsIgnoreCase(""))
-		{
-			return true;
-		}
-		for(Entry<File, String> e : hatNames.entrySet())
-		{
-			if(e.getValue().equalsIgnoreCase(name))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public static String getHatStartingWith(String name)
-	{
-		for(Entry<File, String> e : hatNames.entrySet())
-		{
-			if(e.getValue().toLowerCase().startsWith(name.toLowerCase()))
-			{
-				return e.getValue();
-			}
-		}
-		return name;
-	}
-	
-	public static HatInfo getRandomHat()
-	{
-		ArrayList<String> hatNameList = new ArrayList<String>();
-		
-		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-		while(ite.hasNext())
-		{
-			Entry<File, String> e = ite.next();
-			if(e.getValue().startsWith("(C)".toLowerCase()) && rand.nextFloat() < ((float)Hats.config.getInt("useRandomContributorHats") / 100F))
-			{
-				continue;
-			}
-			hatNameList.add(e.getValue());
-		}
-		
-		if(hatNameList.size() <= 0)
-		{
-			return new HatInfo();
-		}
-		
-		return new HatInfo(hatNameList.get((new Random()).nextInt(hatNameList.size())), 255, 255, 255);
-	}
-	
-	public static ArrayList<String> getAllHatsAsList()
-	{
-		ArrayList<String> hatNameList = new ArrayList<String>();
-		
-		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-		while(ite.hasNext())
-		{
-			Entry<File, String> e = ite.next();
-			String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
-			hatNameList.add(name);
-		}
-		Collections.sort(hatNameList);
-		
-		return hatNameList;
-	}
-	
-	public static String[] getAllHatsAsArray()
-	{
-		ArrayList<String> hatNameList = getAllHatsAsList();
-		
-		String[] hatNameArray = new String[hatNameList.size()];
-		
-		hatNameList.toArray(hatNameArray);
-		
-		return hatNameArray;
-	}
-	
-	public static void unlockHat(EntityPlayer player, String hat) 
-	{
-		if(player == null)
-		{
-			return;
-		}
-		ArrayList<String> hats = Hats.proxy.tickHandlerServer.playerHats.get(player.getCommandSenderName());
-		if(hats != null)
-		{
-			for(String s : hats)
-			{
-				if(s.equalsIgnoreCase(hat))
-				{
-					return;
-				}
-			}
-			
-			Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-			while(ite.hasNext())
-			{
-				Entry<File, String> e = ite.next();
-				String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
-				if(name.equalsIgnoreCase(hat))
-				{
-					hats.add(name);
-					
-					StringBuilder sb = new StringBuilder();
-					for(int i = 0; i < hats.size(); i++)
-					{
-						sb.append(hats.get(i));
-						if(i < hats.size() - 1)
-						{
-							sb.append(":");
-						}
-					}
+        }
+        else if(player != null)
+        {
+            ArrayList<String> queuedLists = queuedHats.get(hatName.toLowerCase());
+            if(queuedLists == null)
+            {
+                queuedLists = new ArrayList<String>();
+                queuedHats.put(hatName, queuedLists);
+            }
+            queuedLists.add(player.getCommandSenderName());
+        }
+    }
 
-                    NBTTagCompound persistentTag = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
-                    persistentTag.setString("Hats_unlocked", sb.toString());
-                    player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
+    public static boolean hasHat(String name)
+    {
+        if(name.equalsIgnoreCase(""))
+        {
+            return true;
+        }
+        for(Entry<File, String> e : hatNames.entrySet())
+        {
+            if(e.getValue().equalsIgnoreCase(name))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
-                    PacketHandler.sendToPlayer(Hats.channels, new PacketString(0, name), player);
+    public static String getHatStartingWith(String name)
+    {
+        for(Entry<File, String> e : hatNames.entrySet())
+        {
+            if(e.getValue().toLowerCase().startsWith(name.toLowerCase()))
+            {
+                return e.getValue();
+            }
+        }
+        return name;
+    }
 
-					break;
-				}
-			}
-		}		
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static void reloadAndOpenGui()
-	{
-		repopulateHatsList();
-		if(Hats.config.getSessionInt("playerHatsMode") == 3)
-		{
+    public static ArrayList<String> getAllHats()
+    {
+        ArrayList<String> hatList = new ArrayList<String>();
+
+        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        while(ite.hasNext())
+        {
+            Entry<File, String> e = ite.next();
+            hatList.add(e.getValue());
+        }
+        return hatList;
+    }
+
+    public static ArrayList<String> getHatsWithWeightedContributors()
+    {
+        ArrayList<String> hatList = new ArrayList<String>();
+
+        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        while(ite.hasNext())
+        {
+            Entry<File, String> e = ite.next();
+            if(e.getValue().startsWith("(C)".toLowerCase()) && rand.nextFloat() > ((float)Hats.config.getInt("useRandomContributorHats") / 100F))
+            {
+                continue;
+            }
+            hatList.add(e.getValue());
+        }
+        return hatList;
+    }
+
+    public static EnumChatFormatting getRarity(String hat)
+    {
+        if(Hats.config.getSessionInt("hatGenerationSeed") == 0)
+        {
+            return EnumChatFormatting.WHITE;
+        }
+        float rarity = HatHandler.getHatRarity(hat);
+        if(rarity < 1F/7F)
+        {
+            return EnumChatFormatting.AQUA;
+        }
+        else if(rarity < 2F/7F)
+        {
+            return EnumChatFormatting.GOLD;
+        }
+        else if(rarity < 3F/7F)
+        {
+            return EnumChatFormatting.YELLOW;
+        }
+        else if(rarity < 4F/7F)
+        {
+            return EnumChatFormatting.LIGHT_PURPLE;
+        }
+        else if(rarity < 5F/7F)
+        {
+            return EnumChatFormatting.BLUE;
+        }
+        else if(rarity < 6F/7F)
+        {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        else if(rarity < 7F/7F)
+        {
+            return EnumChatFormatting.WHITE;
+        }
+        return EnumChatFormatting.WHITE;
+    }
+
+    public static float getHatRarity(String hatName)
+    {
+        hatGen.setSeed(Hats.config.getSessionInt("hatGenerationSeed"));
+        int hash = Math.abs(hatName.toLowerCase().hashCode());
+        int rand = hatGen.nextInt(hash);
+        return (float)rand / (float)hash;
+    }
+
+    public static HatInfo getRandomHatFromList(ArrayList<String> list, boolean withRarity)
+    {
+        if(list.size() == 1)
+        {
+            return new HatInfo(list.get(0), 255, 255, 255);
+        }
+        else if(list.size() == 0)
+        {
+            return new HatInfo();
+        }
+
+        if(withRarity)
+        {
+            HatInfo hat = null;
+
+            final int triesPerPass = 500;
+            float randAmp = 1.0F;
+
+            int tries = 0;
+
+            while(hat == null)
+            {
+                String hatName = list.get(rand.nextInt(list.size()));
+                float rarity = getHatRarity(hatName);
+                if(rand.nextFloat() < rarity * randAmp)
+                {
+                    hat = new HatInfo(hatName, 255, 255, 255);
+                }
+
+                tries++;
+                if(tries >= triesPerPass)
+                {
+                    tries = 0;
+                    randAmp += 0.05F;
+                }
+            }
+
+            return hat;
+        }
+        else
+        {
+            return new HatInfo(list.get(rand.nextInt(list.size())), 255, 255, 255);
+        }
+    }
+
+    public static ArrayList<String> getAllHatNamesAsList()
+    {
+        ArrayList<String> hatNameList = new ArrayList<String>();
+
+        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        while(ite.hasNext())
+        {
+            Entry<File, String> e = ite.next();
+            String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
+            hatNameList.add(name);
+        }
+        Collections.sort(hatNameList);
+
+        return hatNameList;
+    }
+
+    public static String[] getAllHatsAsArray()
+    {
+        ArrayList<String> hatNameList = getAllHatNamesAsList();
+
+        String[] hatNameArray = new String[hatNameList.size()];
+
+        hatNameList.toArray(hatNameArray);
+
+        return hatNameArray;
+    }
+
+    public static void unlockHat(EntityPlayer player, String hat)
+    {
+        if(player == null || hat == null || hat.isEmpty())
+        {
+            return;
+        }
+        HashMap<String, Integer> hats = Hats.proxy.tickHandlerServer.getPlayerHatsList(player.getCommandSenderName());
+        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        while(ite.hasNext())
+        {
+            Entry<File, String> e = ite.next();
+            String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
+            if(name.equalsIgnoreCase(hat))
+            {
+                Integer hatCount = hats.get(name);
+                if(hatCount == null)
+                {
+                    hatCount = 1;
+                    hats.put(name, hatCount);
+                }
+                else
+                {
+                    hats.put(name, hatCount + 1);
+                }
+
+                StringBuilder sb = new StringBuilder();
+                for(Map.Entry<String, Integer> e1 : hats.entrySet())
+                {
+                    String hatName = getNameForHat(e1.getKey());
+                    sb.append(hatName);
+                    if(e1.getValue() > 1)
+                    {
+                        sb.append(">" + e1.getValue());
+                    }
+                    sb.append(":");
+                }
+
+                NBTTagCompound persistentTag = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+                persistentTag.setString("Hats_unlocked", sb.toString().length() > 0 ? sb.toString().substring(0, sb.toString().length() - 1) : sb.toString());
+                player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
+
+                PacketHandler.sendToPlayer(Hats.channels, new PacketString(0, name), player);
+
+                break;
+            }
+        }
+    }
+
+    public static String getNameForHat(String hat)
+    {
+        for(Entry<File, String> e2 : hatNames.entrySet())
+        {
+            if(e2.getValue().equalsIgnoreCase(hat))
+            {
+                return e2.getKey().getName().substring(0, e2.getKey().getName().length() - 4);
+            }
+        }
+        return hat;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void reloadAndOpenGui()
+    {
+        repopulateHatsList();
+        if(Hats.config.getSessionInt("playerHatsMode") == 3)
+        {
             PacketHandler.sendToServer(Hats.channels, new PacketPing(0, false));
-		}
-		else if(Hats.config.getSessionInt("playerHatsMode") != 2)
-		{
-			Hats.proxy.openHatsGui();
-		}
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static void repopulateHatsList()
-	{
-		Hats.proxy.tickHandlerClient.availableHats.clear();
-		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-		while(ite.hasNext())
-		{
-			Entry<File, String> e = ite.next();
-			Hats.proxy.tickHandlerClient.availableHats.add(e.getKey().getName().substring(0, e.getKey().getName().length() - 4));
-		}
-		Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public static void populateHatsList(String s)
-	{
-		Hats.proxy.tickHandlerClient.availableHats.clear();
-		
-		String[] split = s.split(":");
-		for(String name : split)
-		{
-			if(!name.trim().equalsIgnoreCase(""))
-			{
-				Hats.proxy.tickHandlerClient.availableHats.add(name.trim());
-			}
-		}
-		
-		Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
-		while(ite.hasNext())
-		{
-			Entry<File, String> e = ite.next();
-			String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
-			if(isPlayersContributorHat(name, Minecraft.getMinecraft().thePlayer.getCommandSenderName()))
-			{
-				if(!Hats.proxy.tickHandlerClient.availableHats.contains(name))
-				{
-					Hats.proxy.tickHandlerClient.availableHats.add(name);
-				}
-			}
-		}
+        }
+        else if(Hats.config.getSessionInt("playerHatsMode") != 2)
+        {
+            Hats.proxy.openHatsGui();
+        }
+    }
 
-		Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
-		
-		Hats.proxy.tickHandlerClient.serverHats = new ArrayList<String>(Hats.proxy.tickHandlerClient.availableHats);
-	}
+    @SideOnly(Side.CLIENT)
+    public static void repopulateHatsList()
+    {
+        Hats.proxy.tickHandlerClient.availableHats.clear();
+        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        while(ite.hasNext())
+        {
+            Entry<File, String> e = ite.next();
+            Hats.proxy.tickHandlerClient.availableHats.put(e.getKey().getName().substring(0, e.getKey().getName().length() - 4), 1);
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public static void populateHatsList(String s)
+    {
+        Hats.proxy.tickHandlerClient.availableHats.clear();
+
+        String[] split = s.split(":");
+        for(String hatNameWithCount : split)
+        {
+            String[] hatNameAndCount = hatNameWithCount.split(">");
+            if(!hatNameAndCount[0].trim().isEmpty())
+            {
+                try
+                {
+                    Hats.proxy.tickHandlerClient.availableHats.put(hatNameAndCount[0].trim(), hatNameAndCount.length == 1 ? 1 : Integer.parseInt(hatNameAndCount[1]));
+                }
+                catch(Exception e)
+                {
+                    Hats.proxy.tickHandlerClient.availableHats.put(hatNameAndCount[0].trim(), 1);
+                }
+            }
+        }
+
+        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        while(ite.hasNext())
+        {
+            Entry<File, String> e = ite.next();
+            String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
+            if(isPlayersContributorHat(name, Minecraft.getMinecraft().thePlayer.getCommandSenderName()))
+            {
+                Hats.proxy.tickHandlerClient.availableHats.put(name, Hats.proxy.tickHandlerClient.availableHats.get(name) == null ? 1 : Hats.proxy.tickHandlerClient.availableHats.get(name) + 1);
+            }
+        }
+
+        Hats.proxy.tickHandlerClient.serverHats = new HashMap<String, Integer>(Hats.proxy.tickHandlerClient.availableHats);
+    }
 
     public static boolean isPlayersContributorHat(String hatName, String playerName)
     {
@@ -806,38 +918,40 @@ public class HatHandler
                 || hatName.equalsIgnoreCase("(C) Fridgeboy") && playerName.equalsIgnoreCase("lacsap32");
     }
 
-	public static boolean canMobHat(EntityLivingBase ent)
-	{
-		return !ent.isDead && !ent.isChild() && getRenderHelper(ent.getClass()) != null && getRenderHelper(ent.getClass()).canWearHat(ent);
-	}
-	
-	public static RenderOnEntityHelper getRenderHelper(Class clz)
-	{
-		if(EntityLivingBase.class.isAssignableFrom(clz) && clz != EntityLivingBase.class)
-		{
-			RenderOnEntityHelper helper = CommonProxy.renderHelpers.get(clz);
-			if(helper == null)
-			{
-				return getRenderHelper(clz.getSuperclass());
-			}
-			return helper;
-		}
-		return null;
-	}
-	
-	public static boolean reloadingHats;
-	
-	public static File hatsFolder;
-	
-	public static HashMap<String, ArrayList<String>> queuedHats = new HashMap<String, ArrayList<String>>();
-	
-	public static HashMap<String, ArrayList<byte[]>> hatParts = new HashMap<String, ArrayList<byte[]>>();
-	
-	public static HashMap<File, String> hatNames = new HashMap<File, String>();
-	
-	public static HashMap<String, File> checksums = new HashMap<String, File>();
-	
-	public static HashMap<String, ArrayList<String>> categories = new HashMap<String, ArrayList<String>>();
-	
-	public static Random rand = new Random();
-	}
+    public static boolean canMobHat(EntityLivingBase ent)
+    {
+        return !ent.isDead && !ent.isChild() && getRenderHelper(ent.getClass()) != null && getRenderHelper(ent.getClass()).canWearHat(ent);
+    }
+
+    public static RenderOnEntityHelper getRenderHelper(Class clz)
+    {
+        if(EntityLivingBase.class.isAssignableFrom(clz) && clz != EntityLivingBase.class)
+        {
+            RenderOnEntityHelper helper = CommonProxy.renderHelpers.get(clz);
+            if(helper == null)
+            {
+                return getRenderHelper(clz.getSuperclass());
+            }
+            return helper;
+        }
+        return null;
+    }
+
+    public static boolean reloadingHats;
+
+    public static File hatsFolder;
+
+    public static HashMap<String, ArrayList<String>> queuedHats = new HashMap<String, ArrayList<String>>();
+
+    public static HashMap<String, ArrayList<byte[]>> hatParts = new HashMap<String, ArrayList<byte[]>>();
+
+    public static HashMap<File, String> hatNames = new HashMap<File, String>();
+
+    public static HashMap<String, File> checksums = new HashMap<String, File>();
+
+    public static HashMap<String, ArrayList<String>> categories = new HashMap<String, ArrayList<String>>();
+
+    public static Random rand = new Random();
+
+    public static Random hatGen = new Random();
+}

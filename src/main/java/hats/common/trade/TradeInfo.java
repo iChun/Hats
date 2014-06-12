@@ -12,6 +12,9 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class TradeInfo 
 {
@@ -25,10 +28,10 @@ public class TradeInfo
 	public boolean trade1;
 	public boolean trade2;
 	
-	public ArrayList<String> trader1Hats = new ArrayList<String>();
+	public HashMap<String, Integer> trader1Hats = new HashMap<String, Integer>();
 	public ArrayList<ItemStack> trader1Items = new ArrayList<ItemStack>();
 	
-	public ArrayList<String> trader2Hats = new ArrayList<String>();
+	public HashMap<String, Integer> trader2Hats = new HashMap<String, Integer>();
 	public ArrayList<ItemStack> trader2Items = new ArrayList<ItemStack>();
 	
 	public boolean terminate;
@@ -125,17 +128,17 @@ public class TradeInfo
 		return trader1 == player || trader2 == player;
 	}
 
-	public void receiveTradeInfo(ArrayList<String> hats, ArrayList<ItemStack> items, EntityPlayerMP player)
+	public void receiveTradeInfo(HashMap<String, Integer> hats, ArrayList<ItemStack> items, EntityPlayerMP player)
 	{
         PacketHandler.sendToPlayer(Hats.channels, new PacketTradeOffers(hats, items), getOtherPlayer(player));
 
         EntityPlayer player1;
         EntityPlayer player2;
 
-        ArrayList<String> oldHats;
+        HashMap<String, Integer> oldHats;
         ArrayList<ItemStack> oldItems;
 
-        ArrayList<String> newHats = new ArrayList<String>(hats);
+        HashMap<String, Integer> newHats = new HashMap<String, Integer>(hats);
         ArrayList<ItemStack> newItems = new ArrayList<ItemStack>(items);
 
         if(player == trader1)
@@ -143,7 +146,7 @@ public class TradeInfo
             player1 = trader1;
             player2 = trader2;
 
-            oldHats = new ArrayList<String>(trader1Hats);
+            oldHats = new HashMap<String, Integer>(trader1Hats);
             oldItems = new ArrayList<ItemStack>(trader1Items);
 
             trader1Hats = hats;
@@ -154,14 +157,30 @@ public class TradeInfo
             player1 = trader2;
             player2 = trader1;
 
-            oldHats = new ArrayList<String>(trader2Hats);
+            oldHats = new HashMap<String, Integer>(trader2Hats);
             oldItems = new ArrayList<ItemStack>(trader2Items);
 
             trader2Hats = hats;
             trader2Items = items;
         }
 
-        newHats.removeAll(oldHats);
+        Iterator<Map.Entry<String, Integer>> ite = newHats.entrySet().iterator();
+        while(ite.hasNext())
+        {
+            Map.Entry<String, Integer> e = ite.next();
+            for(Map.Entry<String, Integer> e1 : oldHats.entrySet())
+            {
+                if(e.getKey().equals(e1.getKey()))
+                {
+                    e.setValue(e.getValue() - e1.getValue());
+                    if(e.getValue() <= 0)
+                    {
+                        ite.remove();
+                    }
+                }
+            }
+        }
+
         for(ItemStack is : oldItems)
         {
             for(int i = newItems.size() - 1; i >= 0; i--)
@@ -174,7 +193,23 @@ public class TradeInfo
             }
         }
 
-        oldHats.removeAll(hats);
+        Iterator<Map.Entry<String, Integer>> ite1 = oldHats.entrySet().iterator();
+        while(ite1.hasNext())
+        {
+            Map.Entry<String, Integer> e = ite1.next();
+            for(Map.Entry<String, Integer> e1 : hats.entrySet())
+            {
+                if(e.getKey().equals(e1.getKey()))
+                {
+                    e.setValue(e.getValue() - e1.getValue());
+                    if(e.getValue() <= 0)
+                    {
+                        ite1.remove();
+                    }
+                }
+            }
+        }
+
         for(ItemStack is : items)
         {
             for(int i = oldItems.size() - 1; i >= 0; i--)
@@ -217,10 +252,10 @@ public class TradeInfo
             }
         }
 
-        for(String s : oldHats)
+        for(Map.Entry<String, Integer> e : oldHats.entrySet())
         {
-            sendTradeMessage(StatCollector.translateToLocal("hats.trade.you") + " " + StatCollector.translateToLocal("hats.trade.removed") + " " + EnumChatFormatting.WHITE.toString() + s, player1);
-            sendTradeMessage(player1.getCommandSenderName() + " " + StatCollector.translateToLocal("hats.trade.removed") + " " + EnumChatFormatting.WHITE.toString() + s, player2);
+            sendTradeMessage(StatCollector.translateToLocal("hats.trade.you") + " " + StatCollector.translateToLocal("hats.trade.removed") + " " + EnumChatFormatting.WHITE.toString() + e.getKey(), player1);
+            sendTradeMessage(player1.getCommandSenderName() + " " + StatCollector.translateToLocal("hats.trade.removed") + " " + EnumChatFormatting.WHITE.toString() + e.getKey(), player2);
         }
         for(ItemStack is : oldItems)
         {
@@ -228,10 +263,10 @@ public class TradeInfo
             sendTradeMessage(player1.getCommandSenderName() + " " + StatCollector.translateToLocal("hats.trade.removed") + " " + EnumChatFormatting.WHITE.toString() + is.stackSize + " " + is.getDisplayName(), player2);
         }
 
-        for(String s : newHats)
+        for(Map.Entry<String, Integer> e : newHats.entrySet())
         {
-            sendTradeMessage(StatCollector.translateToLocal("hats.trade.you") + " " + StatCollector.translateToLocal("hats.trade.added") + " " + EnumChatFormatting.WHITE.toString() + s, player1);
-            sendTradeMessage(player1.getCommandSenderName() + " " + StatCollector.translateToLocal("hats.trade.added") + " " + EnumChatFormatting.WHITE.toString() + s, player2);
+            sendTradeMessage(StatCollector.translateToLocal("hats.trade.you") + " " + StatCollector.translateToLocal("hats.trade.added") + " " + EnumChatFormatting.WHITE.toString() + e.getKey(), player1);
+            sendTradeMessage(player1.getCommandSenderName() + " " + StatCollector.translateToLocal("hats.trade.added") + " " + EnumChatFormatting.WHITE.toString() + e.getKey(), player2);
         }
         for(ItemStack is : newItems)
         {

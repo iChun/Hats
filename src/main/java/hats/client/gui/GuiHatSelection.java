@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
@@ -147,15 +148,20 @@ public class GuiHatSelection extends GuiScreen
 			}
 			else
 			{
-				Hats.proxy.tickHandlerClient.availableHats = new ArrayList<String>(Hats.proxy.tickHandlerClient.serverHats);
-				Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+				Hats.proxy.tickHandlerClient.availableHats = new HashMap<String, Integer>(Hats.proxy.tickHandlerClient.serverHats);
 			}
 		}
 		
 		player = ply;
 		hat = Hats.proxy.tickHandlerClient.hats.get(player.getCommandSenderName());
-		ArrayList<String> list = new ArrayList<String>(Hats.proxy.tickHandlerClient.availableHats);
-		
+		ArrayList<String> list = new ArrayList<String>();
+
+        for(Map.Entry<String, Integer> e : Hats.proxy.tickHandlerClient.availableHats.entrySet())
+        {
+            list.add(e.getKey());
+        }
+        Collections.sort(list);
+
 		for(int i = list.size() - 1; i >= 0; i--)
 		{
 			if(Hats.config.getInt("showContributorHatsInGui") == 0 && list.get(i).startsWith("(C) "))
@@ -1422,7 +1428,7 @@ public class GuiHatSelection extends GuiScreen
 	    		for(int i = hatsCopy.size() - 1; i >= 0; i--)
 	    		{
 	    			String hatName = hatsCopy.get(i);
-	    			if(!Hats.proxy.tickHandlerClient.serverHats.contains(hatName))
+	    			if(!Hats.proxy.tickHandlerClient.serverHats.containsKey(hatName))
 	    			{
 	    				hatsCopy.remove(i);
 	    			}
@@ -1824,9 +1830,16 @@ public class GuiHatSelection extends GuiScreen
         
         drawPlayerOnGui(k + 42, l + 155, 55, (float)(k + 42) - (float)mouseX, (float)(l + 155 - 92) - (float)mouseY);
 
+        if(player != null && !player.capabilities.isCreativeMode && tempInfo != null && !tempInfo.hatName.isEmpty())
+        {
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            drawString(fontRendererObj, HatHandler.getRarity(tempInfo.hatName).toString() + StatCollector.translateToLocalFormatted("hats.gui.hatsCollected", Hats.proxy.tickHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName)) == null ? 1 : Hats.proxy.tickHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName))), this.guiLeft + 10, this.guiTop + ySize - 22, 0xffffff);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
+        }
+
         drawForeground(par1, par2, par3);
     }
-    
+
     public void drawForeground(int par1, int par2, float par3)
     {
         for (int k1 = 0; k1 < this.buttonList.size(); ++k1)

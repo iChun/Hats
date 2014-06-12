@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 public class PacketSession extends AbstractPacket
 {
     public int hatMode;
+    public int randSeed; //0 for disabled
     public boolean hasVisited;
     public String serverHat;
     public String currentKing;
@@ -18,9 +19,10 @@ public class PacketSession extends AbstractPacket
 
     public PacketSession(){}
 
-    public PacketSession(int serverHatMode, boolean visited, String serverHat, String currentKing, String hats)
+    public PacketSession(int serverHatMode, int randSeed, boolean visited, String serverHat, String currentKing, String hats)
     {
         this.hatMode = serverHatMode;
+        this.randSeed = randSeed;
         this.hasVisited = visited;
         this.serverHat = serverHat;
         this.currentKing = currentKing;
@@ -32,6 +34,7 @@ public class PacketSession extends AbstractPacket
     public void writeTo(ByteBuf buffer, Side side)
     {
         buffer.writeInt(hatMode);
+        buffer.writeInt(randSeed);
         buffer.writeBoolean(hasVisited);
         ByteBufUtils.writeUTF8String(buffer, serverHat);
         ByteBufUtils.writeUTF8String(buffer, currentKing);
@@ -44,6 +47,7 @@ public class PacketSession extends AbstractPacket
 
         Hats.config.updateSession("serverHasMod", 1);
         Hats.config.updateSession("playerHatsMode", buffer.readInt());
+        Hats.config.updateSession("hatGenerationSeed", buffer.readInt());
         Hats.config.updateSession("hasVisited", buffer.readBoolean() ? 1 : 0);
         Hats.config.updateSession("lockedHat", ByteBufUtils.readUTF8String(buffer));
         Hats.config.updateSession("currentKing", ByteBufUtils.readUTF8String(buffer));

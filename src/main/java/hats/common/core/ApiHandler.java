@@ -26,10 +26,15 @@ public class ApiHandler
 	{
 		return new HatInfoClient(hatName, r, g, b);
 	}
-	
-	public static Object getRandomHatInfo(int r, int g, int b)
+
+    public static Object getRandomHatInfoWithServerWeightage(int r, int g, int b)
+    {
+        return new HatInfoClient(HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), true).hatName, r, g, b);
+    }
+
+    public static Object getRandomHatInfo(int r, int g, int b)
 	{
-		return new HatInfoClient(HatHandler.getRandomHat().hatName, r, g, b);
+        return new HatInfoClient(HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), false).hatName, r, g, b);
 	}
 	
 	public static void renderHat(Object info, float alpha, float hatScale, float mobRenderScaleX, float mobRenderScaleY, float mobRenderScaleZ, float renderYawOffset, float rotationYaw, float rotationPitch, float rotationRoll, float rotatePointVert, float rotatePointHori, float rotatePointSide, float offsetVert, float offsetHori, float offsetSide, boolean forceRender, boolean bindTexture, float renderTick)

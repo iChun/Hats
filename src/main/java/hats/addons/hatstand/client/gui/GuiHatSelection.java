@@ -104,7 +104,6 @@ public class GuiHatSelection extends GuiScreen
 	
 	public GuiHatSelection(TileEntityHatStand hatStand)
 	{
-		
 		if(Hats.config.getSessionInt("playerHatsMode") == 4)
 		{
 			if(Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
@@ -113,11 +112,18 @@ public class GuiHatSelection extends GuiScreen
 			}
 			else
 			{
-				Hats.proxy.tickHandlerClient.availableHats = new ArrayList<String>(Hats.proxy.tickHandlerClient.serverHats);
-				Collections.sort(Hats.proxy.tickHandlerClient.availableHats);
+				Hats.proxy.tickHandlerClient.availableHats = new HashMap<String, Integer>(Hats.proxy.tickHandlerClient.serverHats);
 			}
 		}
-		availableHats = ImmutableList.copyOf(Hats.proxy.tickHandlerClient.availableHats);
+        ArrayList<String> list = new ArrayList<String>();
+
+        for(Map.Entry<String, Integer> e : Hats.proxy.tickHandlerClient.availableHats.entrySet())
+        {
+            list.add(e.getKey());
+        }
+        Collections.sort(list);
+
+        availableHats = ImmutableList.copyOf(list);
 		hatsToShow = new ArrayList<String>(availableHats);
 		Collections.sort(hatsToShow);
 		stand = hatStand;

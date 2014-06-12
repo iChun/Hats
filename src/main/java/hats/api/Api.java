@@ -19,10 +19,10 @@ public final class Api
 	
 	/**
 	 * Creates an object storing the relative hat info, used for when rendering hats.
-	 * @param Hat Name
-	 * @param Red value, 0 - 255
-	 * @param Green value, 0 - 255
-	 * @param Blue value, 0 - 255
+	 * @param hatName - Hat Name
+	 * @param r - Red value, 0 - 255
+	 * @param g - Green value, 0 - 255
+	 * @param b - Blue value, 0 - 255
 	 * @return Hat info object
 	 */
 	public static Object createHatInfo(String hatName, int r, int g, int b)
@@ -33,8 +33,17 @@ public final class Api
 			return null;
 		}
 	}
-	
-	public static Object getRandomHatInfo(int r, int g, int b)
+
+    public static Object getRandomHatInfoWithServerWeightage(int r, int g, int b)
+    {
+        try {
+            return (Object)Class.forName("hats.common.core.ApiHandler").getDeclaredMethod("getRandomHatInfoWithServerWeightage", int.class, int.class, int.class).invoke(null, r, g, b);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Object getRandomHatInfo(int r, int g, int b)
 	{
 		try {
 			return (Object)Class.forName("hats.common.core.ApiHandler").getDeclaredMethod("getRandomHatInfo", int.class, int.class, int.class).invoke(null, r, g, b);
@@ -46,25 +55,25 @@ public final class Api
 	/**
 	 * Renders the Hat using the provided hat info.
 	 * You have to pre-translate to the hat position first before translation.
-	 * @param Hat Info (created using createHatInfo)
-	 * @param Alpha levels (1.0F for opaque)
-	 * @param Hat Scale
-	 * @param Scale - X axis
-	 * @param Scale - Y axis
-	 * @param Scale - Z axis
-	 * @param Render Yaw Offset
-	 * @param Rotation Yaw Offset
-	 * @param Rotation Pitch Offset
-	 * @param Rotation Roll Offset (Stuff like the wolf's interest when you hold bones)
-	 * @param Rotation Point Vertical Offset
-	 * @param Rotation Point Horizontal Offset
-	 * @param Rotation Point Sideways Offset
-	 * @param Render Point Vertical Offset
-	 * @param Render Point Horizontal Offset
-	 * @param Render Point Sideways Offset
-	 * @param Force Render
-	 * @param Bind Hat Texture when rendering
-	 * @param Render Tick
+	 * @param info - Hat Info (created using createHatInfo)
+	 * @param alpha - Alpha levels (1.0F for opaque)
+	 * @param hatScale - Hat Scale
+	 * @param mobRenderScaleX - Scale - X axis
+	 * @param mobRenderScaleY - Scale - Y axis
+	 * @param mobRenderScaleZ - Scale - Z axis
+	 * @param renderYawOffset - Render Yaw Offset
+	 * @param rotationYaw - Rotation Yaw Offset
+	 * @param rotationPitch - Rotation Pitch Offset
+	 * @param rotationRoll - Rotation Roll Offset (Stuff like the wolf's interest when you hold bones)
+	 * @param rotatePointVert - Rotation Point Vertical Offset
+	 * @param rotatePointHori - Rotation Point Horizontal Offset
+	 * @param rotatePointSide - Rotation Point Sideways Offset
+	 * @param offsetVert - Render Point Vertical Offset
+	 * @param offsetHori - Render Point Horizontal Offset
+	 * @param offsetSide - Render Point Sideways Offset
+	 * @param forceRender - Force Render
+	 * @param bindTexture - Bind Hat Texture when rendering
+	 * @param renderTick - Render Tick
 	 */
 	public static void renderHat(Object info, float alpha, float hatScale, float mobRenderScaleX, float mobRenderScaleY, float mobRenderScaleZ, float renderYawOffset, float rotationYaw, float rotationPitch, float rotationRoll, float rotatePointVert, float rotatePointHori, float rotatePointSide, float offsetVert, float offsetHori, float offsetSide, boolean forceRender, boolean bindTexture, float renderTick)
 	{

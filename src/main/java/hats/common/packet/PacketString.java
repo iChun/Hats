@@ -20,6 +20,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 
 import java.util.Collections;
 
@@ -146,15 +147,18 @@ public class PacketString extends AbstractPacket
         {
             case 0: //Unlocked hat
             {
-                if(!Hats.proxy.tickHandlerClient.serverHats.contains(pingString))
+                if(Hats.proxy.tickHandlerClient.serverHats.get(pingString) == null)
                 {
-                    Hats.proxy.tickHandlerClient.serverHats.add(pingString);
-                    Collections.sort(Hats.proxy.tickHandlerClient.serverHats);
+                    Hats.proxy.tickHandlerClient.serverHats.put(pingString, 1);
                     if(Hats.proxy.tickHandlerClient.guiHatUnlocked == null)
                     {
                         Hats.proxy.tickHandlerClient.guiHatUnlocked = new GuiHatUnlocked(Minecraft.getMinecraft());
                     }
                     Hats.proxy.tickHandlerClient.guiHatUnlocked.queueHatUnlocked(pingString);
+                }
+                else
+                {
+                    Hats.proxy.tickHandlerClient.serverHats.put(pingString, Hats.proxy.tickHandlerClient.serverHats.get(pingString) + 1);
                 }
                 break;
             }
@@ -180,12 +184,35 @@ public class PacketString extends AbstractPacket
                 {
                     GuiTradeWindow trade = (GuiTradeWindow)Minecraft.getMinecraft().currentScreen;
                     trade.chatMessages.add(pingString);
+                    if(trade.chatMessages.size() > 1 && trade.chatMessages.get(trade.chatMessages.size() - 2).startsWith(pingString) && (pingString.contains(StatCollector.translateToLocal("hats.trade.added")) || pingString.contains(StatCollector.translateToLocal("hats.trade.removed"))) && !pingString.contains(":"))
+                    {
+                        if(trade.chatMessages.get(trade.chatMessages.size() - 2).equals(pingString))
+                        {
+                            trade.chatMessages.remove(trade.chatMessages.size() - 1);
+                            trade.chatMessages.remove(trade.chatMessages.size() - 1);
+                            trade.chatMessages.add(pingString + " (2)");
+                        }
+                        else
+                        {
+                            String countStr = trade.chatMessages.get(trade.chatMessages.size() - 2).substring(pingString.length() + 2, trade.chatMessages.get(trade.chatMessages.size() - 2).length() - 1);
+                            int count = 2;
+                            try
+                            {
+                                count = Integer.parseInt(countStr);
+                            }
+                            catch(NumberFormatException e)
+                            {
+                            }
+                            trade.chatMessages.remove(trade.chatMessages.size() - 1);
+                            trade.chatMessages.remove(trade.chatMessages.size() - 1);
+                            trade.chatMessages.add(pingString + " (" + Integer.toString(count + 1) + ")");
+                        }
+                    }
                 }
                 break;
             }
             case 3: //Begin Trade session
             {
-                System.out.println(pingString);
                 FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiTradeWindow(pingString));
                 Hats.proxy.tickHandlerClient.tradeReq = null;
                 Hats.proxy.tickHandlerClient.tradeReqTimeout = 0;

@@ -32,10 +32,7 @@ import org.lwjgl.input.Keyboard;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 @Mod(modid = "Hats", name = "Hats",
 			version = Hats.version,
@@ -98,6 +95,8 @@ public class Hats
         config.createIntProperty("startTime", "hats.config.prop.startTime.name", "hats.config.prop.startTime.comment", false, false, 6000, 10, Integer.MAX_VALUE);
         config.createIntProperty("timeIncrement", "hats.config.prop.timeIncrement.name", "hats.config.prop.timeIncrement.comment", false, false, 125, 0, Integer.MAX_VALUE);
         config.createIntBoolProperty("resetPlayerHatsOnDeath", "hats.config.prop.resetPlayerHatsOnDeath.name", "hats.config.prop.resetPlayerHatsOnDeath.comment", true, false, false);
+        config.createIntBoolProperty("hatRarity", "hats.config.prop.hatRarity.name", "hats.config.prop.hatRarity.comment", true, false, true);
+        config.createIntProperty("hatGenerationSeed", "hats.config.prop.hatGenerationSeed.name", "hats.config.prop.hatGenerationSeed.comment", true, true, (new Random(System.currentTimeMillis())).nextInt(), Integer.MIN_VALUE, Integer.MAX_VALUE);
 
         if(isClient)
         {
@@ -121,7 +120,7 @@ public class Hats
 
         config.setCurrentCategory("randoMobOptions", "hats.config.cat.randoMobOptions.name", "hats.config.cat.randoMobOptions.comment");
         config.createIntProperty("randomMobHat", "hats.config.prop.randomMobHat.name", "hats.config.prop.randomMobHat.comment", true, false, config.getInt("playerHatsMode") != 4 && isClient ? 0 : 10, 0, 100);
-        config.createIntProperty("useRandomContributorHats", "hats.config.prop.useRandomContributorHats.name", "hats.config.prop.useRandomContributorHats.comment", true, false, 10, 0, 100);
+        config.createIntProperty("useRandomContributorHats", "hats.config.prop.useRandomContributorHats.name", "hats.config.prop.useRandomContributorHats.comment", true, false, 80, 0, 100);
 
         config.createIntBoolProperty("hatBlaze"     , "hats.config.prop.hatBlaze.name"      , "hats.config.prop.hatBlaze.comment"   , true, false, true);
         config.createIntBoolProperty("hatChicken"   , "hats.config.prop.hatChicken.name"    , "hats.config.prop.hatChicken.comment" , true, false, true);
@@ -160,8 +159,7 @@ public class Hats
         FMLCommonHandler.instance().bus().register(eventHandler);
 		MinecraftForge.EVENT_BUS.register(eventHandler);
     }
-    //TODO see if model is readable before redownloading if file size is different
-	
+
 	@Mod.EventHandler
 	public void postInit(FMLPostInitializationEvent event)
 	{

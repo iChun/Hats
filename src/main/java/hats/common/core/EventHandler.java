@@ -4,7 +4,6 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -25,13 +24,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.world.WorldEvent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventHandler
 {
@@ -64,6 +63,7 @@ public class EventHandler
         }
     }
 
+    //TODO look for tile entities which do spawning.
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onEntitySpawn(EntityJoinWorldEvent event)
     {
@@ -102,7 +102,7 @@ public class EventHandler
                 }
             }
         }
-        HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.config.getInt("randomMobHat") / 100F) && !fromSpawner ? HatHandler.getRandomHat() : new HatInfo();
+        HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.config.getInt("randomMobHat") / 100F) && !fromSpawner ? HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), Hats.config.getSessionInt("playerHatsMode") == 4 && Hats.config.getInt("hatRarity") == 1) : new HatInfo();
         if(!hatInfo.hatName.isEmpty())
         {
             Hats.proxy.tickHandlerServer.mobHats.put(living, hatInfo.hatName);
@@ -159,16 +159,14 @@ public class EventHandler
                         }
                         else if(executer != null && Hats.config.getSessionString("currentKing").equalsIgnoreCase(executer.getCommandSenderName()))
                         {
-                            ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(executer.getCommandSenderName());
-                            if(playerHatsList == null)
+                            HashMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(executer.getCommandSenderName());
+
+                            ArrayList<String> newHats = HatHandler.getAllHatNamesAsList();
+
+                            for(Map.Entry<String, Integer> e : playerHatsList.entrySet())
                             {
-                                playerHatsList = new ArrayList<String>();
-                                Hats.proxy.tickHandlerServer.playerHats.put(executer.getCommandSenderName(), playerHatsList);
+                                newHats.remove(e.getKey());
                             }
-
-                            ArrayList<String> newHats = HatHandler.getAllHatsAsList();
-
-                            newHats.removeAll(playerHatsList);
 
                             EntityPlayerMP newKingEnt = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(executer.getCommandSenderName());
 
@@ -225,36 +223,32 @@ public class EventHandler
     }
 
     public static void sendPlayerSessionInfo(EntityPlayer player)
-	{
-        ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(player.getCommandSenderName());
-        if(playerHatsList == null)
-        {
-            playerHatsList = new ArrayList<String>();
-            Hats.proxy.tickHandlerServer.playerHats.put(player.getCommandSenderName(), playerHatsList);
-        }
+    {
+        HashMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(player.getCommandSenderName());
 
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < playerHatsList.size(); i++)
+        for(Map.Entry<String, Integer> e : playerHatsList.entrySet())
         {
-            sb.append(playerHatsList.get(i));
-            if(i < playerHatsList.size() - 1)
+            sb.append(e.getKey());
+            if(e.getValue() != 1)
             {
-                sb.append(":");
+                sb.append(">" + e.getValue());
             }
+            sb.append(":");
         }
 
-        PacketHandler.sendToPlayer(Hats.channels, new PacketSession(Hats.config.getSessionInt("playerHatsMode"), player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getBoolean("Hats_hasVisited") && player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_hatMode") == Hats.config.getSessionInt("playerHatsMode") || Hats.config.getInt("firstJoinMessage") != 1, Hats.config.getSessionString("lockedHat"), Hats.config.getSessionString("currentKing"), sb.toString()), player);
-	}
+        PacketHandler.sendToPlayer(Hats.channels, new PacketSession(Hats.config.getSessionInt("playerHatsMode"), Hats.config.getInt("hatRarity") == 0 ? 0 : Hats.config.getSessionInt("hatGenerationSeed"), player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getBoolean("Hats_hasVisited") && player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_hatMode") == Hats.config.getSessionInt("playerHatsMode") || Hats.config.getInt("firstJoinMessage") != 1, Hats.config.getSessionString("lockedHat"), Hats.config.getSessionString("currentKing"), sb.toString().length() > 0 ? sb.toString().substring(0, sb.toString().length() - 1) : sb.toString()), player);
+    }
 
     @SubscribeEvent
-	public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
-	{
-		if(Hats.config.getSessionInt("playerHatsMode") == 5 && Hats.config.getSessionString("currentKing").equalsIgnoreCase(""))
-		{
-			//There is No king around now, so technically no players online
-			Hats.proxy.tickHandlerServer.updateNewKing(event.player.getCommandSenderName(), null, false);
-			FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("hats.kingOfTheHat.update.playerJoin", event.player.getCommandSenderName()));
-		}
+    public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
+    {
+        if(Hats.config.getSessionInt("playerHatsMode") == 5 && Hats.config.getSessionString("currentKing").equalsIgnoreCase(""))
+        {
+            //There is No king around now, so technically no players online
+            Hats.proxy.tickHandlerServer.updateNewKing(event.player.getCommandSenderName(), null, false);
+            FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("hats.kingOfTheHat.update.playerJoin", event.player.getCommandSenderName()));
+        }
 
         String playerHats = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getString("Hats_unlocked");
 
@@ -269,31 +263,22 @@ public class EventHandler
             }
         }
 
-        ArrayList<String> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(event.player.getCommandSenderName());
-        if(playerHatsList == null)
-        {
-            playerHatsList = new ArrayList<String>();
-            Hats.proxy.tickHandlerServer.playerHats.put(event.player.getCommandSenderName(), playerHatsList);
-        }
+        HashMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(event.player.getCommandSenderName());
 
         playerHatsList.clear();
-        String[] hats = playerHats.split(":");
-        for(String hat : hats)
+        String[] hatsWithCount = playerHats.split(":");
+        for(String hat : hatsWithCount)
         {
-            if(!hat.trim().equalsIgnoreCase(""))
+            String[] hatAndCount = hat.split(">");
+            if(!hatAndCount[0].trim().isEmpty())
             {
-                boolean has = false;
-                for(String s : playerHatsList)
+                try
                 {
-                    if(s.equalsIgnoreCase(hat))
-                    {
-                        has = true;
-                        break;
-                    }
+                    playerHatsList.put(hatAndCount[0], hatAndCount.length == 1 ? 1 : Integer.parseInt(hatAndCount[1]));
                 }
-                if(!has)
+                catch(NumberFormatException e)
                 {
-                    playerHatsList.add(hat);
+                    playerHatsList.put(hatAndCount[0], 1);
                 }
             }
         }
@@ -332,50 +317,50 @@ public class EventHandler
             info.active = true;
         }
 
-		sendPlayerSessionInfo(event.player);
+        sendPlayerSessionInfo(event.player);
 
         NBTTagCompound persistentTag = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
         persistentTag.setBoolean("Hats_hasVisited", true);
         persistentTag.setInteger("Hats_hatMode", Hats.config.getSessionInt("playerHatsMode"));
         event.player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
 
-		if(Hats.config.getSessionInt("playerHatsMode") != 2)
-		{
-			Hats.proxy.sendPlayerListOfWornHats(event.player, true);
-			Hats.proxy.sendPlayerListOfWornHats(event.player, false);
-		}
-	}
+        if(Hats.config.getSessionInt("playerHatsMode") != 2)
+        {
+            Hats.proxy.sendPlayerListOfWornHats(event.player, true);
+            Hats.proxy.sendPlayerListOfWornHats(event.player, false);
+        }
+    }
 
-	@SubscribeEvent
-	public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
-	{
-		if(Hats.config.getSessionInt("playerHatsMode") == 5 && Hats.config.getSessionString("currentKing").equalsIgnoreCase(event.player.getCommandSenderName()))
-		{
-			//King logged out
-			List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
-			List<EntityPlayerMP> list = new ArrayList(players);
-			list.remove(event.player);
-			if(!list.isEmpty())
-			{
-				EntityPlayer newKing = list.get(event.player.worldObj.rand.nextInt(list.size()));
-				Hats.proxy.tickHandlerServer.updateNewKing(newKing.getCommandSenderName(), null, true);
-				Hats.proxy.tickHandlerServer.updateNewKing(newKing.getCommandSenderName(), newKing, true);
-				FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("hats.kingOfTheHat.update.playerLeft", new Object[] { event.player.getCommandSenderName(), newKing.getCommandSenderName() }));
-			}
-		}	
-		
-		TimeActiveInfo info = Hats.proxy.tickHandlerServer.playerActivity.get(event.player.getCommandSenderName());
+    @SubscribeEvent
+    public void onPlayerLogout(PlayerEvent.PlayerLoggedOutEvent event)
+    {
+        if(Hats.config.getSessionInt("playerHatsMode") == 5 && Hats.config.getSessionString("currentKing").equalsIgnoreCase(event.player.getCommandSenderName()))
+        {
+            //King logged out
+            List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().playerEntityList;
+            List<EntityPlayerMP> list = new ArrayList(players);
+            list.remove(event.player);
+            if(!list.isEmpty())
+            {
+                EntityPlayer newKing = list.get(event.player.worldObj.rand.nextInt(list.size()));
+                Hats.proxy.tickHandlerServer.updateNewKing(newKing.getCommandSenderName(), null, true);
+                Hats.proxy.tickHandlerServer.updateNewKing(newKing.getCommandSenderName(), newKing, true);
+                FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentTranslation("hats.kingOfTheHat.update.playerLeft", new Object[] { event.player.getCommandSenderName(), newKing.getCommandSenderName() }));
+            }
+        }
 
-		if(info != null)
-		{
+        TimeActiveInfo info = Hats.proxy.tickHandlerServer.playerActivity.get(event.player.getCommandSenderName());
+
+        if(info != null)
+        {
             NBTTagCompound persistentTag = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
             persistentTag.setInteger("Hats_activityLevels", info.levels);
             persistentTag.setInteger("Hats_activityTimeleft", info.timeLeft);
             event.player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
 
             info.active = false;
-		}
-		
-		Hats.proxy.playerWornHats.remove(event.player.getCommandSenderName());
-	}
+        }
+
+        Hats.proxy.playerWornHats.remove(event.player.getCommandSenderName());
+    }
 }

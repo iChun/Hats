@@ -16,15 +16,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PacketTradeOffers extends AbstractPacket
 {
-    public ArrayList<String> tradeHats;
+    public HashMap<String, Integer> tradeHats;
     public ArrayList<ItemStack> tradeItems;
 
     public PacketTradeOffers(){}
 
-    public PacketTradeOffers(ArrayList<String> hats, ArrayList<ItemStack> items)
+    public PacketTradeOffers(HashMap<String, Integer> hats, ArrayList<ItemStack> items)
     {
         tradeHats = hats;
         tradeItems = items;
@@ -35,9 +37,10 @@ public class PacketTradeOffers extends AbstractPacket
     {
         buffer.writeInt(tradeHats.size());
 
-        for(String s : tradeHats)
+        for(Map.Entry<String, Integer> e : tradeHats.entrySet())
         {
-            ByteBufUtils.writeUTF8String(buffer, s);
+            ByteBufUtils.writeUTF8String(buffer, e.getKey());
+            buffer.writeInt(e.getValue());
         }
 
         buffer.writeInt(tradeItems.size());
@@ -51,14 +54,14 @@ public class PacketTradeOffers extends AbstractPacket
     @Override
     public void readFrom(ByteBuf buffer, Side side)
     {
-        tradeHats = new ArrayList<String>();
+        tradeHats = new HashMap<String, Integer>();
         tradeItems = new ArrayList<ItemStack>();
 
         int hatCount = buffer.readInt();
 
         for(int i = 0; i < hatCount; i++)
         {
-            tradeHats.add(ByteBufUtils.readUTF8String(buffer));
+            tradeHats.put(ByteBufUtils.readUTF8String(buffer), buffer.readInt());
         }
 
         int itemCount = buffer.readInt();
@@ -101,7 +104,7 @@ public class PacketTradeOffers extends AbstractPacket
         {
             GuiTradeWindow trade = (GuiTradeWindow)Minecraft.getMinecraft().currentScreen;
 
-            ArrayList<String> oldHats = new ArrayList<String>(trade.theirHatsForTrade);
+            HashMap<String, Integer> oldHats = new HashMap<String, Integer>(trade.theirHatsForTrade);
             ArrayList<ItemStack> oldItems = new ArrayList<ItemStack>(trade.theirItemsForTrade);
 
             trade.theirHatsForTrade = tradeHats;

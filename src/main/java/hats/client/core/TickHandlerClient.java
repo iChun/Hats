@@ -134,7 +134,7 @@ public class TickHandlerClient
                             requestedMobHats.clear();
                         }
 
-                        HatInfo hatInfo = (Hats.config.getSessionInt("serverHasMod") == 1 ? getPlayerHat(player.getCommandSenderName()) : ((Hats.config.getInt("randomHat") == 1 || Hats.config.getInt("randomHat") == 2 && player != mc.thePlayer) ? HatHandler.getRandomHat() : Hats.favouriteHatInfo));
+                        HatInfo hatInfo = (Hats.config.getSessionInt("serverHasMod") == 1 ? getPlayerHat(player.getCommandSenderName()) : ((Hats.config.getInt("randomHat") == 1 || Hats.config.getInt("randomHat") == 2 && player != mc.thePlayer) ? HatHandler.getRandomHatFromList(HatHandler.getAllHats(), false) : Hats.favouriteHatInfo));
                         hat = new EntityHat(world, player, hatInfo);
                         hats.put(player.getCommandSenderName(), hat);
                         world.spawnEntityInWorld(hat);
@@ -228,7 +228,7 @@ public class TickHandlerClient
                     {
                         if(Hats.config.getSessionInt("serverHasMod") == 0 || Hats.config.getSessionInt("playerHatsMode") != 4)
                         {
-                            HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.config.getInt("randomMobHat") / 100F) ? (Hats.config.getInt("randomHat") >= 1 ? HatHandler.getRandomHat() : Hats.favouriteHatInfo) : new HatInfo();
+                            HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.config.getInt("randomMobHat") / 100F) ? (Hats.config.getInt("randomHat") >= 1 ? HatHandler.getRandomHatFromList(HatHandler.getAllHats(), false) : Hats.favouriteHatInfo) : new HatInfo();
                             hat = new EntityHat(world, living, hatInfo);
                             mobHats.put(living.getEntityId(), hat);
                             world.spawnEntityInWorld(hat);
@@ -316,9 +316,9 @@ public class TickHandlerClient
 	
 	public HashMap<Integer, EntityHat> rendered = new HashMap<Integer, EntityHat>();
 	
-	public ArrayList<String> availableHats = new ArrayList<String>();
+	public HashMap<String, Integer> availableHats = new HashMap<String, Integer>();
+    public HashMap<String, Integer> serverHats = new HashMap<String, Integer>();
 	public ArrayList<String> requestedHats = new ArrayList<String>();
-	public ArrayList<String> serverHats = new ArrayList<String>();
 	public ArrayList<Integer> requestMobHats = new ArrayList<Integer>();
 	public ArrayList<Integer> requestedMobHats = new ArrayList<Integer>();
 	

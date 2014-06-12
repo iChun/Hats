@@ -19,10 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class CommonProxy 
@@ -123,7 +120,7 @@ public class CommonProxy
 	public void loadHatFile(File file)
 	{
 		String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
-		HatHandler.hatNames.put(file, hatName);
+        HatHandler.hatNames.put(file, hatName);
 	}
 	
 	public void remap(String duplicate, String original)

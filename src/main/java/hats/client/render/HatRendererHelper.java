@@ -43,7 +43,7 @@ public class HatRendererHelper
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-            GL11.glScalef(1.005F, 1.005F, 1.005F);
+            GL11.glScalef(1.001F, 1.001F, 1.001F);
             GL11.glScalef(mobRenderScaleX, mobRenderScaleY, mobRenderScaleZ);
 
             GL11.glRotatef(renderYawOffset, 0.0F, -1.0F, 0.0F);
