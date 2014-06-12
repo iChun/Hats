@@ -101,7 +101,7 @@ public class ThreadHatsReader extends Thread
         File[] favs = fav.listFiles();
         for(File file : favs)
         {
-            if(!file.isDirectory() && file.getName().endsWith(".tcn"))
+            if(!file.isDirectory() && (file.getName().endsWith(".tcn") || file.getName().endsWith(".tc2")))
             {
                 File hat = new File(hatsFolder, file.getName());
                 if(!hat.exists())
@@ -146,7 +146,17 @@ public class ThreadHatsReader extends Thread
             }
         }
 
+        //Convert TCN (Techne 1) files to TC2 (Techne 2)
         File[] files = hatsFolder.listFiles();
+        for(File file : files)
+        {
+            if(!file.isDirectory() && file.getName().endsWith(".tcn"))
+            {
+
+            }
+        }
+
+        files = hatsFolder.listFiles();
         for(File file : files)
         {
             if(!file.isDirectory() && HatHandler.readHatFromFile(file))

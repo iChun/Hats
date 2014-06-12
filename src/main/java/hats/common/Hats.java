@@ -12,6 +12,7 @@ import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.relauncher.Side;
 import hats.client.core.ClientProxy;
 import hats.client.render.helper.HelperGeneric;
+import hats.common.converter.TechneConverter;
 import hats.common.core.CommonProxy;
 import hats.common.core.EventHandler;
 import hats.common.core.HatHandler;
@@ -66,6 +67,7 @@ public class Hats
         return true;
     }
 
+    //TODO check github for issues
     //TODO implement something like Hats+ support. Download JSON files with information for classes.
 	@Mod.EventHandler
 	public void preLoad(FMLPreInitializationEvent event)
@@ -193,6 +195,8 @@ public class Hats
 //
 //        System.out.println(jsonOutput);
 
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        System.out.println(gson.toJson(new TechneConverter()));
     }
 
 	@Mod.EventHandler

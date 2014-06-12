@@ -111,7 +111,7 @@ public class CommandHats extends CommandBase {
 				}
 				else if("unlock".startsWith(command.toLowerCase()))
 				{
-					if(Hats.config.getSessionInt("playerHatsMode") == 4)
+					if(Hats.config.getSessionInt("playerHatsMode") >= 4)
 					{
 						if(player.capabilities.isCreativeMode)
 						{
