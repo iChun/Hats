@@ -27,10 +27,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EventHandler
 {
@@ -159,7 +156,7 @@ public class EventHandler
                         }
                         else if(executer != null && Hats.config.getSessionString("currentKing").equalsIgnoreCase(executer.getCommandSenderName()))
                         {
-                            HashMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(executer.getCommandSenderName());
+                            TreeMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(executer.getCommandSenderName());
 
                             ArrayList<String> newHats = HatHandler.getAllHatNamesAsList();
 
@@ -224,7 +221,7 @@ public class EventHandler
 
     public static void sendPlayerSessionInfo(EntityPlayer player)
     {
-        HashMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(player.getCommandSenderName());
+        TreeMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(player.getCommandSenderName());
 
         StringBuilder sb = new StringBuilder();
         for(Map.Entry<String, Integer> e : playerHatsList.entrySet())
@@ -263,7 +260,7 @@ public class EventHandler
             }
         }
 
-        HashMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(event.player.getCommandSenderName());
+        TreeMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(event.player.getCommandSenderName());
 
         playerHatsList.clear();
         String[] hatsWithCount = playerHats.split(":");

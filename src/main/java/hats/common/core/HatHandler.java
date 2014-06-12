@@ -794,7 +794,7 @@ public class HatHandler
         {
             return;
         }
-        HashMap<String, Integer> hats = Hats.proxy.tickHandlerServer.getPlayerHatsList(player.getCommandSenderName());
+        TreeMap<String, Integer> hats = Hats.proxy.tickHandlerServer.getPlayerHatsList(player.getCommandSenderName());
         Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
         while(ite.hasNext())
         {

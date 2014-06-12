@@ -18,15 +18,16 @@ import net.minecraft.util.MathHelper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class PacketTradeOffers extends AbstractPacket
 {
-    public HashMap<String, Integer> tradeHats;
+    public TreeMap<String, Integer> tradeHats;
     public ArrayList<ItemStack> tradeItems;
 
     public PacketTradeOffers(){}
 
-    public PacketTradeOffers(HashMap<String, Integer> hats, ArrayList<ItemStack> items)
+    public PacketTradeOffers(TreeMap<String, Integer> hats, ArrayList<ItemStack> items)
     {
         tradeHats = hats;
         tradeItems = items;
@@ -54,7 +55,7 @@ public class PacketTradeOffers extends AbstractPacket
     @Override
     public void readFrom(ByteBuf buffer, Side side)
     {
-        tradeHats = new HashMap<String, Integer>();
+        tradeHats = new TreeMap<String, Integer>();
         tradeItems = new ArrayList<ItemStack>();
 
         int hatCount = buffer.readInt();

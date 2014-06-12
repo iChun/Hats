@@ -51,13 +51,13 @@ public class GuiTradeWindow extends GuiScreen
     protected int guiTop;
 
     public ArrayList<ItemStack> items;
-    public HashMap<String, Integer> hats;
+    public TreeMap<String, Integer> hats;
 
     public ArrayList<ItemStack> ourItemsForTrade;
-    public HashMap<String, Integer> ourHatsForTrade;
+    public TreeMap<String, Integer> ourHatsForTrade;
 
     public ArrayList<ItemStack> theirItemsForTrade;
-    public HashMap<String, Integer> theirHatsForTrade;
+    public TreeMap<String, Integer> theirHatsForTrade;
 
     public ItemStack grabbedStack;
 
@@ -110,7 +110,7 @@ public class GuiTradeWindow extends GuiScreen
         showInv = false;
 
         items = new ArrayList<ItemStack>();
-        hats = new HashMap<String, Integer>(Hats.proxy.tickHandlerClient.availableHats);
+        hats = new TreeMap<String, Integer>(Hats.proxy.tickHandlerClient.availableHats);
 
         invSlots = 0;
         for(ItemStack is : mc.thePlayer.inventory.mainInventory)
@@ -157,10 +157,10 @@ public class GuiTradeWindow extends GuiScreen
         }
 
         ourItemsForTrade = new ArrayList<ItemStack>();
-        ourHatsForTrade = new HashMap<String, Integer>();
+        ourHatsForTrade = new TreeMap<String, Integer>();
 
         theirItemsForTrade = new ArrayList<ItemStack>();
-        theirHatsForTrade = new HashMap<String, Integer>();
+        theirHatsForTrade = new TreeMap<String, Integer>();
 
         chatMessages = new ArrayList<String>();
     }
@@ -350,7 +350,7 @@ public class GuiTradeWindow extends GuiScreen
                     int mouseProg = x - (guiLeft + 6);
 
                     ArrayList<ItemStack> itemsList = new ArrayList<ItemStack>(items);
-                    HashMap<String, Integer> hatsList = new HashMap<String, Integer>(hats);
+                    TreeMap<String, Integer> hatsList = new TreeMap<String, Integer>(hats);
 
                     Iterator<Map.Entry<String, Integer>> ite = hatsList.entrySet().iterator();
                     while(ite.hasNext())
@@ -364,6 +364,7 @@ public class GuiTradeWindow extends GuiScreen
                                 if(e.getValue() <= 0)
                                 {
                                     ite.remove();
+                                    break;
                                 }
                             }
                         }
@@ -578,7 +579,7 @@ public class GuiTradeWindow extends GuiScreen
 
                                     if(!showInv)
                                     {
-                                        HashMap<String, Integer> hatsList = new HashMap<String, Integer>(hats);
+                                        TreeMap<String, Integer> hatsList = new TreeMap<String, Integer>(hats);
 
                                         Iterator<Map.Entry<String, Integer>> ite1 = hatsList.entrySet().iterator();
                                         while(ite1.hasNext())
@@ -592,6 +593,7 @@ public class GuiTradeWindow extends GuiScreen
                                                     if(e2.getValue() <= 0)
                                                     {
                                                         ite1.remove();
+                                                        break;
                                                     }
                                                 }
                                             }
@@ -733,7 +735,7 @@ public class GuiTradeWindow extends GuiScreen
                 int mouseProg = x - (guiLeft + 6);
 
                 ArrayList<ItemStack> itemsList = new ArrayList<ItemStack>(items);
-                HashMap<String, Integer> hatsList = new HashMap<String, Integer>(hats);
+                TreeMap<String, Integer> hatsList = new TreeMap<String, Integer>(hats);
 
                 Iterator<Map.Entry<String, Integer>> ite = hatsList.entrySet().iterator();
                 while(ite.hasNext())
@@ -747,6 +749,7 @@ public class GuiTradeWindow extends GuiScreen
                             if(e.getValue() <= 0)
                             {
                                 ite.remove();
+                                break;
                             }
                         }
                     }
@@ -1025,7 +1028,7 @@ public class GuiTradeWindow extends GuiScreen
         int l = this.guiTop;
 
         ArrayList<ItemStack> itemsList = new ArrayList<ItemStack>(items);
-        HashMap<String, Integer> hatsList = new HashMap<String, Integer>(hats);
+        TreeMap<String, Integer> hatsList = new TreeMap<String, Integer>(hats);
 
         Iterator<Map.Entry<String, Integer>> ite = hatsList.entrySet().iterator();
         while(ite.hasNext())
@@ -1039,6 +1042,7 @@ public class GuiTradeWindow extends GuiScreen
                     if(e.getValue() <= 0)
                     {
                         ite.remove();
+                        break;
                     }
                 }
             }
@@ -1176,6 +1180,7 @@ public class GuiTradeWindow extends GuiScreen
                                 GL11.glDisable(GL11.GL_DEPTH_TEST);
                                 drawSolidRect(k + 6 + (size * i) + size - 10, l + 29 + size - 10, 9, 9, 0, 0.4F);
                                 fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 6 + (size * i) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 29 + size - 9), 0xffffff, true);
+                                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                                 GL11.glEnable(GL11.GL_DEPTH_TEST);
                                 GL11.glDisable(GL11.GL_BLEND);
 
@@ -1256,6 +1261,7 @@ public class GuiTradeWindow extends GuiScreen
                         GL11.glDisable(GL11.GL_DEPTH_TEST);
                         drawSolidRect(k + 125 + (size * (i % columnWidth)) + size - 10, l + 17 + (size * (int)(Math.floor(i / columnWidth))) + size - 10, 9, 9, 0, 0.4F);
                         fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 17 + (size * (int)(Math.floor(i / columnWidth))) + size - 9), 0xffffff, true);
+                        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                         GL11.glEnable(GL11.GL_DEPTH_TEST);
                         GL11.glDisable(GL11.GL_BLEND);
 
@@ -1340,6 +1346,7 @@ public class GuiTradeWindow extends GuiScreen
                         GL11.glDisable(GL11.GL_DEPTH_TEST);
                         drawSolidRect(k + 125 + (size * (i % columnWidth)) + size - 10, l + 116 + (size * (int)(Math.floor(i / columnWidth))) + size - 10, 9, 9, 0, 0.4F);
                         fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 116 + (size * (int)(Math.floor(i / columnWidth))) + size - 9), 0xffffff, true);
+                        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
                         GL11.glEnable(GL11.GL_DEPTH_TEST);
                         GL11.glDisable(GL11.GL_BLEND);
 

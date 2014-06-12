@@ -11,10 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 public class TradeInfo 
 {
@@ -28,10 +25,10 @@ public class TradeInfo
 	public boolean trade1;
 	public boolean trade2;
 	
-	public HashMap<String, Integer> trader1Hats = new HashMap<String, Integer>();
+	public TreeMap<String, Integer> trader1Hats = new TreeMap<String, Integer>();
 	public ArrayList<ItemStack> trader1Items = new ArrayList<ItemStack>();
 	
-	public HashMap<String, Integer> trader2Hats = new HashMap<String, Integer>();
+	public TreeMap<String, Integer> trader2Hats = new TreeMap<String, Integer>();
 	public ArrayList<ItemStack> trader2Items = new ArrayList<ItemStack>();
 	
 	public boolean terminate;
@@ -128,17 +125,17 @@ public class TradeInfo
 		return trader1 == player || trader2 == player;
 	}
 
-	public void receiveTradeInfo(HashMap<String, Integer> hats, ArrayList<ItemStack> items, EntityPlayerMP player)
+	public void receiveTradeInfo(TreeMap<String, Integer> hats, ArrayList<ItemStack> items, EntityPlayerMP player)
 	{
         PacketHandler.sendToPlayer(Hats.channels, new PacketTradeOffers(hats, items), getOtherPlayer(player));
 
         EntityPlayer player1;
         EntityPlayer player2;
 
-        HashMap<String, Integer> oldHats;
+        TreeMap<String, Integer> oldHats;
         ArrayList<ItemStack> oldItems;
 
-        HashMap<String, Integer> newHats = new HashMap<String, Integer>(hats);
+        TreeMap<String, Integer> newHats = new TreeMap<String, Integer>(hats);
         ArrayList<ItemStack> newItems = new ArrayList<ItemStack>(items);
 
         if(player == trader1)
@@ -146,7 +143,7 @@ public class TradeInfo
             player1 = trader1;
             player2 = trader2;
 
-            oldHats = new HashMap<String, Integer>(trader1Hats);
+            oldHats = new TreeMap<String, Integer>(trader1Hats);
             oldItems = new ArrayList<ItemStack>(trader1Items);
 
             trader1Hats = hats;
@@ -157,7 +154,7 @@ public class TradeInfo
             player1 = trader2;
             player2 = trader1;
 
-            oldHats = new HashMap<String, Integer>(trader2Hats);
+            oldHats = new TreeMap<String, Integer>(trader2Hats);
             oldItems = new ArrayList<ItemStack>(trader2Items);
 
             trader2Hats = hats;
@@ -176,6 +173,7 @@ public class TradeInfo
                     if(e.getValue() <= 0)
                     {
                         ite.remove();
+                        break;
                     }
                 }
             }
@@ -205,6 +203,7 @@ public class TradeInfo
                     if(e.getValue() <= 0)
                     {
                         ite1.remove();
+                        break;
                     }
                 }
             }

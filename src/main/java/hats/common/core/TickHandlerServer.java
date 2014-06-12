@@ -52,7 +52,7 @@ public class TickHandlerServer
                     info.levels++;
                     info.timeLeft = Hats.config.getInt("startTime");
 
-                    HashMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(e.getKey());
+                    TreeMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(e.getKey());
 
                     ArrayList<String> newHats = HatHandler.getAllHatNamesAsList();
 
@@ -94,9 +94,9 @@ public class TickHandlerServer
                 ti.update();
                 if(ti.trade1 && ti.trade2)
                 {
-                    HashMap<String, Integer> trader1Hats = Hats.proxy.tickHandlerServer.getPlayerHatsList(ti.trader1.getCommandSenderName());
+                    TreeMap<String, Integer> trader1Hats = Hats.proxy.tickHandlerServer.getPlayerHatsList(ti.trader1.getCommandSenderName());
 
-                    HashMap<String, Integer> trader2Hats = Hats.proxy.tickHandlerServer.getPlayerHatsList(ti.trader2.getCommandSenderName());
+                    TreeMap<String, Integer> trader2Hats = Hats.proxy.tickHandlerServer.getPlayerHatsList(ti.trader2.getCommandSenderName());
 
                     transferHat(trader1Hats, trader2Hats, ti.trader1Hats);
                     transferHat(trader2Hats, trader1Hats, ti.trader2Hats);
@@ -170,7 +170,7 @@ public class TickHandlerServer
         }
 	}
 	
-	public void transferHat(HashMap<String, Integer> origin, HashMap<String, Integer> destination, HashMap<String, Integer> hatsList)
+	public void transferHat(TreeMap<String, Integer> origin, TreeMap<String, Integer> destination, TreeMap<String, Integer> hatsList)
 	{
         Iterator<Entry<String, Integer>> ite = origin.entrySet().iterator();
         while(ite.hasNext())
@@ -184,6 +184,7 @@ public class TickHandlerServer
                     if(e.getValue() <= 0)
                     {
                         ite.remove();
+                        break;
                     }
                 }
             }
@@ -199,6 +200,7 @@ public class TickHandlerServer
                 {
                     e1.setValue(e.getValue() + e1.getValue());
                     ite1.remove();
+                    break;
                 }
             }
         }
@@ -303,7 +305,7 @@ public class TickHandlerServer
 				playerDeath(oldKing);
 			}
 
-            HashMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(Hats.config.getSessionString("currentKing"));
+            TreeMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(Hats.config.getSessionString("currentKing"));
 
 			Hats.proxy.tickHandlerServer.playerHats.put(Hats.config.getSessionString("currentKing"), null);
 			
@@ -317,7 +319,7 @@ public class TickHandlerServer
                 if(player.getCommandSenderName().equalsIgnoreCase(Hats.config.getSessionString("currentKing")))
                 {
                     StringBuilder sb = new StringBuilder();
-                    HashMap<String, Integer> hats = Hats.proxy.tickHandlerServer.playerHats.get(newKing);
+                    TreeMap<String, Integer> hats = Hats.proxy.tickHandlerServer.playerHats.get(newKing);
                     if(hats != null)
                     {
                         for(Map.Entry<String, Integer> e : hats.entrySet())
@@ -354,19 +356,19 @@ public class TickHandlerServer
 		activeTrades.add((new TradeInfo(player, plyr)).initialize());
 	}
 
-    public HashMap<String, Integer> getPlayerHatsList(String player)
+    public TreeMap<String, Integer> getPlayerHatsList(String player)
     {
-        HashMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(player);
+        TreeMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.playerHats.get(player);
         if(playerHatsList == null)
         {
-            playerHatsList = new HashMap<String, Integer>();
+            playerHatsList = new TreeMap<String, Integer>();
             Hats.proxy.tickHandlerServer.playerHats.put(player, playerHatsList);
         }
         return playerHatsList;
     }
 
 	public WeakHashMap<EntityLivingBase, String> mobHats = new WeakHashMap<EntityLivingBase, String>();
-	public HashMap<String, HashMap<String, Integer>> playerHats = new HashMap<String, HashMap<String, Integer>>();
+	public HashMap<String, TreeMap<String, Integer>> playerHats = new HashMap<String, TreeMap<String, Integer>>();
 	public HashMap<String, TimeActiveInfo> playerActivity = new HashMap<String, TimeActiveInfo>();
 	
 	public HashMap<String, TradeRequest> playerTradeRequests = new HashMap<String, TradeRequest>();
