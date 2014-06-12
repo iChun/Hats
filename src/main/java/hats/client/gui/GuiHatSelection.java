@@ -26,11 +26,9 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
@@ -1833,7 +1831,7 @@ public class GuiHatSelection extends GuiScreen
         if(player != null && !player.capabilities.isCreativeMode && tempInfo != null && !tempInfo.hatName.isEmpty())
         {
             GL11.glDisable(GL11.GL_DEPTH_TEST);
-            drawString(fontRendererObj, HatHandler.getRarity(tempInfo.hatName).toString() + StatCollector.translateToLocalFormatted("hats.gui.hatsCollected", Hats.proxy.tickHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName)) == null ? 1 : Hats.proxy.tickHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName))), this.guiLeft + 10, this.guiTop + ySize - 22, 0xffffff);
+            drawString(fontRendererObj, HatHandler.getHatRarityColour(tempInfo.hatName).toString() + StatCollector.translateToLocalFormatted("hats.gui.hatsCollected", Hats.proxy.tickHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName)) == null ? 1 : Hats.proxy.tickHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName))), this.guiLeft + 10, this.guiTop + ySize - 22, 0xffffff);
             GL11.glEnable(GL11.GL_DEPTH_TEST);
         }
 

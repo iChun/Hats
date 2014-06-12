@@ -670,7 +670,7 @@ public class HatHandler
         return hatList;
     }
 
-    public static EnumChatFormatting getRarity(String hat)
+    public static EnumChatFormatting getHatRarityColour(String hat)
     {
         if(Hats.config.getSessionInt("hatGenerationSeed") == 0)
         {

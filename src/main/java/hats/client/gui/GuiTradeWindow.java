@@ -23,7 +23,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -1176,7 +1175,7 @@ public class GuiTradeWindow extends GuiScreen
                                 GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                                 GL11.glDisable(GL11.GL_DEPTH_TEST);
                                 drawSolidRect(k + 6 + (size * i) + size - 10, l + 29 + size - 10, 9, 9, 0, 0.4F);
-                                fontRendererObj.drawString(e.getValue() > 99 ? "99" : e.getValue().toString(), (int)(k + 6 + (size * i) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 29 + size - 9), 0xffffff, true);
+                                fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 6 + (size * i) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 29 + size - 9), 0xffffff, true);
                                 GL11.glEnable(GL11.GL_DEPTH_TEST);
                                 GL11.glDisable(GL11.GL_BLEND);
 
@@ -1256,7 +1255,7 @@ public class GuiTradeWindow extends GuiScreen
                         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                         GL11.glDisable(GL11.GL_DEPTH_TEST);
                         drawSolidRect(k + 125 + (size * (i % columnWidth)) + size - 10, l + 17 + (size * (int)(Math.floor(i / columnWidth))) + size - 10, 9, 9, 0, 0.4F);
-                        fontRendererObj.drawString(e.getValue() > 99 ? "99" : e.getValue().toString(), (int)(k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 17 + (size * (int)(Math.floor(i / columnWidth))) + size - 9), 0xffffff, true);
+                        fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 17 + (size * (int)(Math.floor(i / columnWidth))) + size - 9), 0xffffff, true);
                         GL11.glEnable(GL11.GL_DEPTH_TEST);
                         GL11.glDisable(GL11.GL_BLEND);
 
@@ -1340,7 +1339,7 @@ public class GuiTradeWindow extends GuiScreen
                         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                         GL11.glDisable(GL11.GL_DEPTH_TEST);
                         drawSolidRect(k + 125 + (size * (i % columnWidth)) + size - 10, l + 116 + (size * (int)(Math.floor(i / columnWidth))) + size - 10, 9, 9, 0, 0.4F);
-                        fontRendererObj.drawString(e.getValue() > 99 ? "99" : e.getValue().toString(), (int)(k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 116 + (size * (int)(Math.floor(i / columnWidth))) + size - 9), 0xffffff, true);
+                        fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 116 + (size * (int)(Math.floor(i / columnWidth))) + size - 9), 0xffffff, true);
                         GL11.glEnable(GL11.GL_DEPTH_TEST);
                         GL11.glDisable(GL11.GL_BLEND);
 
