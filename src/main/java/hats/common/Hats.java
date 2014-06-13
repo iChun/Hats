@@ -1,6 +1,5 @@
 package hats.common;
 
-import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -11,8 +10,7 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.relauncher.Side;
 import hats.client.core.ClientProxy;
-import hats.client.render.helper.HelperGeneric;
-import hats.common.converter.TechneConverter;
+import hats.common.techne.TC2Info;
 import hats.common.core.CommonProxy;
 import hats.common.core.EventHandler;
 import hats.common.core.HatHandler;
@@ -31,8 +29,6 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.*;
 
 @Mod(modid = "Hats", name = "Hats",
@@ -196,7 +192,7 @@ public class Hats
 //        System.out.println(jsonOutput);
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println(gson.toJson(new TechneConverter()));
+        System.out.println(gson.toJson(new TC2Info()));
     }
 
 	@Mod.EventHandler

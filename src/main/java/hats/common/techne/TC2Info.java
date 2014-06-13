@@ -1,15 +1,18 @@
-package hats.common.converter;
+package hats.common.techne;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
- * Class to convert Techne 1 to Techne 2 json compatible files.
+ * Deserialized version of Techne 2's JSON save files.
  */
-public class TechneConverter
+public class TC2Info
 {
     public Techne Techne = new Techne();
 
     private class Techne
     {
-        String Version = "2.2"; //TODO Add @
+        @SerializedName("@Version")
+        String Version = "2.2";
         String Author = "NotZeuX";
         String Name = "";
         String PreviewImage = "";
@@ -28,7 +31,8 @@ public class TechneConverter
                 String GlScale = "1,1,1";
                 String Name = "";
                 String TextureSize = "64,32";
-                String texture = "texture.png"; //TODO Add @
+                @SerializedName("@texture")
+                String texture = "texture.png";
                 String BaseClass = "ModelBase";
                 Group Geometry = new Group();
             }
@@ -38,15 +42,17 @@ public class TechneConverter
     public class Group
     {
         Circular[] Circular = new Circular[] {};
-        Shape[] Shape = new Shape[] { new Shape(), new Shape() };
+        Shape[] Shape = new Shape[] {};
         Linear[] Linear = new Linear[] {};
         Null[] Null = new Null[] {};
     }
 
     public class Circular
     {
-        String Type = "16932820-ef7c-4b4b-bf05-b72063b3d23c"; //TODO ADD @
-        String Name = "Circular Array"; //TODO ADD @
+        @SerializedName("@Type")
+        String Type = "16932820-ef7c-4b4b-bf05-b72063b3d23c";
+        @SerializedName("@Name")
+        String Name = "Circular Array";
         String Position = "0,0,0";
         String Rotation = "0,0,0";
         Group Children = new Group();
@@ -57,8 +63,10 @@ public class TechneConverter
     public class Shape
     {
         int Id = 1; //is a variable
-        String Type = "d9e621f7-957f-4b77-b1ae-20dcd0da7751"; //TODO ADD @
-        String Name = "new cube"; //TODO Add @
+        @SerializedName("@Type")
+        String Type = "d9e621f7-957f-4b77-b1ae-20dcd0da7751";
+        @SerializedName("@Name")
+        String Name = "new cube";
         String IsDecorative = "False";
         String IsFixed = "False";
         String IsMirrored = "False";
@@ -70,8 +78,10 @@ public class TechneConverter
 
     public class Linear
     {
-        String Type = "fc4f63c9-8296-4c97-abd8-414f20e49bd5"; //TODO ADD @
-        String Name = "Linear Array"; //TODO ADD @
+        @SerializedName("@Type")
+        String Type = "fc4f63c9-8296-4c97-abd8-414f20e49bd5";
+        @SerializedName("@Name")
+        String Name = "Linear Array";
         String Position = "0,0,0";
         String Rotation = "0,0,0";
         Group Children = new Group();
@@ -81,8 +91,10 @@ public class TechneConverter
 
     public class Null
     {
-        String Type = "3b3bb6e5-2f8b-4bbd-8dbb-478b67762fd0"; //TODO ADD @
-        String Name = "null element"; //TODO ADD @
+        @SerializedName("@Type")
+        String Type = "3b3bb6e5-2f8b-4bbd-8dbb-478b67762fd0";
+        @SerializedName("@Name")
+        String Name = "null element";
         String Position = "0,0,0";
         String Rotation = "0,0,0";
         Group Children = new Group();
