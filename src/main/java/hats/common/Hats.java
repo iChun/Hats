@@ -1,7 +1,5 @@
 package hats.common;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.Instance;
@@ -10,7 +8,6 @@ import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.FMLEmbeddedChannel;
 import cpw.mods.fml.relauncher.Side;
 import hats.client.core.ClientProxy;
-import hats.common.techne.TC2Info;
 import hats.common.core.CommonProxy;
 import hats.common.core.EventHandler;
 import hats.common.core.HatHandler;
@@ -29,17 +26,18 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
 import java.io.File;
-import java.util.*;
+import java.util.EnumMap;
+import java.util.Random;
 
 @Mod(modid = "Hats", name = "Hats",
-			version = Hats.version,
-            dependencies = "required-after:iChunUtil@[" + iChunUtil.versionMC +".0.0,)",
-            acceptableRemoteVersions = "[" + iChunUtil.versionMC +".0.0," + iChunUtil.versionMC + ".1.0)"
-                )
+        version = Hats.version,
+        dependencies = "required-after:iChunUtil@[" + iChunUtil.versionMC +".0.0,)",
+        acceptableRemoteVersions = "[" + iChunUtil.versionMC +".0.0," + iChunUtil.versionMC + ".1.0)"
+)
 public class Hats
-    implements IConfigUser
+        implements IConfigUser
 {
-	public static final String version = iChunUtil.versionMC +".0.0";
+    public static final String version = iChunUtil.versionMC +".0.0";
 
     private static Logger logger = LogManager.getLogger("Hats");
 
@@ -47,15 +45,15 @@ public class Hats
 
     public static Config config;
 
-	public static HatInfo favouriteHatInfo = new HatInfo();
-	
-	public static boolean hasMorphMod = false;
-	
-	@Instance("Hats")
-	public static Hats instance;
-	
-	@SidedProxy(clientSide = "hats.client.core.ClientProxy", serverSide = "hats.common.core.CommonProxy")
-	public static CommonProxy proxy;
+    public static HatInfo favouriteHatInfo = new HatInfo();
+
+    public static boolean hasMorphMod = false;
+
+    @Instance("Hats")
+    public static Hats instance;
+
+    @SidedProxy(clientSide = "hats.client.core.ClientProxy", serverSide = "hats.common.core.CommonProxy")
+    public static CommonProxy proxy;
 
     @Override
     public boolean onConfigChange(Config cfg, Property prop)
@@ -65,15 +63,15 @@ public class Hats
 
     //TODO check github for issues
     //TODO implement something like Hats+ support. Download JSON files with information for classes.
-	@Mod.EventHandler
-	public void preLoad(FMLPreInitializationEvent event)
-	{
-		HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/hats");
-		
-		if(!HatHandler.hatsFolder.exists())
-		{
-			HatHandler.hatsFolder.mkdirs();
-		}
+    @Mod.EventHandler
+    public void preLoad(FMLPreInitializationEvent event)
+    {
+        HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/hats");
+
+        if(!HatHandler.hatsFolder.exists())
+        {
+            HatHandler.hatsFolder.mkdirs();
+        }
 
         boolean isClient = proxy instanceof ClientProxy;
 
@@ -142,97 +140,94 @@ public class Hats
         //		handleConfig();
 
         ModVersionChecker.register_iChunMod(new ModVersionInfo("Hats", "1.7", version, false));
-	}
-	
-	@Mod.EventHandler
-	public void load(FMLInitializationEvent event)
-	{
-		proxy.initMod();
-		proxy.initTickHandlers();
-		
-		proxy.initRenderersAndTextures();
+    }
+
+    @Mod.EventHandler
+    public void load(FMLInitializationEvent event)
+    {
+        proxy.initMod();
+        proxy.initTickHandlers();
+
+        proxy.initRenderersAndTextures();
 
         EventHandler eventHandler = new EventHandler();
 
         FMLCommonHandler.instance().bus().register(eventHandler);
-		MinecraftForge.EVENT_BUS.register(eventHandler);
+        MinecraftForge.EVENT_BUS.register(eventHandler);
     }
 
-	@Mod.EventHandler
-	public void postInit(FMLPostInitializationEvent event)
-	{
-		if(FMLCommonHandler.instance().getEffectiveSide().isClient())
-		{
-	        try
-	        {
-	        	Class clz = Class.forName("morph.common.Morph");
-	        	hasMorphMod = true;
-	        }
-	        catch(Exception e)
-	        {
-	        }
-		}
+    @Mod.EventHandler
+    public void postInit(FMLPostInitializationEvent event)
+    {
+        if(FMLCommonHandler.instance().getEffectiveSide().isClient())
+        {
+            try
+            {
+                Class clz = Class.forName("morph.common.Morph");
+                hasMorphMod = true;
+            }
+            catch(Exception e)
+            {
+            }
+        }
 
         //GSON gen test
 
-//        Map<String, Map<String, Object>> className = new HashMap<String, Map<String, Object>>();
-//
-//        Map<String, Object> props = new HashMap<String, Object>();
-//
-//        props.put("rotatePointVert", 20.2F/16F);
-//        props.put("rotatePointHori", 8F/16F);
-//        props.put("offsetPointVert", 4F/16F);
-//        props.put("offsetPointHori", 2F/16F);
-//
-//        className.put("net.minecraft.entity.passive.EntityCow", props);
-//
-//        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-//        String jsonOutput = gson.toJson(className);
-//
-//        System.out.println(jsonOutput);
-
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println(gson.toJson(new TC2Info()));
+        //        Map<String, Map<String, Object>> className = new HashMap<String, Map<String, Object>>();
+        //
+        //        Map<String, Object> props = new HashMap<String, Object>();
+        //
+        //        props.put("rotatePointVert", 20.2F/16F);
+        //        props.put("rotatePointHori", 8F/16F);
+        //        props.put("offsetPointVert", 4F/16F);
+        //        props.put("offsetPointHori", 2F/16F);
+        //
+        //        className.put("net.minecraft.entity.passive.EntityCow", props);
+        //
+        //        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        //        String jsonOutput = gson.toJson(className);
+        //
+        //        System.out.println(jsonOutput);
     }
 
-	@Mod.EventHandler
-	public void serverStarting(FMLServerAboutToStartEvent event)
-	{
+    @Mod.EventHandler
+    public void serverStarting(FMLServerAboutToStartEvent event)
+    {
         Hats.config.resetSession();
         Hats.config.updateSession("serverHasMod", 1);
         Hats.config.updateSession("currentKing", "");
 
-//		SessionState.serverHasMod = true;
-//		SessionState.serverHatMode = playerHatsMode;
-//		SessionState.serverHat = lockedHat;
+        //		SessionState.serverHasMod = true;
+        //		SessionState.serverHatMode = playerHatsMode;
+        //		SessionState.serverHat = lockedHat;
 
-		proxy.initCommands(event.getServer());
-	}
-	
-	@Mod.EventHandler
-	public void serverStarted(FMLServerStartedEvent event)
-	{
-	}
-	
-	@Mod.EventHandler
-	public void serverStopped(FMLServerStoppedEvent event)
-	{
-		proxy.tickHandlerServer.mobHats.clear();
-		proxy.tickHandlerServer.playerHats.clear();
-		proxy.tickHandlerServer.playerActivity.clear();
-		proxy.tickHandlerServer.playerTradeRequests.clear();
-		proxy.tickHandlerServer.activeTrades.clear();
-		proxy.playerWornHats.clear();
-	}
+        proxy.initCommands(event.getServer());
+    }
+
+    @Mod.EventHandler
+    public void serverStarted(FMLServerStartedEvent event)
+    {
+    }
+
+    @Mod.EventHandler
+    public void serverStopped(FMLServerStoppedEvent event)
+    {
+        proxy.tickHandlerServer.mobHats.clear();
+        proxy.tickHandlerServer.playerHats.clear();
+        proxy.tickHandlerServer.playerActivity.clear();
+        proxy.tickHandlerServer.playerTradeRequests.clear();
+        proxy.tickHandlerServer.activeTrades.clear();
+        proxy.playerWornHats.clear();
+    }
 
     public static void console(String s, boolean warning)
     {
-    	StringBuilder sb = new StringBuilder();
-    	logger.log(warning ? Level.WARN : Level.INFO, sb.append("[").append(version).append("] ").append(s).toString());
+        StringBuilder sb = new StringBuilder();
+        logger.log(warning ? Level.WARN : Level.INFO, sb.append("[").append(version).append("] ").append(s).toString());
     }
 
     public static void console(String s)
     {
-    	console(s, false);
+        console(s, false);
     }
 }
