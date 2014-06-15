@@ -85,17 +85,6 @@ public class HatRendererHelper
 		        {
 		        	GL11.glColor4f((float)info.colourR / 255.0F, (float)info.colourG / 255.0F, (float)info.colourB / 255.0F, MathHelper.clamp_float(alpha, 0.0F, 1.0F));
 		        }
-		        
-		        BufferedImage image = ClientProxy.bufferedImages.get(info.hatName);
-		        
-		        if (image != null)
-		        {
-		            if (ClientProxy.bufferedImageID.get(image) == -1)
-		            {
-		            	ClientProxy.bufferedImageID.put(image, TextureUtil.uploadTextureImage(TextureUtil.glGenTextures(), image));
-		            }
-		            GL11.glBindTexture(GL11.GL_TEXTURE_2D, ClientProxy.bufferedImageID.get(image));
-		        }
             }
             else
             {
@@ -103,7 +92,7 @@ public class HatRendererHelper
             }
 
 	        GL11.glScalef(-1.0F, -1.0F, 1.0F);
-	        model.render(0.0625F);
+	        model.render(bindTexture, 0.0625F);
 
 	        GL11.glDisable(GL11.GL_BLEND);
     		

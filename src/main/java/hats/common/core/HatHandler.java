@@ -10,6 +10,7 @@ import hats.common.packet.PacketPing;
 import hats.common.packet.PacketRequestHat;
 import hats.common.packet.PacketString;
 import ichun.common.core.network.PacketHandler;
+import ichun.common.core.techne.TC2Info;
 import ichun.common.core.util.MD5Checksum;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,52 +29,9 @@ public class HatHandler
 
     public static boolean isHatReadable(File file)
     {
-        if(file.getName().endsWith(".tcn"))
+        if(file.getName().endsWith(".tc2"))
         {
-            boolean hasTexture = false;
-            boolean hasXml = false;
-            try
-            {
-                ZipFile zipFile = new ZipFile(file);
-                Enumeration entries = zipFile.entries();
-
-                while(entries.hasMoreElements())
-                {
-                    ZipEntry entry = (ZipEntry)entries.nextElement();
-                    if(!entry.isDirectory())
-                    {
-                        if(entry.getName().endsWith(".png"))
-                        {
-                            hasTexture = true;
-                        }
-                        else if(entry.getName().endsWith(".xml"))
-                        {
-                            hasXml = false;
-                        }
-                    }
-                }
-
-                zipFile.close();
-
-            }
-            catch(EOFException e1)
-            {
-                return false;
-            }
-            catch(IOException e1)
-            {
-                return false;
-            }
-            catch (Exception e1)
-            {
-                e1.printStackTrace();
-                return false;
-            }
-
-            if(hasTexture && hasXml)
-            {
-                return true;
-            }
+            return TC2Info.readTechneFile(file) != null;
         }
         return false;
     }
@@ -104,66 +62,24 @@ public class HatHandler
             return true;
         }
 
-        if(file.getName().endsWith(".tcn"))
+        if(file.getName().endsWith(".tc2"))
         {
-            boolean hasTexture = false;
-            boolean isSafe = true;
-            try
-            {
-                ZipFile zipFile = new ZipFile(file);
-                Enumeration entries = zipFile.entries();
+            TC2Info info = TC2Info.readTechneFile(file);
 
-                while(entries.hasMoreElements())
-                {
-                    ZipEntry entry = (ZipEntry)entries.nextElement();
-                    if(!entry.isDirectory())
-                    {
-                        if(entry.getName().endsWith(".png"))
-                        {
-                            hasTexture = true;
-                        }
-                        else if(!entry.getName().endsWith(".xml"))
-                        {
-                            isSafe = false;
-                        }
-                    }
-                }
-
-                zipFile.close();
-
-            }
-            catch(EOFException e1)
-            {
-                Hats.console("Failed to load: " + file.getName() + " is corrupted!", true);
-                return false;
-            }
-            catch(IOException e1)
-            {
-                Hats.console("Failed to load: " + file.getName() + " cannot be read!", true);
-                return false;
-            }
-            catch (Exception e1)
+            if(info == null)
             {
                 Hats.console("Failed to load: " + file.getName() + " threw a generic exception!", true);
-                e1.printStackTrace();
                 return false;
             }
 
-            if(Hats.config.getInt("safeLoad") == 1 && !isSafe)
+            if(Hats.config.getInt("safeLoad") == 1 && info.tampered)
             {
                 Hats.console("Rejecting " + file.getName() + "! It contains files which are not XML or PNG files!", true);
                 return false;
             }
 
-            if(hasTexture)
-            {
-                Hats.proxy.loadHatFile(file);
-                return true;
-            }
-            else
-            {
-                Hats.console("Failed to load: " + file.getName() + " has no texture!", true);
-            }
+            Hats.proxy.loadHatFile(file);
+            return true;
         }
         return false;
     }
@@ -178,7 +94,7 @@ public class HatHandler
             File[] files = dir.listFiles();
             for(File file : files)
             {
-                if(file.getName().endsWith(".tcn"))
+                if(file.getName().endsWith(".tc2"))
                 {
                     String hatName = file.getName().substring(0, file.getName().length() - 4);
                     hatsToLoad.add(hatName.toLowerCase());
@@ -218,7 +134,7 @@ public class HatHandler
         File[] files = dir.listFiles();
         for(File file : files)
         {
-            if(!file.isDirectory() && file.getName().equalsIgnoreCase(hatName + ".tcn"))
+            if(!file.isDirectory() && file.getName().equalsIgnoreCase(hatName + ".tc2"))
             {
                 if(disable)
                 {
@@ -227,7 +143,7 @@ public class HatHandler
                     {
                         disabledDir.mkdirs();
                     }
-                    File disabledName = new File(disabledDir, hatName + ".tcn");
+                    File disabledName = new File(disabledDir, hatName + ".tc2");
                     if(disabledName.exists())
                     {
                         disabledName.delete();
@@ -319,7 +235,7 @@ public class HatHandler
                 {
                     if(hatName.toLowerCase().equalsIgnoreCase(e.getValue()))
                     {
-                        File favFile = new File(hatsFolder, "/" + category + "/" + hatName + ".tcn");
+                        File favFile = new File(hatsFolder, "/" + category + "/" + hatName + ".tc2");
 
                         InputStream inStream = null;
                         OutputStream outStream = null;
@@ -375,8 +291,8 @@ public class HatHandler
                 String fav = favs.get(i);
                 if(fav.equalsIgnoreCase(hatName))
                 {
-                    File favFile = new File(hatsFolder, "/" + category +"/" + hatName + ".tcn");
-                    File hatFile = new File(hatsFolder, hatName + ".tcn");
+                    File favFile = new File(hatsFolder, "/" + category +"/" + hatName + ".tc2");
+                    File hatFile = new File(hatsFolder, hatName + ".tc2");
                     if(!hatFile.exists())
                     {
                         favFile.renameTo(hatFile);
@@ -440,7 +356,7 @@ public class HatHandler
 
             if(hasAllInfo)
             {
-                File file = new File(hatsFolder, hatName + ".tcn");
+                File file = new File(hatsFolder, hatName + ".tc2");
 
                 if(file.exists())
                 {

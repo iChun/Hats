@@ -10,6 +10,7 @@ import hats.common.core.CommonProxy;
 import hats.common.core.HatHandler;
 import hats.common.entity.EntityHat;
 import hats.common.thread.ThreadHatsReader;
+import ichun.common.core.techne.TC2Info;
 import net.minecraft.client.Minecraft;
 import org.w3c.dom.Document;
 
@@ -52,8 +53,6 @@ public class ClientProxy extends CommonProxy
     {
         super.clearAllHats();
         models.clear();
-        bufferedImages.clear();
-        bufferedImageID.clear();
     }
 
     @Override
@@ -61,7 +60,6 @@ public class ClientProxy extends CommonProxy
     {
         super.remap(duplicate, original);
         models.put(duplicate, models.get(original));
-        bufferedImages.put(duplicate, bufferedImages.get(original));
     }
 
     @Override
@@ -74,52 +72,17 @@ public class ClientProxy extends CommonProxy
     @Override
     public void loadHatFile(File file)
     {
-        super.loadHatFile(file);
-
-        String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
-
-        try
+        TC2Info info = TC2Info.readTechneFile(file);
+        if(info != null)
         {
-            ZipFile zipFile = new ZipFile(file);
-            Enumeration entries = zipFile.entries();
+            super.loadHatFile(file);
 
-            while(entries.hasMoreElements())
-            {
-                ZipEntry entry = (ZipEntry)entries.nextElement();
-                if(!entry.isDirectory())
-                {
-                    if(entry.getName().endsWith(".png"))
-                    {
-                        InputStream stream = zipFile.getInputStream(entry);
-                        BufferedImage image = ImageIO.read(stream);
+            String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
 
-                        bufferedImages.put(hatName, image);
-                        bufferedImageID.put(image, -1);
-
-                    }
-                    if(entry.getName().endsWith(".xml"))
-                    {
-                        InputStream stream = zipFile.getInputStream(entry);
-
-                        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-
-                        Document doc = builder.parse(stream);
-
-                        models.put(hatName, new ModelHat(doc));
-                    }
-                }
-            }
-
-            zipFile.close();
-        }
-        catch (Exception e1)
-        {
-            //an exception would have been thrown before this in the thread, so no output.
+            models.put(hatName, new ModelHat(info));
         }
     }
 
-    public static HashMap<String, BufferedImage> bufferedImages = new HashMap<String, BufferedImage>();
-    public static HashMap<BufferedImage, Integer> bufferedImageID = new HashMap<BufferedImage, Integer>();
     public static HashMap<String, ModelHat> models = new HashMap<String, ModelHat>();
 
 }

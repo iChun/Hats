@@ -2,6 +2,8 @@ package hats.client.model;
 
 import java.util.ArrayList;
 
+import ichun.common.core.techne.TC2Info;
+import ichun.common.core.techne.model.ModelTechne2;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -10,102 +12,16 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
-public class ModelHat extends ModelBase 
+public class ModelHat extends ModelTechne2
 {
+	public ModelHat(TC2Info info)
+    {
+        super(info);
 
-	public ArrayList<ModelRenderer> models;
-
-
-	public ModelHat(Document doc)
-	{
-		models = new ArrayList<ModelRenderer>();
-
-		String[] textureSizes = doc.getElementsByTagName("TextureSize").item(0).getChildNodes().item(0).getNodeValue().split(",");
-
-		try
-		{
-			textureWidth = Integer.parseInt(textureSizes[0]);
-			textureHeight = Integer.parseInt(textureSizes[1]);
-		}
-		catch(NumberFormatException e)
-		{
-			textureWidth = 64;
-			textureHeight = 32;
-		}
-
-		NodeList list = doc.getElementsByTagName("Shape");
-
-		for(int i = 0; i < list.getLength(); i++)
-		{
-			Node node = list.item(i);
-
-			for(int j = 0; j < node.getAttributes().getLength(); j++)
-			{
-				Node attribute = node.getAttributes().item(j);
-
-				if(attribute.getNodeName().equalsIgnoreCase("type") && (attribute.getNodeValue().equalsIgnoreCase("d9e621f7-957f-4b77-b1ae-20dcd0da7751") || attribute.getNodeValue().equalsIgnoreCase("de81aa14-bd60-4228-8d8d-5238bcd3caaa")))
-				{
-					try
-					{
-						boolean mirrored = false;
-						String[] offsets = new String[3];
-						String[] positions = new String[3];
-						String[] rotations = new String[3];
-						String[] size = new String[3];
-						String[] textureOffsets = new String[2];
-						for(int k = 0; k < node.getChildNodes().getLength(); k++)
-						{
-							Node child = node.getChildNodes().item(k);
-							if(child.getNodeName().equalsIgnoreCase("IsMirrored"))
-							{
-								mirrored = !child.getTextContent().trim().equalsIgnoreCase("False");
-							}
-							else if(child.getNodeName().equalsIgnoreCase("Offset"))
-							{
-								offsets = child.getTextContent().trim().split(",");
-							}
-							else if(child.getNodeName().equalsIgnoreCase("Position"))
-							{
-								positions = child.getTextContent().trim().split(",");
-							}
-							else if(child.getNodeName().equalsIgnoreCase("Rotation"))
-							{
-								rotations = child.getTextContent().trim().split(",");
-							}
-							else if(child.getNodeName().equalsIgnoreCase("Size"))
-							{
-								size = child.getTextContent().trim().split(",");
-							}
-							else if(child.getNodeName().equalsIgnoreCase("TextureOffset"))
-							{
-								textureOffsets = child.getTextContent().trim().split(",");
-							}
-						}
-						ModelRenderer cube = new ModelRenderer(this, Integer.parseInt(textureOffsets[0]), Integer.parseInt(textureOffsets[1]));
-						cube.mirror = mirrored;
-						cube.addBox(Float.parseFloat(offsets[0]), Float.parseFloat(offsets[1]), Float.parseFloat(offsets[2]), Integer.parseInt(size[0]), Integer.parseInt(size[1]), Integer.parseInt(size[2]));
-						cube.setRotationPoint(Float.parseFloat(positions[0]), Float.parseFloat(positions[1]) - 16F, Float.parseFloat(positions[2]));
-						
-						cube.rotateAngleX = (float)Math.toRadians(Float.parseFloat(rotations[0]));
-						cube.rotateAngleY = (float)Math.toRadians(Float.parseFloat(rotations[1]));
-						cube.rotateAngleZ = (float)Math.toRadians(Float.parseFloat(rotations[2]));
-
-						models.add(cube);
-					}
-					catch(NumberFormatException e)
-					{
-					}
-				}
-			}
-		}
-	}
-
-	public void render(float f5)
-	{
-		for(ModelRenderer cube : models)
-		{
-			cube.renderWithRotation(f5);
-		}
-	}
-
+        for(int i = 0; i < boxList.size(); i++)
+        {
+            ModelRenderer box = (ModelRenderer)boxList.get(i);
+            box.rotationPointY -= 16F;
+        }
+    }
 }

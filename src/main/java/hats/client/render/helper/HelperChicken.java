@@ -34,7 +34,7 @@ public class HelperChicken extends RenderOnEntityHelper {
 	@Override
 	public float getOffsetPointVert(EntityLivingBase ent)
 	{
-		return 6F/16F;
+		return 6.15F/16F;
 	}
 
 	@Override

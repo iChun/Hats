@@ -875,7 +875,7 @@ public class GuiHatSelection extends GuiScreen
 		    						for(File file: files)
 		    						{
 		    							File hat = new File(HatHandler.hatsFolder, file.getName());
-		    							if(!hat.isDirectory() && hat.getName().endsWith(".tcn"))
+		    							if(!hat.isDirectory() && hat.getName().endsWith(".tc2"))
 		    							{
 			    							if(!hat.exists())
 			    							{

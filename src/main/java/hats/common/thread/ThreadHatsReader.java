@@ -2,6 +2,7 @@ package hats.common.thread;
 
 import hats.common.Hats;
 import hats.common.core.HatHandler;
+import ichun.common.core.techne.TC2Info;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -147,16 +148,14 @@ public class ThreadHatsReader extends Thread
         }
 
         //Convert TCN (Techne 1) files to TC2 (Techne 2)
-        File[] files = hatsFolder.listFiles();
-        for(File file : files)
-        {
-            if(!file.isDirectory() && file.getName().endsWith(".tcn"))
-            {
+        int convertCount = convertFolderToTC2(hatsFolder);
 
-            }
+        if(convertCount != 0)
+        {
+            Hats.console("Converted " + convertCount + (convertCount == 1 ? " hat" : " hats") + " from Techne 1 format to Techne 2 format.");
         }
 
-        files = hatsFolder.listFiles();
+        File[] files = hatsFolder.listFiles();
         for(File file : files)
         {
             if(!file.isDirectory() && HatHandler.readHatFromFile(file))
@@ -190,6 +189,26 @@ public class ThreadHatsReader extends Thread
         }
 
         HatHandler.reloadingHats = false;
+    }
+
+    private int convertFolderToTC2(File folder)
+    {
+        int converted = 0;
+        File[] files = folder.listFiles();
+        for(File file : files)
+        {
+            if(file.isDirectory())
+            {
+                converted += convertFolderToTC2(file);
+            }
+            else if(file.getName().endsWith(".tcn"))
+            {
+                TC2Info.readTechneFile(file).saveAsFile(new File(file.getParentFile(), file.getName().substring(0, file.getName().length() - 1) + "2"), true);
+                file.delete();
+                converted++;
+            }
+        }
+        return converted;
     }
 
     public boolean downloadResource(URL par1URL, File par2File, long size) throws IOException
