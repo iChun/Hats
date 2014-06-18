@@ -11,6 +11,7 @@ public class HatInfoClient extends HatInfo
 	public int prevColourR;
 	public int prevColourG;
 	public int prevColourB;
+    public int prevAlpha;
 	
 	public HatInfoClient()
 	{
@@ -22,9 +23,9 @@ public class HatInfoClient extends HatInfo
 		super(string);
 	}
 	
-	public HatInfoClient(String string, int i, int j, int k) 
+	public HatInfoClient(String string, int i, int j, int k, int alpha)
 	{
-		super(string, i, j, k);
+		super(string, i, j, k, alpha);
 	}
 
 	public void inherit(HatInfoClient info)
@@ -32,7 +33,8 @@ public class HatInfoClient extends HatInfo
 		prevColourR = info.colourR;
 		prevColourG = info.colourG;
 		prevColourB = info.colourB;
-		if(info.hatName.equalsIgnoreCase(hatName) && !(prevColourR == colourR && prevColourG == colourG && prevColourB == colourB))
+        prevAlpha = info.alpha;
+		if(info.hatName.equalsIgnoreCase(hatName) && !(prevColourR == colourR && prevColourG == colourG && prevColourB == colourB && prevAlpha == alpha))
 		{
 			recolour = 20;
 		}

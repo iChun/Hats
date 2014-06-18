@@ -38,7 +38,7 @@ public class GuiHatSelection extends GuiScreen
 	private final int ID_DONE_SELECT = 2;
 	private final int ID_PAGE_RIGHT = 3;
 	private final int ID_CLOSE = 4;
-	// 5 6 7 are slider IDs
+	// 5 6 7 8 are slider IDs
 
 	private final int ID_NONE = 8;
 	private final int ID_HAT_COLOUR_SWAP = 9;
@@ -81,6 +81,7 @@ public class GuiHatSelection extends GuiScreen
 	public int colourR;
 	public int colourG;
 	public int colourB;
+    public int alpha;
 	
 	public int head;
 	public boolean base;
@@ -90,6 +91,7 @@ public class GuiHatSelection extends GuiScreen
 	private int prevColourR;
 	private int prevColourG;
 	private int prevColourB;
+    private int prevAlpha;
 	
 	private int prevHead;
 	private String prevHeadName;
@@ -132,6 +134,7 @@ public class GuiHatSelection extends GuiScreen
 		prevColourR = colourR = stand.colourR;
 		prevColourG = colourG = stand.colourG;
 		prevColourB = colourB = stand.colourB;
+        prevAlpha = alpha = stand.alpha;
 		prevHead = head = stand.head;
 		prevBase = base = stand.hasBase;
 		prevStandPost = standPost = stand.hasStand;
@@ -163,7 +166,7 @@ public class GuiHatSelection extends GuiScreen
 	        buttonList.add(new GuiButton(ID_PAGE_RIGHT, width / 2 + 62, height / 2 + 54, 20, 20, ">"));
 	        buttonList.add(new GuiButton(ID_DONE_SELECT, width / 2 + 16, height / 2 + 54, 44, 20, I18n.format("gui.done")));
 	        
-	        //4, 5, 6, 7 = taken.
+	        //4, 5, 6, 7, 8 = taken.
 	        
 	        addToolButton(ID_NONE, 0);
 	        addToolButton(ID_HAT_COLOUR_SWAP, 1);
@@ -229,12 +232,13 @@ public class GuiHatSelection extends GuiScreen
 			stand.colourR = prevColourR;
 			stand.colourG = prevColourG;
 			stand.colourB = prevColourB;
+            stand.alpha = prevAlpha;
 			
 			stand.head = prevHead;
 			stand.headName = prevHeadName;
 			stand.hasBase = prevBase;
 			stand.hasStand = prevStandPost;
-			
+
 			stand.getWorldObj().markBlockForUpdate(stand.xCoord, stand.yCoord, stand.zCoord);
 		}
         Keyboard.enableRepeatEvents(false);
@@ -484,10 +488,11 @@ public class GuiHatSelection extends GuiScreen
 	    		justClickedButton = true;
 	    		stand.hatName = btn.displayString.toLowerCase();
 	    		
-	    		colourR = colourG = colourB = 255;
+	    		colourR = colourG = colourB = alpha = 255;
 	    		stand.colourR = 255;
 	    		stand.colourG = 255;
 	    		stand.colourB = 255;
+                stand.alpha = 255;
 	    		
 	    		updateButtonList();
 	    	}
@@ -500,7 +505,7 @@ public class GuiHatSelection extends GuiScreen
     	
 		mc.displayGuiScreen(null);
 
-        PacketHandler.sendToServer(HatStand.channels, new PacketStandHatInfo(stand.xCoord, stand.yCoord, stand.zCoord, stand.hatName, colourR, colourG, colourB, head, base, standPost));
+        PacketHandler.sendToServer(HatStand.channels, new PacketStandHatInfo(stand.xCoord, stand.yCoord, stand.zCoord, stand.hatName, colourR, colourG, colourB, alpha, head, base, standPost));
     }
     
     public void exitWithoutUpdate()
@@ -526,7 +531,7 @@ public class GuiHatSelection extends GuiScreen
         {
             GuiButton btn = (GuiButton)this.buttonList.get(k1);
             
-            if(btn.id >= 5 && btn.id <= 7 || btn.id >= 11 && btn.id <= 13 || btn.id >= ID_HAT_START_ID)
+            if(btn.id >= 5 && btn.id <= 7 || btn.id == 15 || btn.id >= 11 && btn.id <= 13 || btn.id >= ID_HAT_START_ID)
             {
             	buttonList.remove(k1);
             }
@@ -602,9 +607,9 @@ public class GuiHatSelection extends GuiScreen
     	{
     		int button = 0;
     		
-    		for(int i = 0; i < 3; i++)
+    		for(int i = 0; i < 4; i++)
     		{
-                GuiButton btn = new GuiSlider(5 + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, i == 0 ? StatCollector.translateToLocal("item.fireworksCharge.red") + ": " : i == 1 ? StatCollector.translateToLocal("item.fireworksCharge.green") + ": " : StatCollector.translateToLocal("item.fireworksCharge.blue") + ": ", "", 0, 255, i == 0 ? colourR : i == 1 ? colourG : colourB, false, true, this);
+                GuiButton btn = new GuiSlider(i == 3 ? 15 : 5 + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, i == 0 ? StatCollector.translateToLocal("item.fireworksCharge.red") + ": " : i == 1 ? StatCollector.translateToLocal("item.fireworksCharge.green") + ": " : i == 2 ? StatCollector.translateToLocal("item.fireworksCharge.blue") + ": " : StatCollector.translateToLocal("hats.gui.alpha") + ": ", "", 0, 255, i == 0 ? colourR : i == 1 ? colourG : i == 2 ? colourB : alpha, false, true, this);
     			buttonList.add(btn);
     			
     			button++;
@@ -685,10 +690,11 @@ public class GuiHatSelection extends GuiScreen
 	        	
 	        	stand.hatName = hatName.toLowerCase();
 	        	
-	    		colourR = colourG = colourB = 255;
+	    		colourR = colourG = colourB = alpha = 255;
 	    		stand.colourR = 255;
 	    		stand.colourG = 255;
 	    		stand.colourB = 255;
+                stand.alpha = 255;
 	        	
 	    		pageNumber = randVal / 6;
 	    		
@@ -710,10 +716,11 @@ public class GuiHatSelection extends GuiScreen
 		{
 			if(isShiftKeyDown())
 			{
-	    		colourR = colourG = colourB = 255;
+	    		colourR = colourG = colourB = alpha = 255;
 	    		stand.colourR = 255;
 	    		stand.colourG = 255;
 	    		stand.colourB = 255;
+                stand.alpha = 255;
 
 	    		updateButtonList();
 			}
@@ -979,9 +986,9 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        HatInfoClient info = stand.info;
 	        
-	        if(tempInfo == null || info == null || !(tempInfo.hatName.equalsIgnoreCase(stand.hatName) && tempInfo.colourR == stand.colourR && tempInfo.colourG == stand.colourG && tempInfo.colourB == stand.colourB))
+	        if(tempInfo == null || info == null || !(tempInfo.hatName.equalsIgnoreCase(stand.hatName) && tempInfo.colourR == stand.colourR && tempInfo.colourG == stand.colourG && tempInfo.colourB == stand.colourB && tempInfo.alpha == stand.alpha))
 	        {
-	        	tempInfo = new HatInfoClient(stand.hatName, stand.colourR, stand.colourG, stand.colourB);
+	        	tempInfo = new HatInfoClient(stand.hatName, stand.colourR, stand.colourG, stand.colourB, stand.alpha);
 	        }
 	        
 	        stand.info = tempInfo;
@@ -1035,5 +1042,10 @@ public class GuiHatSelection extends GuiScreen
 			colourB = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
 			stand.colourB = colourB;
 		}
+        else if(slider.id == 15)
+        {
+            alpha = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
+            stand.alpha = alpha;
+        }
 	}
 }

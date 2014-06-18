@@ -19,13 +19,14 @@ public class PacketStandHatInfo extends AbstractPacket
     public int r;
     public int g;
     public int b;
+    public int a;
     public int headType;
     public boolean hasBase;
     public boolean hasStand;
 
     public PacketStandHatInfo(){}
 
-    public PacketStandHatInfo(int xCoord, int yCoord, int zCoord, String hatName, int colourR, int colourG, int colourB, int head, boolean base, boolean standPost)
+    public PacketStandHatInfo(int xCoord, int yCoord, int zCoord, String hatName, int colourR, int colourG, int colourB, int alpha, int head, boolean base, boolean standPost)
     {
         this.x = xCoord;
         this.y = yCoord;
@@ -34,6 +35,7 @@ public class PacketStandHatInfo extends AbstractPacket
         this.r = colourR;
         this.g = colourG;
         this.b = colourB;
+        this.a = alpha;
         this.headType = head;
         this.hasBase = base;
         this.hasStand = standPost;
@@ -49,6 +51,7 @@ public class PacketStandHatInfo extends AbstractPacket
         buffer.writeInt(r);
         buffer.writeInt(g);
         buffer.writeInt(b);
+        buffer.writeInt(a);
         buffer.writeInt(headType);
         buffer.writeBoolean(hasBase);
         buffer.writeBoolean(hasStand);
@@ -66,6 +69,7 @@ public class PacketStandHatInfo extends AbstractPacket
         r = buffer.readInt();
         g = buffer.readInt();
         b = buffer.readInt();
+        a = buffer.readInt();
 
         headType = buffer.readInt();
         hasBase = buffer.readBoolean();
@@ -85,6 +89,7 @@ public class PacketStandHatInfo extends AbstractPacket
             stand.colourR = r;
             stand.colourG = g;
             stand.colourB = b;
+            stand.alpha = a;
 
             stand.head = headType;
             stand.hasBase = hasBase;

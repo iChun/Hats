@@ -104,7 +104,7 @@ public class Hats
 
             String favHat = config.createStringProperty("favouriteHat", "hats.config.prop.favouriteHat.name", "hats.config.prop.favouriteHat.comment", true, false, "Top Hat");
             int clr = config.createColourProperty("favouriteHatColourizer", "hats.config.prop.favouriteHatColourizer.name", "hats.config.prop.favouriteHatColourizer.comment", true, false, 0xffffff);
-            favouriteHatInfo = new HatInfo(favHat.toLowerCase(), clr >> 16 & 255, clr >> 8 & 255, clr & 255);
+            favouriteHatInfo = new HatInfo(favHat.toLowerCase(), clr >> 16 & 255, clr >> 8 & 255, clr & 255, 255);
 
             config.createKeybindProperty("guiKeyBind", "hats.config.prop.guiKeyBind.name", "hats.config.prop.guiKeyBind.comment", Keyboard.KEY_H, false, false, false, false, 0, true);
             config.createStringProperty("personalizeEnabled", "hats.config.prop.personalizeEnabled.name", "hats.config.prop.personalizeEnabled.comment", true, false, "1 2 3 4 5 6 7 8 9");

@@ -59,6 +59,7 @@ hats.command.adminNotify.unlockHatForPlayer=%1$s unlocked %2$s for %3$s
 hats.command.serverIsNotOnHatHuntingMode=Server is not in Hat Hunting Mode!
 hats.serverOnCommandGiverMode=Server has hats set to Command Giver Mode. You can not give commands!
 hats.hatUnlocked=Hat Unlocked!
+hats.gui.alpha=Alpha
 hats.gui.search=Search
 hats.gui.allHats=All Hats
 hats.gui.addNew=Add New

@@ -284,13 +284,20 @@ public class EventHandler
         int r = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_colourR");
         int g = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_colourG");
         int b = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_colourB");
+        int a = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getInteger("Hats_alpha");
+
+        if(a == 0)
+        {
+            event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).setInteger("Hats_alpha", 255);
+            a = 255;
+        }
 
         if(!HatHandler.hasHat(hatName))
         {
             HatHandler.requestHat(hatName, event.player);
         }
 
-        Hats.proxy.playerWornHats.put(event.player.getCommandSenderName(), new HatInfo(hatName, r, g, b));
+        Hats.proxy.playerWornHats.put(event.player.getCommandSenderName(), new HatInfo(hatName, r, g, b, a));
 
         if(Hats.config.getSessionInt("playerHatsMode") == 6)
         {

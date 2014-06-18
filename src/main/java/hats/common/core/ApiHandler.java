@@ -21,20 +21,35 @@ public class ApiHandler
 			Hats.console((exists ? "Overriding" : "Registering") + " hat render helper for " + helper.helperForClass().getName());
 		}
 	}
-	
-	public static Object createHatInfo(String hatName, int r, int g, int b)
+
+    public static Object createHatInfo(String hatName, int r, int g, int b, int alpha)
+    {
+        return new HatInfoClient(hatName, r, g, b, alpha);
+    }
+
+    public static Object createHatInfo(String hatName, int r, int g, int b)
 	{
-		return new HatInfoClient(hatName, r, g, b);
+		return new HatInfoClient(hatName, r, g, b, 255);
 	}
+
+    public static Object getRandomHatInfoWithServerWeightage(int r, int g, int b, int alpha)
+    {
+        return new HatInfoClient(HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), true).hatName, r, g, b, alpha);
+    }
 
     public static Object getRandomHatInfoWithServerWeightage(int r, int g, int b)
     {
-        return new HatInfoClient(HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), true).hatName, r, g, b);
+        return new HatInfoClient(HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), true).hatName, r, g, b, 255);
+    }
+
+    public static Object getRandomHatInfo(int r, int g, int b, int alpha)
+    {
+        return new HatInfoClient(HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), false).hatName, r, g, b, alpha);
     }
 
     public static Object getRandomHatInfo(int r, int g, int b)
 	{
-        return new HatInfoClient(HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), false).hatName, r, g, b);
+        return new HatInfoClient(HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), false).hatName, r, g, b, 255);
 	}
 	
 	public static void renderHat(Object info, float alpha, float hatScale, float mobRenderScaleX, float mobRenderScaleY, float mobRenderScaleZ, float renderYawOffset, float rotationYaw, float rotationPitch, float rotationRoll, float rotatePointVert, float rotatePointHori, float rotatePointSide, float offsetVert, float offsetHori, float offsetSide, boolean forceRender, boolean bindTexture, float renderTick)

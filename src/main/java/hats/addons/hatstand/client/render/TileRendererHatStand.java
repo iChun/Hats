@@ -45,6 +45,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 	
 	public void renderHatStand(TileEntityHatStand stand, double d, double d1, double d2, float f)
 	{
+        GL11.glAlphaFunc(GL11.GL_GREATER, 16F/255F);
 		GL11.glPushMatrix();
 		
 		GL11.glTranslated(d + 0.5D, d1 + 0.4D, d2 + 0.5D);
@@ -148,6 +149,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 		HatRendererHelper.renderHat(stand.info, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.50000000000F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, true, true, f);
 		
         GL11.glPopMatrix();
+        GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 	}
 	
 	@Override

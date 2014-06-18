@@ -18,15 +18,17 @@ public class PacketPlayerHatSelection extends AbstractPacket
     public int r;
     public int g;
     public int b;
+    public int a;
 
     public PacketPlayerHatSelection(){}
 
-    public PacketPlayerHatSelection(String name, int R, int G, int B)
+    public PacketPlayerHatSelection(String name, int R, int G, int B, int A)
     {
         this.hatName = name;
         this.r = R;
         this.g = G;
         this.b = B;
+        this.a = A;
     }
 
     @Override
@@ -37,6 +39,7 @@ public class PacketPlayerHatSelection extends AbstractPacket
         buffer.writeInt(r);
         buffer.writeInt(g);
         buffer.writeInt(b);
+        buffer.writeInt(a);
     }
 
     @Override
@@ -47,12 +50,13 @@ public class PacketPlayerHatSelection extends AbstractPacket
         r = buffer.readInt();
         g = buffer.readInt();
         b = buffer.readInt();
+        a = buffer.readInt();
     }
 
     @Override
     public void execute(Side side, EntityPlayer player)
     {
-        Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo(hatName, r, g, b));
+        Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo(hatName, r, g, b, a));
 
         if(HatHandler.hasHat(hatName))
         {
@@ -61,6 +65,7 @@ public class PacketPlayerHatSelection extends AbstractPacket
             persistentTag.setInteger("Hats_colourR", r);
             persistentTag.setInteger("Hats_colourG", g);
             persistentTag.setInteger("Hats_colourB", b);
+            persistentTag.setInteger("Hats_alpha", a);
             player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
 
             Hats.proxy.sendPlayerListOfWornHats(player, false);

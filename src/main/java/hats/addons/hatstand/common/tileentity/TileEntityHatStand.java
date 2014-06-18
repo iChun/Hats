@@ -25,6 +25,7 @@ public class TileEntityHatStand extends TileEntity
 	public int colourR;
 	public int colourG;
 	public int colourB;
+    public int alpha;
 	
 	public static final String[] headNames = new String[] { "None", "Skeleton", "W. Skele", "Zombie", "Player", "Steve", "Creeper", "Wither", "Wither (I)", "Pigman", "Blaze", "Invisible" };
 	
@@ -42,6 +43,7 @@ public class TileEntityHatStand extends TileEntity
 		colourR = 255;
 		colourG = 255;
 		colourB = 255;
+        alpha = 255;
 		hatName = "".toLowerCase();
 		
 		info = null;
@@ -80,6 +82,7 @@ public class TileEntityHatStand extends TileEntity
     	tag.setInteger("colourR", colourR);
     	tag.setInteger("colourG", colourG);
     	tag.setInteger("colourB", colourB);
+        tag.setInteger("alpha", alpha);
     }
     
     @Override
@@ -98,8 +101,14 @@ public class TileEntityHatStand extends TileEntity
 		colourR = tag.getInteger("colourR");
 		colourG = tag.getInteger("colourG");
 		colourB = tag.getInteger("colourB");
-		
-		info = new HatInfoClient(hatName, colourR, colourG, colourB);
+        alpha = tag.getInteger("alpha");
+
+        if(alpha == 0)
+        {
+            alpha = 255;
+        }
+
+		info = new HatInfoClient(hatName, colourR, colourG, colourB, alpha);
     }
 
     //TODO do not use getAABBPool!

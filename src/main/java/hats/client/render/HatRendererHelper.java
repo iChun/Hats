@@ -28,6 +28,8 @@ public class HatRendererHelper
                 return;
             }
 
+            GL11.glAlphaFunc(GL11.GL_GREATER, 16F/255F);
+
             GL11.glPushMatrix();
 
             GL11.glEnable(GL11.GL_BLEND);
@@ -65,16 +67,18 @@ public class HatRendererHelper
                     float diffR = info.colourR - info.prevColourR;
                     float diffG = info.colourG - info.prevColourG;
                     float diffB = info.colourB - info.prevColourB;
+                    float diffA = info.alpha - info.prevAlpha;
 
                     diffR *= (float)(info.recolour - renderTick) / 20F;
                     diffG *= (float)(info.recolour - renderTick) / 20F;
                     diffB *= (float)(info.recolour - renderTick) / 20F;
+                    diffA *= (float)(info.recolour - renderTick) / 20F;
 
-                    GL11.glColor4f((float)(info.colourR - diffR) / 255.0F, (float)(info.colourG - diffG) / 255.0F, (float)(info.colourB - diffB) / 255.0F, MathHelper.clamp_float(alpha, 0.0F, 1.0F));
+                    GL11.glColor4f((float)(info.colourR - diffR) / 255.0F, (float)(info.colourG - diffG) / 255.0F, (float)(info.colourB - diffB) / 255.0F, MathHelper.clamp_float(alpha * ((float)(info.alpha - diffA) / 255.0F), 0.0F, 1.0F));
                 }
                 else
                 {
-                    GL11.glColor4f((float)info.colourR / 255.0F, (float)info.colourG / 255.0F, (float)info.colourB / 255.0F, MathHelper.clamp_float(alpha, 0.0F, 1.0F));
+                    GL11.glColor4f((float)info.colourR / 255.0F, (float)info.colourG / 255.0F, (float)info.colourB / 255.0F, MathHelper.clamp_float(alpha * ((float)info.alpha / 255.0F), 0.0F, 1.0F));
                 }
             }
             else
@@ -88,6 +92,8 @@ public class HatRendererHelper
             GL11.glDisable(GL11.GL_BLEND);
 
             GL11.glPopMatrix();
+
+            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 
             Hats.proxy.tickHandlerClient.currentHatRenders++;
         }

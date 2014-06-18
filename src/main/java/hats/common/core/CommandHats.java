@@ -106,7 +106,7 @@ public class CommandHats extends CommandBase {
 				else if("set".startsWith(command.toLowerCase()))
 				{
 					icommandsender.addChatMessage(new ChatComponentTranslation("\u00A77" + StatCollector.translateToLocalFormatted("hats.command.setPlayerHat", hatName, player.getCommandSenderName())));
-					Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo(hatName.toLowerCase(), 255, 255, 255));
+					Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo(hatName.toLowerCase(), 255, 255, 255, 255));
 					Hats.proxy.sendPlayerListOfWornHats(player, false, false);
 				}
 				else if("unlock".startsWith(command.toLowerCase()))

@@ -27,10 +27,12 @@ public class EntityHat extends Entity
 	public int prevR;
 	public int prevG;
 	public int prevB;
+    public int prevAlpha;
 	
 	private int colourR;
 	private int colourG;
 	private int colourB;
+    private int alpha;
 	
 	public long lastUpdate;
 	
@@ -46,10 +48,12 @@ public class EntityHat extends Entity
 		prevR = 0;
 		prevG = 0;
 		prevB = 0;
+        prevAlpha = 0;
 		
 		colourR = 0;
 		colourG = 0;
 		colourB = 0;
+        alpha = 0;
 		lastUpdate = par1World.getWorldTime();
 		ignoreFrustumCheck = true;
 		renderDistanceWeight = 10D;
@@ -69,10 +73,12 @@ public class EntityHat extends Entity
 		prevR = 0;
 		prevG = 0;
 		prevB = 0;
+        prevAlpha = 0;
 
 		colourR = hatInfo.colourR;
 		colourG = hatInfo.colourG;
 		colourB = hatInfo.colourB;
+        alpha = hatInfo.alpha;
 		lastUpdate = par1World.getWorldTime();
 		ignoreFrustumCheck = true;
 		renderDistanceWeight = 10D;
@@ -134,19 +140,20 @@ public class EntityHat extends Entity
 	public void validateHatInfo()
 	{
 		boolean regen = true;
-		if(info != null && info.hatName.equalsIgnoreCase(hatName) && info.colourR == getR() && info.colourG == getG() && info.colourB == getB() && info.prevColourR == prevR && info.prevColourG == prevG && info.prevColourB == prevB)
+		if(info != null && info.hatName.equalsIgnoreCase(hatName) && info.colourR == getR() && info.colourG == getG() && info.colourB == getB() && info.alpha == getA() && info.prevColourR == prevR && info.prevColourG == prevG && info.prevColourB == prevB && info.prevAlpha == prevAlpha)
 		{
 			regen = false;
 		}
 		if(regen)
 		{
-			info = new HatInfoClient(hatName, getR(), getG(), getB());
+			info = new HatInfoClient(hatName, getR(), getG(), getB(), getA());
 		}
 		info.recolour = reColour;
 		info.doNotRender = !render;
 		info.prevColourR = prevR;
 		info.prevColourG = prevG;
 		info.prevColourB = prevB;
+        info.prevAlpha = prevAlpha;
 	}
 	
 	public void setR(int i)
@@ -166,6 +173,12 @@ public class EntityHat extends Entity
 		prevB = colourB;
 		colourB = i;
 	}
+
+    public void setA(int i)
+    {
+        prevAlpha = alpha;
+        alpha = i;
+    }
 	
 	public int getR()
 	{
@@ -181,6 +194,11 @@ public class EntityHat extends Entity
 	{
 		return colourB;
 	}
+
+    public int getA()
+    {
+        return alpha;
+    }
 	
 	@Override
 	public void setDead()

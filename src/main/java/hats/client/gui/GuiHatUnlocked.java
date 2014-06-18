@@ -63,7 +63,7 @@ public class GuiHatUnlocked extends Gui
             hatNameText = hatList.get(0);
             unlockedTime = Minecraft.getSystemTime();
             hatList.remove(0);
-            info = new HatInfoClient(hatNameText.toLowerCase(), 255, 255, 255);
+            info = new HatInfoClient(hatNameText.toLowerCase(), 255, 255, 255, 255);
         }
     }
 

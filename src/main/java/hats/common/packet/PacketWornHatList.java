@@ -37,6 +37,7 @@ public class PacketWornHatList extends AbstractPacket
             buffer.writeInt(hat.colourR);
             buffer.writeInt(hat.colourG);
             buffer.writeInt(hat.colourB);
+            buffer.writeInt(hat.alpha);
         }
         ByteBufUtils.writeUTF8String(buffer, "#endPacket");
     }
@@ -51,8 +52,9 @@ public class PacketWornHatList extends AbstractPacket
             int r = buffer.readInt();
             int g = buffer.readInt();
             int b = buffer.readInt();
+            int a = buffer.readInt();
 
-            Hats.proxy.tickHandlerClient.playerWornHats.put(name, new HatInfo(hatName, r, g, b));
+            Hats.proxy.tickHandlerClient.playerWornHats.put(name, new HatInfo(hatName, r, g, b, a));
 
             EntityHat hat = Hats.proxy.tickHandlerClient.hats.get(name);
             if(hat != null)
@@ -65,6 +67,7 @@ public class PacketWornHatList extends AbstractPacket
                 hat.setR(r);
                 hat.setG(g);
                 hat.setB(b);
+                hat.setA(a);
             }
 
             name = ByteBufUtils.readUTF8String(buffer);

@@ -25,7 +25,16 @@ public final class Api
 	 * @param b - Blue value, 0 - 255
 	 * @return Hat info object
 	 */
-	public static Object createHatInfo(String hatName, int r, int g, int b)
+    public static Object createHatInfo(String hatName, int r, int g, int b, int alpha)
+    {
+        try {
+            return (Object)Class.forName("hats.common.core.ApiHandler").getDeclaredMethod("createHatInfo", String.class, int.class, int.class, int.class, int.class).invoke(null, hatName, r, g, b, alpha);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Object createHatInfo(String hatName, int r, int g, int b)
 	{
 		try {
 			return (Object)Class.forName("hats.common.core.ApiHandler").getDeclaredMethod("createHatInfo", String.class, int.class, int.class, int.class).invoke(null, hatName, r, g, b);
@@ -34,10 +43,28 @@ public final class Api
 		}
 	}
 
+    public static Object getRandomHatInfoWithServerWeightage(int r, int g, int b, int alpha)
+    {
+        try {
+            return (Object)Class.forName("hats.common.core.ApiHandler").getDeclaredMethod("getRandomHatInfoWithServerWeightage", int.class, int.class, int.class, int.class).invoke(null, r, g, b, alpha);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public static Object getRandomHatInfoWithServerWeightage(int r, int g, int b)
     {
         try {
             return (Object)Class.forName("hats.common.core.ApiHandler").getDeclaredMethod("getRandomHatInfoWithServerWeightage", int.class, int.class, int.class).invoke(null, r, g, b);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static Object getRandomHatInfo(int r, int g, int b, int alpha)
+    {
+        try {
+            return (Object)Class.forName("hats.common.core.ApiHandler").getDeclaredMethod("getRandomHatInfo", int.class, int.class, int.class, int.class).invoke(null, r, g, b, alpha);
         } catch (Exception e) {
             return null;
         }

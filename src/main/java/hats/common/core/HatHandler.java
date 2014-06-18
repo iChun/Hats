@@ -410,7 +410,7 @@ public class HatHandler
                             }
 
                             HatInfo info = Hats.proxy.playerWornHats.get(player.getCommandSenderName());
-                            Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo(HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase(), info.colourR, info.colourG, info.colourB));
+                            Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo(HatHandler.checksums.get(md5).getName().substring(0, HatHandler.checksums.get(md5).getName().length() - 4).toLowerCase(), info.colourR, info.colourG, info.colourB, info.alpha));
                         }
 
                         Hats.proxy.sendPlayerListOfWornHats(player, false);
@@ -636,7 +636,7 @@ public class HatHandler
     {
         if(list.size() == 1)
         {
-            return new HatInfo(list.get(0), 255, 255, 255);
+            return new HatInfo(list.get(0), 255, 255, 255, 255);
         }
         else if(list.size() == 0)
         {
@@ -658,7 +658,7 @@ public class HatHandler
                 float rarity = getHatRarity(hatName);
                 if(rand.nextFloat() < rarity * randAmp)
                 {
-                    hat = new HatInfo(hatName, 255, 255, 255);
+                    hat = new HatInfo(hatName, 255, 255, 255, 255);
                 }
 
                 tries++;
@@ -673,7 +673,7 @@ public class HatHandler
         }
         else
         {
-            return new HatInfo(list.get(rand.nextInt(list.size())), 255, 255, 255);
+            return new HatInfo(list.get(rand.nextInt(list.size())), 255, 255, 255, 255);
         }
     }
 
