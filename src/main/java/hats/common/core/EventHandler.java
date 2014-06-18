@@ -75,13 +75,12 @@ public class EventHandler
         for(int k = 0; k < event.entity.worldObj.loadedTileEntityList.size(); k++)
         {
             TileEntity te = (TileEntity)event.entity.worldObj.loadedTileEntityList.get(k);
-            if(!(te instanceof TileEntityMobSpawner))
+            if(!HatHandler.isMobSpawner(te.getClass(), te.getClass()))
             {
                 continue;
             }
 
-            TileEntityMobSpawner spawner = (TileEntityMobSpawner)te;
-            MobSpawnerBaseLogic logic = spawner.func_145881_a();
+            MobSpawnerBaseLogic logic = HatHandler.getMobSpawnerLogic(te.getClass(), te);
             if(logic.isActivated())
             {
                 Entity entity = EntityList.createEntityByName(logic.getEntityNameToSpawn(), logic.getSpawnerWorld());

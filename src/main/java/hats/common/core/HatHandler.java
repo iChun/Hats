@@ -16,9 +16,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.MobSpawnerBaseLogic;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.io.*;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.zip.ZipEntry;
@@ -853,6 +856,65 @@ public class HatHandler
         return null;
     }
 
+    public static boolean isMobSpawner(Class clz, Class callingClz)
+    {
+        if(!TileEntity.class.isAssignableFrom(clz))
+        {
+            return false;
+        }
+        Boolean bool = mobSpawners.get(clz);
+        if(bool == null)
+        {
+            try
+            {
+                Field[] fields = clz.getDeclaredFields();
+                for(Field field : fields)
+                {
+                    field.setAccessible(true);
+                    if(MobSpawnerBaseLogic.class.isAssignableFrom(field.getType()))
+                    {
+                        bool = true;
+                        mobSpawnerLogic.put(callingClz, field);
+                        mobSpawners.put(callingClz, bool);
+                        break;
+                    }
+                }
+                if(bool == null)
+                {
+                    bool = clz.getSuperclass() == TileEntity.class ? false : isMobSpawner(clz.getSuperclass(), callingClz);
+                    mobSpawners.put(callingClz, bool);
+                }
+            }
+            catch(Exception e)
+            {
+                bool = false;
+                mobSpawners.put(callingClz, bool);
+            }
+        }
+        return bool;
+    }
+
+    public static MobSpawnerBaseLogic getMobSpawnerLogic(Class<? extends TileEntity> clz, TileEntity instance)
+    {
+        try
+        {
+            Field field = mobSpawnerLogic.get(clz);
+            if(field != null)
+            {
+                field.setAccessible(true);
+                Object obj = field.get(instance);
+                if(obj instanceof MobSpawnerBaseLogic)
+                {
+                    return (MobSpawnerBaseLogic)obj;
+                }
+            }
+        }
+        catch(Exception e)
+        {
+        }
+        return null;
+    }
+
     public static boolean reloadingHats;
 
     public static File hatsFolder;
@@ -870,4 +932,7 @@ public class HatHandler
     public static Random rand = new Random();
 
     public static Random hatGen = new Random();
+
+    private static HashMap<Class<? extends TileEntity>, Boolean> mobSpawners = new HashMap<Class<? extends TileEntity>, Boolean>();
+    private static HashMap<Class<? extends TileEntity>, Field> mobSpawnerLogic = new HashMap<Class<? extends TileEntity>, Field>();
 }
