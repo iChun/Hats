@@ -1,9 +1,12 @@
 hats.firstJoin.hatHunting=[Hats] Dieser Server ist im "Hutjagd"-Modus! Töte ein Monster mit einem Hut, um ihn freizuschalten!
 hats.firstJoin.kingOfTheHat.hasKing=[Hats] Dieser Server ist im "König des Hutes"-Modus! Töte den König, um seinen Hut tragen zu dürfen!
+hats.firstJoin.timeActive=[Hats] Dieser Server ist im "Zaitaktiv"-Modus! Verbringe Zeit auf diesem Server, um Hüte freizuschalten!
 hats.kingOfTheHat.update.playerJoin=[Hats] Freut euch! %s ist jetzt der neue König!
 hats.kingOfTheHat.update.playerDied=[Hats] %1$s ist gestorben! %2$s ist jetzt der König!
 hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s ist gefallen! %2$s ist jetzt der König!
 hats.kingOfTheHat.update.playerLeft=[Hats] %1$s hat das Spiel verlassen! %2$s ist jetzt der König!
+hats.kingOfTheHat.notKing=[Hats] Du bist nicht der König, %s ist es! Du kannst keinen Hut tragen!
+hats.lockedMode=[Hats] Dieser Server ist im Sperrmodus! Du darfst deinen Hut nicht wechseln!
 hats.trade.tradeWith=Handel mit %s
 hats.trade.yourHats=Deine Hüte:
 hats.trade.yourInventory=Dein Inventar:
@@ -14,7 +17,32 @@ hats.trade.tradeNotReady=Nicht bereit zum Handel.
 hats.trade.tradeReady=Bereit zum Handel.
 hats.trade.makeTrade=Handeln
 hats.trade.waitingForReady=Warte auf beide Spieler...
+hats.trade.bothReady=Beide Spieler sind bereit zum Handel.
 hats.trade.cancelTrade=Handel abbrechen
+hats.trade.waitingForYou=Wartet auf deine Bestätigung
+hats.trade.waitingForThem=Warte auf Bestätigung des anderen Spielers
+hats.trade.you=Du
+hats.trade.added=hast hinzugefügt:
+hats.trade.removed=hast entfernt:
+hats.trade.ready=Du bist bereit
+hats.trade.readyThem=%s ist bereit
+hats.trade.notReady=Du bist nicht bereit
+hats.trade.notReadyThem=%s ist nicht bereit
+hats.trade.selectTrader=Wähle den Spieler, mit dem du handeln möchtest
+hats.trade.newTradeRequest=Neue Handelsanfrage
+hats.trade.tradeRequestDesc=Drücke %s für Details
+hats.trade=Handle mit einem nahen Spieler
+hats.trade.acceptRequestGeneral=Handel akzeptieren
+hats.trade.acceptRequestSpecific=Akzeptiere Handel von %1$s (%2$s)
+hats.trade.cannotFindTrader=[Hats] Du kannst nicht handeln! %s ist nicht sichtbar!
+hats.trade.cannotAcceptTrade=[Hats] Du kannst den Handel nicht akzeptieren! Anfrage ist jetzt ungültig!
+hats.trade.terminatePrefix=Handel abgebrochen.
+hats.trade.terminate1=%s starb.
+hats.trade.terminate2=Du und %s wart zu weit voneinander entfernt!
+hats.trade.terminate3=Irgendetwas blockiert die Sicht!
+hats.trade.terminate4=%s hat den Handel abgebrochen.
+hats.trade.terminate5=%s ist in einer anderen Dimension.
+hats.trade.success=[Hats] Handel erfolgreich.
 hats.command="Hats"-Befehle
 hats.command.help=Gib /hats für eine Liste der verfügbaren Kommandos ein.
 hats.command.help.send=/hats send <Spieler> <Name des Hutes>  Sende einem Spieler einen Hut.
@@ -29,7 +57,7 @@ hats.command.playerIsInCreative=%s ist im Kreativmodus!
 hats.command.unlockHatForPlayer=Schalte %1$s für %2$s frei
 hats.command.adminNotify.unlockHatForPlayer=%1$s hat %2$s für %3$s freigeschaltet
 hats.command.serverIsNotOnHatHuntingMode=Der Server ist nicht im "Hutjagd"-Modus!
-hats.serverOnCommandGiverMode=Der Server hat Hats als Befehlsgeber festgelegt. Du kannst keine Befehle ausführen!
+hats.serverOnCommandGiverMode=Der Server hat Hats auf "Befehlsgeber"-Modus gesetzt. Du kannst keine Befehle ausführen!
 hats.hatUnlocked=Hut Freigeschaltet!
 hats.gui.search=Suche
 hats.gui.allHats=Alle Hüte:
@@ -83,16 +111,16 @@ hats.gui.resetButtonsOnSide=Knöpfe an der Seite der Benutzeroberfläche neu lad
 hats.gui.helpInfo1.desc1=Umschalt-Klick auf den Hut
 hats.gui.helpInfo1.desc2=für mehr Optionen!
 hats.gui.helpInfo1.desc3=Du kannst leider nicht den Hut,
-hats.gui.helpInfo1.desc4=den du gerade trägst
+hats.gui.helpInfo1.desc4=den du gerade trägst,
 hats.gui.helpInfo1.desc5=Umschalt-Klicken.
 
-hats.gui.helpInfo2.desc1=Wenn du auf einem Server ohne diesem Mod bist
-hats.gui.helpInfo2.desc2=können andere Spieler mit dem Mod
+hats.gui.helpInfo2.desc1=Wenn du auf einem Server ohne diese Mod bist,
+hats.gui.helpInfo2.desc2=können andere Spieler mit der Mod
 hats.gui.helpInfo2.desc3=deinen Hut nicht sehen.
 
 hats.gui.helpInfo3.desc1=Wusstest du, dass du einfach mehr Hüte kriegen kannst?
 hats.gui.helpInfo3.desc2=Techne Online hat eine Menge
-hats.gui.helpInfo3.desc3=Hüte von der Community,
+hats.gui.helpInfo3.desc3=Hüte aus der Community,
 hats.gui.helpInfo3.desc4=die du runterladen und installieren kannst.
 
 hats.gui.helpInfo4.desc1=Du kannst auch deinen eigenen Hut erstellen!
@@ -102,48 +130,48 @@ hats.gui.helpInfo4.desc4=vom Holzblock platziert werden. Die Größe ist
 hats.gui.helpInfo4.desc5=8 x 8 x 8. Mach deinen Hut darauf!
 
 hats.gui.helpInfo5.desc1=Wusstest du, dass du deine eigene Kategorie erstellen kannst?
-hats.gui.helpInfo5.desc2=Klick den Kategorie Knopf (Oder C auf deiner Tastatur)
+hats.gui.helpInfo5.desc2=Klick den Kategorie-Knopf (Oder C auf deiner Tastatur)
 hats.gui.helpInfo5.desc3=und klicke auf "Hinzufügen".
 
-hats.gui.helpInfo6.desc1=Wusstest du, dass wenn ein Freund den Hut, den du trägst
+hats.gui.helpInfo6.desc1=Wusstest du, dass, wenn ein Freund den Hut, den du trägst,
 hats.gui.helpInfo6.desc2=nicht hat, dieser Hut an den Server gesendet wird
 hats.gui.helpInfo6.desc3=und von da aus weiter an deinen Freund
-hats.gui.helpInfo6.desc4=(Nur auf Servern mit dem Mod)?
+hats.gui.helpInfo6.desc4=(Nur auf Servern mit der Mod)?
 
 hats.gui.helpInfo7.desc1=Ein Umschalt-Klick auf den "Zufälliger Hut"-Knopf
 hats.gui.helpInfo7.desc2=gibt dir einen zufälligen Hut in einer zufällige Farbe!
 
-hats.gui.helpInfo8.desc1=Ein Umschalt-Klick auf den Zufällige Farbe Knopf
-hats.gui.helpInfo8.desc2=gibt dir alle Farben.
+hats.gui.helpInfo8.desc1=Ein Umschalt-Klick auf den "Zufällige Farbe"-Knopf
+hats.gui.helpInfo8.desc2=setzt alle Farben zurück.
 
-hats.gui.helpInfo9.desc1=Du kannst TAB oder T drücken um schnell
+hats.gui.helpInfo9.desc1=Du kannst TAB oder T drücken, um schnell
 hats.gui.helpInfo9.desc2=das Suchfeld anzuwählen.
 
-hats.gui.helpInfo10.desc1=Wusstest du, dass der Hats Mod ursprünglich
-hats.gui.helpInfo10.desc2=für einen 96 Stunden Mod Marathon
+hats.gui.helpInfo10.desc1=Wusstest du, dass diese Mod ursprünglich
+hats.gui.helpInfo10.desc2=für einen 96-Stunden-Mod-Marathon
 hats.gui.helpInfo10.desc3=namens ModJam gemacht wurde?
-hats.gui.helpInfo10.desc4=Er gewann den zweiten Platz und wird
+hats.gui.helpInfo10.desc4=Sie gewann den zweiten Platz und wird
 hats.gui.helpInfo10.desc5=momentan von iChun geupdatet.
 
-hats.gui.helpInfo11.desc1=Die Spielerhüte in diesem Mod sind nach
+hats.gui.helpInfo11.desc1=Die Spielerhüte in dieser Mod sind nach
 hats.gui.helpInfo11.desc2=Leuten benannt, die einen
 hats.gui.helpInfo11.desc3=großen Beitrag an Entwicklung, Testen,
-hats.gui.helpInfo11.desc4=Modelle und Support
-hats.gui.helpInfo11.desc5=an diesem Mod geleistet haben.
+hats.gui.helpInfo11.desc4=Modellen und Support
+hats.gui.helpInfo11.desc5=an dieser Mod geleistet haben.
 hats.gui.helpInfo11.desc6=Direwolf20 ist aber nur ein Bonus :P
 
 hats.gui.helpInfo12.desc1=Ein Umschalt-Klick auf die Hutliste
 hats.gui.helpInfo12.desc2=bringt dich aus einer Kategorie und
 hats.gui.helpInfo12.desc3=zurück zu allen Hüten.
 
-hats.gui.helpInfo13.desc1=Du kannst die Suchleiste Rechtsklicken
+hats.gui.helpInfo13.desc1=Du kannst die Suchleiste rechtsklicken,
 hats.gui.helpInfo13.desc2=um den Text darin zu entfernen.
 
 hats.gui.helpInfo14.desc1=Du kannst einen Hut deaktivieren, anstatt
 hats.gui.helpInfo14.desc2=ihn zu löschen. Halte einfach die Umschalt-Taste beim Löschen.
 
 hats.gui.helpInfo15.desc1=Wenn du Umschalt-F drückst, wird
-hats.gui.helpInfo15.desc2=der Hut, den du momentan an hast,
+hats.gui.helpInfo15.desc2=der Hut, den du momentan trägst,
 hats.gui.helpInfo15.desc3=als Favorit hinzugefügt oder entfernt.
 
 hats.gui.helpInfo16.desc1=Die Taste für Personalisieren ist
@@ -161,7 +189,9 @@ hats.gui.helpInfo18.desc3=Spende erstellt wurde!
 
 hats.gui.helpInfo19.desc1=Wusstest du, dass du einstellen kannst,
 hats.gui.helpInfo19.desc2=ob Monster Hüte haben? Diese Option kannst du
-hats.gui.helpInfo19.desc3=unter dem "Personalisierung" Tab finden.
+hats.gui.helpInfo19.desc3=unter dem Tab "Personalisierung" finden.
 
 hats.addon.hatstands.gui.base=Basis
 hats.addon.hatstands.gui.stand=Hutständer
+
+tile.hats.addon.hatstands.block.name=Hutständer
