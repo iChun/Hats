@@ -283,7 +283,7 @@ public class TickHandlerClient
 		hat.posX = hat.parent.posX;
 		hat.posY = hat.parent.posY;
 		hat.posZ = hat.parent.posZ;
-		
+
 		RenderOnEntityHelper helper = HatHandler.getRenderHelper(parent.getClass());
 
 		if(helper != null)

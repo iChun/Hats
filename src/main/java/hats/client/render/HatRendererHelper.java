@@ -56,6 +56,7 @@ public class HatRendererHelper
 
             GL11.glTranslatef(0.0F, -1F, 0.0F);
             GL11.glScalef(hatScale, hatScale, hatScale);
+            GL11.glTranslatef(0.0F, 1F, 0.0F);
 
             if(bindTexture)
             {
