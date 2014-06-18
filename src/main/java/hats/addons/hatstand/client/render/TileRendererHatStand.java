@@ -140,7 +140,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 		{
 			GL11.glTranslated(0.0D, 0.45D, 0.0D);
 		}
-		
+
 		GL11.glScalef(-1.0F, -1.0F, 1.0F);
 		
 		GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);

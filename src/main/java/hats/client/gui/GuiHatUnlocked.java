@@ -1,34 +1,25 @@
 package hats.client.gui;
 
-import hats.client.core.ClientProxy;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import hats.client.core.HatInfoClient;
-import hats.client.model.ModelHat;
 import hats.client.render.HatRendererHelper;
-import hats.common.Hats;
-import hats.common.core.HatHandler;
-
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.texture.TextureUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public class GuiHatUnlocked extends Gui
 {
-	private static final ResourceLocation texAchi = new ResourceLocation("textures/gui/achievement/achievement_background.png");
-	
+    private static final ResourceLocation texAchi = new ResourceLocation("textures/gui/achievement/achievement_background.png");
+
     /** Holds the instance of the game (Minecraft) */
     private Minecraft theGame;
 
@@ -41,9 +32,9 @@ public class GuiHatUnlocked extends Gui
     private String hatNameText;
 
     private long unlockedTime;
-    
-    public ArrayList<String> hatList = new ArrayList<String>(); 
-    
+
+    public ArrayList<String> hatList = new ArrayList<String>();
+
     private HatInfoClient info = null;
 
     public GuiHatUnlocked(Minecraft par1Minecraft)
@@ -55,25 +46,25 @@ public class GuiHatUnlocked extends Gui
 
     public void queueHatUnlocked(String hat)
     {
-    	if(!hatNameText.equalsIgnoreCase(hat))
-    	{
-	    	if(!hatList.contains(hat))
-	    	{
-	    		hatList.add(hat);
-	    	}
-	    	showNextHatUnlocked();
-    	}
+        if(!hatNameText.equalsIgnoreCase(hat))
+        {
+            if(!hatList.contains(hat))
+            {
+                hatList.add(hat);
+            }
+            showNextHatUnlocked();
+        }
     }
-    
+
     public void showNextHatUnlocked()
     {
-    	if(hatList.size() > 0 && unlockedTime == 0L)
-    	{
-	        hatNameText = hatList.get(0);
-	        unlockedTime = Minecraft.getSystemTime();
-	        hatList.remove(0);
-	        info = new HatInfoClient(hatNameText.toLowerCase(), 255, 255, 255);
-    	}
+        if(hatList.size() > 0 && unlockedTime == 0L)
+        {
+            hatNameText = hatList.get(0);
+            unlockedTime = Minecraft.getSystemTime();
+            hatList.remove(0);
+            info = new HatInfoClient(hatNameText.toLowerCase(), 255, 255, 255);
+        }
     }
 
     /**
@@ -105,7 +96,7 @@ public class GuiHatUnlocked extends Gui
      */
     public void updateGui()
     {
-    	GL11.glPushMatrix();
+        GL11.glPushMatrix();
         if (this.unlockedTime != 0L)
         {
             double d0 = (double)(Minecraft.getSystemTime() - this.unlockedTime) / 3000.0D;
@@ -153,25 +144,25 @@ public class GuiHatUnlocked extends Gui
                 GL11.glEnable(GL12.GL_RESCALE_NORMAL);
                 GL11.glEnable(GL11.GL_COLOR_MATERIAL);
                 GL11.glEnable(GL11.GL_LIGHTING);
-                
+
                 GL11.glTranslatef((float)i + 16, (float)j + 16, 50F);
-                
+
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
                 GL11.glDepthMask(true);
-                
-	            GL11.glScalef(1.0F, -1.0F, 1.0F);
-	            GL11.glScalef(20.0F, 20.0F, 20.0F);
-	            GL11.glRotatef(10.0F, 1.0F, 0.0F, 0.0F);
-	            GL11.glRotatef(-22.5F, 0.0F, 1.0F, 0.0F);
+
+                GL11.glScalef(1.0F, -1.0F, 1.0F);
+                GL11.glScalef(20.0F, 20.0F, 20.0F);
+                GL11.glRotatef(10.0F, 1.0F, 0.0F, 0.0F);
+                GL11.glRotatef(-22.5F, 0.0F, 1.0F, 0.0F);
                 GL11.glRotatef((float)(Minecraft.getSystemTime() - this.unlockedTime) / 6F, 0.0F, 1.0F, 0.0F);
-                
+
                 HatRendererHelper.renderHat(info, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.000000000F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, true, true, 1.0F);
-                
+
                 GL11.glDepthMask(true);
                 GL11.glEnable(GL11.GL_DEPTH_TEST);
 
                 GL11.glDisable(GL11.GL_LIGHTING);
-	            
+
             }
         }
         GL11.glPopMatrix();
