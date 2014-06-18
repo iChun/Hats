@@ -256,6 +256,7 @@ public class EventHandler
                 playerHats = "";
                 NBTTagCompound persistentTag = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
                 persistentTag.setString("Hats_unlocked", playerHats);
+                persistentTag.setString("Hats_wornHat", "");
                 event.player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
             }
         }
