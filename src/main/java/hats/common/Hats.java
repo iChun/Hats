@@ -31,7 +31,7 @@ import java.util.Random;
 
 @Mod(modid = "Hats", name = "Hats",
         version = Hats.version,
-        dependencies = "required-after:iChunUtil@[" + iChunUtil.versionMC +".0.0,)",
+        dependencies = "required-after:iChunUtil@[" + iChunUtil.versionMC +".2.0,)",
         acceptableRemoteVersions = "[" + iChunUtil.versionMC +".0.0," + iChunUtil.versionMC + ".1.0)"
 )
 public class Hats
@@ -61,8 +61,6 @@ public class Hats
         return true;
     }
 
-    //TODO check github for issues
-    //TODO implement something like Hats+ support. Download JSON files with information for classes.
     @Mod.EventHandler
     public void preLoad(FMLPreInitializationEvent event)
     {

@@ -347,7 +347,7 @@ public class GuiHatSelection extends GuiScreen
     			}
     		}
             settingKey = false;
-            Hats.config.config.save();
+            Hats.config.save();
     	}
     	else if(!personalizing)
     	{
@@ -495,7 +495,7 @@ public class GuiHatSelection extends GuiScreen
     			}
     		}
     		settingKey = false;
-    		Hats.config.config.save();
+    		Hats.config.save();
     	}
     	else
     	{
@@ -1090,7 +1090,7 @@ public class GuiHatSelection extends GuiScreen
     		
     		Hats.favouriteHatInfo = new HatInfo(hat.hatName, colourR, colourG, colourB, alpha);
     		
-    		Hats.config.config.save();
+    		Hats.config.save();
 		}
 		else if(!(player == null || player.isDead || !player.isEntityAlive()))
 		{
@@ -1625,7 +1625,7 @@ public class GuiHatSelection extends GuiScreen
     		Hats.config.get("personalizeEnabled").set(sb.toString().trim());
             Hats.config.get("randomMobHat").set(randoMob);
     		
-    		Hats.config.config.save();
+    		Hats.config.save();
     		
     		updateButtonList();
     	}

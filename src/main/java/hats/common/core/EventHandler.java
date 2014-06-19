@@ -60,7 +60,6 @@ public class EventHandler
         }
     }
 
-    //TODO look for tile entities which do spawning.
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onEntitySpawn(EntityJoinWorldEvent event)
     {

@@ -29,7 +29,7 @@ public abstract class RenderOnEntityHelper
 	public boolean canWearHat(EntityLivingBase living)
 	{
 		return true;
-	}//TODO can unlock hat
+	}
 
     /**
      * Used to check if the mob will unlock a hat if killed.
