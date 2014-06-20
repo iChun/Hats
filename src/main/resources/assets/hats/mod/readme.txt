@@ -50,7 +50,7 @@ How to create a hat mod mob mapping. (Disclaimer, my tutorial will be a bit conf
 2. Does the mob have a body and a head with different rotations? If yes, renderYawOffset is the same, you can put ignore putting a value in. EG: pigs, cows. If not, renderYawOffset (and prev) need to be set. Put in a value, like for ghasts: "renderYawOffset": 0.0. EG: ghasts (just a floating head). 
 3. Can the mob's head rotate? If yes, omit rotationYawHead (and prev) so it'll follow defaults. If no, put a value in like for the above (step 2). Do the same for pitch.
 4. At this point you might want to load up the game (save the JSON file to your /hats/ folder and enable the local mod mob mapping config, and set randomHat to 100). Look ingame and a hat should have spawned at the foot of the mob.
-5. Once you confirmed this, you want to get the hat to the right positions. Try to figure out the rotation point of the head (reminder, on normal models/mobs, 1 pixel is 1/16th of a block) and set the appropriate values.
+5. Once you confirmed this, you want to get the hat to the right positions. Try to figure out the rotation point of the head (reminder, on normal models/mobs, 1 pixel is 1/16th of a block) and set the appropriate values. Use the Hats GUI and hit Reload Hats to make it read the JSON file again.
 6. Once you think you got those right, you want to set the offset values as well.
 7. ???
 8. Profit!

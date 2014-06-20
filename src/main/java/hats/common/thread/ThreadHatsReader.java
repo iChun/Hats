@@ -203,9 +203,13 @@ public class ThreadHatsReader extends Thread
             }
             else if(file.getName().endsWith(".tcn"))
             {
-                TC2Info.readTechneFile(file).saveAsFile(new File(file.getParentFile(), file.getName().substring(0, file.getName().length() - 1) + "2"), true);
-                file.delete();
-                converted++;
+                TC2Info info = TC2Info.readTechneFile(file);
+                if(info != null)
+                {
+                    info.saveAsFile(new File(file.getParentFile(), file.getName().substring(0, file.getName().length() - 1) + "2"), true);
+                    file.delete();
+                    converted++;
+                }
             }
         }
         return converted;

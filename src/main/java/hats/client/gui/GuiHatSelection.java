@@ -1291,7 +1291,8 @@ public class GuiHatSelection extends GuiScreen
 				continue;
 			}
 			btn1.enabled = false;
-		}    		
+		}
+        Hats.proxy.getHatMobModSupport();
 		Hats.proxy.getHatsAndOpenGui();
     }
     
