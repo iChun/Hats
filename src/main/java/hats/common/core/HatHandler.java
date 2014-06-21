@@ -71,7 +71,7 @@ public class HatHandler
 
             if(info == null)
             {
-                Hats.console("Failed to load: " + file.getName() + " threw a generic exception!", true);
+                Hats.console("Failed to load: " + file.getName() + " threw a generic exception! If no exception was printed, it's most likely the model has an invalid texture", true);
                 return false;
             }
 
