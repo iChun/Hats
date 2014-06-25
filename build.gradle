@@ -41,6 +41,10 @@ processResources
         exclude 'mcmod.info'
     }
 }
+jar 
+{ 
+	exclude "hats/addons/**"
+}
 
 // add source jar
 task sourceJar(type: Jar) {
@@ -54,5 +58,20 @@ task deobfJar(type: Jar) {
     classifier = 'deobf'
 }
 
+task addonJar(type: Jar, dependsOn: "jar") {
+	from sourceSets.main.output
+	baseName = "HatStand"
+	version = "3.0.0"
+	include "hats/addons/**"
+}
+
+reobf 
+{ 
+	reobf(project.tasks.addonJar)
+	{ 
+		spec -> spec.classpath = configurations.compile 
+	} 
+}
+
 // make sure all of these happen when we run build
-build.dependsOn sourceJar, deobfJar
+build.dependsOn sourceJar, deobfJar, addonJar
