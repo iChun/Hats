@@ -35,7 +35,7 @@ rotationPitch
 Floats(Numbers, including decimal placing), in number of blocks. 1 block is normally 16 pixels (depends on the mob)
 
 What is:
-"Can Unlock Hat"           : When this mob is killed, will it unlock a hat?
+"Can Unlock Hat"           : When this mob is killed, will it unlock a hat? Defaults to true. Please set to false if the mob can be spawned in survival.
 "Render Yaw Offset"        : The sideways rotation of the "body" of the mob. Separate rotation from the head. If not set, will follow defaults of renderYawOffset.
 "Rotation Yaw Head"        : The sideways rotation of the "head" of the mob. If not set, will follow defaults of rotationYawHead.
 "Rotation Pitch"           : The up and down rotation of the "head". If not set, will follow defaults of rotationPitch.
