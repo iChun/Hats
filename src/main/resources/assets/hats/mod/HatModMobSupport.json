@@ -1,6 +1,7 @@
 {
   "_comment": "Go here to read on how to use this JSON file: https://raw.github.com/iChun/Hats/master/src/main/resources/assets/hats/mod/readme.txt",
   "thaumcraft.common.entities.golems.EntityGolemBase" : {
+    "canUnlockHat" : false,
     "offsetPointVert" : 0.27,
     "offsetPointHori" : 0.1,
     "rotatePointVert" : 0.7577,
