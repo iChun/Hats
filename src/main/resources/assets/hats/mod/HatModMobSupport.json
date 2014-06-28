@@ -7,7 +7,9 @@
     "hatScale" : 0.4
   },
   "thaumcraft.common.entities.monster.EntityPech" : {
-      "offsetPointVert" : 1.3,
-      "offsetPointHori" : 0.3
+      "offsetPointVert" : 0.33,
+      "offsetPointHori" : 0.12,
+      "rotatePointVert" : 1,
+      "hatScale" : 0.8
   }
 }
