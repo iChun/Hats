@@ -1,5 +1,7 @@
 This text file is to explain how HatModMobSupport.json works.
 
+IMPORTANT: When submitting a PR to the main git repository, please include screenshots (a link to an imgur album is also fine) of the mobs you are adding, looking straight ahead, looking upwards, and looking downwards.
+
 The JSON file is structured in a way where { <className> { <property> : <propertyType>...etc } }
 
 Examples of classNames:
