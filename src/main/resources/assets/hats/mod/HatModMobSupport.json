@@ -1,5 +1,5 @@
 {
-  "_comment": "Go here to read on how to use this JSON file: https://raw.github.com/iChun/Hats/master/src/main/resources/assets/hats/mod/readme.txt"
+  "_comment": "Go here to read on how to use this JSON file: https://raw.github.com/iChun/Hats/master/src/main/resources/assets/hats/mod/readme.txt",
   "thaumcraft.common.entities.golems.EntityGolemBase" : {
     "offsetPointVert" : 0.27,
     "offsetPointHori" : 0.1,
