@@ -37,7 +37,7 @@ import java.util.Random;
 public class Hats
         implements IConfigUser
 {
-    public static final String version = iChunUtil.versionMC +".0.0";
+    public static final String version = iChunUtil.versionMC +".0.1";
 
     private static Logger logger = LogManager.getLogger("Hats");
 
