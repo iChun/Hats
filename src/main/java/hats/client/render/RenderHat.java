@@ -179,7 +179,7 @@ public class RenderHat extends Render
 	    			float renderYaw = EntityHelperBase.interpolateRotation(helper.getPrevRenderYaw(hat.renderingParent), helper.getRenderYaw(hat.renderingParent), renderTick);
 	    			float rotationYaw = EntityHelperBase.interpolateRotation(helper.getPrevRotationYaw(hat.renderingParent), helper.getRotationYaw(hat.renderingParent), renderTick);
 	    			float rotationPitch = EntityHelperBase.interpolateRotation(helper.getPrevRotationPitch(hat.renderingParent), helper.getRotationPitch(hat.renderingParent), renderTick);
-	    			float rotationRoll = helper.getRotationRoll(hat.renderingParent);
+	    			float rotationRoll = EntityHelperBase.interpolateRotation(helper.getPrevRotationRoll(hat.renderingParent), helper.getRotationRoll(hat.renderingParent), renderTick);
 	    			float posVert = helper.getRotatePointVert(hat.renderingParent);
 	    			float posHori = helper.getRotatePointHori(hat.renderingParent);
 	    			float posSide = helper.getRotatePointSide(hat.renderingParent);

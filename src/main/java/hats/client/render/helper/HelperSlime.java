@@ -46,6 +46,6 @@ public class HelperSlime extends RenderOnEntityHelper {
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)
 	{
-		return 8F/16F;
+		return 8.125F/16F;
 	}	
 }

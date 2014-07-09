@@ -102,7 +102,7 @@ public class HatHandler
                     String hatName = file.getName().substring(0, file.getName().length() - 4);
                     hatsToLoad.add(hatName.toLowerCase());
                     categoryHats.add(hatName);
-                    for(Map.Entry<File, String> e : HatHandler.hatNames.entrySet())
+                    for(Map.Entry<File, String> e : HatHandler.getActualHatNamesMap().entrySet())
                     {
                         String hatEntryName = e.getValue();
                         for(int i = hatsToLoad.size() - 1; i >= 0; i--)
@@ -234,7 +234,7 @@ public class HatHandler
             }
             if(!contained)
             {
-                for(Map.Entry<File, String> e : hatNames.entrySet())
+                for(Map.Entry<File, String> e : getHatNames().entrySet())
                 {
                     if(hatName.toLowerCase().equalsIgnoreCase(e.getValue()))
                     {
@@ -462,7 +462,7 @@ public class HatHandler
 
         File file = null;
 
-        for(Entry<File, String> e : hatNames.entrySet())
+        for(Entry<File, String> e : getHatNames().entrySet())
         {
             if(e.getValue().equalsIgnoreCase(hatName))
             {
@@ -537,7 +537,7 @@ public class HatHandler
         {
             return true;
         }
-        for(Entry<File, String> e : hatNames.entrySet())
+        for(Entry<File, String> e : getHatNames().entrySet())
         {
             if(e.getValue().equalsIgnoreCase(name))
             {
@@ -549,7 +549,7 @@ public class HatHandler
 
     public static String getHatStartingWith(String name)
     {
-        for(Entry<File, String> e : hatNames.entrySet())
+        for(Entry<File, String> e : getHatNames().entrySet())
         {
             if(e.getValue().toLowerCase().startsWith(name.toLowerCase()))
             {
@@ -563,7 +563,7 @@ public class HatHandler
     {
         ArrayList<String> hatList = new ArrayList<String>();
 
-        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
         while(ite.hasNext())
         {
             Entry<File, String> e = ite.next();
@@ -576,7 +576,7 @@ public class HatHandler
     {
         ArrayList<String> hatList = new ArrayList<String>();
 
-        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
         while(ite.hasNext())
         {
             Entry<File, String> e = ite.next();
@@ -684,7 +684,7 @@ public class HatHandler
     {
         ArrayList<String> hatNameList = new ArrayList<String>();
 
-        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
         while(ite.hasNext())
         {
             Entry<File, String> e = ite.next();
@@ -714,7 +714,7 @@ public class HatHandler
             return;
         }
         TreeMap<String, Integer> hats = Hats.proxy.tickHandlerServer.getPlayerHatsList(player.getCommandSenderName());
-        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
         while(ite.hasNext())
         {
             Entry<File, String> e = ite.next();
@@ -757,7 +757,7 @@ public class HatHandler
 
     public static String getNameForHat(String hat)
     {
-        for(Entry<File, String> e2 : hatNames.entrySet())
+        for(Entry<File, String> e2 : getHatNames().entrySet())
         {
             if(e2.getValue().equalsIgnoreCase(hat))
             {
@@ -785,7 +785,7 @@ public class HatHandler
     public static void repopulateHatsList()
     {
         Hats.proxy.tickHandlerClient.availableHats.clear();
-        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
         while(ite.hasNext())
         {
             Entry<File, String> e = ite.next();
@@ -815,7 +815,7 @@ public class HatHandler
             }
         }
 
-        Iterator<Entry<File, String>> ite = HatHandler.hatNames.entrySet().iterator();
+        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
         while(ite.hasNext())
         {
             Entry<File, String> e = ite.next();
@@ -915,6 +915,20 @@ public class HatHandler
         return null;
     }
 
+    public static HashMap<File, String> getHatNames()
+    {
+        if(reloadingHats)
+        {
+            return new HashMap<File, String>();
+        }
+        return hatNames;
+    }
+
+    public static HashMap<File, String> getActualHatNamesMap()
+    {
+        return hatNames;
+    }
+
     public static boolean reloadingHats;
 
     public static File hatsFolder;
@@ -923,7 +937,7 @@ public class HatHandler
 
     public static HashMap<String, ArrayList<byte[]>> hatParts = new HashMap<String, ArrayList<byte[]>>();
 
-    public static HashMap<File, String> hatNames = new HashMap<File, String>();
+    private static HashMap<File, String> hatNames = new HashMap<File, String>();
 
     public static HashMap<String, File> checksums = new HashMap<String, File>();
 

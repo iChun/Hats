@@ -83,7 +83,12 @@ public abstract class RenderOnEntityHelper
 	{
 		return living.rotationPitch;
 	}
-	
+
+    public float getPrevRotationRoll(EntityLivingBase living)
+    {
+        return 0.0F;
+    }
+
 	public float getRotationRoll(EntityLivingBase living)
 	{
 		return 0.0F;

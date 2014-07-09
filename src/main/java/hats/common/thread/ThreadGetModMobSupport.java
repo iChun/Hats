@@ -16,6 +16,8 @@ public class ThreadGetModMobSupport extends Thread
 {
     public ThreadGetModMobSupport()
     {
+        this.setName("Hats Mod Mob Support Thread");
+        this.setDaemon(true);
     }
 
     @Override

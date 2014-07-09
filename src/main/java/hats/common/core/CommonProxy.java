@@ -108,7 +108,7 @@ public class CommonProxy
 	
 	public void clearAllHats()
 	{
-		HatHandler.hatNames.clear();
+		HatHandler.getHatNames().clear();
 		HatHandler.checksums.clear();
 		HatHandler.categories.clear();
 	}
@@ -120,13 +120,13 @@ public class CommonProxy
 	public void loadHatFile(File file)
 	{
 		String hatName = file.getName().substring(0, file.getName().length() - 4).toLowerCase();
-        HatHandler.hatNames.put(file, hatName);
+        HatHandler.getActualHatNamesMap().put(file, hatName);
 	}
 	
 	public void remap(String duplicate, String original)
 	{
 		File file = null;
-		for(Map.Entry<File, String> e : HatHandler.hatNames.entrySet())
+		for(Map.Entry<File, String> e : HatHandler.getActualHatNamesMap().entrySet())
 		{
 			if(e.getValue().equalsIgnoreCase(original))
 			{
@@ -136,7 +136,7 @@ public class CommonProxy
 		}
 		if(file != null)
 		{
-			HatHandler.hatNames.put(file, duplicate);
+			HatHandler.getActualHatNamesMap().put(file, duplicate);
 		}
 	}
 	
