@@ -12,6 +12,7 @@ import hats.common.core.TimeActiveInfo;
 import hats.common.trade.TradeInfo;
 import ichun.common.core.network.AbstractPacket;
 import ichun.common.core.network.PacketHandler;
+import ichun.common.core.util.PlayerHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -53,7 +54,7 @@ public class PacketPing extends AbstractPacket
             {
                 case 0: //Player requested to open GUI
                 {
-                    PacketHandler.sendToPlayer(Hats.channels, new PacketPing(0, FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().isPlayerOpped(player.getCommandSenderName().toLowerCase().trim())), player);
+                    PacketHandler.sendToPlayer(Hats.channels, new PacketPing(0, PlayerHelper.checkOp(player.getGameProfile().getId())), player);
                     break;
                 }
                 case 1: //Received player activity state

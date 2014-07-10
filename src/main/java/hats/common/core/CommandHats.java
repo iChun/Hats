@@ -2,6 +2,7 @@ package hats.common.core;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import hats.common.Hats;
+import ichun.common.core.util.PlayerHelper;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
@@ -81,7 +82,7 @@ public class CommandHats extends CommandBase {
 					sb.append(" ");
 				}
 				String hatName = HatHandler.getHatStartingWith(sb.toString().trim());
-				EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(playerName);
+				EntityPlayer player = PlayerHelper.getPlayerFromUsername(playerName);
 				if(player == null)
 				{
 					icommandsender.addChatMessage(new ChatComponentTranslation("\u00A7c" + StatCollector.translateToLocalFormatted("hats.command.notOnline", playerName)));

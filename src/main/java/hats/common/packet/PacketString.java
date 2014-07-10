@@ -13,6 +13,7 @@ import hats.common.trade.TradeInfo;
 import hats.common.trade.TradeRequest;
 import ichun.common.core.network.AbstractPacket;
 import ichun.common.core.network.PacketHandler;
+import ichun.common.core.util.PlayerHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -62,7 +63,7 @@ public class PacketString extends AbstractPacket
                 {
                     String plyr1 = pingString;
 
-                    EntityPlayerMP plyr = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(plyr1);
+                    EntityPlayerMP plyr = (EntityPlayerMP) PlayerHelper.getPlayerFromUsername(plyr1);
 
                     if(plyr != null && plyr.isEntityAlive() && plyr.getDistanceToEntity(player) < 16D && plyr.canEntityBeSeen(player) && plyr.dimension == player.dimension)
                     {
@@ -99,7 +100,7 @@ public class PacketString extends AbstractPacket
                         break;
                     }
 
-                    EntityPlayerMP plyr = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(plyr1);
+                    EntityPlayerMP plyr = (EntityPlayerMP) PlayerHelper.getPlayerFromUsername(plyr1);
 
                     if(plyr != null && plyr.isEntityAlive() && plyr.getDistanceToEntity(player) < 16D && plyr.canEntityBeSeen(player) && plyr.dimension == player.dimension)
                     {

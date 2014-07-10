@@ -102,7 +102,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
             	ResourceLocation resourcelocation = AbstractClientPlayer.locationStevePng;
                 if (stand.headName != null && stand.headName.length() > 0)
                 {
-                    resourcelocation = AbstractClientPlayer.getLocationSkull(stand.headName);
+                    resourcelocation = AbstractClientPlayer.getLocationSkin(stand.headName);
                     AbstractClientPlayer.getDownloadImageSkin(resourcelocation, stand.headName);
                 }
                 this.bindTexture(resourcelocation);

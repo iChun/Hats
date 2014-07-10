@@ -12,6 +12,7 @@ import hats.common.packet.PacketPing;
 import hats.common.packet.PacketSession;
 import ichun.client.keybind.KeyEvent;
 import ichun.common.core.network.PacketHandler;
+import ichun.common.core.util.PlayerHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -163,7 +164,7 @@ public class EventHandler
                                 newHats.remove(e.getKey());
                             }
 
-                            EntityPlayerMP newKingEnt = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(executer.getCommandSenderName());
+                            EntityPlayerMP newKingEnt = (EntityPlayerMP) PlayerHelper.getPlayerFromUsername(executer.getCommandSenderName());
 
                             if(newKingEnt != null && !newHats.isEmpty())
                             {
