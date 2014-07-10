@@ -10,6 +10,7 @@ import hats.common.packet.PacketPing;
 import hats.common.trade.TradeInfo;
 import hats.common.trade.TradeRequest;
 import ichun.common.core.network.PacketHandler;
+import ichun.common.core.util.PlayerHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -61,7 +62,7 @@ public class TickHandlerServer
                         newHats.remove(e1.getKey());
                     }
 
-                    EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(e.getKey());
+                    EntityPlayerMP player = (EntityPlayerMP) PlayerHelper.getPlayerFromUsername(e.getKey());
 
                     if(player != null && !newHats.isEmpty())
                     {
@@ -299,7 +300,7 @@ public class TickHandlerServer
 	{
 		if(!Hats.config.getSessionString("currentKing").equalsIgnoreCase("") && !Hats.config.getSessionString("currentKing").equalsIgnoreCase(newKing))
 		{
-			EntityPlayerMP oldKing = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(Hats.config.getSessionString("currentKing"));
+			EntityPlayerMP oldKing = (EntityPlayerMP) PlayerHelper.getPlayerFromUsername(Hats.config.getSessionString("currentKing"));
 			if(oldKing != null)
 			{
 				playerDeath(oldKing);

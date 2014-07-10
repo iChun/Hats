@@ -12,6 +12,7 @@ import hats.common.packet.PacketString;
 import ichun.common.core.network.PacketHandler;
 import ichun.common.core.techne.TC2Info;
 import ichun.common.core.util.MD5Checksum;
+import ichun.common.core.util.PlayerHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -391,7 +392,7 @@ public class HatHandler
                             queuedHats.remove(hatName);
                             for(String name : queuedLists)
                             {
-                                EntityPlayer player1 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
+                                EntityPlayer player1 = PlayerHelper.getPlayerFromUsername(name);
                                 if(player1 != null)
                                 {
                                     sendHat(hatName, player1);

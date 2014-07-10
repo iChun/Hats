@@ -31,13 +31,13 @@ import java.util.Random;
 
 @Mod(modid = "Hats", name = "Hats",
         version = Hats.version,
-        dependencies = "required-after:iChunUtil@[" + iChunUtil.versionMC +".2.0,)",
+        dependencies = "required-after:iChunUtil@[" + iChunUtil.versionMC +".0.0,)",
         acceptableRemoteVersions = "[" + iChunUtil.versionMC +".0.0," + iChunUtil.versionMC + ".1.0)"
 )
 public class Hats
         implements IConfigUser
 {
-    public static final String version = iChunUtil.versionMC +".0.1";
+    public static final String version = iChunUtil.versionMC +".0.0";
 
     private static Logger logger = LogManager.getLogger("Hats");
 
