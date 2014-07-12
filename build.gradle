@@ -18,12 +18,12 @@ buildscript {
 apply plugin: 'forge'
 
 // Requires iChunUtil to run. Just put iChunUtil-deobf.jar in the /libs/ folder or it won't compile.
-version = "3.0.0"
+version = "3.0.1"
 group= "hats" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Hats"
 
 minecraft {
-    version = "1.7.2-10.12.2.1128"
+    version = "1.7.10-10.13.0.1180"
     assetDir = "eclipse/assets"
 }
 processResources
