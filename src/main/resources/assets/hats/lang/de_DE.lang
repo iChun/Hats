@@ -198,28 +198,28 @@ hats.addon.hatstands.gui.stand=Hutständer
 
 tile.hats.addon.hatstands.block.name=Hutständer
 
-hats.config.cat.globalOptions.name=Global Options
-hats.config.cat.serverOptions.name=Server Options
-hats.config.cat.clientOnly.name=Client Only
-hats.config.cat.randoMobOptions.name=RandoMob Options
+hats.config.cat.globalOptions.name=Globale Optionen
+hats.config.cat.serverOptions.name=Server Optionen
+hats.config.cat.clientOnly.name=Nur Client
+hats.config.cat.randoMobOptions.name="Zufalls-Monster" Optionen
 
-hats.config.cat.globalOptions.comment=These settings affect both servers and clients that loads the mod.
-hats.config.cat.serverOptions.comment=These settings affect only the server that loads the mod.
-hats.config.cat.clientOnly.comment=These settings affect only the client that loads the mod.
-hats.config.cat.randoMobOptions.comment=These settings affect either the client on randoMob settings or Mob Hunting Mode.
+hats.config.cat.globalOptions.comment=Diese Einstellungen betreffen Server und Client die den Mod laden.
+hats.config.cat.serverOptions.comment=Diese Einstellungen betreffen nur den Server der den Mod lädt.
+hats.config.cat.clientOnly.comment=Diese Einstellungen betreffen nur den Client der den Mod lädt.
+hats.config.cat.randoMobOptions.comment=Diese Einstellungen betreffen entweder den Client "Zufalls-Monster" Modus oder "Hutjagd"-Modus
 
-hats.config.prop.safeLoad.name=Safe Load
-hats.config.prop.allowSendingOfHats.name=Allow Sending Of Hats
-hats.config.prop.allowReceivingOfHats.name=Allow Receiving Of Hats
-hats.config.prop.modMobSupport.name=Hat Mod Mob Support
-hats.config.prop.readLocalModMobSupport.name=Read Local Mod Mob Support
-hats.config.prop.playerHatsMode.name=Player Hats Mode
-hats.config.prop.firstJoinMessage.name=First Join Message
-hats.config.prop.lockedHat.name=Locked Hat
-hats.config.prop.startTime.name=Start Time
+hats.config.prop.safeLoad.name=Sicherung geladen
+hats.config.prop.allowSendingOfHats.name=Erlaubt das versenden von Hütten
+hats.config.prop.allowReceivingOfHats.name=Erlaubt das erhalten von Hütten
+hats.config.prop.modMobSupport.name=Hut Mod Monster Unterstützung
+hats.config.prop.readLocalModMobSupport.name=Lies Lokalen Mod Monster Unterstützung
+hats.config.prop.playerHatsMode.name=Spieler Hut-Modus
+hats.config.prop.firstJoinMessage.name=Erste beitretens Naricht
+hats.config.prop.lockedHat.name=Gesperter Hut
+hats.config.prop.startTime.name=Start Zeit
 hats.config.prop.timeIncrement.name=Time Increment
-hats.config.prop.resetPlayerHatsOnDeath.name=Reset Player Hats On Death
-hats.config.prop.hatRarity.name=Enable Hat Rarity
+hats.config.prop.resetPlayerHatsOnDeath.name=setzt Spielerhütte beim sterben zurück
+hats.config.prop.hatRarity.name=Erlaubt Hutseltenheit
 hats.config.prop.hatGenerationSeed.name=Hat Generation Seed
 hats.config.prop.renderInFirstPerson.name=Render In First Person
 hats.config.prop.enableInServersWithoutMod.name=Enable In Servers Without Mod
