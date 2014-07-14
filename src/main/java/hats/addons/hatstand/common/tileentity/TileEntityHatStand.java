@@ -1,9 +1,12 @@
 package hats.addons.hatstand.common.tileentity;
 
+import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import hats.client.core.HatInfoClient;
+import ichun.common.core.EntityHelperBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -15,7 +18,6 @@ public class TileEntityHatStand extends TileEntity
 
 	public boolean hasBase;
 	public int head;
-	public String headName;
 	public boolean hasStand;
 	public boolean isOnFloor;
 	public int orientation;
@@ -26,6 +28,8 @@ public class TileEntityHatStand extends TileEntity
 	public int colourG;
 	public int colourB;
     public int alpha;
+
+    public GameProfile gameProfile;
 	
 	public static final String[] headNames = new String[] { "None", "Skeleton", "W. Skele", "Zombie", "Player", "Steve", "Creeper", "Wither", "Wither (I)", "Pigman", "Blaze", "Invisible" };
 	
@@ -35,7 +39,6 @@ public class TileEntityHatStand extends TileEntity
 	{
 		hasBase = true;
 		head = 0;
-		headName = "";
 		hasStand = false;
 		isOnFloor = true;
 		orientation = 0;
@@ -72,7 +75,6 @@ public class TileEntityHatStand extends TileEntity
     	super.writeToNBT(tag);
     	tag.setBoolean("hasBase", hasBase);
     	tag.setInteger("head", head);
-    	tag.setString("headName", headName);
     	tag.setBoolean("hasStand", hasStand);
     	tag.setBoolean("isOnFloor", isOnFloor);
     	tag.setInteger("orientation", orientation);
@@ -83,6 +85,13 @@ public class TileEntityHatStand extends TileEntity
     	tag.setInteger("colourG", colourG);
     	tag.setInteger("colourB", colourB);
         tag.setInteger("alpha", alpha);
+
+        if (this.gameProfile != null)
+        {
+            NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+            NBTUtil.func_152460_a(nbttagcompound1, this.gameProfile);
+            tag.setTag("headNameProfile", nbttagcompound1);
+        }
     }
     
     @Override
@@ -91,11 +100,22 @@ public class TileEntityHatStand extends TileEntity
         super.readFromNBT(tag);
 		hasBase = tag.getBoolean("hasBase");
 		head = tag.getInteger("head");
-		headName = tag.getString("headName");
 		hasStand = tag.getBoolean("hasStand");
 		isOnFloor = tag.getBoolean("isOnFloor");
 		orientation = tag.getInteger("orientation");
 		sideOn = tag.getInteger("sideOn");
+
+        if(head == 4)
+        {
+            if(tag.hasKey("headName") && !tag.getString("headName").isEmpty())
+            {
+                this.gameProfile = new GameProfile(EntityHelperBase.uuidExample, tag.getString("headName"));
+            }
+            else if (tag.hasKey("headNameProfile", 10))
+            {
+                this.gameProfile = NBTUtil.func_152459_a(tag.getCompoundTag("headNameProfile"));
+            }
+        }
 		
 		hatName = tag.getString("hatName");
 		colourR = tag.getInteger("colourR");

@@ -97,11 +97,11 @@ public class PacketStandHatInfo extends AbstractPacket
 
             if(stand.head == 4)
             {
-                stand.headName = player.getCommandSenderName();
+                stand.gameProfile = player.getGameProfile();
             }
             else
             {
-                stand.headName = "";
+                stand.gameProfile = null;
             }
 
             if(!HatHandler.hasHat(hatName))

@@ -1,7 +1,10 @@
 package hats.addons.hatstand.client.render;
 
+import com.mojang.authlib.GameProfile;
+import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import hats.addons.hatstand.common.tileentity.TileEntityHatStand;
 import hats.client.render.HatRendererHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelSkeletonHead;
 import net.minecraft.client.renderer.RenderBlocks;
@@ -12,6 +15,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
+
+import java.util.Map;
 
 public class TileRendererHatStand extends TileEntitySpecialRenderer 
 {
@@ -43,7 +48,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
         renderer = this;
     }
 	
-	public void renderHatStand(TileEntityHatStand stand, double d, double d1, double d2, float f)
+	public void renderHatStand(TileEntityHatStand stand, double d, double d1, double d2, float f, GameProfile profile)
 	{
         GL11.glAlphaFunc(GL11.GL_GREATER, 16F/255F);
 		GL11.glPushMatrix();
@@ -99,11 +104,17 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
                 head = head64;
                 break;
             case 4:
-            	ResourceLocation resourcelocation = AbstractClientPlayer.locationStevePng;
-                if (stand.headName != null && stand.headName.length() > 0)
+
+                ResourceLocation resourcelocation = AbstractClientPlayer.locationStevePng;
+                if (profile != null)
                 {
-                    resourcelocation = AbstractClientPlayer.getLocationSkull(stand.headName);
-                    AbstractClientPlayer.getDownloadImageSkin(resourcelocation, stand.headName);
+                    Minecraft minecraft = Minecraft.getMinecraft();
+                    Map map = minecraft.func_152342_ad().func_152788_a(profile);
+
+                    if (map.containsKey(MinecraftProfileTexture.Type.SKIN))
+                    {
+                        resourcelocation = minecraft.func_152342_ad().func_152792_a((MinecraftProfileTexture)map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
+                    }
                 }
                 this.bindTexture(resourcelocation);
                 break;
@@ -155,7 +166,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1,
 			double d2, float f) {
-		this.renderHatStand((TileEntityHatStand)tileentity, d0, d1, d2, f);
+		this.renderHatStand((TileEntityHatStand)tileentity, d0, d1, d2, f, ((TileEntityHatStand)tileentity).gameProfile);
 
 	}
 

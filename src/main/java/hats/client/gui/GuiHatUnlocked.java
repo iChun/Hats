@@ -79,7 +79,7 @@ public class GuiHatUnlocked extends Gui
         GL11.glLoadIdentity();
         this.width = this.theGame.displayWidth;
         this.height = this.theGame.displayHeight;
-        ScaledResolution scaledresolution = new ScaledResolution(this.theGame.gameSettings, this.theGame.displayWidth, this.theGame.displayHeight);
+        ScaledResolution scaledresolution = new ScaledResolution(this.theGame, this.theGame.displayWidth, this.theGame.displayHeight);
         this.width = scaledresolution.getScaledWidth();
         this.height = scaledresolution.getScaledHeight();
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);

@@ -61,7 +61,7 @@ public class TickHandlerServer
                         newHats.remove(e1.getKey());
                     }
 
-                    EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(e.getKey());
+                    EntityPlayerMP player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(e.getKey());
 
                     if(player != null && !newHats.isEmpty())
                     {
@@ -299,7 +299,7 @@ public class TickHandlerServer
 	{
 		if(!Hats.config.getSessionString("currentKing").equalsIgnoreCase("") && !Hats.config.getSessionString("currentKing").equalsIgnoreCase(newKing))
 		{
-			EntityPlayerMP oldKing = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(Hats.config.getSessionString("currentKing"));
+			EntityPlayerMP oldKing = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(Hats.config.getSessionString("currentKing"));
 			if(oldKing != null)
 			{
 				playerDeath(oldKing);

@@ -53,7 +53,7 @@ public class PacketPing extends AbstractPacket
             {
                 case 0: //Player requested to open GUI
                 {
-                    PacketHandler.sendToPlayer(Hats.channels, new PacketPing(0, FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().isPlayerOpped(player.getCommandSenderName().toLowerCase().trim())), player);
+                    PacketHandler.sendToPlayer(Hats.channels, new PacketPing(0, FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152596_g(player.getGameProfile())), player);
                     break;
                 }
                 case 1: //Received player activity state

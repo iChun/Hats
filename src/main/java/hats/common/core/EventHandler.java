@@ -163,7 +163,7 @@ public class EventHandler
                                 newHats.remove(e.getKey());
                             }
 
-                            EntityPlayerMP newKingEnt = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(executer.getCommandSenderName());
+                            EntityPlayerMP newKingEnt = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(executer.getCommandSenderName());
 
                             if(newKingEnt != null && !newHats.isEmpty())
                             {

@@ -81,7 +81,7 @@ public class CommandHats extends CommandBase {
 					sb.append(" ");
 				}
 				String hatName = HatHandler.getHatStartingWith(sb.toString().trim());
-				EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(playerName);
+				EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(playerName);
 				if(player == null)
 				{
 					icommandsender.addChatMessage(new ChatComponentTranslation("\u00A7c" + StatCollector.translateToLocalFormatted("hats.command.notOnline", playerName)));

@@ -1,6 +1,7 @@
 package hats.addons.hatstand.client.gui;
 
 import com.google.common.collect.ImmutableList;
+import com.mojang.authlib.GameProfile;
 import hats.addons.hatstand.client.render.BlockRenderHatStand;
 import hats.addons.hatstand.client.render.TileRendererHatStand;
 import hats.addons.hatstand.common.HatStand;
@@ -94,7 +95,7 @@ public class GuiHatSelection extends GuiScreen
     private int prevAlpha;
 	
 	private int prevHead;
-	private String prevHeadName;
+	private GameProfile prevGameProfile;
 	private boolean prevBase;
 	private boolean prevStandPost;
 	
@@ -130,7 +131,7 @@ public class GuiHatSelection extends GuiScreen
 		Collections.sort(hatsToShow);
 		stand = hatStand;
 		prevHatName = stand.hatName;
-		prevHeadName = stand.headName;
+		prevGameProfile = stand.gameProfile;
 		prevColourR = colourR = stand.colourR;
 		prevColourG = colourG = stand.colourG;
 		prevColourB = colourB = stand.colourB;
@@ -235,7 +236,7 @@ public class GuiHatSelection extends GuiScreen
             stand.alpha = prevAlpha;
 			
 			stand.head = prevHead;
-			stand.headName = prevHeadName;
+			stand.gameProfile = prevGameProfile;
 			stand.hasBase = prevBase;
 			stand.hasStand = prevStandPost;
 
@@ -451,7 +452,7 @@ public class GuiHatSelection extends GuiScreen
 	    		}
 	    		if(stand.head == 4)
 	    		{
-	    			stand.headName = Minecraft.getMinecraft().thePlayer.getCommandSenderName();
+	    			stand.gameProfile = Minecraft.getMinecraft().thePlayer.getGameProfile();
 	    		}
 	    		head = stand.head;
 	    		justClickedButton = true;
@@ -518,7 +519,7 @@ public class GuiHatSelection extends GuiScreen
 		stand.colourB = prevColourB;
 		
 		stand.head = prevHead;
-		stand.headName = prevHeadName;
+		stand.gameProfile = prevGameProfile;
 		stand.hasBase = prevBase;
 		stand.hasStand = prevStandPost;
 		
@@ -993,7 +994,7 @@ public class GuiHatSelection extends GuiScreen
 	        
 	        stand.info = tempInfo;
 	        
-	        TileRendererHatStand.renderer.renderHatStand(stand, 0, 0, 0, 1.0F);
+	        TileRendererHatStand.renderer.renderHatStand(stand, 0, 0, 0, 1.0F, stand.gameProfile);
 
 	        stand.info = info;
 	        

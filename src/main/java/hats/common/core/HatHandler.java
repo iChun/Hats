@@ -391,7 +391,7 @@ public class HatHandler
                             queuedHats.remove(hatName);
                             for(String name : queuedLists)
                             {
-                                EntityPlayer player1 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername(name);
+                                EntityPlayer player1 = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(name);
                                 if(player1 != null)
                                 {
                                     sendHat(hatName, player1);
