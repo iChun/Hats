@@ -186,8 +186,8 @@ hats.gui.helpInfo17.desc2=你可以在帽子獵殺時
 hats.gui.helpInfo17.desc3=戴上他。
 
 hats.gui.helpInfo18.desc1=帽子名稱中的 (C) 
-hats.gui.helpInfo18.desc2=代表這是一頂為了感謝你的贊助
-hats.gui.helpInfo18.desc3=而追加的帽子！
+hats.gui.helpInfo18.desc2=代表這是一頂為了
+hats.gui.helpInfo18.desc3=感謝你的貢獻而添加的帽子！
 
 hats.gui.helpInfo19.desc1=你知道你可以自訂
 hats.gui.helpInfo19.desc2=戴著帽子的生物身上的帽子嗎？
@@ -253,32 +253,32 @@ hats.config.prop.hatWither.name=凋靈帽子
 hats.config.prop.hatWolf.name=狼帽子
 hats.config.prop.hatZombie.name=殭屍帽子
 
-hats.config.prop.safeLoad.comment=Enable safe load?\nSafe load forces the mod to reject Techne Model Files that have files other than xml and png files.
-hats.config.prop.allowSendingOfHats.comment=Enable sending of model files to the server/client?
-hats.config.prop.allowReceivingOfHats.comment=Enable receiving of model files to the server/client?
-hats.config.prop.modMobSupport.comment=Enable mod mob support for Hats?
+hats.config.prop.safeLoad.comment使用安全讀取\n使用安全讀取將會禁止讀取含有 xml 跟 png 以外檔案的模型檔
+hats.config.prop.allowSendingOfHats.comment=啟用傳送模型檔給 伺服器/客戶端？
+hats.config.prop.allowReceivingOfHats.comment=啟用從 伺服器/客戶端 接收模型檔？
+hats.config.prop.modMobSupport.comment=啟用模組動物支援？
 hats.config.prop.readLocalModMobSupport.comment=Read the local mod mob support file (HatModMobSupport.json) from the /hats/ folder?\nIf turned off, it'll pull the online GitHub version.\nUse this to do testing with custom mob hats.
-hats.config.prop.playerHatsMode.comment=Player Hats Mode:\n1 = Free Mode, All players are free to choose what hat to wear.\n2 = Locked mode, all players must wear the same hat, defined in the config.\n3 = Command Giver Mode, what hat you wear is chosen by people who can use commands.\n4 = Hat Hunting Mode, see a mob with a hat, kill it to unlock\n5 = King of the Hat Mode, only one shall wear a hat. The king has to defend their spot or lose the crown!\n6 = Time Active Mode, players unlock more hats the more time they are active on the server.
-hats.config.prop.firstJoinMessage.comment=Send a "First join" message to the player when they connect to a server for the first time?
-hats.config.prop.lockedHat.comment=What hat do players wear in Locked mode (see playerHatsMode 2).\nIf you want different players to wear different hats, use command giver mode.
-hats.config.prop.startTime.comment=For playerHatsMode 6:\nTime required to be active on the server to unlock the first hat.(In ticks)
-hats.config.prop.timeIncrement.comment=For playerHatsMode 6:\nAmount of extra time required to get the next level hat.\nDefault is 125 (1.25%).\nFor 200% time put 20000
-hats.config.prop.resetPlayerHatsOnDeath.comment=Should player hats be reset when they die?\nOnly in unlockable hats modes
-hats.config.prop.hatRarity.comment=Should hats have their own rarity?
-hats.config.prop.hatGenerationSeed.comment=The random seed for hats generation. Used for Hat Hunting mode and Time Active mode. Please do not put 0, although rarity will be enabled on the server, on the client it's marked as an indicator that rarity is disabled.
-hats.config.prop.renderInFirstPerson.comment=Should your hat render in first person?
-hats.config.prop.enableInServersWithoutMod.comment=Enable hats in servers without the mod?
-hats.config.prop.shouldOtherPlayersHaveHats.comment=Do other players have hats? Only when enabled on servers without the mod.
-hats.config.prop.randomHat.comment=Should each player have a random hat?\nThey randomly change from time to time.\n0 = No\n1 = Yes\n2 = Yes, but not the player!\nOnly when enabled on servers without the mod
-hats.config.prop.favouriteHat.comment=What hat do you want to use on servers without the mod? Only when randomHat = 0
-hats.config.prop.favouriteHatColourizer.comment=Do you want to apply a colourizer to your favourite hat?\nIf no, leave as #ffffff\n(Google "hex color codes" if you don't understand)\nFormat: #<colour index>\nEg: #ffffff for white
-hats.config.prop.guiKeyBind.comment=Key bind to open the Hat Selection GUI?
-hats.config.prop.personalizeEnabled.comment=This config is for your GUI personalization.\nPlease don't change this if you don't know what you're doing.
-hats.config.prop.maxHatRenders.comment=Max number of hats to render in one tick
-hats.config.prop.showContributorHatsInGui.comment=Show Contributor Hats in the GUI?
-hats.config.prop.renderHats.comment=Render Hats?
-hats.config.prop.randomMobHat.comment=Do mobs have a random chance of having a hat?\n0 = Disabled (0%)\n100 = All mobs (100%)\n(Client)This follows the randomHat setting, meaning if randomHat is 0, all mobs will wear the favouriteHat setting
-hats.config.prop.useRandomContributorHats.comment=Allow the use of contributor hats when getting a random hat?\n0 - 100%
+hats.config.prop.playerHatsMode.comment=玩家帽子模式\n1 = 自由模式， 所有玩家都可以選自己要的帽子。\n2 = 鎖定模式所有玩家都帶著設定檔中指定的帽子。\n3 = Command Giver Mode, 你戴的帽子由可以使用give指令的人所決定\n4 = 帽子獵殺模式，殺死戴著帽子的生物以解鎖帽子\n5 = 帽子之王模式，只有一人允許戴帽子，被殺死後，權力由殺死他的人繼承\n6 = 時間獎勵模式，隨著登入時間時間增加，自動解鎖帽子
+hats.config.prop.firstJoinMessage.comment=當玩家第一次登入伺服器時，所顯示的訊息
+hats.config.prop.lockedHat.comment=在鎖定模式中戴帽子 (見 玩家帽子模式 2).\n如果西外給人不同帽子，請改用 Command Giver Mode
+hats.config.prop.startTime.comment=玩家帽子模式 6 使用:\n解鎖第一頂帽子所需要的時間(刻=1/20秒)
+hats.config.prop.timeIncrement.comment=玩家帽子模式 6 使用:\n達到下一等級帽子所需的時間\n預設為 125 (1.25%).\n若要設為 200% time 則設成 20000，以此類推
+hats.config.prop.resetPlayerHatsOnDeath.comment=是否在玩家死亡時重設帽子\n(限可以解鎖帽子的模式)
+hats.config.prop.hatRarity.comment=帽子是否有稀有度？
+hats.config.prop.hatGenerationSeed.comment=生成帽子的種子碼，在帽子獵殺 及 時間獎勵 使用，請不要設為0，雖然在伺服器會使用稀有度，在客戶端稀有度會顯示為關閉
+hats.config.prop.renderInFirstPerson.comment=是否要在第一人稱中顯示帽子
+hats.config.prop.enableInServersWithoutMod.comment=是否要為未安裝此mod的伺服中顯示帽子？
+hats.config.prop.shouldOtherPlayersHaveHats.comment=其他玩家是否要有帽子？ 限伺服器沒安裝此mod的情況
+hats.config.prop.randomHat.comment=其他玩家的帽子是否要隨機更換？\n會隨時間隨機改變\n0 = 否\n1 = 是\n2 = 是，但限玩家以外生物。\n限伺服器沒安裝此mod的情況
+hats.config.prop.favouriteHat.comment=你希望當伺服器沒此模組時，其他人使用的帽子，限 randomHat = 0 時使用
+hats.config.prop.favouriteHatColourizer.comment=是否為加到最愛的帽子上色？\nIf no, leave as #ffffff\n(Google "hex color codes" if you don't understand)\nFormat: #<colour index>\nEg: #ffffff for white
+hats.config.prop.guiKeyBind.comment=介面的按鍵綁定
+hats.config.prop.personalizeEnabled.comment=這個設定是為了個人化介面用的\n如果你不知道這是幹嘛用，請不要動它。
+hats.config.prop.maxHatRenders.comment=每一刻中所渲染的最多帽子數量
+hats.config.prop.showContributorHatsInGui.comment=在介面中顯示貢獻者帽子？
+hats.config.prop.renderHats.comment=顯示帽子？
+hats.config.prop.randomMobHat.comment=動物是否要戴上隨機帽子？\n0 = 關閉 (0%)\n100 = 所有動物 (100%)\n(客戶端)這個跟 randomHat 是綁在一起的, 也就是說，如果 randomHat 是 0， 所有動物都將帶的 favouriteHat 所指定的帽子
+hats.config.prop.useRandomContributorHats.comment=是否要在使用隨機帽子時，使用貢獻者帽子？\n0 - 100%
 hats.config.prop.hatBlaze.comment=
 hats.config.prop.hatChicken.comment=
 hats.config.prop.hatCow.comment=
