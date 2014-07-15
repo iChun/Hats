@@ -126,8 +126,8 @@ hats.gui.helpInfo3.desc3=有大量社群製作的的帽子，
 hats.gui.helpInfo3.desc4=你可以去那裡下載並安裝
 
 hats.gui.helpInfo4.desc1=你也可以做你自己的帽子，你需
-hats.gui.helpInfo4.desc2=要下載 Techne 並用它來製作你
-hats.gui.helpInfo4.desc3=需要將一個 "head" 的模型放在 
+hats.gui.helpInfo4.desc2=要下載 Techne 並用它來製作，
+hats.gui.helpInfo4.desc3=你要將一個 "head" 的模型放在 
 hats.gui.helpInfo4.desc4=木頭的正中央，而他的尺寸是8 x 8 x 8
 hats.gui.helpInfo4.desc5=並用他來做帽子。
 
@@ -135,7 +135,7 @@ hats.gui.helpInfo5.desc1=你知道你可以製作自己的分類嗎？
 hats.gui.helpInfo5.desc2=按分類按鈕(或著鍵盤上的C)
 hats.gui.helpInfo5.desc3=並按下 新增 按鈕就可以了歐
 
-hats.gui.helpInfo6.desc1=你知道嗎？如果你的朋友沒有你戴的帽子
+hats.gui.helpInfo6.desc1=你知道嗎？如果你的朋友沒有你戴的帽子，
 hats.gui.helpInfo6.desc2=而你試圖寄那頂帽子給他，那帽子會經由
 hats.gui.helpInfo6.desc3=伺服器傳送，最後再傳送到你的朋友手上
 hats.gui.helpInfo6.desc4=(限有安裝此模組的伺服器)
@@ -159,7 +159,7 @@ hats.gui.helpInfo11.desc1=模組中添加的玩家帽子
 hats.gui.helpInfo11.desc2=是為了紀念對這個mod
 hats.gui.helpInfo11.desc3=做出貢獻的人物，也就是指
 hats.gui.helpInfo11.desc4=那些 開發、測試、製作模型，
-hats.gui.helpInfo11.desc5=以及支持著我們的朋友
+hats.gui.helpInfo11.desc5=以及支持著我們的朋友。
 hats.gui.helpInfo11.desc6=而Direwolf20的那頂帽子則是給他的個人福利
 
 hats.gui.helpInfo12.desc1=按住shift點擊列表，
@@ -174,7 +174,7 @@ hats.gui.helpInfo14.desc2=只要在刪除時按住shift就可以了。
 
 hats.gui.helpInfo15.desc1=按住shift + f，
 hats.gui.helpInfo15.desc2=會將你正在戴著的帽子
-hats.gui.helpInfo15.desc3=加入最愛，會從最愛中移除。
+hats.gui.helpInfo15.desc3=加入最愛，或是從最愛中移除。
 
 hats.gui.helpInfo16.desc1="個人化"的熱鍵是
 hats.gui.helpInfo16.desc2="P"
