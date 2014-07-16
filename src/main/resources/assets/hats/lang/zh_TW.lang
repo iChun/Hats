@@ -1,0 +1,299 @@
+hats.firstJoin.hatHunting=[Hats] 帽子獵殺開始了！殺死戴著帽子的生物來解鎖對應的帽子吧！
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] 帽子之王獵殺開始了！殺死他來取得戴帽子的權力吧！
+hats.firstJoin.timeActive=[Hats] 伺服器現在是在線獎勵模式，在線夠久就能取得新帽子歐！
+hats.kingOfTheHat.update.playerJoin=[Hats] 享受吧！ %s 已經成為了新的王！
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s 死了！ %2$s 成為了新的王！
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s 被殺死了！ %2$s 成為了新的王！
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s 離開伺服器了！ %2$s 成為了新的王！
+hats.kingOfTheHat.notKing=[Hats] 你不是王者，只有王者 %s 擁有戴帽子的權力！
+hats.lockedMode=[Hats] 伺服器處於鎖定狀態！ 你不能更換你戴著的帽子！
+hats.trade.tradeWith=與 %s 交易
+hats.trade.yourHats=你的帽子們
+hats.trade.yourInventory=你的物品欄
+hats.trade.yourOfferings=你即將要出售：
+hats.trade.theirOfferings=%s 要出售：
+hats.trade.waitingForOffer=等待交易目標進入中...
+hats.trade.tradeNotReady=交易準備未完成
+hats.trade.tradeReady=交易準備完成
+hats.trade.makeTrade=交易
+hats.trade.waitingForReady=等待雙方準備完成...
+hats.trade.bothReady=雙方皆已準備完成交易
+hats.trade.cancelTrade=取消交易
+hats.trade.waitingForYou=等待你進行確認
+hats.trade.waitingForThem=等待對方進行確認
+hats.trade.you=你
+hats.trade.added=已加入
+hats.trade.removed=已移除
+hats.trade.ready=你準備好了
+hats.trade.readyThem=%s 準備好了
+hats.trade.notReady=你尚未準備完成
+hats.trade.notReadyThem=%s 尚未準備完成
+hats.trade.selectTrader=選擇你要進行交易的目標
+hats.trade.newTradeRequest=新交易申請
+hats.trade.tradeRequestDesc=點擊 %s 以取得詳細資訊
+hats.trade=與附近玩家交易
+hats.trade.acceptRequestGeneral=接受交易
+hats.trade.acceptRequestSpecific=從 %1$s (%2$s) 接受交易
+hats.trade.cannotFindTrader=[Hats] 無法交易 %s 不可見！
+hats.trade.cannotAcceptTrade=[Hats] 無法交易！交易申請已失效！
+hats.trade.terminatePrefix=交易取消了
+hats.trade.terminate1=%s 死了
+hats.trade.terminate2=你跟 %s 離得太遠了！
+hats.trade.terminate3=有人擋住你的路了！
+hats.trade.terminate4=%s 已結束這次交易
+hats.trade.terminate5=%s 在不同世界中！
+hats.trade.success=[Hats] 交易成功！
+hats.command= Hats 的所有命令
+hats.command.help=輸入 /hats 以顯示完整列表
+hats.command.help.send=/hats send <player> <hat name>  傳送帽子給其他玩家
+hats.command.help.set=/hats set <player> <hat name>   設定目標所戴的帽子
+hats.command.help.unlock=/hats unlock <player> <hat name>   給目標解鎖特定的帽子
+hats.command.notOnline=%s 不在線上！
+hats.command.hatDoesNotExist=%s 不存在！
+hats.command.serverDisabledHatSending=伺服器設定不允許傳送帽子！
+hats.command.sendToPlayer=將 %1$s 送給 %2$s
+hats.command.setPlayerHat=將 %1$s 戴在 %2$s 頭上
+hats.command.playerIsInCreative=%s 目前是創造模式！
+hats.command.unlockHatForPlayer=替 %2$s 解鎖 %1$s
+hats.command.adminNotify.unlockHatForPlayer=%1$s 替 %3$s 解鎖了 %2$s
+hats.command.serverIsNotOnHatHuntingMode=伺服器目前不在 帽子獵殺 模式！
+hats.serverOnCommandGiverMode=伺服器目前不在 帽子贈送 模式！ 你無法使用 give 命令！
+hats.hatUnlocked=帽子以解鎖！
+hats.gui.alpha=Alpha
+hats.gui.search=搜尋
+hats.gui.allHats=所有帽子
+hats.gui.addNew=新增帽子
+hats.gui.firstPerson=第一人稱
+hats.gui.showHats=顯示所有帽子
+hats.gui.contributors=貢獻者
+hats.gui.category=分類
+hats.gui.categories=分類
+hats.gui.colorizer=著色器
+hats.gui.hatsList=帽子列表
+hats.gui.resetSide=重製側邊？
+hats.gui.randomobs=隨機生物
+hats.gui.personalize=個人化
+hats.gui.viewing=瀏覽
+hats.gui.discardChanges=你確定放棄更改？
+hats.gui.removeHat=移除帽子
+hats.gui.randomHat=隨機帽子
+hats.gui.randomCategory=隨機分類
+hats.gui.randomColor=隨機顏色
+hats.gui.resetColor=重設顏色
+hats.gui.reloadAllHats=重新讀取所有帽子？
+hats.gui.discardAllChanges=這將會放棄所有變更。
+hats.gui.favorites=最愛
+hats.gui.invalidName=無法使用的名稱
+hats.gui.addCategory=增加分類
+hats.gui.addToCategory=增加到分類中
+hats.gui.removeFromCategory=從分類中移除
+hats.gui.areYouSure=你確定
+hats.gui.clickConfirm=在按一次以進行確定
+hats.gui.deleteCategory=刪除分類
+hats.gui.deleteCategory.desc1=這將會刪除這個
+hats.gui.deleteCategory.desc2=分類中的所有帽子
+hats.gui.deleteCategory.desc3=，並重新讀介面
+hats.gui.doubleClickConfirm=雙擊以進行確認
+hats.gui.disableHat=禁用帽子？
+hats.gui.disableHat.desc1=這將會把這頂帽子從
+hats.gui.disableHat.desc2=所有分類中禁用，並
+hats.gui.disableHat.desc3=重新讀取介面，但是
+hats.gui.disableHat.desc4=這並不會刪除檔案
+hats.gui.deleteHat=刪除帽子？
+hats.gui.deleteHat.desc1=這將會從所有分類
+hats.gui.deleteHat.desc2=中，刪除這頂帽子
+hats.gui.deleteHat.desc3=，並重新讀取介面
+hats.gui.renameCategory=重命名分類？
+hats.gui.renameCategory.desc1這將會重新讀取介面！
+hats.gui.removeFromFavorites=從最愛中移除
+hats.gui.addToFavorites=加到最愛
+hats.gui.resetButtonsOnSide=重設GUI側邊的按鈕？
+hats.gui.hatsCollected=%s 蒐集到了！
+
+hats.gui.helpInfo1.desc1=按住shift同時點擊帽子
+hats.gui.helpInfo1.desc2=，以取得更詳細資訊！
+hats.gui.helpInfo1.desc3=(你無法按住shift
+hats.gui.helpInfo1.desc4=點擊你正戴著的帽子)
+hats.gui.helpInfo1.desc5=
+
+hats.gui.helpInfo2.desc1=如果你的伺服器沒有安
+hats.gui.helpInfo2.desc2=裝這個mod，其他的玩家
+hats.gui.helpInfo2.desc3=將看不到你戴的帽子
+
+hats.gui.helpInfo3.desc1=你知要有地方可以取得更多
+hats.gui.helpInfo3.desc2=的帽子嗎？Techne Online
+hats.gui.helpInfo3.desc3=有大量社群製作的的帽子，
+hats.gui.helpInfo3.desc4=你可以去那裡下載並安裝
+
+hats.gui.helpInfo4.desc1=你也可以做你自己的帽子，你需
+hats.gui.helpInfo4.desc2=要下載 Techne 並用它來製作，
+hats.gui.helpInfo4.desc3=你要將一個 "head" 的模型放在 
+hats.gui.helpInfo4.desc4=木頭的正中央，而他的尺寸是8 x 8 x 8
+hats.gui.helpInfo4.desc5=並用他來做帽子。
+
+hats.gui.helpInfo5.desc1=你知道你可以製作自己的分類嗎？
+hats.gui.helpInfo5.desc2=按分類按鈕(或著鍵盤上的C)
+hats.gui.helpInfo5.desc3=並按下 新增 按鈕就可以了歐
+
+hats.gui.helpInfo6.desc1=你知道嗎？如果你的朋友沒有你戴的帽子，
+hats.gui.helpInfo6.desc2=而你試圖寄那頂帽子給他，那帽子會經由
+hats.gui.helpInfo6.desc3=伺服器傳送，最後再傳送到你的朋友手上
+hats.gui.helpInfo6.desc4=(限有安裝此模組的伺服器)
+
+hats.gui.helpInfo7.desc1=按住shift點擊 隨機帽子 按鈕，
+hats.gui.helpInfo7.desc2=會給一頂有隨機顏色的隨機帽子！
+
+hats.gui.helpInfo8.desc1=按住shift點擊隨機顏色
+hats.gui.helpInfo8.desc2=將會重設所有帽子的顏色
+
+hats.gui.helpInfo9.desc1=你可以按Tab 或 T，
+hats.gui.helpInfo9.desc2=將焦點移到搜尋欄上
+
+hats.gui.helpInfo10.desc1=你知道這個mod，
+hats.gui.helpInfo10.desc2=是為了一個稱為ModJam的
+hats.gui.helpInfo10.desc3=限時96小時模組製作比賽而做的嗎？
+hats.gui.helpInfo10.desc4=而且它贏得了第二名。
+hats.gui.helpInfo10.desc5=而製作他的人，是現在的維護者 - iChun
+
+hats.gui.helpInfo11.desc1=模組中添加的玩家帽子
+hats.gui.helpInfo11.desc2=是為了紀念對這個mod
+hats.gui.helpInfo11.desc3=做出貢獻的人物，也就是指
+hats.gui.helpInfo11.desc4=那些 開發、測試、製作模型，
+hats.gui.helpInfo11.desc5=以及支持著我們的朋友。
+hats.gui.helpInfo11.desc6=而Direwolf20的那頂帽子則是給他的個人福利
+
+hats.gui.helpInfo12.desc1=按住shift點擊列表，
+hats.gui.helpInfo12.desc2=將會從分類中退出，
+hats.gui.helpInfo12.desc3=並回到所有帽子的介面。
+
+hats.gui.helpInfo13.desc1=你可以右鍵點擊搜尋欄
+hats.gui.helpInfo13.desc2=以清除上面的文字。
+
+hats.gui.helpInfo14.desc1=你可以禁用帽子而不是刪除他，
+hats.gui.helpInfo14.desc2=只要在刪除時按住shift就可以了。
+
+hats.gui.helpInfo15.desc1=按住shift + f，
+hats.gui.helpInfo15.desc2=會將你正在戴著的帽子
+hats.gui.helpInfo15.desc3=加入最愛，或是從最愛中移除。
+
+hats.gui.helpInfo16.desc1="個人化"的熱鍵是
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=這是避免你不小心
+hats.gui.helpInfo16.desc4=關閉這個按紐時備用的
+
+hats.gui.helpInfo17.desc1=如果你有一頂貢獻者帽子，
+hats.gui.helpInfo17.desc2=你可以在帽子獵殺時
+hats.gui.helpInfo17.desc3=戴上他。
+
+hats.gui.helpInfo18.desc1=帽子名稱中的 (C) 
+hats.gui.helpInfo18.desc2=代表這是一頂為了
+hats.gui.helpInfo18.desc3=感謝你的貢獻而添加的帽子！
+
+hats.gui.helpInfo19.desc1=你知道你可以自訂
+hats.gui.helpInfo19.desc2=戴著帽子的生物身上的帽子嗎？
+hats.gui.helpInfo19.desc3=選項在個人化的頁面中。
+
+hats.addon.hatstands.gui.base=底座
+hats.addon.hatstands.gui.stand=帽架
+
+tile.hats.addon.hatstands.block.name=帽架
+
+hats.config.cat.globalOptions.name=全域設定
+hats.config.cat.serverOptions.name=伺服器設定
+hats.config.cat.clientOnly.name=客戶端專用設定
+hats.config.cat.randoMobOptions.name=隨機生物設定
+
+hats.config.cat.globalOptions.comment=這些設定同時會影響客戶端以及伺服器。
+hats.config.cat.serverOptions.comment=這些設定只會影響伺服器。
+hats.config.cat.clientOnly.comment=這些設定只會影響客戶端。
+hats.config.cat.randoMobOptions.comment=這些設定會影響 客戶端的 隨機生物設定 或是 帽子獵殺模式。
+
+hats.config.prop.safeLoad.name=安全讀取
+hats.config.prop.allowSendingOfHats.name=是否允許傳送帽子
+hats.config.prop.allowReceivingOfHats.name=是否允許接收帽子
+hats.config.prop.modMobSupport.name=其他mod追加怪物支援
+hats.config.prop.readLocalModMobSupport.name=是否使用本機mob列表
+hats.config.prop.playerHatsMode.name=玩家帽子模式
+hats.config.prop.firstJoinMessage.name=初次進入訊息
+hats.config.prop.lockedHat.name=鎖定的帽子
+hats.config.prop.startTime.name=開始時間
+hats.config.prop.timeIncrement.name=Time Increment
+hats.config.prop.resetPlayerHatsOnDeath.name=是否在玩家死亡時重設帽子
+hats.config.prop.hatRarity.name=啟用 帽子稀有度設定
+hats.config.prop.hatGenerationSeed.name=帽子生成種子碼
+hats.config.prop.renderInFirstPerson.name=是否於第一人稱中顯示
+hats.config.prop.enableInServersWithoutMod.name=是否在伺服器不支援時使用模組
+hats.config.prop.shouldOtherPlayersHaveHats.name=其他玩家是否使用帽子
+hats.config.prop.randomHat.name=隨機帽子
+hats.config.prop.favouriteHat.name=以加到最愛的帽子
+hats.config.prop.favouriteHatColourizer.name=以加到最愛的顏色
+hats.config.prop.guiKeyBind.name=顯示帽子設定
+hats.config.prop.personalizeEnabled.name=個人化資料夾
+hats.config.prop.maxHatRenders.name=最多渲染帽子數量
+hats.config.prop.showContributorHatsInGui.name=在介面中顯示貢獻者帽子
+hats.config.prop.renderHats.name=顯示帽子
+hats.config.prop.randomMobHat.name=隨機生物帽子
+hats.config.prop.useRandomContributorHats.name=使用隨機貢獻者帽子
+hats.config.prop.hatBlaze.name=烈焰人帽子
+hats.config.prop.hatChicken.name=雞帽子
+hats.config.prop.hatCow.name=牛帽子
+hats.config.prop.hatCreeper.name=苦力怕帽子
+hats.config.prop.hatEnderman.name=終界使者帽子
+hats.config.prop.hatGhast.name=惡魂帽子
+hats.config.prop.hatHorse.name=馬帽子
+hats.config.prop.hatOcelot.name=豹貓帽子
+hats.config.prop.hatPig.name=豬帽子
+hats.config.prop.hatSheep.name=羊帽子
+hats.config.prop.hatSkeleton.name=骨弓帽子
+hats.config.prop.hatSlime.name=史萊姆帽子
+hats.config.prop.hatSpider.name=蜘蛛帽子
+hats.config.prop.hatSquid.name=魷魚帽子
+hats.config.prop.hatVillager.name=村民帽子
+hats.config.prop.hatWither.name=凋靈帽子
+hats.config.prop.hatWolf.name=狼帽子
+hats.config.prop.hatZombie.name=殭屍帽子
+
+hats.config.prop.safeLoad.comment使用安全讀取\n使用安全讀取將會禁止讀取含有 xml 跟 png 以外檔案的模型檔
+hats.config.prop.allowSendingOfHats.comment=啟用傳送模型檔給 伺服器/客戶端？
+hats.config.prop.allowReceivingOfHats.comment=啟用從 伺服器/客戶端 接收模型檔？
+hats.config.prop.modMobSupport.comment=啟用模組動物支援？
+hats.config.prop.readLocalModMobSupport.comment=Read the local mod mob support file (HatModMobSupport.json) from the /hats/ folder?\nIf turned off, it'll pull the online GitHub version.\nUse this to do testing with custom mob hats.
+hats.config.prop.playerHatsMode.comment=玩家帽子模式\n1 = 自由模式， 所有玩家都可以選自己要的帽子。\n2 = 鎖定模式所有玩家都帶著設定檔中指定的帽子。\n3 = Command Giver Mode, 你戴的帽子由可以使用give指令的人所決定\n4 = 帽子獵殺模式，殺死戴著帽子的生物以解鎖帽子\n5 = 帽子之王模式，只有一人允許戴帽子，被殺死後，權力由殺死他的人繼承\n6 = 時間獎勵模式，隨著登入時間時間增加，自動解鎖帽子
+hats.config.prop.firstJoinMessage.comment=當玩家第一次登入伺服器時，所顯示的訊息
+hats.config.prop.lockedHat.comment=在鎖定模式中戴帽子 (見 玩家帽子模式 2).\n如果西外給人不同帽子，請改用 Command Giver Mode
+hats.config.prop.startTime.comment=玩家帽子模式 6 使用:\n解鎖第一頂帽子所需要的時間(刻=1/20秒)
+hats.config.prop.timeIncrement.comment=玩家帽子模式 6 使用:\n達到下一等級帽子所需的時間\n預設為 125 (1.25%).\n若要設為 200% time 則設成 20000，以此類推
+hats.config.prop.resetPlayerHatsOnDeath.comment=是否在玩家死亡時重設帽子\n(限可以解鎖帽子的模式)
+hats.config.prop.hatRarity.comment=帽子是否有稀有度？
+hats.config.prop.hatGenerationSeed.comment=生成帽子的種子碼，在帽子獵殺 及 時間獎勵 使用，請不要設為0，雖然在伺服器會使用稀有度，在客戶端稀有度會顯示為關閉
+hats.config.prop.renderInFirstPerson.comment=是否要在第一人稱中顯示帽子
+hats.config.prop.enableInServersWithoutMod.comment=是否要為未安裝此mod的伺服中顯示帽子？
+hats.config.prop.shouldOtherPlayersHaveHats.comment=其他玩家是否要有帽子？ 限伺服器沒安裝此mod的情況
+hats.config.prop.randomHat.comment=其他玩家的帽子是否要隨機更換？\n會隨時間隨機改變\n0 = 否\n1 = 是\n2 = 是，但限玩家以外生物。\n限伺服器沒安裝此mod的情況
+hats.config.prop.favouriteHat.comment=你希望當伺服器沒此模組時，其他人使用的帽子，限 randomHat = 0 時使用
+hats.config.prop.favouriteHatColourizer.comment=是否為加到最愛的帽子上色？\nIf no, leave as #ffffff\n(Google "hex color codes" if you don't understand)\nFormat: #<colour index>\nEg: #ffffff for white
+hats.config.prop.guiKeyBind.comment=介面的按鍵綁定
+hats.config.prop.personalizeEnabled.comment=這個設定是為了個人化介面用的\n如果你不知道這是幹嘛用，請不要動它。
+hats.config.prop.maxHatRenders.comment=每一刻中所渲染的最多帽子數量
+hats.config.prop.showContributorHatsInGui.comment=在介面中顯示貢獻者帽子？
+hats.config.prop.renderHats.comment=顯示帽子？
+hats.config.prop.randomMobHat.comment=動物是否要戴上隨機帽子？\n0 = 關閉 (0%)\n100 = 所有動物 (100%)\n(客戶端)這個跟 randomHat 是綁在一起的, 也就是說，如果 randomHat 是 0， 所有動物都將帶的 favouriteHat 所指定的帽子
+hats.config.prop.useRandomContributorHats.comment=是否要在使用隨機帽子時，使用貢獻者帽子？\n0 - 100%
+hats.config.prop.hatBlaze.comment=
+hats.config.prop.hatChicken.comment=
+hats.config.prop.hatCow.comment=
+hats.config.prop.hatCreeper.comment=
+hats.config.prop.hatEnderman.comment=
+hats.config.prop.hatGhast.comment=
+hats.config.prop.hatHorse.comment=
+hats.config.prop.hatOcelot.comment=
+hats.config.prop.hatPig.comment=
+hats.config.prop.hatSheep.comment=
+hats.config.prop.hatSkeleton.comment=
+hats.config.prop.hatSlime.comment=
+hats.config.prop.hatSpider.comment=
+hats.config.prop.hatSquid.comment=
+hats.config.prop.hatVillager.comment=
+hats.config.prop.hatWither.comment=
+hats.config.prop.hatWolf.comment=
+hats.config.prop.hatZombie.comment=
