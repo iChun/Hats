@@ -41,6 +41,6 @@ public class HatStand
 	{
 		proxy.initMod();
 
-        ModVersionChecker.register_iChunMod(new ModVersionInfo("HatStand", "1.7", version, false));
+        ModVersionChecker.register_iChunMod(new ModVersionInfo("HatStand", iChunUtil.versionOfMC, version, false));
 	}
 }

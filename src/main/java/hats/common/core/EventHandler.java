@@ -97,7 +97,16 @@ public class EventHandler
                 }
             }
         }
-        HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.config.getInt("randomMobHat") / 100F) && !fromSpawner ? HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), Hats.config.getSessionInt("playerHatsMode") == 4 && Hats.config.getInt("hatRarity") == 1) : new HatInfo();
+        HatInfo hatInfo;
+        if(living.getEntityData().hasKey("Hats_hatInfo"))
+        {
+            hatInfo = new HatInfo(living.getEntityData().getString("Hats_hatInfo"));
+        }
+        else
+        {
+            hatInfo  = living.getRNG().nextFloat() < ((float)Hats.config.getInt("randomMobHat") / 100F) && !fromSpawner ? HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), Hats.config.getSessionInt("playerHatsMode") == 4 && Hats.config.getInt("hatRarity") == 1) : new HatInfo();
+            living.getEntityData().setString("Hats_hatInfo", hatInfo.hatName);
+        }
         if(!hatInfo.hatName.isEmpty())
         {
             Hats.proxy.tickHandlerServer.mobHats.put(living, hatInfo.hatName);
