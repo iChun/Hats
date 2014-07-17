@@ -28,7 +28,7 @@ public class HatRendererHelper
                 return;
             }
 
-            GL11.glAlphaFunc(GL11.GL_GREATER, 16F/255F);
+            GL11.glAlphaFunc(GL11.GL_GREATER, 0.001F);
 
             GL11.glPushMatrix();
 
