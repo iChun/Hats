@@ -234,6 +234,7 @@ hats.config.prop.showContributorHatsInGui.name=Show Contributor Hats In Gui
 hats.config.prop.renderHats.name=Render Hats
 hats.config.prop.randomMobHat.name=Random Mob Hat
 hats.config.prop.useRandomContributorHats.name=Use Random Contributor Hats
+hats.config.prop.hatBat.name=Blaze Hats
 hats.config.prop.hatBlaze.name=Blaze Hats
 hats.config.prop.hatChicken.name=Chicken Hats
 hats.config.prop.hatCow.name=Cow Hats
@@ -279,6 +280,7 @@ hats.config.prop.showContributorHatsInGui.comment=Show Contributor Hats in the G
 hats.config.prop.renderHats.comment=Render Hats?
 hats.config.prop.randomMobHat.comment=Do mobs have a random chance of having a hat?\n0 = Disabled (0%)\n100 = All mobs (100%)\n(Client)This follows the randomHat setting, meaning if randomHat is 0, all mobs will wear the favouriteHat setting
 hats.config.prop.useRandomContributorHats.comment=Allow the use of contributor hats when getting a random hat?\n0 - 100%
+hats.config.prop.hatBat.comment=
 hats.config.prop.hatBlaze.comment=
 hats.config.prop.hatChicken.comment=
 hats.config.prop.hatCow.comment=

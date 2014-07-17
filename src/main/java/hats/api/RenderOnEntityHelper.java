@@ -128,6 +128,12 @@ public abstract class RenderOnEntityHelper
 	{
 		return 1.0F;
 	}
+
+    /**
+     * Render tick time of the render.
+     * Don't set this unless you're doing your own rendering, this will automatically be set by Hat's hat renderer.
+     */
+    public float renderTick;
 	
 	public int currentPass;
 	

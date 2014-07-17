@@ -116,6 +116,7 @@ public class Hats
         config.createIntProperty("randomMobHat", "hats.config.prop.randomMobHat.name", "hats.config.prop.randomMobHat.comment", true, false, config.getInt("playerHatsMode") != 4 && isClient ? 0 : 10, 0, 100);
         config.createIntProperty("useRandomContributorHats", "hats.config.prop.useRandomContributorHats.name", "hats.config.prop.useRandomContributorHats.comment", true, false, 80, 0, 100);
 
+        config.createIntBoolProperty("hatBat"       , "hats.config.prop.hatBat.name"        , "hats.config.prop.hatBat.comment"     , true, false, true);
         config.createIntBoolProperty("hatBlaze"     , "hats.config.prop.hatBlaze.name"      , "hats.config.prop.hatBlaze.comment"   , true, false, true);
         config.createIntBoolProperty("hatChicken"   , "hats.config.prop.hatChicken.name"    , "hats.config.prop.hatChicken.comment" , true, false, true);
         config.createIntBoolProperty("hatCow"       , "hats.config.prop.hatCow.name"        , "hats.config.prop.hatCow.comment"     , true, false, true);

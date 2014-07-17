@@ -39,6 +39,7 @@ public class CommonProxy
 	{
 		getHats();
 
+        CommonProxy.renderHelpers.put(EntityBat.class			, new HelperBat());
 		CommonProxy.renderHelpers.put(EntityBlaze.class			, new HelperBlaze());
 		CommonProxy.renderHelpers.put(EntityChicken.class		, new HelperChicken());
 		CommonProxy.renderHelpers.put(EntityCow.class			, new HelperCow());

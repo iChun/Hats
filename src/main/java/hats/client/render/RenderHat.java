@@ -72,6 +72,7 @@ public class RenderHat extends Render
                 }
 
                 float renderTick = par9;
+                helper.renderTick = renderTick;
 
                 FloatBuffer buffer = GLAllocation.createDirectFloatBuffer(16);
                 FloatBuffer buffer1 = GLAllocation.createDirectFloatBuffer(16);
