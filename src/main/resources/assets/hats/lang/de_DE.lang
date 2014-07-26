@@ -1,5 +1,5 @@
-hats.firstJoin.hatHunting=[Hats] Dieser Server ist im "Hutjagd"-Modus! Töte ein Monster mit einem Hut, um ihn freizuschalten!
-hats.firstJoin.kingOfTheHat.hasKing=[Hats] Dieser Server ist im "König des Hutes"-Modus! Töte den König, um seinen Hut tragen zu dürfen!
+hats.firstJoin.hatHunting=[Hats] Dieser Server ist im "Hüte"-Modus! Töte ein Tier oder Monster mit einem Hut, um ihn freizuschalten!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Dieser Server ist im "König des Hütes"-Modus! Töte den König, um seinen Hut tragen zu dürfen!
 hats.firstJoin.timeActive=[Hats] Dieser Server ist im "Zaitaktiv"-Modus! Verbringe Zeit auf diesem Server, um Hüte freizuschalten!
 hats.kingOfTheHat.update.playerJoin=[Hats] Freut euch! %s ist jetzt der neue König!
 hats.kingOfTheHat.update.playerDied=[Hats] %1$s ist gestorben! %2$s ist jetzt der König!
@@ -144,16 +144,16 @@ hats.gui.helpInfo7.desc1=Ein Umschalt-Klick auf den "Zufälliger Hut"-Knopf
 hats.gui.helpInfo7.desc2=gibt dir einen zufälligen Hut in einer zufällige Farbe!
 
 hats.gui.helpInfo8.desc1=Ein Umschalt-Klick auf den "Zufällige Farbe"-Knopf
-hats.gui.helpInfo8.desc2=setzt alle Farben zurück.
+hats.gui.helpInfo8.desc2=setzt alle aktuellen Farben zurück!
 
-hats.gui.helpInfo9.desc1=Du kannst TAB oder T drücken, um schnell
+hats.gui.helpInfo9.desc1=Drücke "TAB" oder "T", um schnell
 hats.gui.helpInfo9.desc2=das Suchfeld anzuwählen.
 
 hats.gui.helpInfo10.desc1=Wusstest du, dass diese Mod ursprünglich
 hats.gui.helpInfo10.desc2=für einen 96-Stunden-Mod-Marathon
 hats.gui.helpInfo10.desc3=namens ModJam gemacht wurde?
-hats.gui.helpInfo10.desc4=Sie gewann den zweiten Platz und wird
-hats.gui.helpInfo10.desc5=momentan von iChun geupdatet.
+hats.gui.helpInfo10.desc4=Die Mod gewann den zweiten Platz
+hats.gui.helpInfo10.desc5=und wird von iChun geupdatet!
 
 hats.gui.helpInfo11.desc1=Die Spielerhüte in dieser Mod sind nach
 hats.gui.helpInfo11.desc2=Leuten benannt, die einen
@@ -185,7 +185,7 @@ hats.gui.helpInfo17.desc1=Wenn du einen "Mithelfer-Hut" hast,
 hats.gui.helpInfo17.desc2=kannst du ihn im "Hutjagd"-Modus
 hats.gui.helpInfo17.desc3=benutzen.
 
-hats.gui.helpInfo18.desc1=Das (C) im Namen des Hutes
+hats.gui.helpInfo18.desc1=Das (C) im Namen eines Hutes
 hats.gui.helpInfo18.desc2=bedeutet, dass der Hut als Dank für eine
 hats.gui.helpInfo18.desc3=Spende erstellt wurde!
 
