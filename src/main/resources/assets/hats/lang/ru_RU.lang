@@ -1,5 +1,5 @@
 hats.firstJoin.hatHunting=[Hats] Сервер в режиме охоты на шляпы! Убейте моба со шляпой, чтобы получить её!
-hats.firstJoin.kingOfTheHat.hasKing=[Hats] Сервер в режиме Короля шляпы! Убейте короля и получи своё право носить шляпу!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Сервер в режиме Короля шляпы! Убей короля и получи своё право носить шляпу!
 hats.firstJoin.timeActive=[Hats] Сервер в режиме временной активности! Проведи больше времени на сервере, чтобы разблокировать шляпу!
 hats.kingOfTheHat.update.playerJoin=[Hats] Возрадуйтесь! %s теперь Король!
 hats.kingOfTheHat.update.playerDied=[Hats] %1$s умер! %2$s теперь Король!
