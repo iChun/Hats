@@ -109,7 +109,7 @@ public class TileEntityHatStand extends TileEntity
         {
             if(tag.hasKey("headName") && !tag.getString("headName").isEmpty())
             {
-                this.gameProfile = new GameProfile(EntityHelperBase.uuidExample, tag.getString("headName"));
+                this.gameProfile = EntityHelperBase.getFullGameProfileFromName(tag.getString("headName"));
             }
             else if (tag.hasKey("headNameProfile", 10))
             {
