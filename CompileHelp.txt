@@ -1,4 +1,4 @@
-Create a folder in here that is named libs
+Create a folder in this folder "Hats" that is named libs
 In libs put IChunUtil-deobf.jar , Morph-deobf.jar , and IChunUtil_AT.cfg
 Copy that folder to "Hats\src\main\resources\assets\hats"
 Note: you should now have 2 duplicate folders in ^^ and Hats
