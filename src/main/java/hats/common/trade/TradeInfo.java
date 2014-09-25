@@ -55,7 +55,7 @@ public class TradeInfo
 		boolean sameDimension = trader1.dimension == trader2.dimension;
 		if(!(trader1Alive && trader2Alive && distanceCheck && clearSpaceCheck && sameDimension))
 		{
-			terminate((!trader1Alive || !trader2Alive) ? 0 : !distanceCheck ? 1 : clearSpaceCheck ? 2 : 4, !trader1Alive ? trader1 : !trader2Alive ? trader2 : null);
+			terminate(((!trader1Alive || !trader2Alive) ? 0 : (!distanceCheck ? 1 : (!clearSpaceCheck ? 2 : 4))), !trader1Alive ? trader1 : !trader2Alive ? trader2 : null);
 		}
 	}
 	
