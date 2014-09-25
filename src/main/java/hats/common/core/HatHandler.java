@@ -885,7 +885,7 @@ public class HatHandler
                     mobSpawners.put(callingClz, bool);
                 }
             }
-            catch(Exception e)
+            catch(Throwable e)
             {
                 bool = false;
                 mobSpawners.put(callingClz, bool);
