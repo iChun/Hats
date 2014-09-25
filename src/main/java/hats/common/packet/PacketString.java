@@ -118,6 +118,7 @@ public class PacketString extends AbstractPacket
                     {
                         if(ti.isPlayerInTrade(player))
                         {
+                            Hats.console("[In-Trade] " + pingString, false);
                             ti.sendTradeMessage(pingString, ti.getOtherPlayer(player));
                             break;
                         }

@@ -172,6 +172,7 @@ public class TickHandlerServer
 	
 	public void transferHat(TreeMap<String, Integer> origin, TreeMap<String, Integer> destination, TreeMap<String, Integer> hatsList)
 	{
+        HashMap<String, Integer> temp = new HashMap<String, Integer>();
         Iterator<Entry<String, Integer>> ite = origin.entrySet().iterator();
         while(ite.hasNext())
         {
@@ -180,15 +181,23 @@ public class TickHandlerServer
             {
                 if(e.getKey().equals(e1.getKey()))
                 {
-                    e.setValue(e.getValue() - e1.getValue());
-                    if(e.getValue() <= 0)
+                    if(e.getValue() - e1.getValue() <= 0)
                     {
                         ite.remove();
                         break;
                     }
+                    else
+                    {
+                        temp.put(e.getKey(), e.getValue() - e1.getValue());
+                    }
                 }
             }
         }
+        for(Entry<String, Integer> e : temp.entrySet())
+        {
+            origin.put(e.getKey(), e.getValue());
+        }
+        temp.clear();
 
         Iterator<Entry<String, Integer>> ite1 = hatsList.entrySet().iterator();
         while(ite1.hasNext())
@@ -198,12 +207,17 @@ public class TickHandlerServer
             {
                 if(e.getKey().equals(e1.getKey()))
                 {
-                    e1.setValue(e.getValue() + e1.getValue());
+                    temp.put(e1.getKey(), e.getValue() + e1.getValue());
                     ite1.remove();
                     break;
                 }
             }
         }
+        for(Entry<String, Integer> e : temp.entrySet())
+        {
+            destination.put(e.getKey(), e.getValue());
+        }
+        temp.clear();
 
         for(Map.Entry<String, Integer> e : hatsList.entrySet())
         {
