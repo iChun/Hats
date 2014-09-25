@@ -169,7 +169,7 @@ public class TickHandlerClient
                 {
                     if(requestMobHats.size() > 0)
                     {
-                        PacketHandler.sendToServer(Hats.channels, new PacketRequestMobHats(requestedMobHats));
+                        PacketHandler.sendToServer(Hats.channels, new PacketRequestMobHats(requestMobHats));
                         requestMobHats.clear();
                     }
                 }

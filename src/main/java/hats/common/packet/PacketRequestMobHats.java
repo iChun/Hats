@@ -19,7 +19,7 @@ public class PacketRequestMobHats extends AbstractPacket
 
     public PacketRequestMobHats(ArrayList<Integer> list)
     {
-        entIds = list;
+        entIds = new ArrayList<Integer>(list);
     }
 
     @Override
