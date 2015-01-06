@@ -10,12 +10,17 @@ import hats.common.packet.PacketPing;
 import hats.common.trade.TradeInfo;
 import hats.common.trade.TradeRequest;
 import ichun.common.core.network.PacketHandler;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
+import net.minecraft.network.Packet;
+import net.minecraft.world.World;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -23,14 +28,14 @@ import java.util.Map.Entry;
 public class TickHandlerServer
 {
     @SubscribeEvent
-	public void serverTick(TickEvent.ServerTickEvent event)
-	{
+    public void serverTick(TickEvent.ServerTickEvent event)
+    {
         if(event.phase == TickEvent.Phase.START)
         {
-//            for(int i = 0; i < 200; i++)
-//            {
-//                HatHandler.unlockHat(FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername("ohaiiChun"), HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), true).hatName);
-//            }
+            //            for(int i = 0; i < 200; i++)
+            //            {
+            //                HatHandler.unlockHat(FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().getPlayerForUsername("ohaiiChun"), HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), true).hatName);
+            //            }
             Iterator<Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
 
             while(iterator1.hasNext())
@@ -168,10 +173,35 @@ public class TickHandlerServer
                 }
             }
         }
-	}
-	
-	public void transferHat(TreeMap<String, Integer> origin, TreeMap<String, Integer> destination, TreeMap<String, Integer> hatsList)
-	{
+    }
+
+//    @SubscribeEvent
+//    public void onWorldTick(TickEvent.WorldTickEvent event)
+//    {
+//        if(event.phase == TickEvent.Phase.END)
+//        {
+//            boolean start = false;
+//            if(!start)
+//            {
+//                return;
+//            }
+//            for(int i = 0 ; i < event.world.loadedEntityList.size(); i++)
+//            {
+//                Entity ent = (Entity)event.world.loadedEntityList.get(i);
+//                if(ent instanceof EntityPlayer)
+//                {
+//                    continue;
+//                }
+//                if(event.world.getBlock((int)Math.floor(ent.posX), (int)Math.floor(ent.boundingBox.minY) - 1, (int)Math.floor(ent.posZ)) != Blocks.air)
+//                {
+//                    event.world.setBlock((int)Math.floor(ent.posX), (int)Math.floor(ent.boundingBox.minY) - 1, (int)Math.floor(ent.posZ), Blocks.wool, ent.getEntityId() % 16, 3);
+//                }
+//            }
+//        }
+//    }
+
+    public void transferHat(TreeMap<String, Integer> origin, TreeMap<String, Integer> destination, TreeMap<String, Integer> hatsList)
+    {
         HashMap<String, Integer> temp = new HashMap<String, Integer>();
         Iterator<Entry<String, Integer>> ite = origin.entrySet().iterator();
         while(ite.hasNext())
@@ -223,111 +253,111 @@ public class TickHandlerServer
         {
             destination.put(e.getKey(), e.getValue());
         }
-	}
-	
-	public void removeItems(EntityPlayer origin, ArrayList<ItemStack> itemsList) 
-	{
-		ArrayList<ItemStack> itemsListCopy = new ArrayList<ItemStack>();
-		for(ItemStack is : itemsList)
-		{
-			itemsListCopy.add(is.copy());
-		}
-		
-		for(int i = origin.inventory.mainInventory.length - 1; i >= 0; i--)
-		{
-			ItemStack is = origin.inventory.mainInventory[i];
-			if(is != null)
-			{
-				for(int j = itemsListCopy.size() - 1; j >= 0; j--)
-				{
-					ItemStack is1 = itemsListCopy.get(j);
-					if(is1.isItemEqual(is) && ItemStack.areItemStackTagsEqual(is, is1))
-					{
-						while(is.stackSize > 0 && is1.stackSize > 0)
-						{
-							is.stackSize--;
-							is1.stackSize--;
-						}
-						if(is1.stackSize <= 0)
-						{
-							itemsListCopy.remove(j);
-						}
-					}
-				}
-				if(is.stackSize <= 0)
-				{
-					origin.inventory.mainInventory[i] = null;
-				}
-				origin.inventory.markDirty();
-			}
-		}
-		
-		for(ItemStack is : itemsListCopy)
-		{
-			for(int i = itemsList.size() - 1; i >= 0; i--)
-			{
-				ItemStack is1 = itemsList.get(i);
-				if(is1.isItemEqual(is) && ItemStack.areItemStackTagsEqual(is, is1))
-				{
-					while(is.stackSize > 0 && is1.stackSize > 0)
-					{
-						is.stackSize--;
-						is1.stackSize--;
-					}
-					if(is1.stackSize <= 0)
-					{
-						itemsList.remove(i);
-					}
-				}
-			}
-		}
-	}
+    }
 
-	public void playerKilledEntity(EntityLivingBase living, EntityPlayer player)
-	{
-		String hat = mobHats.get(living);
+    public void removeItems(EntityPlayer origin, ArrayList<ItemStack> itemsList)
+    {
+        ArrayList<ItemStack> itemsListCopy = new ArrayList<ItemStack>();
+        for(ItemStack is : itemsList)
+        {
+            itemsListCopy.add(is.copy());
+        }
+
+        for(int i = origin.inventory.mainInventory.length - 1; i >= 0; i--)
+        {
+            ItemStack is = origin.inventory.mainInventory[i];
+            if(is != null)
+            {
+                for(int j = itemsListCopy.size() - 1; j >= 0; j--)
+                {
+                    ItemStack is1 = itemsListCopy.get(j);
+                    if(is1.isItemEqual(is) && ItemStack.areItemStackTagsEqual(is, is1))
+                    {
+                        while(is.stackSize > 0 && is1.stackSize > 0)
+                        {
+                            is.stackSize--;
+                            is1.stackSize--;
+                        }
+                        if(is1.stackSize <= 0)
+                        {
+                            itemsListCopy.remove(j);
+                        }
+                    }
+                }
+                if(is.stackSize <= 0)
+                {
+                    origin.inventory.mainInventory[i] = null;
+                }
+                origin.inventory.markDirty();
+            }
+        }
+
+        for(ItemStack is : itemsListCopy)
+        {
+            for(int i = itemsList.size() - 1; i >= 0; i--)
+            {
+                ItemStack is1 = itemsList.get(i);
+                if(is1.isItemEqual(is) && ItemStack.areItemStackTagsEqual(is, is1))
+                {
+                    while(is.stackSize > 0 && is1.stackSize > 0)
+                    {
+                        is.stackSize--;
+                        is1.stackSize--;
+                    }
+                    if(is1.stackSize <= 0)
+                    {
+                        itemsList.remove(i);
+                    }
+                }
+            }
+        }
+    }
+
+    public void playerKilledEntity(EntityLivingBase living, EntityPlayer player)
+    {
+        String hat = mobHats.get(living);
 
         RenderOnEntityHelper helper = HatHandler.getRenderHelper(living.getClass());
 
-		if((helper == null || helper.canUnlockHat(living)) && hat != null)
-		{
-			HatHandler.unlockHat(player, hat);
-		}
+        if((helper == null || helper.canUnlockHat(living)) && hat != null)
+        {
+            HatHandler.unlockHat(player, hat);
+        }
         mobHats.remove(living);
-	}
-	
-	public void playerDeath(EntityPlayer player)
-	{
+    }
+
+    public void playerDeath(EntityPlayer player)
+    {
         NBTTagCompound persistentTag = player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
         persistentTag.setString("Hats_unlocked", "");
         player.getEntityData().setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentTag);
 
-		Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo());
-		
+        Hats.proxy.playerWornHats.put(player.getCommandSenderName(), new HatInfo());
+
         PacketHandler.sendToPlayer(Hats.channels, new PacketPing(1, false), player);
 
         Hats.proxy.sendPlayerListOfWornHats(player, false, false);
-	}
-	
-	public void updateNewKing(String newKing, EntityPlayer player, boolean send)
-	{
-		if(!Hats.config.getSessionString("currentKing").equalsIgnoreCase("") && !Hats.config.getSessionString("currentKing").equalsIgnoreCase(newKing))
-		{
-			EntityPlayerMP oldKing = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(Hats.config.getSessionString("currentKing"));
-			if(oldKing != null)
-			{
-				playerDeath(oldKing);
-			}
+    }
+
+    public void updateNewKing(String newKing, EntityPlayer player, boolean send)
+    {
+        if(!Hats.config.getSessionString("currentKing").equalsIgnoreCase("") && !Hats.config.getSessionString("currentKing").equalsIgnoreCase(newKing))
+        {
+            EntityPlayerMP oldKing = FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152612_a(Hats.config.getSessionString("currentKing"));
+            if(oldKing != null)
+            {
+                playerDeath(oldKing);
+            }
 
             TreeMap<String, Integer> playerHatsList = Hats.proxy.tickHandlerServer.getPlayerHatsList(Hats.config.getSessionString("currentKing"));
 
-			Hats.proxy.tickHandlerServer.playerHats.put(Hats.config.getSessionString("currentKing"), null);
-			
-			Hats.proxy.tickHandlerServer.playerHats.put(newKing, playerHatsList);
-		}
-		Hats.config.updateSession("currentKing", newKing);
-		if(send)
-		{
+            Hats.proxy.tickHandlerServer.playerHats.put(Hats.config.getSessionString("currentKing"), null);
+
+            Hats.proxy.tickHandlerServer.playerHats.put(newKing, playerHatsList);
+        }
+        Hats.config.updateSession("currentKing", newKing);
+        if(send)
+        {
             if(player != null)
             {
                 if(player.getCommandSenderName().equalsIgnoreCase(Hats.config.getSessionString("currentKing")))
@@ -358,17 +388,17 @@ public class TickHandlerServer
             {
                 PacketHandler.sendToAll(Hats.channels, new PacketKingOfTheHatInfo(Hats.config.getSessionString("currentKing"), ""));
             }
-		}
-	}
-	
-	public void initializeTrade(EntityPlayerMP player, EntityPlayerMP plyr) 
-	{
-		if(player == null || plyr == null)
-		{
-			return;
-		}
-		activeTrades.add((new TradeInfo(player, plyr)).initialize());
-	}
+        }
+    }
+
+    public void initializeTrade(EntityPlayerMP player, EntityPlayerMP plyr)
+    {
+        if(player == null || plyr == null)
+        {
+            return;
+        }
+        activeTrades.add((new TradeInfo(player, plyr)).initialize());
+    }
 
     public TreeMap<String, Integer> getPlayerHatsList(String player)
     {
@@ -381,11 +411,11 @@ public class TickHandlerServer
         return playerHatsList;
     }
 
-	public WeakHashMap<EntityLivingBase, String> mobHats = new WeakHashMap<EntityLivingBase, String>();
-	public HashMap<String, TreeMap<String, Integer>> playerHats = new HashMap<String, TreeMap<String, Integer>>();
-	public HashMap<String, TimeActiveInfo> playerActivity = new HashMap<String, TimeActiveInfo>();
-	
-	public HashMap<String, TradeRequest> playerTradeRequests = new HashMap<String, TradeRequest>();
-	
-	public ArrayList<TradeInfo> activeTrades = new ArrayList<TradeInfo>();
+    public WeakHashMap<EntityLivingBase, String> mobHats = new WeakHashMap<EntityLivingBase, String>();
+    public HashMap<String, TreeMap<String, Integer>> playerHats = new HashMap<String, TreeMap<String, Integer>>();
+    public HashMap<String, TimeActiveInfo> playerActivity = new HashMap<String, TimeActiveInfo>();
+
+    public HashMap<String, TradeRequest> playerTradeRequests = new HashMap<String, TradeRequest>();
+
+    public ArrayList<TradeInfo> activeTrades = new ArrayList<TradeInfo>();
 }

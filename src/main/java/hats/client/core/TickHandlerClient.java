@@ -19,6 +19,7 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -92,6 +93,17 @@ public class TickHandlerClient
         {
             Minecraft mc = Minecraft.getMinecraft();
             WorldClient world = mc.theWorld;
+
+//            for(int i = 0 ; i < world.loadedEntityList.size(); i++)
+//            {
+//                Entity ent = (Entity)world.loadedEntityList.get(i);
+//                if(ent instanceof EntityPlayer)
+//                {
+//                    continue;
+//                }
+//                ent.renderDistanceWeight = 200D;
+//            }
+
 
             if(worldInstance != world)
             {
