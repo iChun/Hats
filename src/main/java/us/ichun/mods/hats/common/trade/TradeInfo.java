@@ -1,9 +1,5 @@
 package us.ichun.mods.hats.common.trade;
 
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.packet.PacketString;
-import us.ichun.mods.hats.common.packet.PacketTradeOffers;
-import us.ichun.mods.hats.common.packet.PacketTradeReadyInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;

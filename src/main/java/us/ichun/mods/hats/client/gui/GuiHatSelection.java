@@ -1,37 +1,35 @@
 package us.ichun.mods.hats.client.gui;
 
 import com.google.common.collect.ImmutableList;
-import us.ichun.mods.hats.common.core.SessionState;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import us.ichun.mods.hats.client.core.HatInfoClient;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.core.HatHandler;
-import us.ichun.mods.hats.common.core.HatInfo;
-import us.ichun.mods.hats.common.entity.EntityHat;
-import us.ichun.mods.hats.common.packet.PacketPlayerHatSelection;
-import us.ichun.mods.hats.common.packet.PacketString;
-import us.ichun.mods.hats.common.core.HatHandler;
-import us.ichun.mods.ichunutil.client.gui.GuiSlider;
-import us.ichun.mods.ichunutil.client.gui.ISlider;
-import us.ichun.mods.ichunutil.client.keybind.KeyBind;
-import us.ichun.mods.ichunutil.common.iChunUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+import us.ichun.mods.hats.client.core.HatInfoClient;
+import us.ichun.mods.hats.common.Hats;
+import us.ichun.mods.hats.common.core.HatHandler;
+import us.ichun.mods.hats.common.core.HatInfo;
+import us.ichun.mods.hats.common.core.SessionState;
+import us.ichun.mods.hats.common.entity.EntityHat;
+import us.ichun.mods.hats.common.packet.PacketPlayerHatSelection;
+import us.ichun.mods.hats.common.packet.PacketString;
+import us.ichun.mods.ichunutil.client.gui.GuiSlider;
+import us.ichun.mods.ichunutil.client.gui.ISlider;
+import us.ichun.mods.ichunutil.client.keybind.KeyBind;
+import us.ichun.mods.ichunutil.common.iChunUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -331,7 +329,6 @@ public class GuiHatSelection extends GuiScreen
     {
     	if(settingKey)
     	{
-
             Hats.config.guiKeyBind = iChunUtil.proxy.registerKeyBind(new KeyBind(i, false, false, false, false), Hats.config.guiKeyBind);
 
     		for(int i1 = 0; i1 < buttonList.size(); i1++)
@@ -1690,7 +1687,7 @@ public class GuiHatSelection extends GuiScreen
     	}
     	drawDefaultBackground();
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(GuiHatSelection.texChooser);
         int k = this.guiLeft;
         int l = this.guiTop;
@@ -1735,9 +1732,9 @@ public class GuiHatSelection extends GuiScreen
             
             if(btn.id == ID_HAT_COLOUR_SWAP || btn.id == ID_NONE || btn.id == ID_RANDOM || btn.id == ID_HELP || btn.id == ID_RELOAD_HATS || btn.id == ID_FAVOURITES || btn.id == ID_CATEGORIES || btn.id == ID_PERSONALIZE || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE || btn.id == ID_FAVOURITE || btn.id == ID_SEARCH || btn.id == ID_MAKE_TRADE || btn.id == ID_ACCEPT_TRADE)
             {
-            	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	            GL11.glEnable(GL11.GL_BLEND);
-	            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            	GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+	            GlStateManager.enableBlend();
+	            GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	            
 	            this.mc.getTextureManager().bindTexture(GuiHatSelection.texIcons);
 
@@ -1816,7 +1813,7 @@ public class GuiHatSelection extends GuiScreen
 	            	}
 	            }
 
-            	GL11.glDisable(GL11.GL_BLEND);
+            	GlStateManager.disableBlend();
             }
         }
         
@@ -1831,9 +1828,9 @@ public class GuiHatSelection extends GuiScreen
 
         if(player != null && !player.capabilities.isCreativeMode && tempInfo != null && !tempInfo.hatName.isEmpty())
         {
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            GlStateManager.disableDepth();
             drawString(fontRendererObj, HatHandler.getHatRarityColour(tempInfo.hatName).toString() + StatCollector.translateToLocalFormatted("hats.gui.hatsCollected", Hats.proxy.tickHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName)) == null ? 1 : Hats.proxy.tickHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName))), this.guiLeft + 10, this.guiTop + ySize - 22, 0xffffff);
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            GlStateManager.enableDepth();
         }
 
         drawForeground(par1, par2, par3);
@@ -1951,8 +1948,8 @@ public class GuiHatSelection extends GuiScreen
     {
         if (!par1List.isEmpty())
         {
-            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            GlStateManager.disableRescaleNormal();
+            GlStateManager.disableDepth();
             int k = 0;
             Iterator iterator = par1List.iterator();
 
@@ -2014,8 +2011,8 @@ public class GuiHatSelection extends GuiScreen
             }
 
             this.zLevel = 0.0F;
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+            GlStateManager.enableDepth();
+            GlStateManager.enableRescaleNormal();
         }
     }
 
@@ -2029,14 +2026,14 @@ public class GuiHatSelection extends GuiScreen
 	    	{
 	    		return;
 	    	}
-	        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-	        GL11.glPushMatrix();
+	        GlStateManager.enableColorMaterial();
+	        GlStateManager.pushMatrix();
 	        
-	        GL11.glDisable(GL11.GL_ALPHA_TEST);
+	        GlStateManager.disableAlpha();
 	        
-	        GL11.glTranslatef((float)par1, (float)par2, 500.0F);
-	        GL11.glScalef((float)(-par3), (float)par3, (float)par3);
-	        GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
+	        GlStateManager.translate((float)par1, (float)par2, 500.0F);
+	        GlStateManager.scale((float)(-par3), (float)par3, (float)par3);
+	        GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
 	        float f2 = hat.renderingParent.renderYawOffset;
 	        float f3 = hat.renderingParent.rotationYaw;
 	        float f4 = hat.renderingParent.rotationPitch;
@@ -2044,10 +2041,10 @@ public class GuiHatSelection extends GuiScreen
 	        float ff3 = hat.rotationYaw;
 	        float ff4 = hat.rotationPitch;
 	        
-	        GL11.glRotatef(135.0F, 0.0F, 1.0F, 0.0F);
+	        GlStateManager.rotate(135.0F, 0.0F, 1.0F, 0.0F);
 	        RenderHelper.enableStandardItemLighting();
-	        GL11.glRotatef(-135.0F, 0.0F, 1.0F, 0.0F);
-	        GL11.glRotatef(-((float)Math.atan((double)(par5 / 40.0F))) * 20.0F + 0.00001F, 1.0F, 0.0F, 0.0F);
+	        GlStateManager.rotate(-135.0F, 0.0F, 1.0F, 0.0F);
+	        GlStateManager.rotate(-((float)Math.atan((double)(par5 / 40.0F))) * 20.0F + 0.00001F, 1.0F, 0.0F, 0.0F);
 	        
 	        hat.renderingParent.renderYawOffset = (float)Math.atan((double)(par4 / 40.0F)) * 20.0F;
 	        hat.renderingParent.rotationYaw = hat.rotationYaw = (float)Math.atan((double)(par4 / 40.0F)) * 40.0F;
@@ -2058,9 +2055,9 @@ public class GuiHatSelection extends GuiScreen
     		
     		float nextScaleMag = nextEntSize > 2.5F ? (2.5F / nextEntSize) : 1.0F;
 
-    		GL11.glScalef(nextScaleMag, nextScaleMag, nextScaleMag);
+    		GlStateManager.scale(nextScaleMag, nextScaleMag, nextScaleMag);
     		
-//	        GL11.glTranslatef(0.0F, hat.parent == hat.renderingParent ? hat.parent.yOffset : 0.0F, 0.0F);
+//	        GlStateManager.translate(0.0F, hat.parent == hat.renderingParent ? hat.parent.yOffset : 0.0F, 0.0F);
 
             Minecraft.getMinecraft().getRenderManager().playerViewY = 180.0F;
             Minecraft.getMinecraft().getRenderManager().renderEntityWithPosYaw(hat.renderingParent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F);
@@ -2068,17 +2065,13 @@ public class GuiHatSelection extends GuiScreen
 	        Tessellator.getInstance().getWorldRenderer().setBrightness(240);
 	        int rend = Hats.config.renderHats;
 	        Hats.config.renderHats = 13131;
-//	        GL11.glTranslatef(0.0F, (float)(hat.lastTickPosY - hat.parent.lastTickPosY) + (float)((hat.parent.boundingBox.minY + hat.parent.yOffset) - (hat.parent.posY)), 0.0F);
+//	        GlStateManager.translate(0.0F, (float)(hat.lastTickPosY - hat.parent.lastTickPosY) + (float)((hat.parent.boundingBox.minY + hat.parent.yOffset) - (hat.parent.posY)), 0.0F);
 	        
 	        Hats.proxy.tickHandlerClient.updateHatPosAndAngle(hat, hat.renderingParent);
 	        
-	        RenderHelper.disableStandardItemLighting();
-	        
-            int i = 15728880;
-            int j = i % 65536;
-            int k = i / 65536;
-            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
-	        
+//	        RenderHelper.disableStandardItemLighting();
+            GlStateManager.enableNormalize();
+
 	        HatInfoClient info = hat.info;
 	        
 	        if(tempInfo == null || info == null || !(tempInfo.hatName.equalsIgnoreCase(hat.hatName) && tempInfo.colourR == hat.getR() && tempInfo.colourG == hat.getG() && tempInfo.colourB == hat.getB() && tempInfo.alpha == hat.getA()))
@@ -2101,12 +2094,12 @@ public class GuiHatSelection extends GuiScreen
 	        hat.rotationYaw = ff3;
 	        hat.rotationPitch = ff4;
 	        
-	        GL11.glEnable(GL11.GL_ALPHA_TEST);
+	        GlStateManager.enableAlpha();
 	        
-	        GL11.glPopMatrix();
-	        GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+	        GlStateManager.popMatrix();
+	        GlStateManager.disableRescaleNormal();
 	        OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
-	        GL11.glDisable(GL11.GL_TEXTURE_2D);
+	        GlStateManager.disableTexture2D();
 	        OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
     	}
     }
@@ -2116,15 +2109,15 @@ public class GuiHatSelection extends GuiScreen
     	if(searchBar.getVisible())
     	{
 	    	searchBar.drawTextBox();
-	    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	        GL11.glEnable(GL11.GL_BLEND);
-	        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	    	GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+	        GlStateManager.enableBlend();
+	        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	
 	        this.mc.getTextureManager().bindTexture(GuiHatSelection.texIcons);
 	    	
 	    	drawTexturedModalRect(this.width / 2 - 85, height - 22, (adding || renaming) ? 112 : 128, 0, 16, 16);
 	    	
-	    	GL11.glDisable(GL11.GL_BLEND);
+	    	GlStateManager.disableBlend();
 	    	
 	    	if((adding || renaming) && searchBar.getText().equalsIgnoreCase(""))
 	    	{

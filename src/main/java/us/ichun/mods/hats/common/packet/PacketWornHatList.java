@@ -1,15 +1,13 @@
 package us.ichun.mods.hats.common.packet;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import us.ichun.mods.hats.common.Hats;
 import us.ichun.mods.hats.common.core.HatInfo;
 import us.ichun.mods.hats.common.entity.EntityHat;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.core.HatInfo;
 import us.ichun.mods.ichunutil.common.core.network.AbstractPacket;
-import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
 
 import java.util.ArrayList;
 

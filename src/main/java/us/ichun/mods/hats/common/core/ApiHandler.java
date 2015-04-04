@@ -4,8 +4,6 @@ import us.ichun.mods.hats.api.RenderOnEntityHelper;
 import us.ichun.mods.hats.client.core.HatInfoClient;
 import us.ichun.mods.hats.client.render.HatRendererHelper;
 import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.client.render.HatRendererHelper;
-import us.ichun.mods.hats.common.Hats;
 
 
 public class ApiHandler 

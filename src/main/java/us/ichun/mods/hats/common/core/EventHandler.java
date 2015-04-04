@@ -1,8 +1,5 @@
 package us.ichun.mods.hats.common.core;
 
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.packet.PacketPing;
-import us.ichun.mods.hats.common.packet.PacketSession;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -23,7 +20,9 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import us.ichun.mods.hats.common.Hats;
 import us.ichun.mods.hats.common.packet.PacketPing;
+import us.ichun.mods.hats.common.packet.PacketSession;
 import us.ichun.mods.ichunutil.client.keybind.KeyEvent;
 
 import java.util.ArrayList;

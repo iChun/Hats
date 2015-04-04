@@ -1,7 +1,6 @@
 package us.ichun.mods.hats.client.core;
 
 import us.ichun.mods.hats.common.core.HatInfo;
-import us.ichun.mods.hats.common.core.HatInfo;
 
 public class HatInfoClient extends HatInfo
 {

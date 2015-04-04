@@ -1,9 +1,5 @@
 package us.ichun.mods.hats.common.entity;
 
-import us.ichun.mods.hats.client.core.HatInfoClient;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.core.HatInfo;
-import us.ichun.mods.hats.common.core.SessionState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

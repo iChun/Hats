@@ -1,17 +1,15 @@
 package us.ichun.mods.hats.client.gui;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import us.ichun.mods.hats.client.core.HatInfoClient;
-import us.ichun.mods.hats.client.render.HatRendererHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import us.ichun.mods.hats.client.core.HatInfoClient;
 import us.ichun.mods.hats.client.render.HatRendererHelper;
 
@@ -74,23 +72,23 @@ public class GuiHatUnlocked extends Gui
      */
     private void updateWindowScale()
     {
-        GL11.glViewport(0, 0, this.theGame.displayWidth, this.theGame.displayHeight);
-        GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glLoadIdentity();
+        GlStateManager.viewport(0, 0, this.theGame.displayWidth, this.theGame.displayHeight);
+        GlStateManager.matrixMode(GL11.GL_PROJECTION);
+        GlStateManager.loadIdentity();
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+        GlStateManager.loadIdentity();
         this.width = this.theGame.displayWidth;
         this.height = this.theGame.displayHeight;
         ScaledResolution scaledresolution = new ScaledResolution(this.theGame, this.theGame.displayWidth, this.theGame.displayHeight);
         this.width = scaledresolution.getScaledWidth();
         this.height = scaledresolution.getScaledHeight();
-        GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glOrtho(0.0D, (double)this.width, (double)this.height, 0.0D, 1000.0D, 3000.0D);
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glLoadIdentity();
-        GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
+        GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT);
+        GlStateManager.matrixMode(GL11.GL_PROJECTION);
+        GlStateManager.loadIdentity();
+        GlStateManager.ortho(0.0D, (double)this.width, (double)this.height, 0.0D, 1000.0D, 3000.0D);
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+        GlStateManager.loadIdentity();
+        GlStateManager.translate(0.0F, 0.0F, -2000.0F);
     }
 
     /**
@@ -98,7 +96,7 @@ public class GuiHatUnlocked extends Gui
      */
     public void updateGui()
     {
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         if (this.unlockedTime != 0L)
         {
             double d0 = (double)(Minecraft.getSystemTime() - this.unlockedTime) / 3000.0D;
@@ -111,8 +109,8 @@ public class GuiHatUnlocked extends Gui
             else
             {
                 this.updateWindowScale();
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-                GL11.glDepthMask(false);
+                GlStateManager.disableDepth();
+                GlStateManager.depthMask(false);
                 double d1 = d0 * 2.0D;
 
                 if (d1 > 1.0D)
@@ -132,41 +130,41 @@ public class GuiHatUnlocked extends Gui
                 d1 *= d1;
                 int i = this.width - 160;
                 int j = 0 - (int)(d1 * 36.0D);
-                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                GL11.glEnable(GL11.GL_TEXTURE_2D);
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                GlStateManager.enableTexture2D();
                 this.theGame.getTextureManager().bindTexture(texAchi);
-                GL11.glDisable(GL11.GL_LIGHTING);
+                GlStateManager.disableLighting();
                 this.drawTexturedModalRect(i, j, 96, 202, 160, 32);
 
                 this.theGame.fontRendererObj.drawString(this.headerText, i + 30, j + 7, -256);
                 this.theGame.fontRendererObj.drawString(this.hatNameText, i + 30, j + 18, -1);
 
                 RenderHelper.enableGUIStandardItemLighting();
-                GL11.glDisable(GL11.GL_LIGHTING);
-                GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-                GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-                GL11.glEnable(GL11.GL_LIGHTING);
+                GlStateManager.disableLighting();
+                GlStateManager.enableRescaleNormal();
+                GlStateManager.enableColorMaterial();
+                GlStateManager.enableLighting();
 
-                GL11.glTranslatef((float)i + 16, (float)j + 16, 50F);
+                GlStateManager.translate((float)i + 16, (float)j + 16, 50F);
 
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
-                GL11.glDepthMask(true);
+                GlStateManager.enableDepth();
+                GlStateManager.depthMask(true);
 
-                GL11.glScalef(1.0F, -1.0F, 1.0F);
-                GL11.glScalef(20.0F, 20.0F, 20.0F);
-                GL11.glRotatef(10.0F, 1.0F, 0.0F, 0.0F);
-                GL11.glRotatef(-22.5F, 0.0F, 1.0F, 0.0F);
-                GL11.glRotatef((float)(Minecraft.getSystemTime() - this.unlockedTime) / 6F, 0.0F, 1.0F, 0.0F);
+                GlStateManager.scale(1.0F, -1.0F, 1.0F);
+                GlStateManager.scale(20.0F, 20.0F, 20.0F);
+                GlStateManager.rotate(10.0F, 1.0F, 0.0F, 0.0F);
+                GlStateManager.rotate(-22.5F, 0.0F, 1.0F, 0.0F);
+                GlStateManager.rotate((float)(Minecraft.getSystemTime() - this.unlockedTime) / 6F, 0.0F, 1.0F, 0.0F);
 
                 HatRendererHelper.renderHat(info, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.000000000F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, true, true, 1.0F);
 
-                GL11.glDepthMask(true);
-                GL11.glEnable(GL11.GL_DEPTH_TEST);
+                GlStateManager.depthMask(true);
+                GlStateManager.enableDepth();
 
-                GL11.glDisable(GL11.GL_LIGHTING);
+                GlStateManager.disableLighting();
 
             }
         }
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 }

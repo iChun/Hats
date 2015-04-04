@@ -4,7 +4,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityPig;
 import us.ichun.mods.hats.api.RenderOnEntityHelper;
 import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.Hats;
 
 public class HelperPig extends RenderOnEntityHelper 
 {

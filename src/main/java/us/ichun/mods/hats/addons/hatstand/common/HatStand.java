@@ -1,12 +1,12 @@
 package us.ichun.mods.hats.addons.hatstand.common;
 
-import us.ichun.mods.hats.addons.hatstand.common.core.CommonProxy;
 import net.minecraft.block.Block;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import us.ichun.mods.hats.addons.hatstand.common.core.CommonProxy;
 import us.ichun.mods.ichunutil.common.core.network.PacketChannel;
 import us.ichun.mods.ichunutil.common.core.updateChecker.ModVersionChecker;
 import us.ichun.mods.ichunutil.common.core.updateChecker.ModVersionInfo;

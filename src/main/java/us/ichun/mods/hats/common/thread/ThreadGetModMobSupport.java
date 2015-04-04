@@ -2,11 +2,8 @@ package us.ichun.mods.hats.common.thread;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
-import us.ichun.mods.hats.client.render.helper.HelperGeneric;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.core.CommonProxy;
-import us.ichun.mods.hats.common.core.HatHandler;
 import net.minecraft.entity.EntityLivingBase;
+import us.ichun.mods.hats.client.render.helper.HelperGeneric;
 import us.ichun.mods.hats.common.Hats;
 import us.ichun.mods.hats.common.core.CommonProxy;
 import us.ichun.mods.hats.common.core.HatHandler;

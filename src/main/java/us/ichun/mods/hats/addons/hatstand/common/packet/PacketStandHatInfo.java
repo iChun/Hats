@@ -1,14 +1,12 @@
 package us.ichun.mods.hats.addons.hatstand.common.packet;
 
-import us.ichun.mods.hats.addons.hatstand.common.tileentity.TileEntityHatStand;
-import us.ichun.mods.hats.common.core.HatHandler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
+import us.ichun.mods.hats.addons.hatstand.common.tileentity.TileEntityHatStand;
 import us.ichun.mods.hats.common.core.HatHandler;
 import us.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 

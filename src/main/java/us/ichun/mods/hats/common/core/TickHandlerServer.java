@@ -1,5 +1,10 @@
 package us.ichun.mods.hats.common.core;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -8,21 +13,6 @@ import us.ichun.mods.hats.common.Hats;
 import us.ichun.mods.hats.common.packet.PacketKingOfTheHatInfo;
 import us.ichun.mods.hats.common.packet.PacketPing;
 import us.ichun.mods.hats.common.trade.TradeInfo;
-import us.ichun.mods.hats.common.trade.TradeRequest;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
-import net.minecraft.world.World;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.packet.PacketKingOfTheHatInfo;
-import us.ichun.mods.hats.common.packet.PacketPing;
 import us.ichun.mods.hats.common.trade.TradeRequest;
 
 import java.util.*;

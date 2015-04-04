@@ -1,15 +1,15 @@
 package us.ichun.mods.hats.common.packet;
 
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import us.ichun.mods.hats.client.gui.GuiTradeWindow;
-import us.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import us.ichun.mods.hats.client.gui.GuiTradeWindow;
+import us.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 
 public class PacketTradeReadyInfo extends AbstractPacket
 {

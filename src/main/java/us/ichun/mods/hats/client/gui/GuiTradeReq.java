@@ -1,24 +1,21 @@
 package us.ichun.mods.hats.client.gui;
 
-import us.ichun.mods.hats.common.Hats;
-
-import java.util.ArrayList;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 import us.ichun.mods.hats.common.Hats;
+
+import java.util.ArrayList;
 
 @SideOnly(Side.CLIENT)
 public class GuiTradeReq extends Gui
@@ -71,23 +68,23 @@ public class GuiTradeReq extends Gui
      */
     private void updateWindowScale()
     {
-        GL11.glViewport(0, 0, this.theGame.displayWidth, this.theGame.displayHeight);
-        GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glLoadIdentity();
+        GlStateManager.viewport(0, 0, this.theGame.displayWidth, this.theGame.displayHeight);
+        GlStateManager.matrixMode(GL11.GL_PROJECTION);
+        GlStateManager.loadIdentity();
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+        GlStateManager.loadIdentity();
         this.width = this.theGame.displayWidth;
         this.height = this.theGame.displayHeight;
         ScaledResolution scaledresolution = new ScaledResolution(this.theGame, this.theGame.displayWidth, this.theGame.displayHeight);
         this.width = scaledresolution.getScaledWidth();
         this.height = scaledresolution.getScaledHeight();
-        GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
-        GL11.glMatrixMode(GL11.GL_PROJECTION);
-        GL11.glLoadIdentity();
-        GL11.glOrtho(0.0D, (double)this.width, (double)this.height, 0.0D, 1000.0D, 3000.0D);
-        GL11.glMatrixMode(GL11.GL_MODELVIEW);
-        GL11.glLoadIdentity();
-        GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
+        GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT);
+        GlStateManager.matrixMode(GL11.GL_PROJECTION);
+        GlStateManager.loadIdentity();
+        GlStateManager.ortho(0.0D, (double)this.width, (double)this.height, 0.0D, 1000.0D, 3000.0D);
+        GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+        GlStateManager.loadIdentity();
+        GlStateManager.translate(0.0F, 0.0F, -2000.0F);
     }
 
     /**
@@ -95,7 +92,7 @@ public class GuiTradeReq extends Gui
      */
     public void updateGui()
     {
-    	GL11.glPushMatrix();
+    	GlStateManager.pushMatrix();
         if (this.unlockedTime != 0L)
         {
             double d0 = (double)(Minecraft.getSystemTime() - this.unlockedTime) / 10000.0D;
@@ -108,8 +105,8 @@ public class GuiTradeReq extends Gui
             else
             {
                 this.updateWindowScale();
-                GL11.glDisable(GL11.GL_DEPTH_TEST);
-                GL11.glDepthMask(false);
+                GlStateManager.disableDepth();
+                GlStateManager.depthMask(false);
                 double d1 = d0 * 2.0D;
 
                 if (d1 > 1.0D)
@@ -129,10 +126,10 @@ public class GuiTradeReq extends Gui
                 d1 *= d1;
                 int i = this.width - 160;
                 int j = 0 - (int)(d1 * 36.0D);
-                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                GL11.glEnable(GL11.GL_TEXTURE_2D);
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                GlStateManager.enableTexture2D();
                 this.theGame.getTextureManager().bindTexture(texAchi);
-                GL11.glDisable(GL11.GL_LIGHTING);
+                GlStateManager.disableLighting();
                 this.drawTexturedModalRect(i, j, 96, 202, 160, 32);
 
                 this.theGame.fontRendererObj.drawString(this.headerText, i + 30, j + 7, -256);
@@ -150,7 +147,7 @@ public class GuiTradeReq extends Gui
                 
                 if(rl != null)
                 {
-                	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                	GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                 	this.theGame.getTextureManager().bindTexture(rl);
                 	
                 	double xOff = 6D;
@@ -170,10 +167,10 @@ public class GuiTradeReq extends Gui
                 }
 
                 RenderHelper.enableGUIStandardItemLighting();
-                GL11.glDisable(GL11.GL_LIGHTING);
+                GlStateManager.disableLighting();
 	            
             }
         }
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 }

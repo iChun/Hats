@@ -1,16 +1,5 @@
 package us.ichun.mods.hats.client.core;
 
-import us.ichun.mods.hats.api.RenderOnEntityHelper;
-import us.ichun.mods.hats.client.gui.GuiHatSelection;
-import us.ichun.mods.hats.client.gui.GuiHatUnlocked;
-import us.ichun.mods.hats.client.gui.GuiTradeReq;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.core.HatHandler;
-import us.ichun.mods.hats.common.core.HatInfo;
-import us.ichun.mods.hats.common.core.SessionState;
-import us.ichun.mods.hats.common.entity.EntityHat;
-import us.ichun.mods.hats.common.packet.PacketPing;
-import us.ichun.mods.hats.common.packet.PacketRequestMobHats;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
@@ -22,11 +11,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
+import us.ichun.mods.hats.api.RenderOnEntityHelper;
 import us.ichun.mods.hats.client.gui.GuiHatSelection;
+import us.ichun.mods.hats.client.gui.GuiHatUnlocked;
+import us.ichun.mods.hats.client.gui.GuiTradeReq;
 import us.ichun.mods.hats.common.Hats;
 import us.ichun.mods.hats.common.core.HatHandler;
 import us.ichun.mods.hats.common.core.HatInfo;
 import us.ichun.mods.hats.common.core.SessionState;
+import us.ichun.mods.hats.common.entity.EntityHat;
 import us.ichun.mods.hats.common.packet.PacketPing;
 import us.ichun.mods.hats.common.packet.PacketRequestMobHats;
 

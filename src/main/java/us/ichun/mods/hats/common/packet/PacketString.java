@@ -1,11 +1,5 @@
 package us.ichun.mods.hats.common.packet;
 
-import us.ichun.mods.hats.client.gui.GuiHatSelection;
-import us.ichun.mods.hats.client.gui.GuiHatUnlocked;
-import us.ichun.mods.hats.client.gui.GuiTradeWindow;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.trade.TradeInfo;
-import us.ichun.mods.hats.common.trade.TradeRequest;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -20,7 +14,10 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.ichun.mods.hats.client.gui.GuiHatSelection;
+import us.ichun.mods.hats.client.gui.GuiHatUnlocked;
+import us.ichun.mods.hats.client.gui.GuiTradeWindow;
 import us.ichun.mods.hats.common.Hats;
+import us.ichun.mods.hats.common.trade.TradeInfo;
 import us.ichun.mods.hats.common.trade.TradeRequest;
 import us.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 

@@ -1,21 +1,13 @@
 package us.ichun.mods.hats.client.gui;
 
-import us.ichun.mods.hats.client.core.HatInfoClient;
-import us.ichun.mods.hats.client.render.HatRendererHelper;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.core.HatHandler;
-import us.ichun.mods.hats.common.entity.EntityHat;
-import us.ichun.mods.hats.common.packet.PacketPing;
-import us.ichun.mods.hats.common.packet.PacketString;
-import us.ichun.mods.hats.common.packet.PacketTradeOffers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
@@ -23,10 +15,11 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
+import us.ichun.mods.hats.client.core.HatInfoClient;
 import us.ichun.mods.hats.client.render.HatRendererHelper;
 import us.ichun.mods.hats.common.Hats;
 import us.ichun.mods.hats.common.core.HatHandler;
+import us.ichun.mods.hats.common.entity.EntityHat;
 import us.ichun.mods.hats.common.packet.PacketPing;
 import us.ichun.mods.hats.common.packet.PacketString;
 import us.ichun.mods.hats.common.packet.PacketTradeOffers;
@@ -1029,7 +1022,7 @@ public class GuiTradeWindow extends GuiScreen
         this.mouseX = (float)par1;
         this.mouseY = (float)par2;
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         int k = this.guiLeft;
         int l = this.guiTop;
 
@@ -1119,7 +1112,7 @@ public class GuiTradeWindow extends GuiScreen
 
         this.mc.getTextureManager().bindTexture(texIcons);
 
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
 
         RendererHelper.startGlScissor(guiLeft + 6, guiTop + 29, 108, 36);
 
@@ -1131,7 +1124,7 @@ public class GuiTradeWindow extends GuiScreen
 
             if(slotsToDraw > columnWidth)
             {
-                GL11.glTranslatef(-(float)(size * (slotsToDraw - columnWidth) * sliderProg), 0.0F, 0.0F);
+                GlStateManager.translate(-(float)(size * (slotsToDraw - columnWidth) * sliderProg), 0.0F, 0.0F);
             }
 
             int lastInv = 0;
@@ -1165,30 +1158,30 @@ public class GuiTradeWindow extends GuiScreen
                         {
                             if(ii == lastInv)
                             {
-                                GL11.glPushMatrix();
+                                GlStateManager.pushMatrix();
 
-                                GL11.glTranslatef((float)(k + 6 + (size * i) - 2), (float)(l + 29 + 14), -3.0F + this.zLevel);
+                                GlStateManager.translate((float)(k + 6 + (size * i) - 2), (float)(l + 29 + 14), -3.0F + this.zLevel);
 
-                                GL11.glScalef(20.0F, 20.0F, 20.0F);
+                                GlStateManager.scale(20.0F, 20.0F, 20.0F);
 
-                                GL11.glTranslatef(1.0F, 0.5F, 1.0F);
-                                GL11.glScalef(1.0F, 1.0F, -1.0F);
-                                GL11.glRotatef(190.0F, 1.0F, 0.0F, 0.0F);
-                                GL11.glRotatef(45.0F + (Minecraft.getSystemTime() - this.rotationalClock) / 6F, 0.0F, 1.0F, 0.0F);
+                                GlStateManager.translate(1.0F, 0.5F, 1.0F);
+                                GlStateManager.scale(1.0F, 1.0F, -1.0F);
+                                GlStateManager.rotate(190.0F, 1.0F, 0.0F, 0.0F);
+                                GlStateManager.rotate(45.0F + (Minecraft.getSystemTime() - this.rotationalClock) / 6F, 0.0F, 1.0F, 0.0F);
 
                                 HatInfoClient info = new HatInfoClient(e.getKey().toLowerCase());
                                 HatRendererHelper.renderHat(info, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0000000F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, true, true, 1.0F);
 
-                                GL11.glPopMatrix();
+                                GlStateManager.popMatrix();
 
-                                GL11.glEnable(GL11.GL_BLEND);
-                                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                                GL11.glDisable(GL11.GL_DEPTH_TEST);
+                                GlStateManager.enableBlend();
+                                GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                                GlStateManager.disableDepth();
                                 drawSolidRect(k + 6 + (size * i) + size - 10, l + 29 + size - 10, 9, 9, 0, 0.4F);
                                 fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 6 + (size * i) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 29 + size - 9), 0xffffff, true);
-                                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                                GL11.glEnable(GL11.GL_DEPTH_TEST);
-                                GL11.glDisable(GL11.GL_BLEND);
+                                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                                GlStateManager.enableDepth();
+                                GlStateManager.disableBlend();
 
                                 break;
                             }
@@ -1214,7 +1207,7 @@ public class GuiTradeWindow extends GuiScreen
                 }
             }
         }
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 
         RendererHelper.startGlScissor(guiLeft + 125, guiTop + 17, 108, 54);
 
@@ -1229,11 +1222,11 @@ public class GuiTradeWindow extends GuiScreen
 
         int hatLevels = (int)Math.ceil((float)slotsToDraw / 3F);
 
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
 
         int boxes = hatLevels * 2 + (int)Math.ceil((float)Math.max(ourItemsForTrade.size(), 6) / 6F);
 
-        GL11.glTranslatef(0.0F, (-boxes * 18F + 54) * selfScrollProg, 0.0F);
+        GlStateManager.translate(0.0F, (-boxes * 18F + 54) * selfScrollProg, 0.0F);
 
         for(int i = 0; i < slotsToDraw; i++)
         {
@@ -1246,30 +1239,30 @@ public class GuiTradeWindow extends GuiScreen
                 {
                     if(ii == i)
                     {
-                        GL11.glPushMatrix();
+                        GlStateManager.pushMatrix();
 
-                        GL11.glTranslatef((float)(k + 125 + (size * (i % columnWidth)) - 2), (float)(l + 17 + (size * (int)(Math.floor(i / columnWidth))) + 14), -3.0F + this.zLevel);
+                        GlStateManager.translate((float)(k + 125 + (size * (i % columnWidth)) - 2), (float)(l + 17 + (size * (int)(Math.floor(i / columnWidth))) + 14), -3.0F + this.zLevel);
 
-                        GL11.glScalef(20.0F, 20.0F, 20.0F);
+                        GlStateManager.scale(20.0F, 20.0F, 20.0F);
 
-                        GL11.glTranslatef(1.0F, 0.5F, 1.0F);
-                        GL11.glScalef(1.0F, 1.0F, -1.0F);
-                        GL11.glRotatef(190.0F, 1.0F, 0.0F, 0.0F);
-                        GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+                        GlStateManager.translate(1.0F, 0.5F, 1.0F);
+                        GlStateManager.scale(1.0F, 1.0F, -1.0F);
+                        GlStateManager.rotate(190.0F, 1.0F, 0.0F, 0.0F);
+                        GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
 
                         HatInfoClient info = new HatInfoClient(e.getKey().toLowerCase());
                         HatRendererHelper.renderHat(info, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0000000F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, true, true, 1.0F);
 
-                        GL11.glPopMatrix();
+                        GlStateManager.popMatrix();
 
-                        GL11.glEnable(GL11.GL_BLEND);
-                        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                        GL11.glDisable(GL11.GL_DEPTH_TEST);
+                        GlStateManager.enableBlend();
+                        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                        GlStateManager.disableDepth();
                         drawSolidRect(k + 125 + (size * (i % columnWidth)) + size - 10, l + 17 + (size * (int)(Math.floor(i / columnWidth))) + size - 10, 9, 9, 0, 0.4F);
                         fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 17 + (size * (int)(Math.floor(i / columnWidth))) + size - 9), 0xffffff, true);
-                        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                        GL11.glEnable(GL11.GL_DEPTH_TEST);
-                        GL11.glDisable(GL11.GL_BLEND);
+                        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                        GlStateManager.enableDepth();
+                        GlStateManager.disableBlend();
 
                         break;
                     }
@@ -1299,7 +1292,7 @@ public class GuiTradeWindow extends GuiScreen
             }
         }
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 
         RendererHelper.startGlScissor(guiLeft + 125, guiTop + 116, 108, 54);
 
@@ -1314,11 +1307,11 @@ public class GuiTradeWindow extends GuiScreen
 
         hatLevels = (int)Math.ceil((float)slotsToDraw / 3F);
 
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
 
         boxes = hatLevels * 2 + (int)Math.ceil((float)Math.max(theirItemsForTrade.size(), 6) / 6F);
 
-        GL11.glTranslatef(0.0F, (-boxes * 18F + 54) * theirScrollProg, 0.0F);
+        GlStateManager.translate(0.0F, (-boxes * 18F + 54) * theirScrollProg, 0.0F);
 
         for(int i = 0; i < slotsToDraw; i++)
         {
@@ -1331,30 +1324,30 @@ public class GuiTradeWindow extends GuiScreen
                 {
                     if(ii == i)
                     {
-                        GL11.glPushMatrix();
+                        GlStateManager.pushMatrix();
 
-                        GL11.glTranslatef((float)(k + 125 + (size * (i % columnWidth)) - 2), (float)(l + 116 + (size * (int)(Math.floor(i / columnWidth))) + 14), -3.0F + this.zLevel);
+                        GlStateManager.translate((float)(k + 125 + (size * (i % columnWidth)) - 2), (float)(l + 116 + (size * (int)(Math.floor(i / columnWidth))) + 14), -3.0F + this.zLevel);
 
-                        GL11.glScalef(20.0F, 20.0F, 20.0F);
+                        GlStateManager.scale(20.0F, 20.0F, 20.0F);
 
-                        GL11.glTranslatef(1.0F, 0.5F, 1.0F);
-                        GL11.glScalef(1.0F, 1.0F, -1.0F);
-                        GL11.glRotatef(190.0F, 1.0F, 0.0F, 0.0F);
-                        GL11.glRotatef(45.0F, 0.0F, 1.0F, 0.0F);
+                        GlStateManager.translate(1.0F, 0.5F, 1.0F);
+                        GlStateManager.scale(1.0F, 1.0F, -1.0F);
+                        GlStateManager.rotate(190.0F, 1.0F, 0.0F, 0.0F);
+                        GlStateManager.rotate(45.0F, 0.0F, 1.0F, 0.0F);
 
                         HatInfoClient info = new HatInfoClient(e.getKey().toLowerCase());
                         HatRendererHelper.renderHat(info, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0000000F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, true, true, 1.0F);
 
-                        GL11.glPopMatrix();
+                        GlStateManager.popMatrix();
 
-                        GL11.glEnable(GL11.GL_BLEND);
-                        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                        GL11.glDisable(GL11.GL_DEPTH_TEST);
+                        GlStateManager.enableBlend();
+                        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+                        GlStateManager.disableDepth();
                         drawSolidRect(k + 125 + (size * (i % columnWidth)) + size - 10, l + 116 + (size * (int)(Math.floor(i / columnWidth))) + size - 10, 9, 9, 0, 0.4F);
                         fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 116 + (size * (int)(Math.floor(i / columnWidth))) + size - 9), 0xffffff, true);
-                        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-                        GL11.glEnable(GL11.GL_DEPTH_TEST);
-                        GL11.glDisable(GL11.GL_BLEND);
+                        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+                        GlStateManager.enableDepth();
+                        GlStateManager.disableBlend();
 
                         break;
                     }
@@ -1385,7 +1378,7 @@ public class GuiTradeWindow extends GuiScreen
             }
         }
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 
         RendererHelper.endGlScissor();
 
@@ -1393,14 +1386,14 @@ public class GuiTradeWindow extends GuiScreen
         this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
 
         this.mc.getTextureManager().bindTexture(texIcons);
-        GL11.glPushMatrix();
-        GL11.glTranslatef(0.0F, 37F * selfScrollProg, 0.0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0.0F, 37F * selfScrollProg, 0.0F);
         this.drawTexturedModalRect(k + 237, l + 18, selfCanScroll ? 54 : 66, 45, 12, 15); //scroll button is 15 wide //scroll bar is 37 long
-        GL11.glPopMatrix();
-        GL11.glPushMatrix();
-        GL11.glTranslatef(0.0F, 37F * theirScrollProg, 0.0F);
+        GlStateManager.popMatrix();
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(0.0F, 37F * theirScrollProg, 0.0F);
         this.drawTexturedModalRect(k + 237, l + 117, theirCanScroll ? 54 : 66, 45, 12, 15); //scroll button is 15 wide //scroll bar is 37 long
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 
         super.drawScreen(par1, par2, par3);
 
@@ -1413,15 +1406,15 @@ public class GuiTradeWindow extends GuiScreen
 
         boolean hasItem = !(ourHatsForTrade.size() == 0 && ourItemsForTrade.size() == 0 && theirHatsForTrade.size() == 0 && theirItemsForTrade.size() == 0);
 
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         float scale = 0.5F;
-        GL11.glScalef(scale, scale, scale);
+        GlStateManager.scale(scale, scale, scale);
         fontRendererObj.drawString(hasItem ? (selfReady && theirReady ? (pointOfNoReturn ? (clickedMakeTrade ? StatCollector.translateToLocal("hats.trade.waitingForThem") : StatCollector.translateToLocal("hats.trade.waitingForYou")) : StatCollector.translateToLocal("hats.trade.bothReady")) : StatCollector.translateToLocal("hats.trade.waitingForReady") ) : StatCollector.translateToLocal("hats.trade.waitingForOffer"), (int)((guiLeft + 187) / scale - (fontRendererObj.getStringWidth(hasItem ? (selfReady && theirReady ? (pointOfNoReturn ? (clickedMakeTrade ? StatCollector.translateToLocal("hats.trade.waitingForThem") : StatCollector.translateToLocal("hats.trade.waitingForYou")) : StatCollector.translateToLocal("hats.trade.bothReady")) : StatCollector.translateToLocal("hats.trade.waitingForReady") ) : StatCollector.translateToLocal("hats.trade.waitingForOffer")) / 2)), (int)((guiTop + ySize - 10) / scale), -16777216, false);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
 
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glTranslatef(0.0F, 0.0F, 75F);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.translate(0.0F, 0.0F, 75F);
         zLevel += 100F;
         if(selfReady)
         {
@@ -1433,8 +1426,8 @@ public class GuiTradeWindow extends GuiScreen
             drawSolidRect(guiLeft + 125, guiTop + 116, 108, 54, 0, 0.4F);
         }
         zLevel -= 100F;
-        GL11.glTranslatef(0.0F, 0.0F, -75F);
-        GL11.glDisable(GL11.GL_BLEND);
+        GlStateManager.translate(0.0F, 0.0F, -75F);
+        GlStateManager.disableBlend();
 
         for(int i = 0; i < buttonList.size(); i++)
         {
@@ -1456,24 +1449,24 @@ public class GuiTradeWindow extends GuiScreen
     {
         if (itemstack != null)
         {
-            GL11.glTranslatef(0.0F, 0.0F, 50.0F);
+            GlStateManager.translate(0.0F, 0.0F, 50.0F);
             if(itemstack == grabbedStack)
             {
-                GL11.glTranslatef(0.0F, 0.0F, 50.0F);
+                GlStateManager.translate(0.0F, 0.0F, 50.0F);
             }
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+            GlStateManager.enableRescaleNormal();
             RenderHelper.enableGUIStandardItemLighting();
             itemRender.renderItemAndEffectIntoGUI(itemstack, par2, par3);
             itemRender.renderItemOverlays(fontRendererObj, itemstack, par2, par3);
             RenderHelper.disableStandardItemLighting();
-            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+            GlStateManager.disableRescaleNormal();
             if(itemstack == grabbedStack)
             {
-                GL11.glTranslatef(0.0F, 0.0F, -50.0F);
+                GlStateManager.translate(0.0F, 0.0F, -50.0F);
             }
-            GL11.glTranslatef(0.0F, 0.0F, -50.0F);
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glEnable(GL11.GL_BLEND);
+            GlStateManager.translate(0.0F, 0.0F, -50.0F);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.enableBlend();
         }
     }
 
@@ -1531,16 +1524,16 @@ public class GuiTradeWindow extends GuiScreen
         float f3 = (float)(par4 & 255) / 255.0F;
         Tessellator tessellator = Tessellator.getInstance();
         WorldRenderer worldRenderer = tessellator.getWorldRenderer();
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glColor4f(f1, f2, f3, alpha);
+        GlStateManager.disableTexture2D();
+        GlStateManager.color(f1, f2, f3, alpha);
         worldRenderer.startDrawingQuads();
         worldRenderer.addVertex((double)(par0 + 0), (double)(par1 + par3), (double)this.zLevel);
         worldRenderer.addVertex((double)(par0 + par2), (double)(par1 + par3), (double)this.zLevel);
         worldRenderer.addVertex((double)(par0 + par2), (double)(par1 + 0), (double)this.zLevel);
         worldRenderer.addVertex((double)(par0 + 0), (double)(par1 + 0), (double)this.zLevel);
         tessellator.draw();
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.enableTexture2D();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
     }
 
     public void drawSearchBar()
@@ -1560,9 +1553,9 @@ public class GuiTradeWindow extends GuiScreen
 
         RendererHelper.startGlScissor(guiLeft + 6, guiTop + 113, 101, 97);
 
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         float scale = 0.5F;
-        GL11.glScalef(scale, scale, scale);
+        GlStateManager.scale(scale, scale, scale);
         int lines = 0; //max 12 before require scroll
         for(int i = 0; i < chatMessages.size(); i++)
         {
@@ -1575,7 +1568,7 @@ public class GuiTradeWindow extends GuiScreen
 
         if(lines > 19)
         {
-            GL11.glTranslatef(0.0F, -(lines - 19) * 10.0F * (1.0F - chatScroll), 0.0F);
+            GlStateManager.translate(0.0F, -(lines - 19) * 10.0F * (1.0F - chatScroll), 0.0F);
         }
 
         lines = 0;
@@ -1630,15 +1623,15 @@ public class GuiTradeWindow extends GuiScreen
 
         RendererHelper.endGlScissor();
 
-        GL11.glPopMatrix();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.popMatrix();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         if(lines > 19)
         {
-            GL11.glPushMatrix();
-            GL11.glTranslatef(0.0F, -82F * chatScroll, 0.0F);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0.0F, -82F * chatScroll, 0.0F);
             this.mc.getTextureManager().bindTexture(texIcons);
             drawTexturedModalRect(guiLeft + 107, guiTop + 195, 78, 45, 4, 15);
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
         }
     }
 
@@ -1646,8 +1639,8 @@ public class GuiTradeWindow extends GuiScreen
     {
         if (!par1List.isEmpty())
         {
-            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            GlStateManager.disableRescaleNormal();
+            GlStateManager.disableDepth();
             int k = 0;
             Iterator iterator = par1List.iterator();
 
@@ -1709,8 +1702,8 @@ public class GuiTradeWindow extends GuiScreen
             }
 
             this.zLevel = 0.0F;
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+            GlStateManager.enableDepth();
+            GlStateManager.enableRescaleNormal();
         }
     }
 }

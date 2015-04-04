@@ -1,7 +1,5 @@
 package us.ichun.mods.hats.common.thread;
 
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.core.HatHandler;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

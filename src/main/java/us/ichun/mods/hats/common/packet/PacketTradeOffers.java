@@ -1,13 +1,5 @@
 package us.ichun.mods.hats.common.packet;
 
-import net.minecraftforge.fml.common.network.ByteBufUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import us.ichun.mods.hats.client.gui.GuiTradeWindow;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.trade.TradeInfo;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +7,13 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import us.ichun.mods.hats.client.gui.GuiTradeWindow;
+import us.ichun.mods.hats.common.Hats;
+import us.ichun.mods.hats.common.trade.TradeInfo;
+import us.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 
 import java.util.ArrayList;
 import java.util.HashMap;

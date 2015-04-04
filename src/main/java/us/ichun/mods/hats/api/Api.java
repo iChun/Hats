@@ -1,9 +1,6 @@
 package us.ichun.mods.hats.api;
 
-import us.ichun.mods.hats.client.core.HatInfoClient;
-
-
-public final class Api 
+public final class Api
 {
 	/**
 	 * Registers this RenderOnEntityHelper class with the Hats mod.

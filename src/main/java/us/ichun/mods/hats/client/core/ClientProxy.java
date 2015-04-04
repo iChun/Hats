@@ -1,18 +1,14 @@
 package us.ichun.mods.hats.client.core;
 
-import us.ichun.mods.hats.client.gui.GuiHatSelection;
-import us.ichun.mods.hats.client.render.RenderHat;
-import us.ichun.mods.hats.common.core.CommonProxy;
-import us.ichun.mods.hats.common.core.HatHandler;
-import us.ichun.mods.hats.common.entity.EntityHat;
-import us.ichun.mods.hats.common.thread.ThreadHatsReader;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import us.ichun.mods.hats.client.gui.GuiHatSelection;
 import us.ichun.mods.hats.client.render.RenderHat;
+import us.ichun.mods.hats.common.core.CommonProxy;
 import us.ichun.mods.hats.common.core.HatHandler;
+import us.ichun.mods.hats.common.entity.EntityHat;
 import us.ichun.mods.hats.common.thread.ThreadHatsReader;
 import us.ichun.mods.ichunutil.common.module.tabula.client.formats.ImportList;
 import us.ichun.mods.ichunutil.common.module.tabula.client.model.ModelTabula;

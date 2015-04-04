@@ -1,14 +1,12 @@
 package us.ichun.mods.hats.client.gui;
 
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.packet.PacketString;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import org.lwjgl.opengl.GL11;
 import us.ichun.mods.hats.common.Hats;
 import us.ichun.mods.hats.common.packet.PacketString;
 
@@ -99,7 +97,7 @@ public class GuiTradeMaker extends GuiScreen
         }
         drawDefaultBackground();
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(texMaker);
         int k = this.guiLeft;
         int l = this.guiTop;

@@ -1,6 +1,5 @@
 package us.ichun.mods.hats.common.packet;
 
-import us.ichun.mods.hats.common.Hats;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

@@ -1,17 +1,5 @@
 package us.ichun.mods.hats.common.core;
 
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import us.ichun.mods.hats.api.RenderOnEntityHelper;
-import us.ichun.mods.hats.client.core.TickHandlerClient;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.thread.ThreadGetModMobSupport;
-import us.ichun.mods.hats.common.thread.ThreadHatsReader;
-import us.ichun.mods.hats.client.core.TickHandlerClient;
-import us.ichun.mods.hats.client.render.helper.*;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.packet.*;
-import us.ichun.mods.hats.common.thread.ThreadHatsReader;
-import us.ichun.mods.ichunutil.common.core.network.ChannelHandler;
 import net.minecraft.command.CommandHandler;
 import net.minecraft.command.ICommandManager;
 import net.minecraft.entity.boss.EntityWither;
@@ -19,10 +7,22 @@ import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import us.ichun.mods.hats.api.RenderOnEntityHelper;
+import us.ichun.mods.hats.client.core.TickHandlerClient;
+import us.ichun.mods.hats.client.render.helper.*;
+import us.ichun.mods.hats.common.Hats;
+import us.ichun.mods.hats.common.packet.*;
+import us.ichun.mods.hats.common.thread.ThreadGetModMobSupport;
+import us.ichun.mods.hats.common.thread.ThreadHatsReader;
+import us.ichun.mods.ichunutil.common.core.network.ChannelHandler;
 import us.ichun.mods.ichunutil.common.module.tabula.client.formats.ImportList;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
 public class CommonProxy 

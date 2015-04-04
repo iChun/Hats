@@ -1,18 +1,12 @@
 package us.ichun.mods.hats.client.render;
 
-import us.ichun.mods.hats.api.RenderOnEntityHelper;
-import us.ichun.mods.hats.client.gui.GuiHatSelection;
-import us.ichun.mods.hats.client.render.helper.HelperGeneric;
-import us.ichun.mods.hats.common.Hats;
-import us.ichun.mods.hats.common.core.HatHandler;
-import us.ichun.mods.hats.common.entity.EntityHat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,9 +14,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import us.ichun.mods.hats.api.RenderOnEntityHelper;
 import us.ichun.mods.hats.client.gui.GuiHatSelection;
+import us.ichun.mods.hats.client.render.helper.HelperGeneric;
 import us.ichun.mods.hats.common.Hats;
 import us.ichun.mods.hats.common.core.HatHandler;
+import us.ichun.mods.hats.common.entity.EntityHat;
 import us.ichun.mods.ichunutil.common.core.EntityHelperBase;
 import us.ichun.mods.ichunutil.common.core.util.ObfHelper;
 import us.ichun.mods.ichunutil.common.iChunUtil;
@@ -82,12 +79,12 @@ public class RenderHat extends Render
                 FloatBuffer buffer = GLAllocation.createDirectFloatBuffer(16);
                 FloatBuffer buffer1 = GLAllocation.createDirectFloatBuffer(16);
 
-                GL11.glPushMatrix();
-                GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
+                GlStateManager.pushMatrix();
+                GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
                 Render rend = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(hat.renderingParent);
                 ObfHelper.invokePreRenderCallback(rend, rend.getClass(), hat.renderingParent, renderTick);
-                GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer1);
-                GL11.glPopMatrix();
+                GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, buffer1);
+                GlStateManager.popMatrix();
 
                 float prevScaleX = buffer1.get(0) / buffer.get(0);
                 float prevScaleY = buffer1.get(5) / buffer.get(5);
@@ -111,12 +108,12 @@ public class RenderHat extends Render
                                 FloatBuffer bufferr = GLAllocation.createDirectFloatBuffer(16);
                                 FloatBuffer bufferr1 = GLAllocation.createDirectFloatBuffer(16);
 
-                                GL11.glPushMatrix();
-                                GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, bufferr);
+                                GlStateManager.pushMatrix();
+                                GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, bufferr);
                                 Render rend1 = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(prevMorph);
                                 ObfHelper.invokePreRenderCallback(rend1, rend1.getClass(), prevMorph, renderTick);
-                                GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, bufferr1);
-                                GL11.glPopMatrix();
+                                GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, bufferr1);
+                                GlStateManager.popMatrix();
 
                                 float prevScaleeX = bufferr1.get(0) / bufferr.get(0);
                                 float prevScaleeY = bufferr1.get(5) / bufferr.get(5);
@@ -156,25 +153,25 @@ public class RenderHat extends Render
                     return;
                 }
 
-                GL11.glPushMatrix();
+                GlStateManager.pushMatrix();
 
                 if(isPlayer && hat.parent == Minecraft.getMinecraft().getRenderViewEntity() && hat.parent.isSneaking())
                 {
-                    GL11.glTranslatef(0.0F, -0.075F, 0.0F);
+                    GlStateManager.translate(0.0F, -0.075F, 0.0F);
                 }
 
-                GL11.glTranslated(par2, par4, par6);
-                //                GL11.glTranslatef(0.0F, -hat.parent.yOffset, 0.0F);
+                GlStateManager.translate(par2, par4, par6);
+                //                GlStateManager.translate(0.0F, -hat.parent.yOffset, 0.0F);
 
                 if(Hats.config.renderHats == 1)
                 {
-                    GL11.glTranslatef(0.0F, (float)-(hat.lastTickPosY - hat.parent.lastTickPosY) + (float)((hat.parent.getEntityBoundingBox().minY/* + hat.parent.yOffset*/) - (hat.parent.posY)), 0.0F);
+                    GlStateManager.translate(0.0F, (float)-(hat.lastTickPosY - hat.parent.lastTickPosY) + (float)((hat.parent.getEntityBoundingBox().minY/* + hat.parent.yOffset*/) - (hat.parent.posY)), 0.0F);
                     int i = hat.renderingParent.getBrightnessForRender(renderTick);
                     int j = i % 65536;
                     int k = i / 65536;
                     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
                 }
-                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
                 for(int i = 0; i < passesNeeded; i++)
                 {
@@ -287,7 +284,7 @@ public class RenderHat extends Render
                     }
                 }
 
-                GL11.glPopMatrix();
+                GlStateManager.popMatrix();
             }
         }
     }

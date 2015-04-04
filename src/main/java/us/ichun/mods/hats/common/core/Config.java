@@ -1,7 +1,6 @@
 package us.ichun.mods.hats.common.core;
 
 import net.minecraftforge.fml.relauncher.Side;
-import us.ichun.mods.hats.common.Hats;
 import org.lwjgl.input.Keyboard;
 import us.ichun.mods.hats.common.Hats;
 import us.ichun.mods.ichunutil.client.keybind.KeyBind;

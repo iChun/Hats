@@ -1,7 +1,5 @@
 package us.ichun.mods.hats.addons.hatstand.common.block;
 
-import us.ichun.mods.hats.addons.hatstand.common.HatStand;
-import us.ichun.mods.hats.addons.hatstand.common.tileentity.TileEntityHatStand;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -15,6 +13,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import us.ichun.mods.hats.addons.hatstand.common.HatStand;
 import us.ichun.mods.hats.addons.hatstand.common.tileentity.TileEntityHatStand;
 
 import java.util.List;

@@ -1,12 +1,10 @@
 package us.ichun.mods.hats.client.render.helper;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityWither;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import us.ichun.mods.hats.api.RenderOnEntityHelper;
-import us.ichun.mods.hats.common.Hats;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.EntityWither;
-import net.minecraft.util.MathHelper;
 import us.ichun.mods.hats.common.Hats;
 
 public class HelperWither extends RenderOnEntityHelper {

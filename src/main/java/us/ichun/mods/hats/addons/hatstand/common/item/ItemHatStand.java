@@ -1,7 +1,5 @@
 package us.ichun.mods.hats.addons.hatstand.common.item;
 
-import us.ichun.mods.hats.addons.hatstand.common.HatStand;
-import us.ichun.mods.hats.addons.hatstand.common.tileentity.TileEntityHatStand;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

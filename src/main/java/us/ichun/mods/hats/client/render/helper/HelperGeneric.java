@@ -1,6 +1,5 @@
 package us.ichun.mods.hats.client.render.helper;
 
-import us.ichun.mods.hats.api.RenderOnEntityHelper;
 import net.minecraft.entity.EntityLivingBase;
 import us.ichun.mods.hats.api.RenderOnEntityHelper;
 

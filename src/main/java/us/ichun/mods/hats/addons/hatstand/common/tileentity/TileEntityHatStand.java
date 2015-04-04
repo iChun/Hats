@@ -1,7 +1,6 @@
 package us.ichun.mods.hats.addons.hatstand.common.tileentity;
 
 import com.mojang.authlib.GameProfile;
-import us.ichun.mods.hats.client.core.HatInfoClient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.NetworkManager;
@@ -11,6 +10,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import us.ichun.mods.hats.client.core.HatInfoClient;
 import us.ichun.mods.ichunutil.common.core.EntityHelperBase;
 
 public class TileEntityHatStand extends TileEntity

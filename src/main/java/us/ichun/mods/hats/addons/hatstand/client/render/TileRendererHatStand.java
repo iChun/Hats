@@ -2,8 +2,6 @@ package us.ichun.mods.hats.addons.hatstand.client.render;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
-import us.ichun.mods.hats.addons.hatstand.common.tileentity.TileEntityHatStand;
-import us.ichun.mods.hats.client.render.HatRendererHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelSkeletonHead;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,7 +12,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 import us.ichun.mods.hats.addons.hatstand.common.tileentity.TileEntityHatStand;
 import us.ichun.mods.hats.client.render.HatRendererHelper;
 
@@ -51,34 +48,34 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 
     public void renderHatStand(TileEntityHatStand stand, double d, double d1, double d2, float f, int destroyState, GameProfile profile)
     {
-        GL11.glAlphaFunc(GL11.GL_GREATER, 16F/255F);
-        GL11.glPushMatrix();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 16F/255F);
+        GlStateManager.pushMatrix();
 
-        GL11.glTranslated(d + 0.5D, d1 + 0.4D, d2 + 0.5D);
-        GL11.glScalef(-1.0F, -1.0F, 1.0F);
+        GlStateManager.translate(d + 0.5D, d1 + 0.4D, d2 + 0.5D);
+        GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 
-        GL11.glRotatef((stand.orientation - 1) * 90F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate((stand.orientation - 1) * 90F, 0.0F, 1.0F, 0.0F);
 
         if(!stand.isOnFloor)
         {
             if(stand.hasBase)
             {
-                GL11.glTranslated(0.0D, 0.2D, 0.1D);
+                GlStateManager.translate(0.0D, 0.2D, 0.1D);
             }
             else
             {
-                GL11.glTranslated(0.0D, 0.2D, 0.25D);
+                GlStateManager.translate(0.0D, 0.2D, 0.25D);
             }
         }
         else if(!stand.hasStand)
         {
             if(!stand.hasBase)
             {
-                GL11.glTranslated(0.0D, 0.45D, 0.0D);
+                GlStateManager.translate(0.0D, 0.45D, 0.0D);
             }
             else
             {
-                GL11.glTranslated(0.0D, 0.3D, 0.0D);
+                GlStateManager.translate(0.0D, 0.3D, 0.0D);
             }
         }
 
@@ -96,7 +93,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 
             if(!stand.hasStand)
             {
-                GL11.glTranslated(0.0D, -0.05D, 0.0D);
+                GlStateManager.translate(0.0D, -0.05D, 0.0D);
             }
 
             ModelSkeletonHead head = head32;
@@ -156,7 +153,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 
 
             float f4 = 0.0625F;
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+            GlStateManager.enableRescaleNormal();
             head.render((Entity)null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, f4);
 
             if (destroyState >= 0)
@@ -168,17 +165,17 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
         }
         else
         {
-            GL11.glTranslated(0.0D, 0.45D, 0.0D);
+            GlStateManager.translate(0.0D, 0.45D, 0.0D);
         }
 
-        GL11.glScalef(-1.0F, -1.0F, 1.0F);
+        GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 
-        GL11.glRotatef(180F, 0.0F, 1.0F, 0.0F);
+        GlStateManager.rotate(180F, 0.0F, 1.0F, 0.0F);
 
         HatRendererHelper.renderHat(stand.info, 1.0F, 1.0F, 1.0F, 1.0F, 1.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.50000000000F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, true, true, f);
 
-        GL11.glPopMatrix();
-        GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+        GlStateManager.popMatrix();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
     }
 
     @Override

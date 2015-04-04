@@ -1,13 +1,11 @@
 package us.ichun.mods.hats.client.render.helper;
 
-import us.ichun.mods.hats.api.RenderOnEntityHelper;
-import us.ichun.mods.hats.client.gui.GuiHatSelection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
 import net.minecraft.client.gui.inventory.GuiInventory;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import us.ichun.mods.hats.api.RenderOnEntityHelper;
 import us.ichun.mods.hats.client.gui.GuiHatSelection;
 
 public class HelperPlayer extends RenderOnEntityHelper 
