@@ -88,7 +88,7 @@ public class HatRendererHelper
             }
 
             GlStateManager.scale(-1.0F, -1.0F, 1.0F);
-            model.render(0.0625F, bindTexture, true);
+            model.render(0.0625F, bindTexture, false);
 
             GlStateManager.disableBlend();
 

@@ -31,7 +31,7 @@ public class TileEntityHatStand extends TileEntity
 
     public GameProfile gameProfile;
 
-    public static final String[] headNames = new String[] { "None", "Skeleton", "W. Skele", "Zombie", "Player", "Steve", "Creeper", "Wither", "Wither (I)", "Pigman", "Blaze", "Invisible" };
+    public static final String[] headNames = new String[] { "None", "Skeleton", "W. Skele", "Zombie", "Player", "Steve", "Creeper", "Wither", "Wither (I)", "Pigman", "Blaze", "Invisible", "Alex" };
 
     public HatInfoClient info;
 

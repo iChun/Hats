@@ -44,7 +44,7 @@ public class Hats
     @Mod.EventHandler
     public void preLoad(FMLPreInitializationEvent event)
     {
-        HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/hats");
+        HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/mods/hats");
 
         if(!HatHandler.hatsFolder.exists())
         {

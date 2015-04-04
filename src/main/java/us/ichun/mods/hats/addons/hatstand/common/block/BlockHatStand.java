@@ -144,9 +144,7 @@ public class BlockHatStand extends Block
         {
             TileEntityHatStand stand = (TileEntityHatStand)te;
 
-            pos.offset(EnumFacing.getFront(stand.sideOn), -1);
-
-            if(!world.isSideSolid(pos, EnumFacing.getFront(stand.sideOn), false))
+            if(!world.isSideSolid(pos.offset(EnumFacing.getFront(stand.sideOn), -1), EnumFacing.getFront(stand.sideOn), false))
             {
                 world.setBlockToAir(pos);
                 spawnAsEntity(world, pos, new ItemStack(HatStand.blockHatStand, 1));

@@ -566,6 +566,10 @@ public class GuiHatSelection extends GuiScreen
                     btn.enabled = true;
                 }
             }
+            else if(btn.id == ID_DONE_SELECT)
+            {
+                btn.enabled = view != VIEW_COLOURIZER;
+            }
         }
 
         if(view == VIEW_HATS)

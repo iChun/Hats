@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -16,6 +17,7 @@ import us.ichun.mods.hats.addons.hatstand.common.tileentity.TileEntityHatStand;
 import us.ichun.mods.hats.client.render.HatRendererHelper;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class TileRendererHatStand extends TileEntitySpecialRenderer
 {
@@ -25,6 +27,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
     public static final ResourceLocation texZombie		 = new ResourceLocation("textures/entity/zombie/zombie.png");
     public static final ResourceLocation texCreeper		 = new ResourceLocation("textures/entity/creeper/creeper.png");
     public static final ResourceLocation texPlayer		 = new ResourceLocation("textures/entity/steve.png");
+    public static final ResourceLocation texPlayer2		 = new ResourceLocation("textures/entity/alex.png");
     public static final ResourceLocation texWitherInvul	 = new ResourceLocation("textures/entity/wither/wither_invulnerable.png");
     public static final ResourceLocation texWither		 = new ResourceLocation("textures/entity/wither/wither.png");
     public static final ResourceLocation texBlaze		 = new ResourceLocation("textures/entity/blaze.png");
@@ -48,7 +51,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 
     public void renderHatStand(TileEntityHatStand stand, double d, double d1, double d2, float f, int destroyState, GameProfile profile)
     {
-        GlStateManager.alphaFunc(GL11.GL_GREATER, 16F/255F);
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 16F / 255F);
         GlStateManager.pushMatrix();
 
         GlStateManager.translate(d + 0.5D, d1 + 0.4D, d2 + 0.5D);
@@ -114,6 +117,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
                 case 4:
 
                     ResourceLocation resourcelocation = DefaultPlayerSkin.getDefaultSkinLegacy();
+
                     if (profile != null)
                     {
                         Minecraft minecraft = Minecraft.getMinecraft();
@@ -123,11 +127,18 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
                         {
                             resourcelocation = minecraft.getSkinManager().loadSkin((MinecraftProfileTexture)map.get(MinecraftProfileTexture.Type.SKIN), MinecraftProfileTexture.Type.SKIN);
                         }
+                        else
+                        {
+                            UUID uuid = EntityPlayer.getUUID(profile);
+                            resourcelocation = DefaultPlayerSkin.getDefaultSkin(uuid);
+                        }
                     }
                     this.bindTexture(resourcelocation);
+                    head = head64;
                     break;
                 case 5:
                     this.bindTexture(texPlayer);
+                    head = head64;
                     break;
                 case 6:
                     this.bindTexture(texCreeper);
@@ -148,6 +159,10 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
                     break;
                 case 11:
                     this.bindTexture(texSpiderEyes);
+                    break;
+                case 12:
+                    this.bindTexture(texPlayer2);
+                    head = head64;
                     break;
             }
 

@@ -30,8 +30,7 @@ public class ItemHatStand extends ItemBlock
         }
         else
         {
-            pos.offset(side);
-            if(!world.isSideSolid(pos, side, false))
+            if(!world.isSideSolid(pos.offset(side, -1), side, false))
             {
                 return false;
             }
