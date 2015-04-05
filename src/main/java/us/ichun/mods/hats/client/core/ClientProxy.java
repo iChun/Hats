@@ -73,6 +73,9 @@ public class ClientProxy extends CommonProxy
                 HatHandler.getActualHatNamesMap().put(file, hatName);
 
                 models.put(hatName, new ModelTabula(info));
+//
+//                File newHat = new File(file.getParentFile(), file.getName().substring(0, file.getName().length() - 4) + ".tbl");
+//                ProjectInfo.saveProject(info, newHat);
             }
         }
     }

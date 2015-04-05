@@ -6,6 +6,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import us.ichun.mods.hats.common.Hats;
 import us.ichun.mods.hats.common.core.HatHandler;
+import us.ichun.mods.ichunutil.common.module.tabula.client.formats.ImportList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -101,7 +102,7 @@ public class ThreadHatsReader extends Thread
         File[] favs = fav.listFiles();
         for(File file : favs)
         {
-            if(!file.isDirectory() && (file.getName().endsWith(".tcn") || file.getName().endsWith(".tc2")))
+            if(!file.isDirectory() && ImportList.isFileSupported(file))
             {
                 File hat = new File(hatsFolder, file.getName());
                 if(!hat.exists())
