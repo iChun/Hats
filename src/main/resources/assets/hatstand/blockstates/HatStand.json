@@ -1,11 +1,12 @@
 {
     "variants": {
-        "facing=up,stand=true,hat=false": { "model": "hatstand:HatStandWithStand" },
-		"facing=up,stand=true,hat=true" : { "model": "hatstand:HatStandWithShortStand" },
-		"facing=up,stand=false,hat=true" : { "model": "hatstand:HatStand" },
-		"facing=north,stand=false,hat=true" : { "model": "hatstand:HatStand", "z": 90, "y": 90 },
-		"facing=south,stand=false,hat=true" : { "model": "hatstand:HatStand", "z": 90, "y": 180 },
-		"facing=east,stand=false,hat=true" : { "model": "hatstand:HatStand", "z": 90 },
-		"facing=west,stand=false,hat=true" : { "model": "hatstand:HatStand", "z": 90 }
+        "type=0": { "model": "hatstand:HatStandWithStand" },
+		"type=1" : { "model": "hatstand:HatStandWithShortStand" },
+		"type=2" : { "model": "hatstand:HatStand" },
+		"type=3" : { "model": "hatstand:HatStandWithoutHatStand" },
+		"type=4" : { "model": "hatstand:HatStand", "x": 90 },
+		"type=5" : { "model": "hatstand:HatStand", "x": 90, "y": 180 },
+		"type=6" : { "model": "hatstand:HatStand", "x": 90, "y": 270 },
+		"type=7" : { "model": "hatstand:HatStand", "x": 90, "y": 90 }
     }
 }

@@ -1,6 +1,7 @@
 {
     "textures": {
-	    "all": "blocks/planks_oak"
+	    "all": "blocks/planks_oak",
+		"particle": "blocks/planks_oak"
     },
     "elements": [
         {   "from": [ 1.6, 0, 1.6 ],

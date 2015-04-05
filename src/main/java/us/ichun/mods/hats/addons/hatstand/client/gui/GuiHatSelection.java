@@ -2,6 +2,7 @@ package us.ichun.mods.hats.addons.hatstand.client.gui;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.authlib.GameProfile;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiButton;
@@ -13,12 +14,14 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import us.ichun.mods.hats.addons.hatstand.client.render.TileRendererHatStand;
 import us.ichun.mods.hats.addons.hatstand.common.HatStand;
+import us.ichun.mods.hats.addons.hatstand.common.block.BlockHatStand;
 import us.ichun.mods.hats.addons.hatstand.common.packet.PacketStandHatInfo;
 import us.ichun.mods.hats.addons.hatstand.common.tileentity.TileEntityHatStand;
 import us.ichun.mods.hats.client.core.HatInfoClient;
@@ -26,6 +29,7 @@ import us.ichun.mods.hats.common.Hats;
 import us.ichun.mods.hats.common.core.HatHandler;
 import us.ichun.mods.ichunutil.client.gui.GuiSlider;
 import us.ichun.mods.ichunutil.client.gui.ISlider;
+import us.ichun.mods.ichunutil.client.render.RendererHelper;
 
 import java.io.IOException;
 import java.util.*;
@@ -945,6 +949,7 @@ public class GuiHatSelection extends GuiScreen
     {
         if(stand != null)
         {
+            RenderHelper.enableGUIStandardItemLighting();
             GlStateManager.enableColorMaterial();
             GlStateManager.pushMatrix();
 
@@ -980,9 +985,11 @@ public class GuiHatSelection extends GuiScreen
                 GlStateManager.rotate(90F, 0.0F, 1.0F, 0.0F);
             }
 
+            GlStateManager.enableNormalize();
+
             this.mc.getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
-            //TODO render block hat stand here
-            //            BlockRenderHatStand.instance.renderInventoryBlockWithTileEntity((BlockHatStand)HatStand.blockHatStand, stand, TileRendererHatStand.renderBlocks);
+            IBlockState state = HatStand.blockHatStand.getDefaultState().withProperty(BlockHatStand.TYPE, stand.hasBase ? stand.hasStand ? stand.hatName.isEmpty() ? 0 : 1 : stand.isOnFloor ? 2 : EnumFacing.getFront(stand.sideOn).ordinal() + 2 : 3);
+            RendererHelper.renderBakedModel(mc.getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state), -1, null);
 
             GlStateManager.translate(-0.5D, -0.5D, -0.5D);
 
@@ -995,9 +1002,7 @@ public class GuiHatSelection extends GuiScreen
 
             stand.info = tempInfo;
 
-            GlStateManager.enableNormalize();
-
-            TileRendererHatStand.renderer.renderHatStand(stand, 0, 0, 0, 1.0F, 0, stand.gameProfile);
+            TileRendererHatStand.renderer.renderHatStand(stand, 0, 0, 0, 1.0F, -1, stand.gameProfile);
 
             stand.info = info;
 
@@ -1008,6 +1013,8 @@ public class GuiHatSelection extends GuiScreen
             OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
             GlStateManager.disableTexture2D();
             OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+
+            RenderHelper.disableStandardItemLighting();
         }
     }
 

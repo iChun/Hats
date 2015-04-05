@@ -4,8 +4,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -25,13 +25,12 @@ import java.util.List;
 public class BlockHatStand extends Block
         implements ITileEntityProvider
 {
-    public static final PropertyBool STAND = PropertyBool.create("stand");
-    public static final PropertyBool HAT = PropertyBool.create("hat");
+    public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 7);
 
     public BlockHatStand(Material par2Material)
     {
         super(par2Material);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(BlockTorch.FACING, EnumFacing.UP).withProperty(STAND, true).withProperty(HAT, false));
+        this.setDefaultState(this.blockState.getBaseState().withProperty(TYPE, 0));
     }
 
     @Override
@@ -125,7 +124,7 @@ public class BlockHatStand extends Block
         if(te instanceof TileEntityHatStand)
         {
             TileEntityHatStand stand = (TileEntityHatStand)te;
-            return state.withProperty(BlockTorch.FACING, stand.isOnFloor ? EnumFacing.UP : EnumFacing.getFront(stand.sideOn)).withProperty(STAND, stand.hasStand).withProperty(HAT, !stand.hatName.isEmpty());
+            return state.withProperty(TYPE, stand.hasBase ? stand.hasStand ? stand.hatName.isEmpty() ? 0 : 1 : stand.isOnFloor ? 2 : EnumFacing.getFront(stand.sideOn).ordinal() + 2 : 3);
         }
         return state;
     }
@@ -133,7 +132,13 @@ public class BlockHatStand extends Block
     @Override
     public BlockState createBlockState()
     {
-        return new BlockState(this, new IProperty[] { BlockTorch.FACING, STAND, HAT });
+        return new BlockState(this, TYPE);
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state)
+    {
+        return 0;
     }
 
     @Override

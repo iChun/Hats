@@ -815,7 +815,7 @@ public class HatHandler
         {
             Entry<File, String> e = ite.next();
             String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
-            if(isPlayersContributorHat(name, Minecraft.getMinecraft().thePlayer.getCommandSenderName()))
+            if(isPlayersContributorHat(name, Minecraft.getMinecraft().getSession().getUsername()))
             {
                 Hats.proxy.tickHandlerClient.availableHats.put(name, Hats.proxy.tickHandlerClient.availableHats.get(name) == null ? 1 : Hats.proxy.tickHandlerClient.availableHats.get(name) + 1);
             }
