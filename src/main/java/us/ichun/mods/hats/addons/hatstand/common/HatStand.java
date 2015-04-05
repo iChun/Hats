@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import us.ichun.mods.hats.addons.hatstand.common.core.CommonProxy;
 import us.ichun.mods.ichunutil.common.core.network.PacketChannel;
@@ -37,5 +38,11 @@ public class HatStand
         proxy.preInitMod();
 
         ModVersionChecker.register_iChunMod(new ModVersionInfo("HatStand", iChunUtil.versionOfMC, version, false));
+    }
+
+    @EventHandler
+    public void load(FMLInitializationEvent event)
+    {
+        proxy.initMod();
     }
 }

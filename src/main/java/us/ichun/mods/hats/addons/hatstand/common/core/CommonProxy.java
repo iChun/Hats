@@ -22,12 +22,12 @@ public class CommonProxy
     {
         HatStand.blockHatStand = (new BlockHatStand(Material.wood)).setHardness(0.5F).setCreativeTab(CreativeTabs.tabDecorations).setStepSound(Block.soundTypeWood).setUnlocalizedName("hats.addon.hatstands.block");
 
-        GameRegistry.registerBlock(HatStand.blockHatStand, ItemHatStand.class, "hats.addon.hatstands.block");
+        GameRegistry.registerBlock(HatStand.blockHatStand, ItemHatStand.class, "HatStand");
 
         GameRegistry.addRecipe(new ItemStack(HatStand.blockHatStand, 1),
                 new Object[] { "S", "#", Character.valueOf('#'), Blocks.wooden_slab, Character.valueOf('S'), Items.stick});
 
-        registerTileEntity(TileEntityHatStand.class, "Hats_Stand");
+        registerTileEntity(TileEntityHatStand.class, "HatStand");
 
         HatStand.channel = ChannelHandler.getChannelHandlers("HatStand", PacketStandHatInfo.class);
     }

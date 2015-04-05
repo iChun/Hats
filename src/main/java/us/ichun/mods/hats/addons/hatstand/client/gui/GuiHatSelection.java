@@ -9,6 +9,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.GameSettings;
@@ -993,6 +994,8 @@ public class GuiHatSelection extends GuiScreen
             }
 
             stand.info = tempInfo;
+
+            GlStateManager.enableNormalize();
 
             TileRendererHatStand.renderer.renderHatStand(stand, 0, 0, 0, 1.0F, 0, stand.gameProfile);
 

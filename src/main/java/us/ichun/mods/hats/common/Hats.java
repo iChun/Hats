@@ -25,7 +25,7 @@ import java.io.File;
 )
 public class Hats
 {
-    public static final String version = iChunUtil.versionMC +".0.1";
+    public static final String version = iChunUtil.versionMC +".0.0";
 
     private static Logger logger = LogManager.getLogger("Hats");
 

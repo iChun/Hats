@@ -19,7 +19,7 @@ public class ClientProxy extends CommonProxy
     {
         super.initMod();
 
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(HatStand.blockHatStand), 0, new ModelResourceLocation("hats:HatStand", "inventory"));
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(Item.getItemFromBlock(HatStand.blockHatStand), 0, new ModelResourceLocation("hatstand:HatStand", "inventory"));
     }
 
     @Override
