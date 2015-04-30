@@ -1,0 +1,301 @@
+hats.firstJoin.hatHunting=[Hats] Le serveur est en mode Chasse de chapeaux ! Tuez un mob avec un chapeau pour le déverrouiller !
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Le serveur est en mode Roi du chapeau ! Tuez le roi et réclamez son droit de porter un chapeau !
+hats.firstJoin.timeActive=[Hats] Le serveur est en mode Temps actif ! Passez du temps de manière active sur le serveur pour déverrouiller des chapeaux !
+hats.kingOfTheHat.update.playerJoin=[Hats] Réjouissez-vous ! %s est maintenant le nouveau roi !
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s est mort(e) ! %2$s est maintenant le nouveau roi !
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s s'est fait tuer ! %2$s est maintenant le nouveau roi !
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s a quitté le serveur ! %2$s est maintenant le nouveau roi !
+hats.kingOfTheHat.notKing=[Hats] Vous n'êtes pas le roi, %s l'est ! Vous ne pouvez pas porter un chapeau !
+hats.lockedMode=[Hats] Le serveur est en mode Verrouillé ! Vous n'êtes pas autorisé(e) de changer de chapeau !
+hats.trade.tradeWith=Échange avec %s
+hats.trade.yourHats=Vos chapeaux
+hats.trade.yourInventory=Votre inventaire
+hats.trade.yourOfferings=Vos offres :
+hats.trade.theirOfferings=Les offres de/d' %s :
+hats.trade.waitingForOffer=En attente que quelqu'un fasse une offre.
+hats.trade.tradeNotReady=Pas prêt(e) pour échanger
+hats.trade.tradeReady=Prêt(e) pour échanger
+hats.trade.makeTrade=Échanger
+hats.trade.waitingForReady=En attente que les deux groupes soient prêts.
+hats.trade.bothReady=Les deux groupes sont prêts pour échanger.
+hats.trade.cancelTrade=Annuler
+hats.trade.waitingForYou=En attente de votre confirmation.
+hats.trade.waitingForThem=En attente de la confirmation de l'autre groupe.
+hats.trade.you=Vous
+hats.trade.added=ajoutez
+hats.trade.removed=enlevez
+hats.trade.ready=Vous êtes prêt(e)
+hats.trade.readyThem=%s est prêt(e)
+hats.trade.notReady=Vous n'êtes pas prêt(e)
+hats.trade.notReadyThem=%s n'est pas prêt(e)
+hats.trade.selectTrader=Avec qui voulez-vous échanger ?
+hats.trade.newTradeRequest=Nouvelle requête d'échange
+hats.trade.tradeRequestDesc=Appuyez sur %s pour les détails
+hats.trade=Échanger avec les joueurs à proximité
+hats.trade.acceptRequestGeneral=Accepter l'échange
+hats.trade.acceptRequestSpecific=Accepter l'échange de/d' %1$s (%2$s)
+hats.trade.cannotFindTrader=[Hats] Impossible d'échanger ! %s est introuvable !
+hats.trade.cannotAcceptTrade=[Hats] Impossible d'accepter l'échange ! La requête est maintenant invalide !
+hats.trade.terminatePrefix=Échange annulé.
+hats.trade.terminate1=%s est mort(e).
+hats.trade.terminate2=Vous et %s étiez trop loin l'un(e) de l'autre !
+hats.trade.terminate3=Quelque chose bloque votre chemin !
+hats.trade.terminate4=%s a mis fin à l'échange.
+hats.trade.terminate5=%s est dans une autre dimension.
+hats.trade.success=[Hats] Échange réussi.
+hats.command=Commandes de Hats
+hats.command.help=Tapez /hats pour la liste complète.
+hats.command.help.send=/hats send <joueur> <nom du chapeau>  Envoie un chapeau au joueur.
+hats.command.help.set=/hats set <joueur> <nom du chapeau>   Fait porter un chapeau au joueur.
+hats.command.help.unlock=/hats unlock <joueur> <nom du chapeau>   Déverrouille un chapeau au joueur.
+hats.command.notOnline=%s n'est pas en ligne !
+hats.command.hatDoesNotExist=%s n'existe pas !
+hats.command.serverDisabledHatSending=Le serveur a désactivé l'envoi de chapeaux !
+hats.command.sendToPlayer=Envoie du chapeau %1$s pour %2$s
+hats.command.setPlayerHat=%2$s porte maintenant le chapeau %1$s
+hats.command.playerIsInCreative=%s est en mode Créatif !
+hats.command.unlockHatForPlayer=Déverrouillage du chapeau %1$s pour %2$s
+hats.command.adminNotify.unlockHatForPlayer=%1$s a déverrouillé le chapeau %2$s pour %3$s
+hats.command.serverIsNotOnHatHuntingMode=Le serveur n'est pas en mode Chasse de chapeaux !
+hats.serverOnCommandGiverMode=Le serveur a Hats défini en mode Donneur de commandes. Vous ne pouvez pas donner des commandes !
+hats.hatUnlocked=Chapeau déverrouillé !
+hats.gui.alpha=Alpha
+hats.gui.search=Rechercher
+hats.gui.allHats=Tout
+hats.gui.addNew=Ajouter
+hats.gui.firstPerson=1ère pers. 
+hats.gui.showHats=Montrer 
+hats.gui.contributors=Contributeurs
+hats.gui.category=Catégorie
+hats.gui.categories=Catégories
+hats.gui.colorizer=Colorieur
+hats.gui.hatsList=Liste des chapeaux
+hats.gui.resetSide=Réinitialiser ?
+hats.gui.randomobs=RandoMobs
+hats.gui.personalize=Personnaliser
+hats.gui.viewing=Affichage de 
+hats.gui.discardChanges=Annuler les changements ?
+hats.gui.removeHat=Enlever le chapeau
+hats.gui.randomHat=Chapeau aléatoire
+hats.gui.randomCategory=Catégorie aléatoire
+hats.gui.randomColor=Couleur aléatoire
+hats.gui.resetColor=Réinitialiser la couleur
+hats.gui.reloadAllHats=Recharger tous les chapeaux ?
+hats.gui.discardAllChanges=Cela va annuler tous les changements.
+hats.gui.favorites=Favoris
+hats.gui.invalidName=Nom invalide !
+hats.gui.addCategory=Ajouter la catégorie
+hats.gui.addToCategory=Ajouter à une catégorie
+hats.gui.removeFromCategory=Enlever de la catégorie
+hats.gui.areYouSure=Êtes-vous sûr(e) ?
+hats.gui.clickConfirm=Cliquez de nouveau pour confirmer
+hats.gui.deleteCategory=Supprimer la catégorie
+hats.gui.deleteCategory.desc1=Cela va enlever tous les
+hats.gui.deleteCategory.desc2=chapeaux dans cette catégorie
+hats.gui.deleteCategory.desc3=et recharger l'interface.
+hats.gui.doubleClickConfirm=Double-cliquez pour confirmer
+hats.gui.disableHat=Désactiver le chapeau ?
+hats.gui.disableHat.desc1=Cela va désactiver ce chapeau de
+hats.gui.disableHat.desc2=toutes les catégories et recharger
+hats.gui.disableHat.desc3=l'interface. Cela ne va pas
+hats.gui.disableHat.desc4=supprimer le fichier.
+hats.gui.deleteHat=Supprimer le chapeau ?
+hats.gui.deleteHat.desc1=Cela va enlever ce chapeau de
+hats.gui.deleteHat.desc2=toutes les catégories et recharger
+hats.gui.deleteHat.desc3=l'interface.
+hats.gui.renameCategory=Renommer la catégorie ?
+hats.gui.renameCategory.desc1=Cela va recharger l'interface !
+hats.gui.removeFromFavorites=Enlever des favoris
+hats.gui.addToFavorites=Ajouter aux favoris
+hats.gui.resetButtonsOnSide=Réinitialiser les boutons à côté ?
+hats.gui.hatsCollected=%s obtenu(e) !
+
+hats.gui.helpInfo1.desc1=Faites Maj + clic sur le bouton
+hats.gui.helpInfo1.desc2=du chapeau pour plus d'options !
+hats.gui.helpInfo1.desc3=Cependant, vous ne pouvez pas
+hats.gui.helpInfo1.desc4=faire Maj + clic sur le
+hats.gui.helpInfo1.desc5=chapeau que vous portez.
+
+hats.gui.helpInfo2.desc1=Si vous êtes sur un serveur qui n'a pas
+hats.gui.helpInfo2.desc2=le mod, un autre joueur avec le mod ne
+hats.gui.helpInfo2.desc3=sera pas capable de voir votre chapeau.
+
+hats.gui.helpInfo3.desc1=Saviez-vous que vous pouvez obtenir encore
+hats.gui.helpInfo3.desc2=plus de chapeaux ? Techne Online possède
+hats.gui.helpInfo3.desc3=plusieurs chapeaux faits par la communauté
+hats.gui.helpInfo3.desc4=que vous pouvez télécharger et installer. 
+
+hats.gui.helpInfo4.desc1=Vous pouvez aussi faire votre propre chapeau !
+hats.gui.helpInfo4.desc2=Vous avez besoin de Techne pour y arriver.
+hats.gui.helpInfo4.desc3=Un modèle de "tête" est placé au milieu du
+hats.gui.helpInfo4.desc4=bloc de bois. Sa taille est de 8 x 8 x 8.
+hats.gui.helpInfo4.desc5=Utilisez-le pour faire votre chapeau !
+
+hats.gui.helpInfo5.desc1=Saviez-vous que vous pouvez faire vos propres
+hats.gui.helpInfo5.desc2=catégories ? Appuyez sur le bouton Catégories
+hats.gui.helpInfo5.desc3=(ou C sur votre clavier), puis sur "Ajouter".
+
+hats.gui.helpInfo6.desc1=Saviez-vous que si votre ami n'a pas le chapeau
+hats.gui.helpInfo6.desc2=que vous portez, vous envoyez le chapeau vers
+hats.gui.helpInfo6.desc3=le serveur et celui-ci l'envoie à votre ami ?
+hats.gui.helpInfo6.desc4=(Seulement sur les serveurs avec le mod)
+
+hats.gui.helpInfo7.desc1=Faire Maj + clic sur le bouton Chapeau aléatoire vous
+hats.gui.helpInfo7.desc2=donne un chapeau aléatoire avec une couleur aléatoire !
+
+hats.gui.helpInfo8.desc1=Faire Maj + clic sur le bouton Couleur aléatoire
+hats.gui.helpInfo8.desc2=réinitialise toutes les couleurs par défaut.
+
+hats.gui.helpInfo9.desc1=Vous pouvez tapez Tab ou T pour sélectionner
+hats.gui.helpInfo9.desc2=rapidement la barre de recherche.
+
+hats.gui.helpInfo10.desc1=Saviez-vous que ce mod a été initialement
+hats.gui.helpInfo10.desc2=réalisé pour un marathon de modding de 96
+hats.gui.helpInfo10.desc3=heures du nom de ModJam ?
+hats.gui.helpInfo10.desc4=Il a gagné la seconde place et a été fait en
+hats.gui.helpInfo10.desc5=plus d'être actuellement maintenu par iChun.
+
+hats.gui.helpInfo11.desc1=Les chapeaux de joueurs ajoutés par le mod sont
+hats.gui.helpInfo11.desc2=les noms de quelques personnes qui ont fait une
+hats.gui.helpInfo11.desc3=contribution significative au mod, en termes
+hats.gui.helpInfo11.desc4=de développement, de test, de contribution de
+hats.gui.helpInfo11.desc5=modèle et de support.
+hats.gui.helpInfo11.desc6=Direwolf20 est toutefois juste un bonus.
+
+hats.gui.helpInfo12.desc1=Faire Maj + clic sur la liste des chapeaux
+hats.gui.helpInfo12.desc2=vous fera sortir d'une catégorie pour
+hats.gui.helpInfo12.desc3=revenir à la liste de tous les chapeaux.
+
+hats.gui.helpInfo13.desc1=Vous pouvez faire un clic droit dans la
+hats.gui.helpInfo13.desc2=barre de recherche pour l'effacer.
+
+hats.gui.helpInfo14.desc1=Vous pouvez désactiver les chapeaux plutôt que de
+hats.gui.helpInfo14.desc2=les supprimer. Maintenez juste Maj en supprimant.
+
+hats.gui.helpInfo15.desc1=Faire Maj + F va mettre le chapeau
+hats.gui.helpInfo15.desc2=que vous portez en favoris ou
+hats.gui.helpInfo15.desc3=l'enlever des favoris.
+
+hats.gui.helpInfo16.desc1=La touche raccourci pour le bouton
+hats.gui.helpInfo16.desc2="Personnaliser" est la touche "P"
+hats.gui.helpInfo16.desc3=au cas où vous avez désactivé
+hats.gui.helpInfo16.desc4=le bouton accidentellement.
+
+hats.gui.helpInfo17.desc1=Si vous avez un chapeau de contributeur,
+hats.gui.helpInfo17.desc2=vous pouvez l'utiliser en mode Chasse de
+hats.gui.helpInfo17.desc3=chapeaux.
+
+hats.gui.helpInfo18.desc1=Le (C) dans le nom du chapeau représente
+hats.gui.helpInfo18.desc2=un chapeau ajouté comme remerciement
+hats.gui.helpInfo18.desc3=pour un don envers le mod !
+
+hats.gui.helpInfo19.desc1=Saviez-vous que vous pouvez personnaliser
+hats.gui.helpInfo19.desc2=si les mobs ont des chapeaux ? C'est dans
+hats.gui.helpInfo19.desc3=l'onglet "Personnaliser".
+
+hats.addon.hatstands.gui.base=Base
+hats.addon.hatstands.gui.stand=Support
+
+tile.hats.addon.hatstands.block.name=Porte-chapeau
+
+hats.config.cat.globalOptions.name=Options globales
+hats.config.cat.serverOptions.name=Options du serveur
+hats.config.cat.clientOnly.name=Client seulement
+hats.config.cat.randoMobOptions.name=Options du RandoMob
+
+hats.config.cat.globalOptions.comment=Ces paramètres affectent autant le serveur que les clients qui chargent le mod.
+hats.config.cat.serverOptions.comment=Ces paramètres affectent seulement le serveur qui charge le mod.
+hats.config.cat.clientOnly.comment=Ces paramètres affectent seulement le client qui charge le mod.
+hats.config.cat.randoMobOptions.comment=Ces paramètres affectent le client soit sur les paramètres de RandoMob, soit dans le mode Chasse aux mobs.
+
+hats.config.prop.safeLoad.name=Chargement sûr
+hats.config.prop.allowSendingOfHats.name=Permettre l'envoi de chapeaux
+hats.config.prop.allowReceivingOfHats.name=Permettre la réception de chapeaux
+hats.config.prop.modMobSupport.name=Support des chapeaux de mobs de mods
+hats.config.prop.readLocalModMobSupport.name=Lire le support de mobs de mods local
+hats.config.prop.playerHatsMode.name=Mode des chapeaux de joueur
+hats.config.prop.firstJoinMessage.name=Message du premier arrivé
+hats.config.prop.lockedHat.name=Chapeau verrouillé
+hats.config.prop.startTime.name=Temps de départ
+hats.config.prop.timeIncrement.name=Incrémentation du temps
+hats.config.prop.resetPlayerHatsOnDeath.name=Réinitialiser les chapeaux du joueur à sa mort
+hats.config.prop.hatRarity.name=Activer la rareté des chapeaux
+hats.config.prop.hatGenerationSeed.name=Seed de génération de chapeaux
+hats.config.prop.renderInFirstPerson.name=Faire le rendu à la première personne
+hats.config.prop.enableInServersWithoutMod.name=Activer dans les serveurs sans mod
+hats.config.prop.shouldOtherPlayersHaveHats.name=Est-ce que les autres joueurs devraient avoir des chapeaux
+hats.config.prop.randomHat.name=Chapeau aléatoire
+hats.config.prop.favouriteHat.name=Chapeau favori
+hats.config.prop.favouriteHatColourizer.name=Colorieur de chapeau favori
+hats.config.prop.guiKeyBind.name=Ouvrir l'interface des chapeaux
+hats.config.prop.personalizeEnabled.name=Personnaliser les catégories
+hats.config.prop.maxHatRenders.name=Maximum de chapeaux rendu
+hats.config.prop.showContributorHatsInGui.name=Afficher les chapeaux de contributeurs dans l'interface
+hats.config.prop.renderHats.name=Faire le rendu des chapeaux
+hats.config.prop.randomMobHat.name=Chapeau sur mob aléatoire
+hats.config.prop.useRandomContributorHats.name=Utiliser des chapeaux de contributeurs aléatoires
+hats.config.prop.hatBat.name=Chapeaux de chauve-souris
+hats.config.prop.hatBlaze.name=Chapeaux de Blaze
+hats.config.prop.hatChicken.name=Chapeaux de poulet
+hats.config.prop.hatCow.name=Chapeaux de vache
+hats.config.prop.hatCreeper.name=Chapeaux de Creeper
+hats.config.prop.hatEnderman.name=Chapeaux d'Enderman
+hats.config.prop.hatGhast.name=Chapeaux de Ghast
+hats.config.prop.hatHorse.name=Chapeaux de cheval
+hats.config.prop.hatOcelot.name=Chapeaux de minou sauvage
+hats.config.prop.hatPig.name=Chapeaux de cochon
+hats.config.prop.hatSheep.name=Chapeaux de mouton
+hats.config.prop.hatSkeleton.name=Chapeaux de squelette
+hats.config.prop.hatSlime.name=Chapeaux de Slime
+hats.config.prop.hatSpider.name=Chapeaux d'araignée
+hats.config.prop.hatSquid.name=Chapeaux de poulpe
+hats.config.prop.hatVillager.name=Chapeaux de villageois
+hats.config.prop.hatWither.name=Chapeaux de Wither
+hats.config.prop.hatWolf.name=Chapeaux de loup
+hats.config.prop.hatZombie.name=Chapeaux de zombie
+
+hats.config.prop.safeLoad.comment=Activer le chargement sûr ?\nLe chargement sûr force le mod à rejeter les fichiers de modèle Techne qui ont des fichiers différents des fichiers XML et PNG.
+hats.config.prop.allowSendingOfHats.comment=Activer l'envoi des fichiers de modèle au serveur/client ?
+hats.config.prop.allowReceivingOfHats.comment=Activer la réception des fichiers de modèle au serveur/client ?
+hats.config.prop.modMobSupport.comment=Activer le support de mobs de mods pour Hats ?
+hats.config.prop.readLocalModMobSupport.comment=Lire le fichier de support de mobs de mods (HatModMobSupport.json) à partir du dossier /hats/ ?\nSi cette option est désactivée, cela va récupérer la version de GitHub en ligne.\nUtilisez ceci pour faire des tests avec des chapeaux de mobs personnalisés.
+hats.config.prop.playerHatsMode.comment=Mode des chapeaux de joueur :\n1 = Mode Libre, tous les joueurs sont libre de choisir quel chapeau porter.\n2 = Mode Verrouillé, toujours les joueurs doivent porter le même chapeau, défini dans la configuration.\n3 = Mode Donneur de commandes, le chapeau que vous portez est choisi par le monde qui peuvent utiliser les commandes.\n4 = Mode Chasse aux chapeaux, vous voyez un mob avec un chapeau, tuez-le pour le déverrouiller\n5 = Mode Roi du chapeau, seulement un d'entre vous a le droit de porter un chapeau. Le roi doit défendre son territoire ou il perd sa couronne !\n6 = Mode Temps actif, les joueurs déverrouillent plus de chapeaux à force d'être actif sur le serveur.
+hats.config.prop.firstJoinMessage.comment=Envoyer un message de "premier arrivé" au joueur lorsqu'ils se connectent à un serveur pour la première fois ?
+hats.config.prop.lockedHat.comment=Quel chapeau les joueurs doivent porter en mode Verrouillé (voir playerHatsMode 2).\nSi vous voulez que différents joueurs portent différents chapeaux, utilisez le mode Donneur de commandes.
+hats.config.prop.startTime.comment=Pour playerHatsMode 6 :\nLa durée requise pour être actif sur le serveur afin de déverrouiller le premier chapeau (en ticks).
+hats.config.prop.timeIncrement.comment=Pour playerHatsMode 6 :\nLa quantité de temps supplémentaire requise pour atteindre le prochain chapeau.\nLa valeur par défaut est de 125 (1.25%).\nPour une valeur de 200% de temps, mettez 20000.
+hats.config.prop.resetPlayerHatsOnDeath.comment=Est-ce que les chapeaux des joueurs devraient être réinitialisés lorsqu'ils meurent ?\nSeulement dans les modes de déverrouillage de chapeaux.
+hats.config.prop.hatRarity.comment=Est-ce que les chapeaux devraient avoir leur propre rareté ?
+hats.config.prop.hatGenerationSeed.comment=Le seed aléatoire pour la génération des chapeaux. Utilisé pour le mode Chasse aux chapeaux et le mode Temps actif. Veuillez ne pas mettre 0, bien que la rareté sera activé sur le serveur, pour le client cela sera marqué comme un indicateur comme quoi la rareté est désactivée.
+hats.config.prop.renderInFirstPerson.comment=Est-ce que votre chapeau devrait être rendu à la première personne ?
+hats.config.prop.enableInServersWithoutMod.comment=Activer les chapeaux dans les serveurs sans le mod ?
+hats.config.prop.shouldOtherPlayersHaveHats.comment=Est-ce que les autres joueurs ont des chapeaux ? Seulement lorsqu'activé sur les serveurs sans le mod.
+hats.config.prop.randomHat.comment=Est-ce que chaque joueur devrait avoir un chapeau aléatoire ?\nIls changent aléatoirement de temps en temps.\n0 = Non\n1 = Oui\n2 = Oui, mais pas le joueur !\nSeulement lorsqu'activé sur les serveurs sans le mod.
+hats.config.prop.favouriteHat.comment=Quel chapeau voulez-vous utiliser sur les serveurs sans le mod ? Seulement quand randomHat = 0.
+hats.config.prop.favouriteHatColourizer.comment=Voulez-vous appliquer un colorieur à votre chapeau favori ?\nSi non, laissez la valeur à #ffffff\n(Cherchez "codes couleur hexadécimal" sur Google si vous ne comprenez pas)\nFormat : #<index de couleur>\nEx : #ffffff pour du blanc.
+hats.config.prop.guiKeyBind.comment=La touche pour ouvrir l'interface de sélection des chapeaux ?
+hats.config.prop.personalizeEnabled.comment=Cette configuration est pour votre personnalisation de l'interface.\nVeuillez ne pas changer ça si vous ne savez pas ce que vous faites.
+hats.config.prop.maxHatRenders.comment=Le nombre maximum de chapeaux rendu en un tick.
+hats.config.prop.showContributorHatsInGui.comment=Afficher les chapeaux de contributeurs dans l'interface ?
+hats.config.prop.renderHats.comment=Faire le rendu des chapeaux ?
+hats.config.prop.randomMobHat.comment=Est-ce que les mobs ont une chance aléatoire d'avoir un chapeau ?\n0 = Désactivé (0%)\n100 = Tous les mobs (100%)\n(Client) Cela suit le paramètre randomHat, signifiant que si randomHat est à 0, tous les mobs vont porter le chapeau du paramètre favouriteHat.
+hats.config.prop.useRandomContributorHats.comment=Permet d'utiliser les chapeaux de contributeurs lorsque l'on reçoit un chapeau aléatoire ?\n0 - 100%
+hats.config.prop.hatBat.comment=
+hats.config.prop.hatBlaze.comment=
+hats.config.prop.hatChicken.comment=
+hats.config.prop.hatCow.comment=
+hats.config.prop.hatCreeper.comment=
+hats.config.prop.hatEnderman.comment=
+hats.config.prop.hatGhast.comment=
+hats.config.prop.hatHorse.comment=
+hats.config.prop.hatOcelot.comment=
+hats.config.prop.hatPig.comment=
+hats.config.prop.hatSheep.comment=
+hats.config.prop.hatSkeleton.comment=
+hats.config.prop.hatSlime.comment=
+hats.config.prop.hatSpider.comment=
+hats.config.prop.hatSquid.comment=
+hats.config.prop.hatVillager.comment=
+hats.config.prop.hatWither.comment=
+hats.config.prop.hatWolf.comment=
+hats.config.prop.hatZombie.comment=
