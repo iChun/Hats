@@ -1,0 +1,195 @@
+hats.firstJoin.hatHunting=[Hats] De server staat op hoed jaag mode! Vermoord een mob met een hoed om hem te ontgrendelen!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] De server staat op koning van de hoed mode! Vermoord de koning en krijg zijn recht om een hoed te dragen!
+hats.firstJoin.timeActive=[Hats] De server staat op tijd actief mode! Breng actief tijd op de server door om hoeden te krijgen!
+hats.kingOfTheHat.update.playerJoin=[Hats] Hoera! %s is nu de nieuwe koning!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s is gestorven! %2$s is nu de nieuwe koning!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s is verslagen! %2$s is nu de nieuwe koning!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s heeft de server verlaten! %2$s is nu de nieuwe koning!
+hats.kingOfTheHat.notKing=[Hats] Jij bent de koning niet, %s is! Je kan geen hoed dragen!
+hats.lockedMode=[Hats] De server staat op vergrendelde mode! Je kan niet van hoed veranderen!
+hats.trade.tradeWith=Aan het ruilen met %s
+hats.trade.yourHats=Jouw hoeden
+hats.trade.yourInventory=Jouw inventaris
+hats.trade.yourOfferings=Jouw aanbiedingen:
+hats.trade.theirOfferings=%s's aanbiedingen:
+hats.trade.waitingForOffer=Aan het wachten totdat iemand een aanbieding maakt.
+hats.trade.tradeNotReady=Niet klaar om te ruilen.
+hats.trade.tradeReady=Klaar om te ruilen.
+hats.trade.makeTrade=Ruild
+hats.trade.waitingForReady=Aan het wachten totdat iedereen klaar is.
+hats.trade.bothReady=Iedereen is klaar om te ruilen.
+hats.trade.cancelTrade=Annuleer de ruild
+hats.trade.waitingForYou=Aan het wachten totdat jij bevestigt
+hats.trade.waitingForThem=Aan het wachten totdat de ander bevestigt
+hats.trade.you=Jij
+hats.trade.added=toegevoegd
+hats.trade.removed=verwijdered
+hats.trade.ready=Je bent klaar
+hats.trade.readyThem=%s is klaar
+hats.trade.notReady=Je bent niet klaar
+hats.trade.notReadyThem=%s is niet klaar
+hats.trade.selectTrader=Selecteer met welke speler je wilt ruilen
+hats.trade.newTradeRequest=Nieuw Ruilverzoek
+hats.trade.tradeRequestDesc=Druk op %s voor details
+hats.trade=Ruil met nabije spelers
+hats.trade.acceptRequestGeneral=Accepteer ruil
+hats.trade.acceptRequestSpecific=Accepteer ruil van %1$s (%2$s)
+hats.trade.cannotFindTrader=[Hats] Kan niet ruilen! %s kan niet gezien worden!
+hats.trade.cannotAcceptTrade=[Hats] Kan de ruil niet accepteren! Verzoek is nu ongeldig!
+hats.trade.terminatePrefix=Ruil geannuleerd.
+hats.trade.terminate1=%s is gestorven.
+hats.trade.terminate2=Jij en %s gingen te ver weg van elkaar!
+hats.trade.terminate3=Iest blokkeert je weg!
+hats.trade.terminate4=%s annuleerde de ruil.
+hats.trade.terminate5=%s is in een andere dimensie.
+hats.trade.success=[Hats] Ruil geslaagd.
+hats.command= Hats commands
+hats.command.help=type /hats voor een volledige lijst.
+hats.command.help.send=/hats send <player> <hat name>  Zend een hoed naar een speler.
+hats.command.help.set=/hats set <player> <hat name>   Zet een spelers hoed.
+hats.command.help.unlock=/hats unlock <player> <hat name>   Ontgrendelt een hoed voor een speler.
+hats.command.notOnline=%s is niet online!
+hats.command.hatDoesNotExist=%s bestaat niet!
+hats.command.serverDisabledHatSending=De server heeft het zenden van hoeden verboden!
+hats.command.sendToPlayer=%1$s naar %2$s aan het zenden
+hats.command.setPlayerHat=%1$s op %2$s aan het zetten
+hats.command.playerIsInCreative=%s is in Creatief!
+hats.command.unlockHatForPlayer=%1$s voor %2$s aan het ontgrendelen
+hats.command.adminNotify.unlockHatForPlayer=%1$s heeft %2$s voor %3$s ontgrendeld
+hats.command.serverIsNotOnHatHuntingMode=De server staat niet in hoed jaag mode!
+hats.serverOnCommandGiverMode=De server heeft hats naar Command Gever Mode gezet. Je kan geen commands geven!
+hats.hatUnlocked=Hoed Ontgrendeld!
+hats.gui.search=Zoek
+hats.gui.allHats=Alle Hoeden
+hats.gui.addNew=Voeg Nieuwe Toe
+hats.gui.firstPerson=Eerste Persoon
+hats.gui.showHats=Laat Hoeden Zien
+hats.gui.contributors=Bijdragers
+hats.gui.category=Categorie
+hats.gui.categories=Categorieën
+hats.gui.colorizer=Colorizer
+hats.gui.hatsList=Hoeden Lijst
+hats.gui.resetSide=Reset Zijde?
+hats.gui.randomobs=RandoMobs
+hats.gui.personalize=Pas Aan
+hats.gui.viewing=Aan Het Bekijken
+hats.gui.discardChanges=Wijzigingen ongedaan maken?
+hats.gui.removeHat=Verwijder Hoed
+hats.gui.randomHat=Willekeurige Hoed
+hats.gui.randomCategory=Willekeurige Categorie
+hats.gui.randomColor=Willekeurige Kleur
+hats.gui.resetColor=Reset Kleur
+hats.gui.reloadAllHats=Herlaad alle hoeden?
+hats.gui.discardAllChanges=Dit zal alle veranderingen ongedaan maken.
+hats.gui.favorites=Favorieten
+hats.gui.invalidName=Ongeldige Naam!
+hats.gui.addCategory=Voeg Categorie Toe
+hats.gui.addToCategory=Voeg toe aan categorie
+hats.gui.removeFromCategory=Verwijder uit categorie
+hats.gui.areYouSure=Weet je het zeker?
+hats.gui.clickConfirm=Klik nog een keer om te bevestigen
+hats.gui.deleteCategory=Verwijder Categorie
+hats.gui.deleteCategory.desc1=Dit zal alle hoeden uit deze categorie
+hats.gui.deleteCategory.desc2=verwijderen en de GUI
+hats.gui.deleteCategory.desc3=herladen.
+hats.gui.doubleClickConfirm=Klik twee keer om te bevestigen
+hats.gui.disableHat=Schakel hoed uit?
+hats.gui.disableHat.desc1=Dit zal deze hoed in elke categorie
+hats.gui.disableHat.desc2=uitschakelen en de GUI
+hats.gui.disableHat.desc3=herladen. Dit zal het
+hats.gui.disableHat.desc4=bestand niet verwijderen.
+hats.gui.deleteHat=Verwijder hoed?
+hats.gui.deleteHat.desc1=Dit zal deze hoed in elke categorie
+hats.gui.deleteHat.desc2=verwijderen en de GUI
+hats.gui.deleteHat.desc3=herladen.
+hats.gui.renameCategory=Hernoem Categorie?
+hats.gui.renameCategory.desc1=Dit zal de GUI herladen!
+hats.gui.removeFromFavorites=Verwijder uit Favorieten
+hats.gui.addToFavorites=Voeg Toe aan Favorieten
+hats.gui.resetButtonsOnSide=Reset de knoppen aan de zijkant van de GUI?
+
+hats.gui.helpInfo1.desc1=Shift klik op de Hoed
+hats.gui.helpInfo1.desc2=knop voor meer opties!
+hats.gui.helpInfo1.desc3=Je kan echter niet shift klikken
+hats.gui.helpInfo1.desc4=op de Hoed die je op
+hats.gui.helpInfo1.desc5=hebt.
+
+hats.gui.helpInfo2.desc1=Als je op een server bent die de mod
+hats.gui.helpInfo2.desc2=niet heeft geïnstalleerd, kan een andere speler die de mod wel
+hats.gui.helpInfo2.desc3=heeft geïnstalleerd jouw hoed niet zien.
+
+hats.gui.helpInfo3.desc1=Wist je dat je altijd meer hoeden kan krijgen?
+hats.gui.helpInfo3.desc2=Techne Online heeft een heleboel
+hats.gui.helpInfo3.desc3=door anderen gemaakte hoeden die je
+hats.gui.helpInfo3.desc4=kan downloaden en installeren.
+
+hats.gui.helpInfo4.desc1=Je kan ook je eigen hoed maken!
+hats.gui.helpInfo4.desc2=Je hebt Techne nodig en je kan er een hoed mee maken.
+hats.gui.helpInfo4.desc3=Je moet een "hoofd" model in het midden 
+hats.gui.helpInfo4.desc4=van het hout blok plaatsen. Het is
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Maak je hoed erop!
+
+hats.gui.helpInfo5.desc1=Wist je dat je je eigen categorieën kan maken?
+hats.gui.helpInfo5.desc2=Druk ok de Categorieën knop (of C, op je toetenbord)
+hats.gui.helpInfo5.desc3=en druk op de "Voeg Nieuwe Toe" knop.
+
+hats.gui.helpInfo6.desc1=Wist je dat als jij een hoed hebt die je
+hats.gui.helpInfo6.desc2=vriend niet heeft, je jouw hoed naar de server
+hats.gui.helpInfo6.desc3=kan zenden, en de hoed wordt naar je vriend gestuurd.
+hats.gui.helpInfo6.desc4=(Alleen op servers met de mod)
+
+hats.gui.helpInfo7.desc1=Shift klik de willekeurige hoed knop
+hats.gui.helpInfo7.desc2=geeft je een willekeurige hoed EN kleur!
+
+hats.gui.helpInfo8.desc1=Shift klikken op de willekeurige kleur knop reset
+hats.gui.helpInfo8.desc2=alle kleuren.
+
+hats.gui.helpInfo9.desc1=Je kan op TAB of T drukken om snel naar
+hats.gui.helpInfo9.desc2=de zoek balk te gaan.
+
+hats.gui.helpInfo10.desc1=Wist je dat deze mod oorspronkelijk is gemaakt
+hats.gui.helpInfo10.desc2=voor de 96 uur lange mod marathon
+hats.gui.helpInfo10.desc3=genaamd ModJam?
+hats.gui.helpInfo10.desc4=Het kreeg de tweede plaast en
+hats.gui.helpInfo10.desc5=wordt op dit moment gemaakt door iChun.
+
+hats.gui.helpInfo11.desc1=De speler hoeden die toegevoegd worden aan de mod
+hats.gui.helpInfo11.desc2=zijn namen van mensen die belangrijk
+hats.gui.helpInfo11.desc3=waren voor de mod, als
+hats.gui.helpInfo11.desc4=ontwikkelaars, testers, modelers
+hats.gui.helpInfo11.desc5=en supporters.
+hats.gui.helpInfo11.desc6=Direwolf20 is echter gewoon een bonus.
+
+hats.gui.helpInfo12.desc1=Shift Klikken op de hoeden lijst neemt
+hats.gui.helpInfo12.desc2=je terug uit een categorie naar een lijst van alle
+hats.gui.helpInfo12.desc3=hoeden.
+
+hats.gui.helpInfo13.desc1=Je kunt met de rechtermuisknop op de zoekbalk klikken
+hats.gui.helpInfo13.desc2=om hem leeg te maken.
+
+hats.gui.helpInfo14.desc1=Je kunt hoeden uitschakelen inplaats van
+hats.gui.helpInfo14.desc2=verwijderen. Houd gewoon shift ingedrukt wanneer je ze verwijdert.
+
+hats.gui.helpInfo15.desc1=Op Shift-F drukken voegt de hoed
+hats.gui.helpInfo15.desc2=die je op dit moment aan hebt toe aan
+hats.gui.helpInfo15.desc3=favorieten of haalt hem uit favorieten.
+
+hats.gui.helpInfo16.desc1=The sneltoets voor aanPassen is
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=voor als je per ongeluk
+hats.gui.helpInfo16.desc4=de knop uitschakeld.
+
+hats.gui.helpInfo17.desc1=Als je een hoed hebt om bij te dragen,
+hats.gui.helpInfo17.desc2=kan je hem gebruiken in
+hats.gui.helpInfo17.desc3=Jaag Mode.
+
+hats.gui.helpInfo18.desc1=De (C) in de naam van de hoed
+hats.gui.helpInfo18.desc2=is voor een dank je
+hats.gui.helpInfo18.desc3=voor een donatie voor de mod!
+
+hats.gui.helpInfo19.desc1=Wist je dat je kan aanpassen
+hats.gui.helpInfo19.desc2=of mobs hoeden hebben? Het staat in het
+hats.gui.helpInfo19.desc3="Aanpassen" label
+
+hats.addon.hatstands.gui.base=Basis
+hats.addon.hatstands.gui.stand=Stand
