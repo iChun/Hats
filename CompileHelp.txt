@@ -1,0 +1,9 @@
+Create a folder in this folder "Hats" that is named libs
+In libs put IChunUtil-deobf.jar , Morph-deobf.jar , and IChunUtil_AT.cfg
+Copy that folder to "Hats\src\main\resources\assets\hats"
+Note: you should now have 2 duplicate folders in ^^ and Hats
+Now Compile
+
+To Get IChunUtil-deobf.jar compile IChunUtil
+To Get IChunUtil-deobf.jar it is in "IChunUtil\src\main\resources\META-INF"
+To Get Morph-deobf.jar compile morph like above but you don't need morph-deobf.jar
