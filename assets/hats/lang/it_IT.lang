@@ -1,0 +1,167 @@
+hats.firstJoin.hatHunting=[Hats] Il server è in modalità di caccia al cappello! Uccidi un mob con un cappello per sbloccarlo!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Il server è in modalità "Re dei cappelli"! Uccidi il re e prendi il diritto di indossare cappelli!
+hats.kingOfTheHat.update.playerJoin=[Hats] Gioite! %s è il nuovo re!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s è morto! %2$s è ora il nuovo re!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s è stato assassinato! %2$s è ora il nuovo re!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s ha abbandonato il server! %2$s è ora il nuovo re!
+hats.trade.tradeWith=Stai scambiando con %s
+hats.trade.yourHats=I tuoi cappelli
+hats.trade.yourInventory=Il tuo inventario
+hats.trade.yourOfferings=La tua offerta:
+hats.trade.theirOfferings=L'offerta di %s:
+hats.trade.waitingForOffer=In attesa che qualcuno faccia un offerta.
+hats.trade.tradeNotReady=Non pronto per scambiare.
+hats.trade.tradeReady=Pronto per scambiare.
+hats.trade.makeTrade=Scambia
+hats.trade.waitingForReady=In attesa che entrambe le parti siano pronte per scambiare.
+hats.trade.cancelTrade=Annulla lo scambio
+hats.command= Comandi per i cappelli
+hats.command.help=digita /hats per l'intera lista.
+hats.command.help.send=/hats send <player> <hat name>  Invia un cappello a un giocatore.
+hats.command.help.set=/hats set <player> <hat name>   Imposta il cappello di un giocatore.
+hats.command.help.unlock=/hats unlock <player> <hat name>   Sblocca un cappello per un giocatore.
+hats.command.notOnline=%s non è online!
+hats.command.hatDoesNotExist=%s non esiste!
+hats.command.serverDisabledHatSending=Il server ha disabilitato l'invio di cappelli!
+hats.command.sendToPlayer=Invio di %1$s a %2$s
+hats.command.setPlayerHat=Impostazione di %1$s su %2$s
+hats.command.playerIsInCreative=%s è in modalità creativa!
+hats.command.unlockHatForPlayer=Sblocco di %1$s per %2$s
+hats.command.adminNotify.unlockHatForPlayer=%1$s ha sbloccato %2$s per %3$s
+hats.command.serverIsNotOnHatHuntingMode=Il server non è in modalità di caccia al cappello!
+hats.serverOnCommandGiverMode=Server has hats set to Command Giver Mode. You can not give commands!
+hats.hatUnlocked=Cappello sbloccato!
+hats.gui.search=Cerca
+hats.gui.allHats=Tutti i cappelli
+hats.gui.addNew=Aggiungi nuovo
+hats.gui.firstPerson=Prima persona
+hats.gui.showHats=Mostra cappelli
+hats.gui.contributors=Contributori
+hats.gui.category=Categoria
+hats.gui.categories=Categorie
+hats.gui.colorizer=Coloratore
+hats.gui.hatsList=Lista dei cappelli
+hats.gui.resetSide=Reimposta lato?
+hats.gui.randomobs=Mobs Casuali
+hats.gui.personalize=Personalizza
+hats.gui.viewing=Vista
+hats.gui.discardChanges=Annulla cambiamenti?
+hats.gui.removeHat=Rimuovi cappello
+hats.gui.randomHat=Cappello casuale
+hats.gui.randomCategory=Categoria casuale
+hats.gui.randomColor=Colore casuale
+hats.gui.resetColor=Reimposta colore
+hats.gui.reloadAllHats=Ricarica tutti i cappelli?
+hats.gui.discardAllChanges=Questo annullerà tutti i cambiamenti.
+hats.gui.favorites=Preferiti
+hats.gui.invalidName=Nome non valido!
+hats.gui.addCategory=Aggiungi categoria
+hats.gui.addToCategory=Aggiungi a categoria
+hats.gui.removeFromCategory=Rimuovi da categoria
+hats.gui.areYouSure=Sei sicuro?
+hats.gui.clickConfirm=Clicca ancora per confermare
+hats.gui.deleteCategory=Cancella categoria
+hats.gui.deleteCategory.desc1=Questo rimuoverà tutti i cappelli
+hats.gui.deleteCategory.desc2=in questa categoria e ricaricherà
+hats.gui.deleteCategory.desc3=l'interfaccia grafica.
+hats.gui.doubleClickConfirm=Doppio click per confermare.
+hats.gui.disableHat=Disabilita cappello?
+hats.gui.disableHat.desc1=Questo cancellerà questo cappello da
+hats.gui.disableHat.desc2=tutte le categorie e ricaricherà
+hats.gui.disableHat.desc3=l'interfaccia grafica. Questo non
+hats.gui.disableHat.desc4=cancellerà il file.
+hats.gui.deleteHat=Cancella cappello?
+hats.gui.deleteHat.desc1=Questo rimuoverà questo cappello da
+hats.gui.deleteHat.desc2=tutte le categorie e ricaricherà
+hats.gui.deleteHat.desc3=l'interfaccia grafica.
+hats.gui.renameCategory=Rinomina la categoria?
+hats.gui.renameCategory.desc1=Questo ricaricherà l'interfaccia grafica!
+hats.gui.removeFromFavorites=Rimuovi dai preferiti
+hats.gui.addToFavorites=Aggiungi ai preferiti.
+hats.gui.resetButtonsOnSide=Reimposta i bottoni ai lati dell'interfaccia grafica?
+
+hats.gui.helpInfo1.desc1=Shift click sul bottone del
+hats.gui.helpInfo1.desc2=cappello per altre opzioni!
+hats.gui.helpInfo1.desc3=Non puoi fare shift click sul
+hats.gui.helpInfo1.desc4=cappello che stai indossando
+hats.gui.helpInfo1.desc5=però.
+
+hats.gui.helpInfo2.desc1=Se sei su un server che non possiede
+hats.gui.helpInfo2.desc2=questa mod, altri giocatori con questa
+hats.gui.helpInfo2.desc3=mod non saranno in grado di vedere il tuo cappello.
+
+hats.gui.helpInfo3.desc1=Lo sapevi che puoi sempre trovare nuovi cappelli?
+hats.gui.helpInfo3.desc2=Techne Online ha molti
+hats.gui.helpInfo3.desc3=cappelli creati dalla comunità che puoi
+hats.gui.helpInfo3.desc4=scaricare ed installare.
+
+hats.gui.helpInfo4.desc1=Puoi anche fare i tuoi cappelli personali!
+hats.gui.helpInfo4.desc2=Avrai bisogno di Techne e potrai farci un cappello.
+hats.gui.helpInfo4.desc3=Il modello della testa è piazzato in mezzo al
+hats.gui.helpInfo4.desc4=blocco di legno. La grandezza è di
+hats.gui.helpInfo4.desc5=8 x 8 x 8. Costruiscici il tuo cappello!
+
+hats.gui.helpInfo5.desc1=Lo sapevi che puoi fare le tue categorie personali?
+hats.gui.helpInfo5.desc2=Premi il bottone delle categorie (o C, sulla tu tastiera)
+hats.gui.helpInfo5.desc3=e premi il bottone "Aggiungi nuova".
+
+hats.gui.helpInfo6.desc1=Lo sapevi che se un tuo amico non
+hats.gui.helpInfo6.desc2=ha il cappello che stai indossando, invii il tuo cappello
+hats.gui.helpInfo6.desc3=al server, e viene inviato al tuo amico.
+hats.gui.helpInfo6.desc4=(Solo per i server con la mod)
+
+hats.gui.helpInfo7.desc1=Shift click sul tasto per un cappello casuale ti darà
+hats.gui.helpInfo7.desc2=un cappello E un colore casuale!
+
+hats.gui.helpInfo8.desc1=Shift click sul bottone del colore casuale reimposterà
+hats.gui.helpInfo8.desc2=tutti i colori.
+
+hats.gui.helpInfo9.desc1=Puoi premere TAB o T per selezionare velocemente
+hats.gui.helpInfo9.desc2=la barra di ricerca.
+
+hats.gui.helpInfo10.desc1=Lo sapevi che questa mod è stata originariamente
+hats.gui.helpInfo10.desc2=fatta per una maratona di modding di 96 ore
+hats.gui.helpInfo10.desc3=chiamata ModJam?
+hats.gui.helpInfo10.desc4=Ha vinto il secondo posto ed è stata fatta e viene
+hats.gui.helpInfo10.desc5=attualmente mantenuta da iChun.
+
+hats.gui.helpInfo11.desc1=I cappelli di giocatori aggiunti dalla mod sono i
+hats.gui.helpInfo11.desc2=nomi di alcune persone che hanno contribuito
+hats.gui.helpInfo11.desc3=significativamente alla mod, in termini
+hats.gui.helpInfo11.desc4=di sviluppo, prove, contributo per i modelli
+hats.gui.helpInfo11.desc5=e supporto.
+hats.gui.helpInfo11.desc6=Direwolf20 è solo un bonus però.
+
+hats.gui.helpInfo12.desc1=Shift Click sulla lista dei cappelli ti farà 
+hats.gui.helpInfo12.desc2=uscire da una categoria e ti riporterà a tutti
+hats.gui.helpInfo12.desc3=i cappelli.
+
+hats.gui.helpInfo13.desc1=Puoi fare tasto destro sulla barra di ricerca
+hats.gui.helpInfo13.desc2=per ripulirla.
+
+hats.gui.helpInfo14.desc1=Puoi disabilitare cappelli invece che eliminarli
+hats.gui.helpInfo14.desc2=Basta che tieni premuto shift mentre li cancelli.
+
+hats.gui.helpInfo15.desc1=Premere Shift-F metterà o toglierà
+hats.gui.helpInfo15.desc2=dai preferiti il cappello che stai
+hats.gui.helpInfo15.desc3=attualmente indossando.
+
+hats.gui.helpInfo16.desc1=Il tasto per "Personalizza" è
+hats.gui.helpInfo16.desc2="P"
+hats.gui.helpInfo16.desc3=nel caso tu avessi accidentalmente
+hats.gui.helpInfo16.desc4=disabilitato il bottone.
+
+hats.gui.helpInfo17.desc1=Se hai un cappello da contributore,
+hats.gui.helpInfo17.desc2=puoi usarlo nella modalità di
+hats.gui.helpInfo17.desc3="Caccia al cappello".
+
+hats.gui.helpInfo18.desc1=La (C) nel nome del cappello
+hats.gui.helpInfo18.desc2=rappresenta un cappello aggiunto per ringraziare
+hats.gui.helpInfo18.desc3=una donazione per la mod!
+
+hats.gui.helpInfo19.desc1=Lo sapevi che puoi impostare il possesso
+hats.gui.helpInfo19.desc2=dei cappelli per i mob? Si trova nella
+hats.gui.helpInfo19.desc3=tab "Personalizza"
+
+hats.addon.hatstands.gui.base=Base
+hats.addon.hatstands.gui.stand=Supporto
