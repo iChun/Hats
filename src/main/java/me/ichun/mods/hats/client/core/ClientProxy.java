@@ -1,6 +1,6 @@
 package me.ichun.mods.hats.client.core;
 
-import me.ichun.mods.hats.common.core.CommomProxy;
+import me.ichun.mods.hats.common.core.CommonProxy;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -14,7 +14,7 @@ import me.ichun.mods.ichunutil.common.module.tabula.common.project.ProjectInfo;
 import java.io.File;
 import java.util.HashMap;
 
-public class ClientProxy extends CommomProxy
+public class ClientProxy extends CommonProxy
 {
     @Override
     public void initTickHandlers()

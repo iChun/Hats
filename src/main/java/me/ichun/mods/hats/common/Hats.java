@@ -41,8 +41,8 @@ public class Hats
     @Instance("hats")
     public static Hats instance;
 
-    @SidedProxy(clientSide = "me.ichun.mods.hats.client.core.ClientProxy", serverSide = "me.ichun.mods.hats.common.core.CommomProxy", modId = "hats")
-    public static CommomProxy proxy;
+    @SidedProxy(clientSide = "me.ichun.mods.hats.client.core.ClientProxy", serverSide = "me.ichun.mods.hats.common.core.CommonProxy", modId = "hats")
+    public static CommonProxy proxy;
 
     @Mod.EventHandler
     public void preLoad(FMLPreInitializationEvent event)

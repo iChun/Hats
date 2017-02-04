@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentBase;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -82,17 +83,7 @@ public class PacketString extends AbstractPacket
                     }
                     else
                     {
-                        player.sendMessage(new TextComponentBase() {
-                            @Override
-                            public String getUnformattedComponentText() {
-                                return I18n.translateToLocalFormatted("hats.trade.cannotFindTrader", plyr1);
-                            }
-
-                            @Override
-                            public ITextComponent createCopy() {
-                                return this;
-                            }
-                        });
+                        player.sendMessage(new TextComponentTranslation("hats.trade.cannotFindTrader", plyr1));
                     }
                     break;
                 }
@@ -104,17 +95,7 @@ public class PacketString extends AbstractPacket
                     TradeRequest tr = Hats.proxy.tickHandlerServer.playerTradeRequests.get(player.getName());
                     if(tr == null)
                     {
-                        player.sendMessage(new TextComponentBase() {
-                            @Override
-                            public String getUnformattedComponentText() {
-                                return "hats.trade.cannotAcceptTrade";
-                            }
-
-                            @Override
-                            public ITextComponent createCopy() {
-                                return this;
-                            }
-                        });
+                        player.sendMessage(new TextComponentTranslation("hats.trade.cannotAcceptTrade"));
                         break;
                     }
 
@@ -127,17 +108,7 @@ public class PacketString extends AbstractPacket
                     }
                     else
                     {
-                        player.sendMessage(new TextComponentBase() {
-                            @Override
-                            public String getUnformattedComponentText() {
-                                return "hats.trade.cannotAcceptTrade";
-                            }
-
-                            @Override
-                            public ITextComponent createCopy() {
-                                return this;
-                            }
-                        });
+                        player.sendMessage(new TextComponentTranslation("hats.trade.cannotAcceptTrade"));
                     }
                     break;
                 }

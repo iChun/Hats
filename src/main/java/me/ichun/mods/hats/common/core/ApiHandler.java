@@ -16,8 +16,8 @@ public class ApiHandler
 		}
 		else
 		{
-			boolean exists = CommomProxy.renderHelpers.get(helper.helperForClass()) != null;
-			CommomProxy.renderHelpers.put(helper.helperForClass(), helper);
+			boolean exists = CommonProxy.renderHelpers.get(helper.helperForClass()) != null;
+			CommonProxy.renderHelpers.put(helper.helperForClass(), helper);
 			Hats.console((exists ? "Overriding" : "Registering") + " hat render helper for " + helper.helperForClass().getName());
 		}
 	}

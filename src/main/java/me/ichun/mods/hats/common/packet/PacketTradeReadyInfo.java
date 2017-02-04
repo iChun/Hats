@@ -13,36 +13,36 @@ import me.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 
 public class PacketTradeReadyInfo extends AbstractPacket
 {
-    public String trader1String;
+    public String trader1Name;
     public boolean trader1Ready;
-    public String trader2String;
+    public String trader2Name;
     public boolean trader2Ready;
 
     public PacketTradeReadyInfo(){}
 
-    public PacketTradeReadyInfo(String t1UUID, boolean t1Ready, String t2UUID, boolean t2Ready)
+    public PacketTradeReadyInfo(String t1Name, boolean t1Ready, String t2Name, boolean t2Ready)
     {
-        this.trader1String = t1UUID;
+        this.trader1Name = t1Name;
         this.trader1Ready = t1Ready;
-        this.trader2String = t2UUID;
+        this.trader2Name = t2Name;
         this.trader2Ready = t2Ready;
     }
 
     @Override
     public void writeTo(ByteBuf buffer)
     {
-        ByteBufUtils.writeUTF8String(buffer, trader1String);
+        ByteBufUtils.writeUTF8String(buffer, trader1Name);
         buffer.writeBoolean(trader1Ready);
-        ByteBufUtils.writeUTF8String(buffer, trader2String);
+        ByteBufUtils.writeUTF8String(buffer, trader2Name);
         buffer.writeBoolean(trader2Ready);
     }
 
     @Override
     public void readFrom(ByteBuf buffer)
     {
-        trader1String = ByteBufUtils.readUTF8String(buffer);
+        trader1Name = ByteBufUtils.readUTF8String(buffer);
         trader1Ready = buffer.readBoolean();
-        trader2String = ByteBufUtils.readUTF8String(buffer);
+        trader2Name = ByteBufUtils.readUTF8String(buffer);
         trader2Ready = buffer.readBoolean();
     }
 
@@ -68,7 +68,7 @@ public class PacketTradeReadyInfo extends AbstractPacket
         {
             GuiTradeWindow trade = (GuiTradeWindow)Minecraft.getMinecraft().currentScreen;
 
-            if(trader1String.equals(Minecraft.getMinecraft().player.getName()))
+            if(trader1Name.equals(Minecraft.getMinecraft().player.getName()))
             {
                 if(trade.selfReady && !trader1Ready)
                 {

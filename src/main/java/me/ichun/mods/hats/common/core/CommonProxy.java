@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class CommomProxy
+public class CommonProxy
 {
 	public static HashMap<Class, RenderOnEntityHelper> renderHelpers = new HashMap<Class, RenderOnEntityHelper>();
 	public void initCommands(MinecraftServer server)
@@ -40,41 +40,41 @@ public class CommomProxy
 	public void initMod()
 	{
 		getHats();
-		//TODO Every mob between 1.8 and 1.11
-        CommomProxy.renderHelpers.put(EntityBat.class			 , new HelperBat());
-		CommomProxy.renderHelpers.put(EntityBlaze.class			 , new HelperBlaze());
-		CommomProxy.renderHelpers.put(EntityChicken.class		 , new HelperChicken());
-		CommomProxy.renderHelpers.put(EntityCow.class			 , new HelperCow());
-		CommomProxy.renderHelpers.put(EntityCreeper.class		 , new HelperCreeper());
-		CommomProxy.renderHelpers.put(EntityDonkey.class         , new HelperDonkey());
-		CommomProxy.renderHelpers.put(EntityEnderman.class		 , new HelperEnderman());
-		CommomProxy.renderHelpers.put(EntityEvoker.class		 , new HelperEvoker());
-		CommomProxy.renderHelpers.put(EntityGhast.class			 , new HelperGhast());
-		CommomProxy.renderHelpers.put(EntityGiantZombie.class	 , new HelperGiantZombie());
-		CommomProxy.renderHelpers.put(EntityGuardian.class       , new HelperGuardian());
-		CommomProxy.renderHelpers.put(EntityHorse.class			 , new HelperHorse());
-		CommomProxy.renderHelpers.put(EntityMule.class           , new HelperMule());
-		CommomProxy.renderHelpers.put(EntityOcelot.class		 , new HelperOcelot());
-		CommomProxy.renderHelpers.put(EntityPig.class			 , new HelperPig());
-		CommomProxy.renderHelpers.put(EntityPlayer.class		 , new HelperPlayer());
-		CommomProxy.renderHelpers.put(EntityPolarBear.class      , new HelperPolarBear());
-		CommomProxy.renderHelpers.put(EntityStray.class			 , new HelperStray());
-		CommomProxy.renderHelpers.put(EntitySheep.class			 , new HelperSheep());
-		CommomProxy.renderHelpers.put(EntityShulker.class        , new HelperShulker());
-		CommomProxy.renderHelpers.put(EntitySkeleton.class		 , new HelperSkeleton());
-		CommomProxy.renderHelpers.put(EntitySkeletonHorse.class  , new HelperSkeletonHorse());
-		CommomProxy.renderHelpers.put(EntitySlime.class			 , new HelperSlime());
-		CommomProxy.renderHelpers.put(EntitySpider.class		 , new HelperSpider());
-		CommomProxy.renderHelpers.put(EntitySquid.class			 , new HelperSquid());
-		CommomProxy.renderHelpers.put(EntityVillager.class		 , new HelperVillager());
-		CommomProxy.renderHelpers.put(EntityVindicator.class     , new HelperVindictor());
-		CommomProxy.renderHelpers.put(EntityVex.class		     , new HelperVex());
-		CommomProxy.renderHelpers.put(EntityWitherSkeleton.class , new HelperWitherSkeleton());
-		CommomProxy.renderHelpers.put(EntityWolf.class			 , new HelperWolf());
-		CommomProxy.renderHelpers.put(EntityZombie.class		 , new HelperZombie());
-		CommomProxy.renderHelpers.put(EntityZombieHorse.class    , new HelperZombieHorse());
-		CommomProxy.renderHelpers.put(EntityZombieVillager.class , new HelperZombieVillager());
-		CommomProxy.renderHelpers.put(EntityWither.class		 , new HelperWither());
+		//Should be every mob
+        CommonProxy.renderHelpers.put(EntityBat.class			 , new HelperBat());
+		CommonProxy.renderHelpers.put(EntityBlaze.class			 , new HelperBlaze());
+		CommonProxy.renderHelpers.put(EntityChicken.class		 , new HelperChicken());
+		CommonProxy.renderHelpers.put(EntityCow.class			 , new HelperCow());
+		CommonProxy.renderHelpers.put(EntityCreeper.class		 , new HelperCreeper());
+		CommonProxy.renderHelpers.put(EntityDonkey.class         , new HelperDonkey());
+		CommonProxy.renderHelpers.put(EntityEnderman.class		 , new HelperEnderman());
+		CommonProxy.renderHelpers.put(EntityEvoker.class		 , new HelperEvoker());
+		CommonProxy.renderHelpers.put(EntityGhast.class			 , new HelperGhast());
+		CommonProxy.renderHelpers.put(EntityGiantZombie.class	 , new HelperGiantZombie());
+		CommonProxy.renderHelpers.put(EntityGuardian.class       , new HelperGuardian());
+		CommonProxy.renderHelpers.put(EntityHorse.class			 , new HelperHorse());
+		CommonProxy.renderHelpers.put(EntityMule.class           , new HelperMule());
+		CommonProxy.renderHelpers.put(EntityOcelot.class		 , new HelperOcelot());
+		CommonProxy.renderHelpers.put(EntityPig.class			 , new HelperPig());
+		CommonProxy.renderHelpers.put(EntityPlayer.class		 , new HelperPlayer());
+		CommonProxy.renderHelpers.put(EntityPolarBear.class      , new HelperPolarBear());
+		CommonProxy.renderHelpers.put(EntityStray.class			 , new HelperStray());
+		CommonProxy.renderHelpers.put(EntitySheep.class			 , new HelperSheep());
+		CommonProxy.renderHelpers.put(EntityShulker.class        , new HelperShulker());
+		CommonProxy.renderHelpers.put(EntitySkeleton.class		 , new HelperSkeleton());
+		CommonProxy.renderHelpers.put(EntitySkeletonHorse.class  , new HelperSkeletonHorse());
+		CommonProxy.renderHelpers.put(EntitySlime.class			 , new HelperSlime());
+		CommonProxy.renderHelpers.put(EntitySpider.class		 , new HelperSpider());
+		CommonProxy.renderHelpers.put(EntitySquid.class			 , new HelperSquid());
+		CommonProxy.renderHelpers.put(EntityVillager.class		 , new HelperVillager());
+		CommonProxy.renderHelpers.put(EntityVindicator.class     , new HelperVindictor());
+		CommonProxy.renderHelpers.put(EntityVex.class		     , new HelperVex());
+		CommonProxy.renderHelpers.put(EntityWitherSkeleton.class , new HelperWitherSkeleton());
+		CommonProxy.renderHelpers.put(EntityWolf.class			 , new HelperWolf());
+		CommonProxy.renderHelpers.put(EntityZombie.class		 , new HelperZombie());
+		CommonProxy.renderHelpers.put(EntityZombieHorse.class    , new HelperZombieHorse());
+		CommonProxy.renderHelpers.put(EntityZombieVillager.class , new HelperZombieVillager());
+		CommonProxy.renderHelpers.put(EntityWither.class		 , new HelperWither());
 
         getHatMobModSupport();//Done after initial mapping so that the new JSON can override the mod's vanilla helpers.
 

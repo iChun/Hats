@@ -816,7 +816,7 @@ public class HatHandler
     {
         if(EntityLivingBase.class.isAssignableFrom(clz) && clz != EntityLivingBase.class)
         {
-            RenderOnEntityHelper helper = CommomProxy.renderHelpers.get(clz);
+            RenderOnEntityHelper helper = CommonProxy.renderHelpers.get(clz);
             if(helper == null)
             {
                 return getRenderHelper(clz.getSuperclass());

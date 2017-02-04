@@ -2,7 +2,7 @@ package me.ichun.mods.hats.common.thread;
 
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
-import me.ichun.mods.hats.common.core.CommomProxy;
+import me.ichun.mods.hats.common.core.CommonProxy;
 import net.minecraft.entity.EntityLivingBase;
 import me.ichun.mods.hats.client.render.helper.HelperGeneric;
 import me.ichun.mods.hats.common.Hats;
@@ -75,7 +75,7 @@ public class ThreadGetModMobSupport extends Thread
 
                     helperGeneric.hatScale = getVar(vars.get("hatScale"));
 
-                    CommomProxy.renderHelpers.put(clz, helperGeneric);
+                    CommonProxy.renderHelpers.put(clz, helperGeneric);
 
                     Hats.console("Registered " + clz.getName() + " with hat mod mappings.");
                 }

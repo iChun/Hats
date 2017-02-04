@@ -69,11 +69,11 @@ public class PacketTradeOffers extends AbstractPacket
 
         for(int i = 0; i < itemCount; i++)
         {
-            NBTTagCompound nbt = ByteBufUtils.readTag(buffer);
+            ItemStack is = new ItemStack(ByteBufUtils.readTag(buffer));
 
-            if(nbt != null)
+            if(!is.isEmpty())
             {
-                tradeItems.add(new ItemStack(nbt));
+                tradeItems.add(is);
             }
         }
     }
