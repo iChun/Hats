@@ -1,40 +1,40 @@
 buildscript {
     repositories {
-        mavenCentral()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/content/repositories/snapshots/"
-        }
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
     }
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:1.2-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
 
-apply plugin: 'forge'
+apply plugin: 'net.minecraftforge.gradle.forge'
 
 // Requires iChunUtil to run. Just put iChunUtil-deobf.jar in the /libs/ folder and iChunUtil_AT.cfg in the /src/api/resources/ folder or it won't compile.
-version = "4.0.1"
-group= "hats" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+version = "5.0.1"
+group= "me.ichun" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Hats"
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
 minecraft {
-    version = "1.8-11.14.1.1353"
-    runDir = "eclipse"
+    version = "1.11.2-13.20.0.2224"
+    runDir = "run"
     
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
+    // Use non-default mappings at your own risk. they may not always work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20150401"
+    mappings = "snapshot_20161220"
+    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
-processResources
-{
+processResources {
+    // this will ensure that this task is redone when the versions change.
+    inputs.property "version", project.version
+    inputs.property "mcversion", project.minecraft.version
+
     // replace stuff in mcmod.info, nothing else
     from(sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
@@ -48,37 +48,6 @@ processResources
         exclude 'mcmod.info'
     }
 }
-jar 
-{ 
-	exclude "hats/addons/**"
-}
-
-// add source jar
-task sourceJar(type: Jar) {
-    from sourceSets.main.allSource
-    classifier = 'source'
-}
-
-// deobf jars
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'deobf'
-}
-
-task addonJar(type: Jar, dependsOn: "jar") {
-	from sourceSets.main.output
-	baseName = "HatStand"
-	version = "4.0.0"
-	include "hats/addons/**"
-}
-
-reobf 
-{ 
-	reobf(project.tasks.addonJar)
-	{ 
-		spec -> spec.classpath = configurations.compile 
-	} 
-}
 
 // make sure all of these happen when we run build
-build.dependsOn sourceJar, deobfJar, addonJar
+// build.dependsOn sourceJar, deobfJar
