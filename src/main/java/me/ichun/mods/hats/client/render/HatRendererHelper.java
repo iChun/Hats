@@ -34,7 +34,7 @@ public class HatRendererHelper
             GlStateManager.pushMatrix();
 
             GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
             GlStateManager.scale(1.001F, 1.001F, 1.001F);
             GlStateManager.scale(mobRenderScaleX, mobRenderScaleY, mobRenderScaleZ);
