@@ -1,6 +1,7 @@
 package me.ichun.mods.hats.client.gui;
 
 import me.ichun.mods.hats.client.core.HatInfoClient;
+import me.ichun.mods.hats.client.render.HatRendererHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -11,7 +12,6 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
-import me.ichun.mods.hats.client.render.HatRendererHelper;
 
 import java.util.ArrayList;
 
@@ -33,7 +33,7 @@ public class GuiHatUnlocked extends Gui
 
     private long unlockedTime;
 
-    public ArrayList<String> hatList = new ArrayList<String>();
+    public ArrayList<String> hatList = new ArrayList<>();
 
     private HatInfoClient info = null;
 

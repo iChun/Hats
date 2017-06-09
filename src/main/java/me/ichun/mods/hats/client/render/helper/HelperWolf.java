@@ -1,11 +1,11 @@
 package me.ichun.mods.hats.client.render.helper;
 
 import me.ichun.mods.hats.api.RenderOnEntityHelper;
+import me.ichun.mods.hats.common.Hats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import me.ichun.mods.hats.common.Hats;
 
 public class HelperWolf extends RenderOnEntityHelper
 {
@@ -51,7 +51,7 @@ public class HelperWolf extends RenderOnEntityHelper
     @Override
     public float getRotatePointSide(EntityLivingBase ent)
     {
-        return 1F/16F;
+        return 0F/16F;
     }
 
     @Override

@@ -1,14 +1,18 @@
 package me.ichun.mods.hats.common.packet;
 
 import io.netty.buffer.ByteBuf;
+import me.ichun.mods.hats.client.gui.GuiHatSelection;
+import me.ichun.mods.hats.client.gui.GuiHatUnlocked;
 import me.ichun.mods.hats.client.gui.GuiTradeWindow;
+import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.trade.TradeInfo;
+import me.ichun.mods.hats.common.trade.TradeRequest;
 import me.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -16,11 +20,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import me.ichun.mods.hats.client.gui.GuiHatSelection;
-import me.ichun.mods.hats.client.gui.GuiHatUnlocked;
-import me.ichun.mods.hats.common.Hats;
-import me.ichun.mods.hats.common.trade.TradeInfo;
-import me.ichun.mods.hats.common.trade.TradeRequest;
 
 public class PacketString extends AbstractPacket
 {

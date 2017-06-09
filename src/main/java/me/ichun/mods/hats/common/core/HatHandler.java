@@ -86,8 +86,8 @@ public class HatHandler
         int hatCount = 0;
         if(dir.isDirectory())
         {
-            ArrayList<String> hatsToLoad = new ArrayList<String>();
-            ArrayList<String> categoryHats = new ArrayList<String>();
+            ArrayList<String> hatsToLoad = new ArrayList<>();
+            ArrayList<String> categoryHats = new ArrayList<>();
             File[] files = dir.listFiles();
             for(File file : files)
             {
@@ -328,7 +328,7 @@ public class HatHandler
             ArrayList<byte[]> byteArray = hatParts.get(hatName);
             if(byteArray == null)
             {
-                byteArray = new ArrayList<byte[]>();
+                byteArray = new ArrayList<>();
 
                 hatParts.put(hatName, byteArray);
 
@@ -342,9 +342,8 @@ public class HatHandler
 
             boolean hasAllInfo = true;
 
-            for(int i = 0; i < byteArray.size(); i++)
+            for(byte[] byteList : byteArray)
             {
-                byte[] byteList = byteArray.get(i);
                 if(byteList.length == 0)
                 {
                     hasAllInfo = false;
@@ -363,9 +362,8 @@ public class HatHandler
 
                 FileOutputStream fis = new FileOutputStream(file);
 
-                for(int i = 0; i < byteArray.size(); i++)
+                for(byte[] byteList : byteArray)
                 {
-                    byte[] byteList = byteArray.get(i);
                     fis.write(byteList);
                 }
 
@@ -518,7 +516,7 @@ public class HatHandler
             ArrayList<String> queuedLists = queuedHats.get(hatName.toLowerCase());
             if(queuedLists == null)
             {
-                queuedLists = new ArrayList<String>();
+                queuedLists = new ArrayList<>();
                 queuedHats.put(hatName, queuedLists);
             }
             queuedLists.add(player.getName());
@@ -555,12 +553,10 @@ public class HatHandler
 
     public static ArrayList<String> getAllHats()
     {
-        ArrayList<String> hatList = new ArrayList<String>();
+        ArrayList<String> hatList = new ArrayList<>();
 
-        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
-        while(ite.hasNext())
+        for(Entry<File, String> e : HatHandler.getHatNames().entrySet())
         {
-            Entry<File, String> e = ite.next();
             hatList.add(e.getValue());
         }
         return hatList;
@@ -568,12 +564,10 @@ public class HatHandler
 
     public static ArrayList<String> getHatsWithWeightedContributors()
     {
-        ArrayList<String> hatList = new ArrayList<String>();
+        ArrayList<String> hatList = new ArrayList<>();
 
-        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
-        while(ite.hasNext())
+        for(Entry<File, String> e : HatHandler.getHatNames().entrySet())
         {
-            Entry<File, String> e = ite.next();
             //            if(e.getValue().startsWith("(C)".toLowerCase()) && rand.nextFloat() > ((float)Hats.config.useRandomContributorHats / 100F))
             //            {
             //                continue;
@@ -677,12 +671,10 @@ public class HatHandler
 
     public static ArrayList<String> getAllHatNamesAsList()
     {
-        ArrayList<String> hatNameList = new ArrayList<String>();
+        ArrayList<String> hatNameList = new ArrayList<>();
 
-        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
-        while(ite.hasNext())
+        for(Entry<File, String> e : HatHandler.getHatNames().entrySet())
         {
-            Entry<File, String> e = ite.next();
             String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
             hatNameList.add(name);
         }
@@ -709,10 +701,8 @@ public class HatHandler
             return;
         }
         TreeMap<String, Integer> hats = Hats.eventHandlerServer.getPlayerHatsList(player.getName());
-        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
-        while(ite.hasNext())
+        for(Entry<File, String> e : HatHandler.getHatNames().entrySet())
         {
-            Entry<File, String> e = ite.next();
             String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
             if(name.equalsIgnoreCase(hat))
             {
@@ -728,7 +718,7 @@ public class HatHandler
                 }
 
                 StringBuilder sb = new StringBuilder();
-                for(Map.Entry<String, Integer> e1 : hats.entrySet())
+                for(Entry<String, Integer> e1 : hats.entrySet())
                 {
                     String hatName = getNameForHat(e1.getKey());
                     sb.append(hatName);
@@ -780,10 +770,8 @@ public class HatHandler
     public static void repopulateHatsList()
     {
         Hats.eventHandlerClient.availableHats.clear();
-        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
-        while(ite.hasNext())
+        for(Entry<File, String> e : HatHandler.getHatNames().entrySet())
         {
-            Entry<File, String> e = ite.next();
             Hats.eventHandlerClient.availableHats.put(e.getKey().getName().substring(0, e.getKey().getName().length() - 4), 1);
         }
     }
@@ -810,10 +798,8 @@ public class HatHandler
             }
         }
 
-        Iterator<Entry<File, String>> ite = HatHandler.getHatNames().entrySet().iterator();
-        while(ite.hasNext())
+        for(Entry<File, String> e : HatHandler.getHatNames().entrySet())
         {
-            Entry<File, String> e = ite.next();
             String name = e.getKey().getName().substring(0, e.getKey().getName().length() - 4);
             if(isPlayersContributorHat(name, Minecraft.getMinecraft().getSession().getUsername()))
             {
@@ -821,7 +807,7 @@ public class HatHandler
             }
         }
 
-        Hats.eventHandlerClient.serverHats = new HashMap<String, Integer>(Hats.eventHandlerClient.availableHats);
+        Hats.eventHandlerClient.serverHats = new HashMap<>(Hats.eventHandlerClient.availableHats);
     }
 
     public static boolean isPlayersContributorHat(String hatName, String playerName)
@@ -914,7 +900,7 @@ public class HatHandler
     {
         if(reloadingHats)
         {
-            return new HashMap<File, String>();
+            return new HashMap<>();
         }
         return hatNames;
     }
@@ -928,20 +914,20 @@ public class HatHandler
 
     public static File hatsFolder;
 
-    public static HashMap<String, ArrayList<String>> queuedHats = new HashMap<String, ArrayList<String>>();
+    public static HashMap<String, ArrayList<String>> queuedHats = new HashMap<>();
 
-    public static HashMap<String, ArrayList<byte[]>> hatParts = new HashMap<String, ArrayList<byte[]>>();
+    public static HashMap<String, ArrayList<byte[]>> hatParts = new HashMap<>();
 
-    private static HashMap<File, String> hatNames = new HashMap<File, String>();
+    private static HashMap<File, String> hatNames = new HashMap<>();
 
-    public static HashMap<String, File> checksums = new HashMap<String, File>();
+    public static HashMap<String, File> checksums = new HashMap<>();
 
-    public static HashMap<String, ArrayList<String>> categories = new HashMap<String, ArrayList<String>>();
+    public static HashMap<String, ArrayList<String>> categories = new HashMap<>();
 
     public static Random rand = new Random();
 
     public static Random hatGen = new Random();
 
-    private static HashMap<Class<? extends TileEntity>, Boolean> mobSpawners = new HashMap<Class<? extends TileEntity>, Boolean>();
-    private static HashMap<Class<? extends TileEntity>, Field> mobSpawnerLogic = new HashMap<Class<? extends TileEntity>, Field>();
+    private static HashMap<Class<? extends TileEntity>, Boolean> mobSpawners = new HashMap<>();
+    private static HashMap<Class<? extends TileEntity>, Field> mobSpawnerLogic = new HashMap<>();
 }

@@ -108,8 +108,8 @@ public class GuiTradeWindow extends GuiScreen
         mc = Minecraft.getMinecraft();
         showInv = false;
 
-        items = new ArrayList<ItemStack>();
-        hats = new TreeMap<String, Integer>(Hats.eventHandlerClient.availableHats);
+        items = new ArrayList<>();
+        hats = new TreeMap<>(Hats.eventHandlerClient.availableHats);
 
         invSlots = 0;
         for(ItemStack is : mc.thePlayer.inventory.mainInventory)
@@ -155,13 +155,13 @@ public class GuiTradeWindow extends GuiScreen
             hatSlots = 3;
         }
 
-        ourItemsForTrade = new ArrayList<ItemStack>();
-        ourHatsForTrade = new TreeMap<String, Integer>();
+        ourItemsForTrade = new ArrayList<>();
+        ourHatsForTrade = new TreeMap<>();
 
-        theirItemsForTrade = new ArrayList<ItemStack>();
-        theirHatsForTrade = new TreeMap<String, Integer>();
+        theirItemsForTrade = new ArrayList<>();
+        theirHatsForTrade = new TreeMap<>();
 
-        chatMessages = new ArrayList<String>();
+        chatMessages = new ArrayList<>();
     }
 
     @Override
@@ -320,9 +320,9 @@ public class GuiTradeWindow extends GuiScreen
         }
         if(items.size() <= 12 && showInv)
         {
-            for(int ii = 0; ii < buttonList.size(); ii++)
+            for(GuiButton aButtonList : buttonList)
             {
-                GuiButton btn1 = (GuiButton)buttonList.get(ii);
+                GuiButton btn1 = (GuiButton)aButtonList;
                 if(btn1 instanceof GuiSlider)
                 {
                     ((GuiSlider)btn1).sliderValue = 0.0D;
@@ -348,8 +348,8 @@ public class GuiTradeWindow extends GuiScreen
                 {
                     int mouseProg = x - (guiLeft + 6);
 
-                    ArrayList<ItemStack> itemsList = new ArrayList<ItemStack>(items);
-                    TreeMap<String, Integer> hatsList = new TreeMap<String, Integer>(hats);
+                    ArrayList<ItemStack> itemsList = new ArrayList<>(items);
+                    TreeMap<String, Integer> hatsList = new TreeMap<>(hats);
 
                     Iterator<Map.Entry<String, Integer>> ite = hatsList.entrySet().iterator();
                     while(ite.hasNext())
@@ -486,9 +486,9 @@ public class GuiTradeWindow extends GuiScreen
 
                                     if(e.getValue() == 1)
                                     {
-                                        for(int ii = 0; ii < buttonList.size(); ii++)
+                                        for(GuiButton aButtonList : buttonList)
                                         {
-                                            GuiButton btn1 = (GuiButton)buttonList.get(ii);
+                                            GuiButton btn1 = (GuiButton)aButtonList;
                                             if(btn1 instanceof GuiSlider)
                                             {
                                                 ((GuiSlider)btn1).sliderValue = (double)MathHelper.clamp_float((float)((GuiSlider)btn1).sliderValue * (hatSlots - 3) / (hatSlots - 4), 0.0F, 1.0F);
@@ -578,7 +578,7 @@ public class GuiTradeWindow extends GuiScreen
 
                                     if(!showInv)
                                     {
-                                        TreeMap<String, Integer> hatsList = new TreeMap<String, Integer>(hats);
+                                        TreeMap<String, Integer> hatsList = new TreeMap<>(hats);
 
                                         Iterator<Map.Entry<String, Integer>> ite1 = hatsList.entrySet().iterator();
                                         while(ite1.hasNext())
@@ -600,9 +600,9 @@ public class GuiTradeWindow extends GuiScreen
 
                                         if(hatsList.get(hatName) == 1)
                                         {
-                                            for(int ii = 0; ii < buttonList.size(); ii++)
+                                            for(GuiButton aButtonList : buttonList)
                                             {
-                                                GuiButton btn1 = (GuiButton)buttonList.get(ii);
+                                                GuiButton btn1 = (GuiButton)aButtonList;
                                                 if(btn1 instanceof GuiSlider)
                                                 {
                                                     ((GuiSlider)btn1).sliderValue = (double)MathHelper.clamp_float((float)((GuiSlider)btn1).sliderValue * (hatSlots - 3) / (hatSlots + 1 - 3), 0.0F, 1.0F);
@@ -684,9 +684,9 @@ public class GuiTradeWindow extends GuiScreen
         chatBar.textboxKeyTyped(c, i);
         if(searchBar.isFocused())
         {
-            for(int ii = 0; ii < buttonList.size(); ii++)
+            for(GuiButton aButtonList : buttonList)
             {
-                GuiButton btn1 = (GuiButton)buttonList.get(ii);
+                GuiButton btn1 = (GuiButton)aButtonList;
                 if(btn1 instanceof GuiSlider)
                 {
                     ((GuiSlider)btn1).sliderValue = 0.0D;
@@ -710,7 +710,7 @@ public class GuiTradeWindow extends GuiScreen
             }
             else
             {
-                mc.displayGuiScreen((GuiScreen)null);
+                mc.displayGuiScreen(null);
                 mc.setIngameFocus();
             }
         }
@@ -733,8 +733,8 @@ public class GuiTradeWindow extends GuiScreen
             {
                 int mouseProg = x - (guiLeft + 6);
 
-                ArrayList<ItemStack> itemsList = new ArrayList<ItemStack>(items);
-                TreeMap<String, Integer> hatsList = new TreeMap<String, Integer>(hats);
+                ArrayList<ItemStack> itemsList = new ArrayList<>(items);
+                TreeMap<String, Integer> hatsList = new TreeMap<>(hats);
 
                 Iterator<Map.Entry<String, Integer>> ite = hatsList.entrySet().iterator();
                 while(ite.hasNext())
@@ -1026,8 +1026,8 @@ public class GuiTradeWindow extends GuiScreen
         int k = this.guiLeft;
         int l = this.guiTop;
 
-        ArrayList<ItemStack> itemsList = new ArrayList<ItemStack>(items);
-        TreeMap<String, Integer> hatsList = new TreeMap<String, Integer>(hats);
+        ArrayList<ItemStack> itemsList = new ArrayList<>(items);
+        TreeMap<String, Integer> hatsList = new TreeMap<>(hats);
 
         Iterator<Map.Entry<String, Integer>> ite = hatsList.entrySet().iterator();
         while(ite.hasNext())
@@ -1178,7 +1178,7 @@ public class GuiTradeWindow extends GuiScreen
                                 GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                                 GlStateManager.disableDepth();
                                 drawSolidRect(k + 6 + (size * i) + size - 10, l + 29 + size - 10, 9, 9, 0, 0.4F);
-                                fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 6 + (size * i) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 29 + size - 9), 0xffffff, true);
+                                fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), k + 6 + (size * i) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2), l + 29 + size - 9, 0xffffff, true);
                                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                                 GlStateManager.enableDepth();
                                 GlStateManager.disableBlend();
@@ -1259,7 +1259,7 @@ public class GuiTradeWindow extends GuiScreen
                         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                         GlStateManager.disableDepth();
                         drawSolidRect(k + 125 + (size * (i % columnWidth)) + size - 10, l + 17 + (size * (int)(Math.floor(i / columnWidth))) + size - 10, 9, 9, 0, 0.4F);
-                        fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 17 + (size * (int)(Math.floor(i / columnWidth))) + size - 9), 0xffffff, true);
+                        fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2), l + 17 + (size * (int)(Math.floor(i / columnWidth))) + size - 9, 0xffffff, true);
                         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                         GlStateManager.enableDepth();
                         GlStateManager.disableBlend();
@@ -1344,7 +1344,7 @@ public class GuiTradeWindow extends GuiScreen
                         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
                         GlStateManager.disableDepth();
                         drawSolidRect(k + 125 + (size * (i % columnWidth)) + size - 10, l + 116 + (size * (int)(Math.floor(i / columnWidth))) + size - 10, 9, 9, 0, 0.4F);
-                        fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), (int)(k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2)), (int)(l + 116 + (size * (int)(Math.floor(i / columnWidth))) + size - 9), 0xffffff, true);
+                        fontRendererObj.drawString(HatHandler.getHatRarityColour(e.getKey()).toString() + (e.getValue() > 99 ? "99" : e.getValue().toString()), k + 125 + (size * (i % columnWidth)) + size - 5 - (fontRendererObj.getStringWidth(e.getValue() > 99 ? "99" : e.getValue().toString()) / 2), l + 116 + (size * (int)(Math.floor(i / columnWidth))) + size - 9, 0xffffff, true);
                         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
                         GlStateManager.enableDepth();
                         GlStateManager.disableBlend();
@@ -1397,12 +1397,12 @@ public class GuiTradeWindow extends GuiScreen
 
         super.drawScreen(par1, par2, par3);
 
-        fontRendererObj.drawString(I18n.translateToLocal("hats.trade.yourOfferings"), (int)(guiLeft + 125), (int)(guiTop + 6), 0x2c2c2c, false);
-        fontRendererObj.drawString(I18n.translateToLocalFormatted("hats.trade.theirOfferings", trader ), (int)(guiLeft + 125), (int)(guiTop + 105), 0x2c2c2c, false);
+        fontRendererObj.drawString(I18n.translateToLocal("hats.trade.yourOfferings"), guiLeft + 125, guiTop + 6, 0x2c2c2c, false);
+        fontRendererObj.drawString(I18n.translateToLocalFormatted("hats.trade.theirOfferings", trader ), guiLeft + 125, guiTop + 105, 0x2c2c2c, false);
 
-        fontRendererObj.drawString(selfReady ? I18n.translateToLocal("hats.trade.tradeReady") : I18n.translateToLocal("hats.trade.tradeNotReady"), (int)((guiLeft + 187) - (fontRendererObj.getStringWidth(selfReady ? I18n.translateToLocal("hats.trade.tradeReady") : I18n.translateToLocal("hats.trade.tradeNotReady")) / 2)), (int)((guiTop + 83)), selfReady ? 0x81b63a : 0x790000, false); //0x790000
+        fontRendererObj.drawString(selfReady ? I18n.translateToLocal("hats.trade.tradeReady") : I18n.translateToLocal("hats.trade.tradeNotReady"), (guiLeft + 187) - (fontRendererObj.getStringWidth(selfReady ? I18n.translateToLocal("hats.trade.tradeReady") : I18n.translateToLocal("hats.trade.tradeNotReady")) / 2), (guiTop + 83), selfReady ? 0x81b63a : 0x790000, false); //0x790000
 
-        fontRendererObj.drawString(theirReady ? I18n.translateToLocal("hats.trade.tradeReady") : I18n.translateToLocal("hats.trade.tradeNotReady"), (int)(guiLeft + 187 - (fontRendererObj.getStringWidth(theirReady ? I18n.translateToLocal("hats.trade.tradeReady") : I18n.translateToLocal("hats.trade.tradeNotReady")) / 2)), (int)(guiTop + 176), theirReady ? 0x517924 : 0x790000, false); //0x790000
+        fontRendererObj.drawString(theirReady ? I18n.translateToLocal("hats.trade.tradeReady") : I18n.translateToLocal("hats.trade.tradeNotReady"), guiLeft + 187 - (fontRendererObj.getStringWidth(theirReady ? I18n.translateToLocal("hats.trade.tradeReady") : I18n.translateToLocal("hats.trade.tradeNotReady")) / 2), guiTop + 176, theirReady ? 0x517924 : 0x790000, false); //0x790000
 
         boolean hasItem = !(ourHatsForTrade.size() == 0 && ourItemsForTrade.size() == 0 && theirHatsForTrade.size() == 0 && theirItemsForTrade.size() == 0);
 
@@ -1429,9 +1429,9 @@ public class GuiTradeWindow extends GuiScreen
         GlStateManager.translate(0.0F, 0.0F, -75F);
         GlStateManager.disableBlend();
 
-        for(int i = 0; i < buttonList.size(); i++)
+        for(GuiButton aButtonList : buttonList)
         {
-            GuiButton btn = (GuiButton)buttonList.get(i);
+            GuiButton btn = (GuiButton)aButtonList;
             if(btn.id == ID_MAKE_TRADE)
             {
                 btn.enabled = selfReady && theirReady && !clickedMakeTrade;
@@ -1480,9 +1480,9 @@ public class GuiTradeWindow extends GuiScreen
                 showInv = !showInv;
                 btn.displayString = showInv ? I18n.translateToLocal("hats.trade.yourInventory") : I18n.translateToLocal("hats.trade.yourHats");
                 searchBar.setText("");
-                for(int i = 0; i < buttonList.size(); i++)
+                for(GuiButton aButtonList : buttonList)
                 {
-                    GuiButton btn1 = (GuiButton)buttonList.get(i);
+                    GuiButton btn1 = (GuiButton)aButtonList;
                     if(btn1 instanceof GuiSlider)
                     {
                         ((GuiSlider)btn1).sliderValue = 0.0D;
@@ -1526,10 +1526,10 @@ public class GuiTradeWindow extends GuiScreen
         VertexBuffer vertexbuffer = tessellator.getBuffer();
         GlStateManager.disableTexture2D();
         vertexbuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-        vertexbuffer.pos((double)(par0 + 0), (double)(par1 + par3), (double)this.zLevel).color(f1, f2, f3, alpha).endVertex();
+        vertexbuffer.pos((double)(par0), (double)(par1 + par3), (double)this.zLevel).color(f1, f2, f3, alpha).endVertex();
         vertexbuffer.pos((double)(par0 + par2), (double)(par1 + par3), (double)this.zLevel).color(f1, f2, f3, alpha).endVertex();
-        vertexbuffer.pos((double)(par0 + par2), (double)(par1 + 0), (double)this.zLevel).color(f1, f2, f3, alpha).endVertex();
-        vertexbuffer.pos((double)(par0 + 0), (double)(par1 + 0), (double)this.zLevel).color(f1, f2, f3, alpha).endVertex();
+        vertexbuffer.pos((double)(par0 + par2), (double)(par1), (double)this.zLevel).color(f1, f2, f3, alpha).endVertex();
+        vertexbuffer.pos((double)(par0), (double)(par1), (double)this.zLevel).color(f1, f2, f3, alpha).endVertex();
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -1556,10 +1556,8 @@ public class GuiTradeWindow extends GuiScreen
         float scale = 0.5F;
         GlStateManager.scale(scale, scale, scale);
         int lines = 0; //max 12 before require scroll
-        for(int i = 0; i < chatMessages.size(); i++)
+        for(String msg : chatMessages)
         {
-            String msg = chatMessages.get(i);
-
             List list = fontRendererObj.listFormattedStringToWidth(msg, 196);
 
             lines += list.size();
@@ -1572,10 +1570,8 @@ public class GuiTradeWindow extends GuiScreen
 
         lines = 0;
 
-        for(int i = 0; i < chatMessages.size(); i++)
+        for(String msg : chatMessages)
         {
-            String msg = chatMessages.get(i);
-
             List list = fontRendererObj.listFormattedStringToWidth(msg, 196);
 
             for(int kk = 0; kk < list.size(); kk++)
@@ -1586,11 +1582,11 @@ public class GuiTradeWindow extends GuiScreen
                 {
                     if(kk == 0)
                     {
-                        fontRendererObj.drawString(" " + (String)list.get(kk), (int)((guiLeft + 8) / scale), (int)((guiTop + 115 + (lines * 5)) / scale), 0x790000, false);
+                        fontRendererObj.drawString(" " + list.get(kk), (int)((guiLeft + 8) / scale), (int)((guiTop + 115 + (lines * 5)) / scale), 0x790000, false);
                     }
                     else
                     {
-                        fontRendererObj.drawString(" " + (String)list.get(kk), (int)((guiLeft + 8) / scale), (int)((guiTop + 115 + (lines * 5)) / scale), 0x790000, false);
+                        fontRendererObj.drawString(" " + list.get(kk), (int)((guiLeft + 8) / scale), (int)((guiTop + 115 + (lines * 5)) / scale), 0x790000, false);
                     }
                 }
                 else
@@ -1613,7 +1609,7 @@ public class GuiTradeWindow extends GuiScreen
                     }
                     else
                     {
-                        fontRendererObj.drawString(" " + (String)list.get(kk), (int)((guiLeft + 8) / scale), (int)((guiTop + 115 + (lines * 5)) / scale), 14737632, false);
+                        fontRendererObj.drawString(" " + list.get(kk), (int)((guiLeft + 8) / scale), (int)((guiTop + 115 + (lines * 5)) / scale), 14737632, false);
                     }
                 }
                 lines++;
@@ -1641,14 +1637,13 @@ public class GuiTradeWindow extends GuiScreen
             GlStateManager.disableRescaleNormal();
             GlStateManager.disableDepth();
             int k = 0;
-            Iterator iterator = par1List.iterator();
 
-            while (iterator.hasNext())
+            for(Object aPar1List : par1List)
             {
-                String s = (String)iterator.next();
+                String s = (String)aPar1List;
                 int l = this.fontRendererObj.getStringWidth(s);
 
-                if (l > k)
+                if(l > k)
                 {
                     k = l;
                 }

@@ -33,17 +33,17 @@ import java.util.Map;
 
 public class EventHandlerClient
 {
-    public HashMap<String, HatInfo> playerWornHats = new HashMap<String, HatInfo>();
-    public HashMap<String, EntityHat> hats = new HashMap<String, EntityHat>();
-    public HashMap<Integer, EntityHat> mobHats = new HashMap<Integer, EntityHat>();
+    public HashMap<String, HatInfo> playerWornHats = new HashMap<>();
+    public HashMap<String, EntityHat> hats = new HashMap<>();
+    public HashMap<Integer, EntityHat> mobHats = new HashMap<>();
 
-    public HashMap<Integer, EntityHat> rendered = new HashMap<Integer, EntityHat>();
+    public HashMap<Integer, EntityHat> rendered = new HashMap<>();
 
-    public HashMap<String, Integer> availableHats = new HashMap<String, Integer>();
-    public HashMap<String, Integer> serverHats = new HashMap<String, Integer>();
-    public ArrayList<String> requestedHats = new ArrayList<String>();
-    public ArrayList<Integer> requestMobHats = new ArrayList<Integer>();
-    public ArrayList<Integer> requestedMobHats = new ArrayList<Integer>();
+    public HashMap<String, Integer> availableHats = new HashMap<>();
+    public HashMap<String, Integer> serverHats = new HashMap<>();
+    public ArrayList<String> requestedHats = new ArrayList<>();
+    public ArrayList<Integer> requestMobHats = new ArrayList<>();
+    public ArrayList<Integer> requestedMobHats = new ArrayList<>();
 
     public World worldInstance;
 
@@ -79,11 +79,9 @@ public class EventHandlerClient
             if(event.phase == TickEvent.Phase.START)
             {
                 currentHatRenders = 0;
-                Iterator<Map.Entry<String, EntityHat>> iterator = hats.entrySet().iterator();
 
-                while(iterator.hasNext())
+                for(Map.Entry<String, EntityHat> e : hats.entrySet())
                 {
-                    Map.Entry<String, EntityHat> e = iterator.next();
                     if(e.getValue().parent != null)
                     {
                         EntityHat hat = e.getValue();
@@ -92,11 +90,8 @@ public class EventHandlerClient
                     }
                 }
 
-                Iterator<Map.Entry<Integer, EntityHat>> iterator1 = mobHats.entrySet().iterator();
-
-                while(iterator1.hasNext())
+                for(Map.Entry<Integer, EntityHat> e : mobHats.entrySet())
                 {
-                    Map.Entry<Integer, EntityHat> e = iterator1.next();
                     if(e.getValue().parent != null)
                     {
                         EntityHat hat = e.getValue();
@@ -158,7 +153,7 @@ public class EventHandlerClient
             {
                 for(int i = 0; i < world.playerEntities.size(); i++)
                 {
-                    EntityPlayer player = (EntityPlayer)world.playerEntities.get(i);
+                    EntityPlayer player = world.playerEntities.get(i);
                     if(SessionState.serverHasMod == 0 && Hats.config.shouldOtherPlayersHaveHats == 0 && player != Minecraft.getMinecraft().thePlayer || !player.isEntityAlive())
                     {
                         continue;
@@ -262,7 +257,7 @@ public class EventHandlerClient
             {
                 for(int i = 0; i < world.loadedEntityList.size(); i++)
                 {
-                    Entity ent = (Entity)world.loadedEntityList.get(i);
+                    Entity ent = world.loadedEntityList.get(i);
                     if(!(ent instanceof EntityLivingBase) || !(SessionState.serverHasMod == 1 && Hats.config.playerHatsMode == 4) && !HatHandler.canMobHat((EntityLivingBase)ent) || ent instanceof EntityPlayer)
                     {
                         continue;

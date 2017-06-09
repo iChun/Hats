@@ -1,7 +1,5 @@
 package me.ichun.mods.hats.common.core;
 
-import net.minecraftforge.fml.relauncher.Side;
-import org.lwjgl.input.Keyboard;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.ichunutil.client.keybind.KeyBind;
 import me.ichun.mods.ichunutil.common.core.config.ConfigBase;
@@ -9,6 +7,8 @@ import me.ichun.mods.ichunutil.common.core.config.annotations.ConfigProp;
 import me.ichun.mods.ichunutil.common.core.config.annotations.IntBool;
 import me.ichun.mods.ichunutil.common.core.config.annotations.IntMinMax;
 import me.ichun.mods.ichunutil.common.core.config.types.Colour;
+import net.minecraftforge.fml.relauncher.Side;
+import org.lwjgl.input.Keyboard;
 
 import java.io.File;
 import java.util.Random;
@@ -139,6 +139,10 @@ public class Config extends ConfigBase
 
     @ConfigProp(category = "randoMobOptions")
     @IntBool
+    public int hatGuardian = 1;
+
+    @ConfigProp(category = "randoMobOptions")
+    @IntBool
     public int hatHorse = 1;
 
     @ConfigProp(category = "randoMobOptions")
@@ -151,7 +155,19 @@ public class Config extends ConfigBase
 
     @ConfigProp(category = "randoMobOptions")
     @IntBool
+    public int hatPolarBear = 1;
+
+    @ConfigProp(category = "randoMobOptions")
+    @IntBool
+    public int hatRabbit = 1;
+
+    @ConfigProp(category = "randoMobOptions")
+    @IntBool
     public int hatSheep = 1;
+
+    @ConfigProp(category = "randoMobOptions")
+    @IntBool
+    public int hatShulker = 1;
 
     @ConfigProp(category = "randoMobOptions")
     @IntBool

@@ -107,8 +107,8 @@ public class GuiHatSelection extends GuiScreen
     public List<String> availableHats;
     public List<String> hatsToShow;
     public List<String> categories;
-    public List<String> categoryHats = new ArrayList<String>();
-    public List<String> enabledButtons = new ArrayList<String>();
+    public List<String> categoryHats = new ArrayList<>();
+    public List<String> enabledButtons = new ArrayList<>();
 
     protected int xSize = 176;
     protected int ySize = 170;
@@ -147,13 +147,13 @@ public class GuiHatSelection extends GuiScreen
             }
             else
             {
-                Hats.eventHandlerClient.availableHats = new HashMap<String, Integer>(Hats.eventHandlerClient.serverHats);
+                Hats.eventHandlerClient.availableHats = new HashMap<>(Hats.eventHandlerClient.serverHats);
             }
         }
 
         player = ply;
         hat = Hats.eventHandlerClient.hats.get(player.getName());
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
 
         for(Map.Entry<String, Integer> e : Hats.eventHandlerClient.availableHats.entrySet())
         {
@@ -170,10 +170,10 @@ public class GuiHatSelection extends GuiScreen
         }
 
         availableHats = ImmutableList.copyOf(list);
-        hatsToShow = new ArrayList<String>(availableHats);
+        hatsToShow = new ArrayList<>(availableHats);
         Collections.sort(hatsToShow);
 
-        categories = new ArrayList<String>();
+        categories = new ArrayList<>();
         for(Map.Entry<String, ArrayList<String>> e : HatHandler.categories.entrySet())
         {
             if(!e.getKey().equalsIgnoreCase("Favourites"))
@@ -210,15 +210,15 @@ public class GuiHatSelection extends GuiScreen
 
             String[] enabledBtn = Hats.config.personalizeEnabled.split(" ");
             enabledButtons.clear();
-            for(int i = 0; i < enabledBtn.length; i++)
+            for(String anEnabledBtn : enabledBtn)
             {
-                if(enabledBtn[i].equalsIgnoreCase("9"))
+                if(anEnabledBtn.equalsIgnoreCase("9"))
                 {
                     enabledSearchBar = true;
                 }
-                else if(!enabledButtons.contains(enabledBtn[i]))
+                else if(!enabledButtons.contains(anEnabledBtn))
                 {
-                    enabledButtons.add(enabledBtn[i]);
+                    enabledButtons.add(anEnabledBtn);
                 }
             }
 
@@ -251,7 +251,7 @@ public class GuiHatSelection extends GuiScreen
             {
                 for(int i = 0; i < hatsToShow.size(); i++)
                 {
-                    String hatName = (String)hatsToShow.get(i);
+                    String hatName = hatsToShow.get(i);
                     if(hatName.equalsIgnoreCase(hat.hatName))
                     {
                         i -= i % 6;
@@ -330,9 +330,9 @@ public class GuiHatSelection extends GuiScreen
         {
             Hats.config.guiKeyBind = iChunUtil.proxy.registerKeyBind(new KeyBind(i, false, false, false, false), Hats.config.guiKeyBind);
 
-            for(int i1 = 0; i1 < buttonList.size(); i1++)
+            for(GuiButton aButtonList : buttonList)
             {
-                GuiButton btn = (GuiButton)buttonList.get(i1);
+                GuiButton btn = (GuiButton)aButtonList;
                 if(btn.id == ID_SET_KEY)
                 {
                     btn.displayString = "GUI: " + Keyboard.getKeyName(i);
@@ -472,9 +472,9 @@ public class GuiHatSelection extends GuiScreen
         {
             Hats.config.guiKeyBind = iChunUtil.proxy.registerKeyBind(new KeyBind(par3 - 100, false, false, false, false), Hats.config.guiKeyBind);
 
-            for(int i = 0; i < buttonList.size(); i++)
+            for(GuiButton aButtonList : buttonList)
             {
-                GuiButton btn = (GuiButton)buttonList.get(i);
+                GuiButton btn = (GuiButton)aButtonList;
                 if(btn.id == ID_SET_KEY)
                 {
                     btn.displayString = "GUI: " + GameSettings.getKeyDisplayString(par3 - 100);
@@ -553,9 +553,9 @@ public class GuiHatSelection extends GuiScreen
             {
                 invalidFolderName = true;
             }
-            for(int k = 0; k < buttonList.size(); k++)
+            for(GuiButton aButtonList : buttonList)
             {
-                GuiButton btn = (GuiButton)buttonList.get(k);
+                GuiButton btn = (GuiButton)aButtonList;
                 if(btn.id == ID_ADD)
                 {
                     btn.enabled = !invalidFolderName;
@@ -568,7 +568,7 @@ public class GuiHatSelection extends GuiScreen
             if(searchBar.getText().equalsIgnoreCase("") || !hasClicked && searchBar.getText().equalsIgnoreCase(I18n.translateToLocal("hats.gui.search")))
             {
                 searchBar.setTextColor(14737632);
-                hatsToShow = new ArrayList<String>(view == VIEW_HATS ? availableHats : view == VIEW_CATEGORY ? categoryHats : categories);
+                hatsToShow = new ArrayList<>(view == VIEW_HATS ? availableHats : view == VIEW_CATEGORY ? categoryHats : categories);
                 Collections.sort(hatsToShow);
                 if(view == VIEW_CATEGORIES)
                 {
@@ -579,7 +579,7 @@ public class GuiHatSelection extends GuiScreen
             else
             {
                 String query = searchBar.getText();
-                ArrayList<String> matches = new ArrayList<String>();
+                ArrayList<String> matches = new ArrayList<>();
                 for(String s : (view == VIEW_HATS ? availableHats : view == VIEW_CATEGORY ? categoryHats : categories))
                 {
                     if(view == VIEW_CATEGORIES && (s.equalsIgnoreCase(I18n.translateToLocal("hats.gui.allHats")) || s.equalsIgnoreCase(I18n.translateToLocal("hats.gui.addNew"))))
@@ -612,7 +612,7 @@ public class GuiHatSelection extends GuiScreen
                 if(matches.size() == 0)
                 {
                     searchBar.setTextColor(0xFF5555);
-                    hatsToShow = new ArrayList<String>(view == VIEW_HATS ? availableHats : view == VIEW_CATEGORY ? categoryHats : categories);
+                    hatsToShow = new ArrayList<>(view == VIEW_HATS ? availableHats : view == VIEW_CATEGORY ? categoryHats : categories);
                     Collections.sort(hatsToShow);
                     if(view == VIEW_CATEGORIES)
                     {
@@ -624,7 +624,7 @@ public class GuiHatSelection extends GuiScreen
                 {
                     searchBar.setTextColor(14737632);
                     pageNumber = 0;
-                    hatsToShow = new ArrayList<String>(matches);
+                    hatsToShow = new ArrayList<>(matches);
                     Collections.sort(hatsToShow);
                 }
             }
@@ -735,7 +735,7 @@ public class GuiHatSelection extends GuiScreen
 
                 for(int i = buttonList.size() - 1; i >= 0; i--)
                 {
-                    GuiButton btn1 = (GuiButton)buttonList.get(i);
+                    GuiButton btn1 = buttonList.get(i);
                     if(btn1.id >= ID_NONE && btn1.id <= (ID_SEARCH - 1))
                     {
                         btn1.xPosition = width / 2 + 89;
@@ -907,7 +907,7 @@ public class GuiHatSelection extends GuiScreen
 
                     for(int i = buttonList.size() - 1; i >= 0; i--)
                     {
-                        GuiButton button = (GuiButton)buttonList.get(i);
+                        GuiButton button = buttonList.get(i);
                         if(button.id == ID_RENAME || button.id == ID_DELETE || button.id == ID_CANCEL)
                         {
                             buttonList.remove(i);
@@ -950,7 +950,7 @@ public class GuiHatSelection extends GuiScreen
 
                     for(int i = buttonList.size() - 1; i >= 0 ; i--)
                     {
-                        GuiButton button = (GuiButton)buttonList.get(i);
+                        GuiButton button = buttonList.get(i);
                         if(button.id == btn.id)
                         {
                             buttonList.remove(button);
@@ -1001,7 +1001,7 @@ public class GuiHatSelection extends GuiScreen
 
                         for(int i = buttonList.size() - 1; i >= 0 ; i--)
                         {
-                            GuiButton button = (GuiButton)buttonList.get(i);
+                            GuiButton button = buttonList.get(i);
                             if(button.id == btn.id)
                             {
                                 buttonList.remove(button);
@@ -1024,7 +1024,7 @@ public class GuiHatSelection extends GuiScreen
 
                         for(int i = buttonList.size() - 1; i >= 0 ; i--)
                         {
-                            GuiButton button = (GuiButton)buttonList.get(i);
+                            GuiButton button = buttonList.get(i);
                             if(button.id == btn.id)
                             {
                                 buttonList.remove(button);
@@ -1111,7 +1111,7 @@ public class GuiHatSelection extends GuiScreen
 
         for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
         {
-            GuiButton btn = (GuiButton)this.buttonList.get(k1);
+            GuiButton btn = this.buttonList.get(k1);
 
             if(btn.id >= 5 && btn.id <= 7 || btn.id == 29 || btn.id >= ID_CATEGORIES_START || btn.id == ID_ADD || btn.id == ID_CANCEL || btn.id == ID_RENAME || btn.id == ID_DELETE || btn.id == ID_FAVOURITE || btn.id == ID_MAKE_TRADE || btn.id == ID_ACCEPT_TRADE)
             {
@@ -1194,7 +1194,7 @@ public class GuiHatSelection extends GuiScreen
                 for(int i = pageNumber * 6; i < hatsToShow.size() && i < (pageNumber + 1) * 6; i++)
                 {
                     GuiButton btn;
-                    String hatName = (String)hatsToShow.get(i);
+                    String hatName = hatsToShow.get(i);
 
                     btn = new GuiButton((view == VIEW_HATS || view == VIEW_CATEGORY ? ID_HAT_START_ID + i : ID_CATEGORIES_START + i), width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
 
@@ -1273,7 +1273,7 @@ public class GuiHatSelection extends GuiScreen
     {
         for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
         {
-            GuiButton btn1 = (GuiButton)this.buttonList.get(k1);
+            GuiButton btn1 = this.buttonList.get(k1);
             if((btn1 instanceof GuiSlider) || btn1.id == ID_CLOSE)
             {
                 continue;
@@ -1321,7 +1321,7 @@ public class GuiHatSelection extends GuiScreen
             view = view > VIEW_HATS ? VIEW_HATS : VIEW_COLOURIZER;
         }
 
-        hatsToShow = new ArrayList<String>(view == VIEW_HATS ? availableHats : categoryHats);
+        hatsToShow = new ArrayList<>(view == VIEW_HATS ? availableHats : categoryHats);
         Collections.sort(hatsToShow);
 
         searchBar.setText("");
@@ -1345,9 +1345,9 @@ public class GuiHatSelection extends GuiScreen
             }
             categories.add(s);
             Collections.sort(categories);
-            HatHandler.categories.put(s, new ArrayList<String>());
+            HatHandler.categories.put(s, new ArrayList<>());
 
-            hatsToShow = new ArrayList<String>(categories);
+            hatsToShow = new ArrayList<>(categories);
             Collections.sort(hatsToShow);
             hatsToShow.add(0, I18n.translateToLocal("hats.gui.allHats"));
             hatsToShow.add(I18n.translateToLocal("hats.gui.addNew"));
@@ -1411,10 +1411,10 @@ public class GuiHatSelection extends GuiScreen
             ArrayList<String> hatsList = HatHandler.categories.get(s);
             if(hatsList == null)
             {
-                hatsList = new ArrayList<String>();
+                hatsList = new ArrayList<>();
             }
 
-            ArrayList<String> hatsCopy = new ArrayList<String>(hatsList);
+            ArrayList<String> hatsCopy = new ArrayList<>(hatsList);
 
             if(Hats.config.playerHatsMode >= 4 && !mc.thePlayer.capabilities.isCreativeMode)
             {
@@ -1428,9 +1428,9 @@ public class GuiHatSelection extends GuiScreen
                 }
             }
 
-            categoryHats = new ArrayList<String>(hatsCopy);
+            categoryHats = new ArrayList<>(hatsCopy);
 
-            hatsToShow = new ArrayList<String>(hatsCopy);
+            hatsToShow = new ArrayList<>(hatsCopy);
             Collections.sort(hatsToShow);
 
             updateButtonList();
@@ -1444,7 +1444,7 @@ public class GuiHatSelection extends GuiScreen
             if(hatsToShow.size() > 0)
             {
                 int randVal = rand.nextInt(hatsToShow.size());
-                String hatName = (String)hatsToShow.get(randVal);
+                String hatName = hatsToShow.get(randVal);
 
                 hat.hatName = hatName.toLowerCase();
 
@@ -1492,7 +1492,7 @@ public class GuiHatSelection extends GuiScreen
             if(hatsToShow.size() > 0)
             {
                 int randVal = rand.nextInt(hatsToShow.size());
-                String categoryName = (String)hatsToShow.get(randVal);
+                String categoryName = hatsToShow.get(randVal);
                 showCategory(categoryName);
             }
         }
@@ -1502,7 +1502,7 @@ public class GuiHatSelection extends GuiScreen
     {
         for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
         {
-            GuiButton btn1 = (GuiButton)this.buttonList.get(k1);
+            GuiButton btn1 = this.buttonList.get(k1);
             if(btn1 instanceof GuiSlider)
             {
                 GuiSlider slider = (GuiSlider)btn1;
@@ -1532,7 +1532,7 @@ public class GuiHatSelection extends GuiScreen
             searchBar.setText("");
             onSearchBarInteract();
 
-            hatsToShow = new ArrayList<String>(categories);
+            hatsToShow = new ArrayList<>(categories);
             Collections.sort(hatsToShow);
             if(!addingToCategory)
             {
@@ -1560,7 +1560,7 @@ public class GuiHatSelection extends GuiScreen
 
             for(int i = buttonList.size() - 1; i >= 0 ; i--)
             {
-                GuiButton btn = (GuiButton)buttonList.get(i);
+                GuiButton btn = buttonList.get(i);
 
                 if(btn.id >= ID_NONE && btn.id <= ID_HELP)
                 {
@@ -1585,7 +1585,7 @@ public class GuiHatSelection extends GuiScreen
 
             for(int i = buttonList.size() - 1; i >= 0 ; i--)
             {
-                GuiButton btn = (GuiButton)buttonList.get(i);
+                GuiButton btn = buttonList.get(i);
 
                 if(btn.id >= ID_NONE && btn.id <= ID_HELP)
                 {
@@ -1601,9 +1601,9 @@ public class GuiHatSelection extends GuiScreen
             }
 
             StringBuilder sb = new StringBuilder();
-            for(int i = 0; i < enabledButtons.size(); i++)
+            for(String enabledButton : enabledButtons)
             {
-                sb.append(enabledButtons.get(i));
+                sb.append(enabledButton);
                 sb.append(" ");
             }
             if(enabledSearchBar)
@@ -1648,9 +1648,9 @@ public class GuiHatSelection extends GuiScreen
             enabledButtons.remove(Integer.toString(btn.id - (ID_NONE - 1)));
             btn.xPosition = width - 24;
             btn.yPosition = height / 2 - 93 + ((btn.id - ID_NONE) * 21);
-            for(int i = 0; i < buttonList.size(); i++)
+            for(GuiButton aButtonList : buttonList)
             {
-                GuiButton btn1 = (GuiButton)buttonList.get(i);
+                GuiButton btn1 = (GuiButton)aButtonList;
                 if(enabledButtons.contains(Integer.toString(btn1.id - (ID_NONE - 1))))
                 {
                     for(int i1 = 0; i1 < enabledButtons.size(); i1++)
@@ -1703,9 +1703,9 @@ public class GuiHatSelection extends GuiScreen
             this.drawTexturedModalRect(k - 1, height - 29, 0, 16, 190, 29);
         }
 
-        for (int k1 = 0; k1 < this.buttonList.size(); ++k1)
+        for(GuiButton aButtonList : this.buttonList)
         {
-            GuiButton btn = (GuiButton)this.buttonList.get(k1);
+            GuiButton btn = (GuiButton)aButtonList;
 
             String disp = btn.displayString;
 
@@ -1823,7 +1823,7 @@ public class GuiHatSelection extends GuiScreen
 
         drawSearchBar();
 
-        drawPlayerOnGui(k + 42, l + 155, 55, (float)(k + 42) - (float)mouseX, (float)(l + 155 - 92) - (float)mouseY);
+        drawPlayerOnGui(k + 42, l + 155, 55, (float)(k + 42) - mouseX, (float)(l + 155 - 92) - mouseY);
 
         if(player != null && !player.capabilities.isCreativeMode && tempInfo != null && !tempInfo.hatName.isEmpty())
         {
@@ -1837,30 +1837,30 @@ public class GuiHatSelection extends GuiScreen
 
     public void drawForeground(int par1, int par2, float par3)
     {
-        for (int k1 = 0; k1 < this.buttonList.size(); ++k1)
+        for(GuiButton aButtonList : this.buttonList)
         {
-            GuiButton btn = (GuiButton)this.buttonList.get(k1);
+            GuiButton btn = (GuiButton)aButtonList;
             if(btn.isMouseOver() && !personalizing)
             {
                 if(btn.id >= ID_CATEGORIES_START && btn.displayString.length() > 16)
                 {
-                    drawTooltip(Arrays.asList(new String[] {"\u00a77" + btn.displayString}), par1, par2);
+                    drawTooltip(Arrays.asList("\u00a77" + btn.displayString), par1, par2);
                 }
                 else if(btn.id == ID_CLOSE)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.discardChanges")}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.discardChanges")), par1, par2);
                 }
                 else if(btn.id == ID_NONE)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.removeHat") + " (N)"}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.removeHat") + " (N)"), par1, par2);
                 }
                 else if(btn.id == ID_HAT_COLOUR_SWAP)
                 {
-                    drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS || view == VIEW_CATEGORY ? I18n.translateToLocal("hats.gui.colorizer") : I18n.translateToLocal("hats.gui.hatsList")) + " (H)"}), par1, par2);
+                    drawTooltip(Arrays.asList((view == VIEW_HATS || view == VIEW_CATEGORY ? I18n.translateToLocal("hats.gui.colorizer") : I18n.translateToLocal("hats.gui.hatsList")) + " (H)"), par1, par2);
                 }
                 else if(btn.id == ID_RANDOM)
                 {
-                    drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS || view == VIEW_CATEGORY ? I18n.translateToLocal("hats.gui.randomHat") : view == VIEW_CATEGORIES ? I18n.translateToLocal("hats.gui.randomCategory") : isShiftKeyDown() ? I18n.translateToLocal("hats.gui.resetColor") : I18n.translateToLocal("hats.gui.randomColor")) + " (R)"}), par1, par2);
+                    drawTooltip(Arrays.asList((view == VIEW_HATS || view == VIEW_CATEGORY ? I18n.translateToLocal("hats.gui.randomHat") : view == VIEW_CATEGORIES ? I18n.translateToLocal("hats.gui.randomCategory") : isShiftKeyDown() ? I18n.translateToLocal("hats.gui.resetColor") : I18n.translateToLocal("hats.gui.randomColor")) + " (R)"), par1, par2);
                 }
                 else if(btn.id == ID_HELP)
                 {
@@ -1868,76 +1868,76 @@ public class GuiHatSelection extends GuiScreen
                 }
                 else if(btn.id == ID_RELOAD_HATS)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.reloadAllHats"), I18n.translateToLocal("hats.gui.discardAllChanges")}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.reloadAllHats"), I18n.translateToLocal("hats.gui.discardAllChanges")), par1, par2);
                 }
                 else if(btn.id == ID_FAVOURITES)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.favorites") + " (F)"}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.favorites") + " (F)"), par1, par2);
                 }
                 else if(btn.id == ID_CATEGORIES)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.categories") + " (C)"}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.categories") + " (C)"), par1, par2);
                 }
                 else if(btn.id == ID_PERSONALIZE)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.personalize") + " (P)"}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.personalize") + " (P)"), par1, par2);
                 }
                 else if(btn.id == ID_ADD)
                 {
-                    drawTooltip(Arrays.asList(new String[] {adding || renaming ? invalidFolderName ? "\u00a7c" + I18n.translateToLocal("hats.gui.invalidName") : I18n.translateToLocal("hats.gui.addCategory") : (view == VIEW_HATS || view == VIEW_CATEGORY && (category.equalsIgnoreCase("Favourites") || category.equalsIgnoreCase(I18n.translateToLocal("hats.gui.contributors")))) ? I18n.translateToLocal("hats.gui.addToCategory") : I18n.translateToLocal("hats.gui.removeFromCategory")}), par1, par2);
+                    drawTooltip(Arrays.asList(adding || renaming ? invalidFolderName ? "\u00a7c" + I18n.translateToLocal("hats.gui.invalidName") : I18n.translateToLocal("hats.gui.addCategory") : (view == VIEW_HATS || view == VIEW_CATEGORY && (category.equalsIgnoreCase("Favourites") || category.equalsIgnoreCase(I18n.translateToLocal("hats.gui.contributors")))) ? I18n.translateToLocal("hats.gui.addToCategory") : I18n.translateToLocal("hats.gui.removeFromCategory")), par1, par2);
                 }
                 else if(btn.id == ID_CANCEL)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("gui.cancel")}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("gui.cancel")), par1, par2);
                 }
                 else if(btn.id == ID_DELETE)
                 {
                     if(deleting)
                     {
-                        drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.areYouSure"), "", I18n.translateToLocal("hats.gui.clickConfirm")}), par1, par2);
+                        drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.areYouSure"), "", I18n.translateToLocal("hats.gui.clickConfirm")), par1, par2);
                     }
                     else if(view == VIEW_CATEGORIES)
                     {
-                        drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.deleteCategory"), "", I18n.translateToLocal("hats.gui.deleteCategory.desc1"), I18n.translateToLocal("hats.gui.deleteCategory.desc2"), I18n.translateToLocal("hats.gui.deleteCategory.desc3"), "", I18n.translateToLocal("hats.gui.doubleClickConfirm")}), par1, par2);
+                        drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.deleteCategory"), "", I18n.translateToLocal("hats.gui.deleteCategory.desc1"), I18n.translateToLocal("hats.gui.deleteCategory.desc2"), I18n.translateToLocal("hats.gui.deleteCategory.desc3"), "", I18n.translateToLocal("hats.gui.doubleClickConfirm")), par1, par2);
                     }
                     else
                     {
                         if(isShiftKeyDown())
                         {
-                            drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.disableHat"), "", I18n.translateToLocal("hats.gui.disableHat.desc1"), I18n.translateToLocal("hats.gui.disableHat.desc2"), I18n.translateToLocal("hats.gui.disableHat.desc3"), I18n.translateToLocal("hats.gui.disableHat.desc4"), "", I18n.translateToLocal("hats.gui.doubleClickConfirm")}), par1, par2);
+                            drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.disableHat"), "", I18n.translateToLocal("hats.gui.disableHat.desc1"), I18n.translateToLocal("hats.gui.disableHat.desc2"), I18n.translateToLocal("hats.gui.disableHat.desc3"), I18n.translateToLocal("hats.gui.disableHat.desc4"), "", I18n.translateToLocal("hats.gui.doubleClickConfirm")), par1, par2);
                         }
                         else
                         {
-                            drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.deleteHat"), "", I18n.translateToLocal("hats.gui.deleteHat.desc1"), I18n.translateToLocal("hats.gui.deleteHat.desc2"), I18n.translateToLocal("hats.gui.deleteHat.desc3"), "", I18n.translateToLocal("hats.gui.doubleClickConfirm")}), par1, par2);
+                            drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.deleteHat"), "", I18n.translateToLocal("hats.gui.deleteHat.desc1"), I18n.translateToLocal("hats.gui.deleteHat.desc2"), I18n.translateToLocal("hats.gui.deleteHat.desc3"), "", I18n.translateToLocal("hats.gui.doubleClickConfirm")), par1, par2);
                         }
                     }
                 }
                 else if(btn.id == ID_RENAME)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.renameCategory"), "", I18n.translateToLocal("hats.gui.renameCategory.desc1")}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.renameCategory"), "", I18n.translateToLocal("hats.gui.renameCategory.desc1")), par1, par2);
                 }
                 else if(btn.id == ID_FAVOURITE)
                 {
                     if(!selectedButtonName.equalsIgnoreCase("") && HatHandler.isInFavourites(selectedButtonName))
                     {
-                        drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.removeFromFavorites")}), par1, par2);
+                        drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.removeFromFavorites")), par1, par2);
                     }
                     else
                     {
-                        drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.addToFavorites")}), par1, par2);
+                        drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.addToFavorites")), par1, par2);
                     }
                 }
                 else if(btn.id == ID_RESET_SIDE)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.resetButtonsOnSide")}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.resetButtonsOnSide")), par1, par2);
                 }
                 else if(btn.id == ID_MAKE_TRADE)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.trade")}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("hats.trade")), par1, par2);
                 }
                 else if(btn.id == ID_ACCEPT_TRADE)
                 {
-                    drawTooltip(Arrays.asList(new String[] { Hats.eventHandlerClient.tradeReq != null && Hats.eventHandlerClient.tradeReqTimeout > 0 ? I18n.translateToLocalFormatted("hats.trade.acceptRequestSpecific", new Object[] { Hats.eventHandlerClient.tradeReq, (int)Math.ceil((double)Hats.eventHandlerClient.tradeReqTimeout / 20D) }) : I18n.translateToLocal("hats.trade.acceptRequestGeneral")}), par1, par2);
+                    drawTooltip(Arrays.asList(Hats.eventHandlerClient.tradeReq != null && Hats.eventHandlerClient.tradeReqTimeout > 0 ? I18n.translateToLocalFormatted("hats.trade.acceptRequestSpecific", Hats.eventHandlerClient.tradeReq, (int)Math.ceil((double)Hats.eventHandlerClient.tradeReqTimeout / 20D)) : I18n.translateToLocal("hats.trade.acceptRequestGeneral")), par1, par2);
                 }
             }
         }
@@ -1950,14 +1950,13 @@ public class GuiHatSelection extends GuiScreen
             GlStateManager.disableRescaleNormal();
             GlStateManager.disableDepth();
             int k = 0;
-            Iterator iterator = par1List.iterator();
 
-            while (iterator.hasNext())
+            for(Object aPar1List : par1List)
             {
-                String s = (String)iterator.next();
+                String s = (String)aPar1List;
                 int l = this.fontRendererObj.getStringWidth(s);
 
-                if (l > k)
+                if(l > k)
                 {
                     k = l;
                 }
@@ -2160,7 +2159,7 @@ public class GuiHatSelection extends GuiScreen
     private static final String[] invalidChars = new String[] { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
 
     private static int helpPage = 0;
-    private static final ArrayList<String[]> help = new ArrayList<String[]>();
+    private static final ArrayList<String[]> help = new ArrayList<>();
     private static final String[] helpInfo1 = new String[] {I18n.translateToLocal("hats.gui.helpInfo1.desc1"), I18n.translateToLocal("hats.gui.helpInfo1.desc2"), I18n.translateToLocal("hats.gui.helpInfo1.desc3"), I18n.translateToLocal("hats.gui.helpInfo1.desc4"), I18n.translateToLocal("hats.gui.helpInfo1.desc5")};
     private static final String[] helpInfo2 = new String[] {I18n.translateToLocal("hats.gui.helpInfo2.desc1"), I18n.translateToLocal("hats.gui.helpInfo2.desc2"), I18n.translateToLocal("hats.gui.helpInfo2.desc3")};
     private static final String[] helpInfo3 = new String[] {I18n.translateToLocal("hats.gui.helpInfo3.desc1"), I18n.translateToLocal("hats.gui.helpInfo3.desc2"), I18n.translateToLocal("hats.gui.helpInfo3.desc3"), I18n.translateToLocal("hats.gui.helpInfo3.desc4")};
@@ -2215,14 +2214,14 @@ public class GuiHatSelection extends GuiScreen
 
     private static List getCurrentHelpText()
     {
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
         list.add(getHelpHeader());
         list.add("");
 
         String[] str = help.get(helpPage);
-        for(int i = 0; i < str.length; i++)
+        for(String aStr : str)
         {
-            list.add(str[i]);
+            list.add(aStr);
         }
 
         return list;

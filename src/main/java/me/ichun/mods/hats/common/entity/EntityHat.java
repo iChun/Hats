@@ -1,6 +1,9 @@
 package me.ichun.mods.hats.common.entity;
 
 import me.ichun.mods.hats.client.core.HatInfoClient;
+import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.core.HatInfo;
+import me.ichun.mods.hats.common.core.SessionState;
 import me.ichun.mods.ichunutil.common.iChunUtil;
 import me.ichun.mods.morph.api.MorphApi;
 import net.minecraft.entity.Entity;
@@ -10,9 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import me.ichun.mods.hats.common.Hats;
-import me.ichun.mods.hats.common.core.HatInfo;
-import me.ichun.mods.hats.common.core.SessionState;
 
 @SideOnly(Side.CLIENT)
 public class EntityHat extends Entity 

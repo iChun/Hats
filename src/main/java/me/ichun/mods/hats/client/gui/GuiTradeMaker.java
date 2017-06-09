@@ -28,7 +28,7 @@ public class GuiTradeMaker extends GuiScreen
 
     public final int ID_CANCEL = 100;
 
-    public ArrayList<String> players = new ArrayList<String>();
+    public ArrayList<String> players = new ArrayList<>();
 
     @Override
     public void updateScreen()
@@ -39,7 +39,7 @@ public class GuiTradeMaker extends GuiScreen
             players.clear();
             for(int i = 0; i < mc.theWorld.playerEntities.size(); i++)
             {
-                EntityPlayer player = (EntityPlayer)mc.theWorld.playerEntities.get(i);
+                EntityPlayer player = mc.theWorld.playerEntities.get(i);
                 if(player == mc.thePlayer)
                 {
                     continue;
@@ -82,7 +82,7 @@ public class GuiTradeMaker extends GuiScreen
         {
             Hats.channel.sendToServer(new PacketString(0, players.get(btn.id)));
         }
-        this.mc.displayGuiScreen((GuiScreen)null);
+        this.mc.displayGuiScreen(null);
         this.mc.setIngameFocus();
         return;
     }

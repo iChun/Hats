@@ -3,10 +3,10 @@ package me.ichun.mods.hats.common.thread;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 import me.ichun.mods.hats.client.render.helper.HelperGeneric;
-import me.ichun.mods.hats.common.core.ProxyCommon;
-import net.minecraft.entity.EntityLivingBase;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.core.HatHandler;
+import me.ichun.mods.hats.common.core.ProxyCommon;
+import net.minecraft.entity.EntityLivingBase;
 
 import java.io.*;
 import java.net.URL;

@@ -1,14 +1,14 @@
 package me.ichun.mods.hats.common.packet;
 
 import io.netty.buffer.ByteBuf;
+import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.core.HatHandler;
+import me.ichun.mods.hats.common.core.HatInfo;
 import me.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
-import me.ichun.mods.hats.common.Hats;
-import me.ichun.mods.hats.common.core.HatHandler;
-import me.ichun.mods.hats.common.core.HatInfo;
 
 public class PacketPlayerHatSelection extends AbstractPacket
 {

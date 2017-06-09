@@ -2,8 +2,8 @@ package me.ichun.mods.hats.common.core;
 
 import me.ichun.mods.hats.api.RenderOnEntityHelper;
 import me.ichun.mods.hats.client.core.HatInfoClient;
-import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.client.render.HatRendererHelper;
+import me.ichun.mods.hats.common.Hats;
 
 
 public class ApiHandler 

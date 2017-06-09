@@ -3,6 +3,7 @@ package me.ichun.mods.hats.addons.hatstand.client.render;
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftProfileTexture;
 import me.ichun.mods.hats.addons.hatstand.common.tileentity.TileEntityHatStand;
+import me.ichun.mods.hats.client.render.HatRendererHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelSkeletonHead;
 import net.minecraft.client.renderer.GlStateManager;
@@ -14,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import me.ichun.mods.hats.client.render.HatRendererHelper;
 
 import java.util.Map;
 import java.util.UUID;
@@ -169,7 +169,7 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
 
             float f4 = 0.0625F;
             GlStateManager.enableRescaleNormal();
-            head.render((Entity)null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, f4);
+            head.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, f4);
 
             if (destroyState >= 0)
             {

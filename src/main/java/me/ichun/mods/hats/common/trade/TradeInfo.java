@@ -27,11 +27,11 @@ public class TradeInfo
     public boolean trade1;
     public boolean trade2;
 
-    public TreeMap<String, Integer> trader1Hats = new TreeMap<String, Integer>();
-    public ArrayList<ItemStack> trader1Items = new ArrayList<ItemStack>();
+    public TreeMap<String, Integer> trader1Hats = new TreeMap<>();
+    public ArrayList<ItemStack> trader1Items = new ArrayList<>();
 
-    public TreeMap<String, Integer> trader2Hats = new TreeMap<String, Integer>();
-    public ArrayList<ItemStack> trader2Items = new ArrayList<ItemStack>();
+    public TreeMap<String, Integer> trader2Hats = new TreeMap<>();
+    public ArrayList<ItemStack> trader2Items = new ArrayList<>();
 
     public boolean terminate;
 
@@ -137,16 +137,16 @@ public class TradeInfo
         TreeMap<String, Integer> oldHats;
         ArrayList<ItemStack> oldItems;
 
-        TreeMap<String, Integer> newHats = new TreeMap<String, Integer>(hats);
-        ArrayList<ItemStack> newItems = new ArrayList<ItemStack>(items);
+        TreeMap<String, Integer> newHats = new TreeMap<>(hats);
+        ArrayList<ItemStack> newItems = new ArrayList<>(items);
 
         if(player == trader1)
         {
             player1 = trader1;
             player2 = trader2;
 
-            oldHats = new TreeMap<String, Integer>(trader1Hats);
-            oldItems = new ArrayList<ItemStack>(trader1Items);
+            oldHats = new TreeMap<>(trader1Hats);
+            oldItems = new ArrayList<>(trader1Items);
 
             trader1Hats = hats;
             trader1Items = items;
@@ -156,8 +156,8 @@ public class TradeInfo
             player1 = trader2;
             player2 = trader1;
 
-            oldHats = new TreeMap<String, Integer>(trader2Hats);
-            oldItems = new ArrayList<ItemStack>(trader2Items);
+            oldHats = new TreeMap<>(trader2Hats);
+            oldItems = new ArrayList<>(trader2Items);
 
             trader2Hats = hats;
             trader2Items = items;
@@ -288,7 +288,7 @@ public class TradeInfo
         if(!shouldReady && ready1)
         {
             sendTradeMessage(I18n.translateToLocal("hats.trade.notReady"), trader1);
-            sendTradeMessage(I18n.translateToLocalFormatted("hats.trade.notReadyThem", new Object[] { trader1.getName() }), trader2);
+            sendTradeMessage(I18n.translateToLocalFormatted("hats.trade.notReadyThem", trader1.getName()), trader2);
             ready1 = false;
             trade1 = trade2 = false;
             sendReadyInfo();
@@ -296,7 +296,7 @@ public class TradeInfo
         else if(shouldReady && !ready1)
         {
             sendTradeMessage(I18n.translateToLocal("hats.trade.ready"), trader1);
-            sendTradeMessage(I18n.translateToLocalFormatted("hats.trade.readyThem", new Object[] { trader1.getName() }), trader2);
+            sendTradeMessage(I18n.translateToLocalFormatted("hats.trade.readyThem", trader1.getName()), trader2);
             ready1 = true;
             sendReadyInfo();
         }
@@ -307,7 +307,7 @@ public class TradeInfo
         if(!shouldReady && ready2)
         {
             sendTradeMessage(I18n.translateToLocal("hats.trade.notReady"), trader2);
-            sendTradeMessage(I18n.translateToLocalFormatted("hats.trade.notReadyThem", new Object[] { trader2.getName() }), trader1);
+            sendTradeMessage(I18n.translateToLocalFormatted("hats.trade.notReadyThem", trader2.getName()), trader1);
             ready2 = false;
             trade1 = trade2 = false;
             sendReadyInfo();
@@ -315,7 +315,7 @@ public class TradeInfo
         else if(shouldReady && !ready2)
         {
             sendTradeMessage(I18n.translateToLocal("hats.trade.ready"), trader2);
-            sendTradeMessage(I18n.translateToLocalFormatted("hats.trade.readyThem", new Object[] { trader2.getName() }), trader1);
+            sendTradeMessage(I18n.translateToLocalFormatted("hats.trade.readyThem", trader2.getName()), trader1);
             ready2 = true;
             sendReadyInfo();
         }

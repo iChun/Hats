@@ -4,6 +4,7 @@ import me.ichun.mods.hats.api.RenderOnEntityHelper;
 import me.ichun.mods.hats.client.gui.GuiHatSelection;
 import me.ichun.mods.hats.client.render.helper.HelperGeneric;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.core.HatHandler;
 import me.ichun.mods.hats.common.entity.EntityHat;
 import me.ichun.mods.ichunutil.common.core.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.core.util.ObfHelper;
@@ -19,15 +20,13 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.DefaultPlayerSkin;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import org.lwjgl.opengl.GL11;
-import me.ichun.mods.hats.common.core.HatHandler;
 
 import java.nio.FloatBuffer;
 
@@ -88,7 +87,7 @@ public class RenderHat extends Render<EntityHat>
                 GlStateManager.pushMatrix();
                 GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
                 Render rend = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(hat.renderingParent);
-                ObfHelper.invokePreRenderCallback((RenderLivingBase)rend, rend.getClass(), hat.renderingParent, renderTick);
+                ObfHelper.invokePreRenderCallback(rend, rend.getClass(), hat.renderingParent, renderTick);
                 GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, buffer1);
                 GlStateManager.popMatrix();
 
@@ -118,7 +117,7 @@ public class RenderHat extends Render<EntityHat>
                                 GlStateManager.pushMatrix();
                                 GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, bufferr);
                                 Render rend1 = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(prevMorph);
-                                ObfHelper.invokePreRenderCallback((RenderLivingBase)rend1, rend1.getClass(), prevMorph, renderTick);
+                                ObfHelper.invokePreRenderCallback(rend1, rend1.getClass(), prevMorph, renderTick);
                                 GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, bufferr1);
                                 GlStateManager.popMatrix();
 

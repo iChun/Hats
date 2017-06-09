@@ -18,7 +18,7 @@ public class PacketRequestMobHats extends AbstractPacket
 
     public PacketRequestMobHats(ArrayList<Integer> list)
     {
-        entIds = new ArrayList<Integer>(list);
+        entIds = new ArrayList<>(list);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class PacketRequestMobHats extends AbstractPacket
     @Override
     public void readFrom(ByteBuf buffer)
     {
-        entIds = new ArrayList<Integer>();
+        entIds = new ArrayList<>();
         int id = buffer.readInt();
         while(id != -2)
         {
@@ -46,15 +46,15 @@ public class PacketRequestMobHats extends AbstractPacket
     @Override
     public AbstractPacket execute(Side side, EntityPlayer player)
     {
-        ArrayList<Integer> ids = new ArrayList<Integer>();
-        ArrayList<String> names = new ArrayList<String>();
+        ArrayList<Integer> ids = new ArrayList<>();
+        ArrayList<String> names = new ArrayList<>();
 
         for(Integer id : entIds)
         {
             Entity ent = player.worldObj.getEntityByID(id);
             if(ent instanceof EntityLivingBase)
             {
-                String hatName = Hats.eventHandlerServer.mobHats.get((EntityLivingBase)ent);
+                String hatName = Hats.eventHandlerServer.mobHats.get(ent);
                 if(hatName != null)
                 {
                     ids.add(id);

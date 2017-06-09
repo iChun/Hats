@@ -1,9 +1,9 @@
 package me.ichun.mods.hats.client.render.helper;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityVillager;
 import me.ichun.mods.hats.api.RenderOnEntityHelper;
 import me.ichun.mods.hats.common.Hats;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityVillager;
 
 public class HelperVillager extends RenderOnEntityHelper {
 

@@ -1,6 +1,9 @@
 package me.ichun.mods.hats.client.core;
 
+import me.ichun.mods.hats.client.gui.GuiHatSelection;
+import me.ichun.mods.hats.client.render.RenderHat;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.core.HatHandler;
 import me.ichun.mods.hats.common.core.ProxyCommon;
 import me.ichun.mods.hats.common.entity.EntityHat;
 import me.ichun.mods.hats.common.thread.ThreadHatsReader;
@@ -11,9 +14,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import me.ichun.mods.hats.client.gui.GuiHatSelection;
-import me.ichun.mods.hats.client.render.RenderHat;
-import me.ichun.mods.hats.common.core.HatHandler;
 
 import java.io.File;
 import java.util.HashMap;
@@ -34,7 +34,7 @@ public class ProxyClient extends ProxyCommon
     @Override
     public void getHatsAndOpenGui()
     {
-        ((Thread)new ThreadHatsReader(HatHandler.hatsFolder, false, true)).start();
+        new ThreadHatsReader(HatHandler.hatsFolder, false, true).start();
     }
 
     @Override
@@ -76,6 +76,6 @@ public class ProxyClient extends ProxyCommon
         }
     }
 
-    public static HashMap<String, ModelTabula> models = new HashMap<String, ModelTabula>();
+    public static HashMap<String, ModelTabula> models = new HashMap<>();
 
 }

@@ -3,44 +3,31 @@ package me.ichun.mods.hats.client.render.helper;
 import me.ichun.mods.hats.api.RenderOnEntityHelper;
 import me.ichun.mods.hats.common.Hats;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.monster.EntityGuardian;
 
-public class HelperSpider extends RenderOnEntityHelper {
+public class HelperGuardian extends RenderOnEntityHelper {
 
 	@Override
 	public Class helperForClass() 
 	{
-		return EntitySpider.class;
+		return EntityGuardian.class;
 	}
 
     @Override
     public boolean canWearHat(EntityLivingBase living)
     {
-        return Hats.config.hatSpider == 1;
+        return Hats.config.hatGuardian == 1;
     }
 
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)
 	{
-		return 9.25F/16F;
-	}
-
-	@Override
-	public float getRotatePointHori(EntityLivingBase ent)
-	{
-		return 3F/16F;
+		return -9F/16F;
 	}
 
 	@Override
 	public float getOffsetPointVert(EntityLivingBase ent)
 	{
-		return 3.8F/16F;
+		return 25F/16F;
 	}
-
-	@Override
-	public float getOffsetPointHori(EntityLivingBase ent)
-	{
-		return 4F/16F;
-	}
-
 }

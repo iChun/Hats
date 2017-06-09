@@ -2,6 +2,8 @@ package me.ichun.mods.hats.common.packet;
 
 import io.netty.buffer.ByteBuf;
 import me.ichun.mods.hats.client.gui.GuiTradeWindow;
+import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.trade.TradeInfo;
 import me.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,8 +14,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import me.ichun.mods.hats.common.Hats;
-import me.ichun.mods.hats.common.trade.TradeInfo;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -55,8 +55,8 @@ public class PacketTradeOffers extends AbstractPacket
     @Override
     public void readFrom(ByteBuf buffer)
     {
-        tradeHats = new TreeMap<String, Integer>();
-        tradeItems = new ArrayList<ItemStack>();
+        tradeHats = new TreeMap<>();
+        tradeItems = new ArrayList<>();
 
         int hatCount = buffer.readInt();
 
@@ -112,8 +112,8 @@ public class PacketTradeOffers extends AbstractPacket
         {
             GuiTradeWindow trade = (GuiTradeWindow)Minecraft.getMinecraft().currentScreen;
 
-            HashMap<String, Integer> oldHats = new HashMap<String, Integer>(trade.theirHatsForTrade);
-            ArrayList<ItemStack> oldItems = new ArrayList<ItemStack>(trade.theirItemsForTrade);
+            HashMap<String, Integer> oldHats = new HashMap<>(trade.theirHatsForTrade);
+            ArrayList<ItemStack> oldItems = new ArrayList<>(trade.theirItemsForTrade);
 
             trade.theirHatsForTrade = tradeHats;
             trade.theirItemsForTrade = tradeItems;

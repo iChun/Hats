@@ -1,7 +1,7 @@
 package me.ichun.mods.hats.client.render.helper;
 
-import net.minecraft.entity.EntityLivingBase;
 import me.ichun.mods.hats.api.RenderOnEntityHelper;
+import net.minecraft.entity.EntityLivingBase;
 
 /**
  * This class is really ugly and uses a lot of reflection but I don't know how else I would have done it.

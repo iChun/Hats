@@ -115,10 +115,10 @@ public class GuiHatSelection extends GuiScreen
             }
             else
             {
-                Hats.eventHandlerClient.availableHats = new HashMap<String, Integer>(Hats.eventHandlerClient.serverHats);
+                Hats.eventHandlerClient.availableHats = new HashMap<>(Hats.eventHandlerClient.serverHats);
             }
         }
-        ArrayList<String> list = new ArrayList<String>();
+        ArrayList<String> list = new ArrayList<>();
 
         for(Map.Entry<String, Integer> e : Hats.eventHandlerClient.availableHats.entrySet())
         {
@@ -127,7 +127,7 @@ public class GuiHatSelection extends GuiScreen
         Collections.sort(list);
 
         availableHats = ImmutableList.copyOf(list);
-        hatsToShow = new ArrayList<String>(availableHats);
+        hatsToShow = new ArrayList<>(availableHats);
         Collections.sort(hatsToShow);
         stand = hatStand;
         prevHatName = stand.hatName;
@@ -181,7 +181,7 @@ public class GuiHatSelection extends GuiScreen
             {
                 for(int i = 0; i < hatsToShow.size(); i++)
                 {
-                    String hatName = (String)hatsToShow.get(i);
+                    String hatName = hatsToShow.get(i);
                     if(hatName.equalsIgnoreCase(stand.hatName))
                     {
                         i -= i % 6;
@@ -338,13 +338,13 @@ public class GuiHatSelection extends GuiScreen
         if(searchBar.getText().equalsIgnoreCase("") || !hasClicked && searchBar.getText().equalsIgnoreCase("Search"))
         {
             searchBar.setTextColor(14737632);
-            hatsToShow = new ArrayList<String>(availableHats);
+            hatsToShow = new ArrayList<>(availableHats);
             Collections.sort(hatsToShow);
         }
         else
         {
             String query = searchBar.getText();
-            ArrayList<String> matches = new ArrayList<String>();
+            ArrayList<String> matches = new ArrayList<>();
             for(String s : (availableHats))
             {
                 if(s.toLowerCase().startsWith(query.toLowerCase()))
@@ -373,14 +373,14 @@ public class GuiHatSelection extends GuiScreen
             if(matches.size() == 0)
             {
                 searchBar.setTextColor(0xFF5555);
-                hatsToShow = new ArrayList<String>(availableHats);
+                hatsToShow = new ArrayList<>(availableHats);
                 Collections.sort(hatsToShow);
             }
             else
             {
                 searchBar.setTextColor(14737632);
                 pageNumber = 0;
-                hatsToShow = new ArrayList<String>(matches);
+                hatsToShow = new ArrayList<>(matches);
                 Collections.sort(hatsToShow);
             }
         }
@@ -533,7 +533,7 @@ public class GuiHatSelection extends GuiScreen
     {
         for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
         {
-            GuiButton btn = (GuiButton)this.buttonList.get(k1);
+            GuiButton btn = this.buttonList.get(k1);
 
             if(btn.id >= 5 && btn.id <= 7 || btn.id == 15 || btn.id >= 11 && btn.id <= 13 || btn.id >= ID_HAT_START_ID)
             {
@@ -585,7 +585,7 @@ public class GuiHatSelection extends GuiScreen
             for(int i = pageNumber * 6; i < hatsToShow.size() && i < (pageNumber + 1) * 6; i++)
             {
                 GuiButton btn;
-                String hatName = (String)hatsToShow.get(i);
+                String hatName = hatsToShow.get(i);
 
                 btn = new GuiButton(ID_HAT_START_ID + i, width / 2 - 6, height / 2 - 78 + (22 * button), 88, 20, hatName);
 
@@ -678,7 +678,7 @@ public class GuiHatSelection extends GuiScreen
     {
         view = view > VIEW_HATS ? VIEW_HATS : VIEW_COLOURIZER;
 
-        hatsToShow = new ArrayList<String>(availableHats);
+        hatsToShow = new ArrayList<>(availableHats);
         Collections.sort(hatsToShow);
 
         searchBar.setText("");
@@ -694,7 +694,7 @@ public class GuiHatSelection extends GuiScreen
             if(hatsToShow.size() > 0)
             {
                 int randVal = rand.nextInt(hatsToShow.size());
-                String hatName = (String)hatsToShow.get(randVal);
+                String hatName = hatsToShow.get(randVal);
 
                 stand.hatName = hatName.toLowerCase();
 
@@ -743,7 +743,7 @@ public class GuiHatSelection extends GuiScreen
     {
         for (int k1 = buttonList.size() - 1; k1 >= 0; k1--)
         {
-            GuiButton btn1 = (GuiButton)this.buttonList.get(k1);
+            GuiButton btn1 = this.buttonList.get(k1);
             if(btn1 instanceof GuiSlider)
             {
                 GuiSlider slider = (GuiSlider)btn1;
@@ -776,9 +776,9 @@ public class GuiHatSelection extends GuiScreen
 
         this.mc.getTextureManager().bindTexture(me.ichun.mods.hats.client.gui.GuiHatSelection.texIcons);
 
-        for (int k1 = 0; k1 < this.buttonList.size(); ++k1)
+        for(GuiButton aButtonList : this.buttonList)
         {
-            GuiButton btn = (GuiButton)this.buttonList.get(k1);
+            GuiButton btn = (GuiButton)aButtonList;
 
             String disp = btn.displayString;
 
@@ -837,37 +837,37 @@ public class GuiHatSelection extends GuiScreen
 
         drawSearchBar();
 
-        drawPlayerOnGui(k + 42, l + 155, 55, (float)(k + 42) - (float)mouseX, (float)(l + 155 - 42) - (float)mouseY);
+        drawPlayerOnGui(k + 42, l + 155, 55, (float)(k + 42) - mouseX, (float)(l + 155 - 42) - mouseY);
 
         drawForeground(par1, par2, par3);
     }
 
     public void drawForeground(int par1, int par2, float par3)
     {
-        for (int k1 = 0; k1 < this.buttonList.size(); ++k1)
+        for(GuiButton aButtonList : this.buttonList)
         {
-            GuiButton btn = (GuiButton)this.buttonList.get(k1);
+            GuiButton btn = (GuiButton)aButtonList;
             if(btn.isMouseOver())
             {
                 if(btn.id >= ID_HAT_START_ID && btn.displayString.length() > 16)
                 {
-                    drawTooltip(Arrays.asList(new String[] {"\u00a77" + btn.displayString}), par1, par2);
+                    drawTooltip(Arrays.asList("\u00a77" + btn.displayString), par1, par2);
                 }
                 else if(btn.id == ID_CLOSE)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.discardChanges")}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.discardChanges")), par1, par2);
                 }
                 else if(btn.id == ID_NONE)
                 {
-                    drawTooltip(Arrays.asList(new String[] {I18n.translateToLocal("hats.gui.removeHat") + " (N)"}), par1, par2);
+                    drawTooltip(Arrays.asList(I18n.translateToLocal("hats.gui.removeHat") + " (N)"), par1, par2);
                 }
                 else if(btn.id == ID_HAT_COLOUR_SWAP)
                 {
-                    drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? I18n.translateToLocal("hats.gui.personalize") : I18n.translateToLocal("hats.gui.hatsList")) + " (H)"}), par1, par2);
+                    drawTooltip(Arrays.asList((view == VIEW_HATS ? I18n.translateToLocal("hats.gui.personalize") : I18n.translateToLocal("hats.gui.hatsList")) + " (H)"), par1, par2);
                 }
                 else if(btn.id == ID_RANDOM)
                 {
-                    drawTooltip(Arrays.asList(new String[] {(view == VIEW_HATS ? I18n.translateToLocal("hats.gui.randomHat") : isShiftKeyDown() ? I18n.translateToLocal("hats.gui.resetColor"): I18n.translateToLocal("hats.gui.randomColor")) + " (R)"}), par1, par2);
+                    drawTooltip(Arrays.asList((view == VIEW_HATS ? I18n.translateToLocal("hats.gui.randomHat") : isShiftKeyDown() ? I18n.translateToLocal("hats.gui.resetColor") : I18n.translateToLocal("hats.gui.randomColor")) + " (R)"), par1, par2);
                 }
             }
         }
@@ -880,14 +880,13 @@ public class GuiHatSelection extends GuiScreen
             GlStateManager.disableRescaleNormal();
             GlStateManager.disableDepth();
             int k = 0;
-            Iterator iterator = par1List.iterator();
 
-            while (iterator.hasNext())
+            for(Object aPar1List : par1List)
             {
-                String s = (String)iterator.next();
+                String s = (String)aPar1List;
                 int l = this.fontRendererObj.getStringWidth(s);
 
-                if (l > k)
+                if(l > k)
                 {
                     k = l;
                 }

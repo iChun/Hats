@@ -31,13 +31,13 @@ import java.util.*;
 
 public class EventHandlerServer
 {
-    public WeakHashMap<EntityLivingBase, String> mobHats = new WeakHashMap<EntityLivingBase, String>();
-    public HashMap<String, TreeMap<String, Integer>> playerHats = new HashMap<String, TreeMap<String, Integer>>();
-    public HashMap<String, TimeActiveInfo> playerActivity = new HashMap<String, TimeActiveInfo>();
+    public WeakHashMap<EntityLivingBase, String> mobHats = new WeakHashMap<>();
+    public HashMap<String, TreeMap<String, Integer>> playerHats = new HashMap<>();
+    public HashMap<String, TimeActiveInfo> playerActivity = new HashMap<>();
 
-    public HashMap<String, TradeRequest> playerTradeRequests = new HashMap<String, TradeRequest>();
+    public HashMap<String, TradeRequest> playerTradeRequests = new HashMap<>();
 
-    public ArrayList<TradeInfo> activeTrades = new ArrayList<TradeInfo>();
+    public ArrayList<TradeInfo> activeTrades = new ArrayList<>();
 
     @SubscribeEvent
     public void serverTick(TickEvent.ServerTickEvent event)
@@ -48,16 +48,8 @@ public class EventHandlerServer
             //            {
             //                HatHandler.unlockHat(FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerForUsername("ohaiiChun"), HatHandler.getRandomHatFromList(HatHandler.getHatsWithWeightedContributors(), true).hatName);
             //            }
-            Iterator<Map.Entry<EntityLivingBase, String>> iterator1 = mobHats.entrySet().iterator();
 
-            while(iterator1.hasNext())
-            {
-                Map.Entry<EntityLivingBase, String> e = iterator1.next();
-                if(e.getKey().isDead)
-                {
-                    iterator1.remove();
-                }
-            }
+            mobHats.entrySet().removeIf(e -> e.getKey().isDead);
 
             for(Map.Entry<String, TimeActiveInfo> e : playerActivity.entrySet())
             {
@@ -214,7 +206,7 @@ public class EventHandlerServer
 
     public void transferHat(TreeMap<String, Integer> origin, TreeMap<String, Integer> destination, TreeMap<String, Integer> hatsList)
     {
-        HashMap<String, Integer> temp = new HashMap<String, Integer>();
+        HashMap<String, Integer> temp = new HashMap<>();
         Iterator<Map.Entry<String, Integer>> ite = origin.entrySet().iterator();
         while(ite.hasNext())
         {
@@ -269,7 +261,7 @@ public class EventHandlerServer
 
     public void removeItems(EntityPlayer origin, ArrayList<ItemStack> itemsList)
     {
-        ArrayList<ItemStack> itemsListCopy = new ArrayList<ItemStack>();
+        ArrayList<ItemStack> itemsListCopy = new ArrayList<>();
         for(ItemStack is : itemsList)
         {
             itemsListCopy.add(is.copy());
@@ -414,12 +406,7 @@ public class EventHandlerServer
 
     public TreeMap<String, Integer> getPlayerHatsList(String player)
     {
-        TreeMap<String, Integer> playerHatsList = Hats.eventHandlerServer.playerHats.get(player);
-        if(playerHatsList == null)
-        {
-            playerHatsList = new TreeMap<String, Integer>();
-            Hats.eventHandlerServer.playerHats.put(player, playerHatsList);
-        }
+        TreeMap<String, Integer> playerHatsList = Hats.eventHandlerServer.playerHats.computeIfAbsent(player, k -> new TreeMap<>());
         return playerHatsList;
     }
 
@@ -436,7 +423,7 @@ public class EventHandlerServer
         boolean fromSpawner = false;
         for(int k = 0; k < event.getEntity().worldObj.loadedTileEntityList.size(); k++)
         {
-            TileEntity te = (TileEntity)event.getEntity().worldObj.loadedTileEntityList.get(k);
+            TileEntity te = event.getEntity().worldObj.loadedTileEntityList.get(k);
             if(!HatHandler.isMobSpawner(te.getClass(), te.getClass()))
             {
                 continue;
@@ -508,7 +495,7 @@ public class EventHandlerServer
                             {
                                 Hats.eventHandlerServer.updateNewKing(executer.getName(), null, true);
                                 Hats.eventHandlerServer.updateNewKing(executer.getName(), executer, true);
-                                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentTranslation("hats.kingOfTheHat.update.playerSlayed", new Object[] { player.getName(), executer.getName() }));
+                                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentTranslation("hats.kingOfTheHat.update.playerSlayed", player.getName(), executer.getName()));
                             }
                             else
                             {
@@ -520,7 +507,7 @@ public class EventHandlerServer
                                     EntityPlayer newKing = list.get(player.worldObj.rand.nextInt(list.size()));
                                     Hats.eventHandlerServer.updateNewKing(newKing.getName(), null, true);
                                     Hats.eventHandlerServer.updateNewKing(newKing.getName(), newKing, true);
-                                    FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentTranslation("hats.kingOfTheHat.update.playerDied", new Object[] { player.getName(), newKing.getName() }));
+                                    FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentTranslation("hats.kingOfTheHat.update.playerDied", player.getName(), newKing.getName()));
                                 }
                             }
                         }
@@ -686,7 +673,7 @@ public class EventHandlerServer
                 EntityPlayer newKing = list.get(event.player.worldObj.rand.nextInt(list.size()));
                 Hats.eventHandlerServer.updateNewKing(newKing.getName(), null, true);
                 Hats.eventHandlerServer.updateNewKing(newKing.getName(), newKing, true);
-                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentTranslation("hats.kingOfTheHat.update.playerLeft", new Object[] { event.player.getName(), newKing.getName() }));
+                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentTranslation("hats.kingOfTheHat.update.playerLeft", event.player.getName(), newKing.getName()));
             }
         }
 

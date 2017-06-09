@@ -1,7 +1,7 @@
 package me.ichun.mods.hats.client.render;
 
-import me.ichun.mods.hats.client.core.ProxyClient;
 import me.ichun.mods.hats.client.core.HatInfoClient;
+import me.ichun.mods.hats.client.core.ProxyClient;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.core.HatHandler;
 import me.ichun.mods.ichunutil.client.module.tabula.model.ModelTabula;
@@ -70,12 +70,12 @@ public class HatRendererHelper
                     float diffB = info.colourB - info.prevColourB;
                     float diffA = info.alpha - info.prevAlpha;
 
-                    diffR *= (float)(info.recolour - renderTick) / 20F;
-                    diffG *= (float)(info.recolour - renderTick) / 20F;
-                    diffB *= (float)(info.recolour - renderTick) / 20F;
-                    diffA *= (float)(info.recolour - renderTick) / 20F;
+                    diffR *= (info.recolour - renderTick) / 20F;
+                    diffG *= (info.recolour - renderTick) / 20F;
+                    diffB *= (info.recolour - renderTick) / 20F;
+                    diffA *= (info.recolour - renderTick) / 20F;
 
-                    GlStateManager.color((float)(info.colourR - diffR) / 255.0F, (float)(info.colourG - diffG) / 255.0F, (float)(info.colourB - diffB) / 255.0F, MathHelper.clamp_float(alpha * ((float)(info.alpha - diffA) / 255.0F), 0.0F, 1.0F));
+                    GlStateManager.color((info.colourR - diffR) / 255.0F, (info.colourG - diffG) / 255.0F, (info.colourB - diffB) / 255.0F, MathHelper.clamp_float(alpha * ((info.alpha - diffA) / 255.0F), 0.0F, 1.0F));
                 }
                 else
                 {

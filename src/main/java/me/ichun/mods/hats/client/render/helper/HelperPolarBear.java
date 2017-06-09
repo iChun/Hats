@@ -3,54 +3,49 @@ package me.ichun.mods.hats.client.render.helper;
 import me.ichun.mods.hats.api.RenderOnEntityHelper;
 import me.ichun.mods.hats.common.Hats;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityBat;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.entity.monster.EntityPolarBear;
 
-public class HelperBat extends RenderOnEntityHelper {
+public class HelperPolarBear extends RenderOnEntityHelper {
 
 	@Override
 	public Class helperForClass() 
 	{
-		return EntityBat.class;
+		return EntityPolarBear.class;
 	}
 
 	@Override
 	public boolean canWearHat(EntityLivingBase living)
 	{
-		return Hats.config.hatBat == 1;
+		return Hats.config.hatPolarBear == 1;
 	}
 
     @Override
     public float getRotatePointHori(EntityLivingBase ent)
     {
-        return 0F/16F;
+        return 16F/16F;
     }
 
     @Override
     public float getOffsetPointHori(EntityLivingBase ent)
     {
-        return 0F/16F;
+        return -1F/16F;
     }
 
     @Override
 	public float getRotatePointVert(EntityLivingBase ent)
 	{
-		return 24F/16F + MathHelper.cos((ent.ticksExisted + renderTick) * 0.3F) * 0.275F;
+		return 12F/16F;
 	}
 
 	@Override
 	public float getOffsetPointVert(EntityLivingBase ent)
 	{
-		return 3F/16F;
+		return 5F/16F;
 	}
 
     @Override
     public float getHatScale(EntityLivingBase ent)
     {
-        if(((EntityBat)ent).getIsBatHanging())
-        {
-            return 0.0F;
-        }
-        return 0.8F;
+        return 1F;
     }
 }

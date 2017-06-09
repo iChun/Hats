@@ -36,7 +36,7 @@ public class GuiTradeReq extends Gui
 
     private long unlockedTime;
 
-    public ArrayList<String> hatList = new ArrayList<String>();
+    public ArrayList<String> hatList = new ArrayList<>();
 
     public GuiTradeReq(Minecraft par1Minecraft)
     {
@@ -134,7 +134,7 @@ public class GuiTradeReq extends Gui
                 this.drawTexturedModalRect(i, j, 96, 202, 160, 32);
 
                 this.theGame.fontRendererObj.drawString(this.headerText, i + 30, j + 7, -256);
-                this.theGame.fontRendererObj.drawString(I18n.translateToLocalFormatted("hats.trade.tradeRequestDesc", new Object[] { theGame.gameSettings.getKeyDisplayString(Hats.config.guiKeyBind.keyIndex) }), i + 30, j + 18, -1);
+                this.theGame.fontRendererObj.drawString(I18n.translateToLocalFormatted("hats.trade.tradeRequestDesc", theGame.gameSettings.getKeyDisplayString(Hats.config.guiKeyBind.keyIndex)), i + 30, j + 18, -1);
 
                 ResourceLocation rl = null;
                 for(int ii = 0; ii < theGame.theWorld.playerEntities.size(); ii++)
@@ -159,10 +159,10 @@ public class GuiTradeReq extends Gui
                     Tessellator tessellator = Tessellator.getInstance();
                     VertexBuffer vertexbuffer = tessellator.getBuffer();
                     vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-                    vertexbuffer.pos((double)(i + xOff + 0), (double)(j + yOff + size), (double)this.zLevel).tex(8D / 64D, 16D / 32D).endVertex();
-                    vertexbuffer.pos((double)(i + xOff + size), (double)(j + yOff + size), (double)this.zLevel).tex(16D / 64D, 16D / 32D).endVertex();
-                    vertexbuffer.pos((double)(i + xOff + size), (double)(j + yOff + 0), (double)this.zLevel).tex(16D / 64D, 8D / 32D).endVertex();
-                    vertexbuffer.pos((double)(i + xOff + 0), (double)(j + yOff + 0), (double)this.zLevel).tex(8D / 64D, 8D / 32D).endVertex();
+                    vertexbuffer.pos(i + xOff + 0, j + yOff + size, (double)this.zLevel).tex(8D / 64D, 16D / 32D).endVertex();
+                    vertexbuffer.pos(i + xOff + size, j + yOff + size, (double)this.zLevel).tex(16D / 64D, 16D / 32D).endVertex();
+                    vertexbuffer.pos(i + xOff + size, j + yOff + 0, (double)this.zLevel).tex(16D / 64D, 8D / 32D).endVertex();
+                    vertexbuffer.pos(i + xOff + 0, j + yOff + 0, (double)this.zLevel).tex(8D / 64D, 8D / 32D).endVertex();
                     tessellator.draw();
 
                 }

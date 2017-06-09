@@ -1,8 +1,12 @@
 package me.ichun.mods.hats.common.packet;
 
 import io.netty.buffer.ByteBuf;
+import me.ichun.mods.hats.client.gui.GuiHatSelection;
 import me.ichun.mods.hats.client.gui.GuiTradeWindow;
+import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.core.HatHandler;
 import me.ichun.mods.hats.common.core.TimeActiveInfo;
+import me.ichun.mods.hats.common.trade.TradeInfo;
 import me.ichun.mods.ichunutil.common.core.network.AbstractPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,10 +15,6 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import me.ichun.mods.hats.client.gui.GuiHatSelection;
-import me.ichun.mods.hats.common.Hats;
-import me.ichun.mods.hats.common.core.HatHandler;
-import me.ichun.mods.hats.common.trade.TradeInfo;
 
 public class PacketPing extends AbstractPacket
 {

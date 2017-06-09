@@ -1,12 +1,12 @@
 package me.ichun.mods.hats.common.thread;
 
+import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.core.HatHandler;
 import me.ichun.mods.ichunutil.common.module.tabula.formats.ImportList;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import me.ichun.mods.hats.common.Hats;
-import me.ichun.mods.hats.common.core.HatHandler;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

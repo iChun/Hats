@@ -49,11 +49,15 @@ public class ProxyCommon
         ProxyCommon.renderHelpers.put(EntityEnderman.class		, new HelperEnderman());
         ProxyCommon.renderHelpers.put(EntityGhast.class			, new HelperGhast());
         ProxyCommon.renderHelpers.put(EntityGiantZombie.class	, new HelperGiantZombie());
+        ProxyCommon.renderHelpers.put(EntityGuardian.class		, new HelperGuardian());
         ProxyCommon.renderHelpers.put(EntityHorse.class			, new HelperHorse());
         ProxyCommon.renderHelpers.put(EntityOcelot.class		, new HelperOcelot());
         ProxyCommon.renderHelpers.put(EntityPig.class			, new HelperPig());
         ProxyCommon.renderHelpers.put(EntityPlayer.class		, new HelperPlayer());
+        ProxyCommon.renderHelpers.put(EntityPolarBear.class		, new HelperPolarBear());
+        ProxyCommon.renderHelpers.put(EntityRabbit.class		, new HelperRabbit());
         ProxyCommon.renderHelpers.put(EntitySheep.class			, new HelperSheep());
+        ProxyCommon.renderHelpers.put(EntityShulker.class		, new HelperShulker());
         ProxyCommon.renderHelpers.put(EntitySkeleton.class		, new HelperSkeleton());
         ProxyCommon.renderHelpers.put(EntitySlime.class			, new HelperSlime());
         ProxyCommon.renderHelpers.put(EntitySpider.class		, new HelperSpider());
@@ -146,16 +150,13 @@ public class ProxyCommon
 
     public void sendPlayerListOfWornHats(EntityPlayer player, boolean sendAllPlayerHatInfo, boolean ignorePlayer) //if false send the only player's info to all players
     {
-        ArrayList<String> playerNames = new ArrayList<String>();
+        ArrayList<String> playerNames = new ArrayList<>();
 
         if(sendAllPlayerHatInfo)
         {
-            Iterator<Entry<String, HatInfo>> ite = Hats.proxy.playerWornHats.entrySet().iterator();
 
-            while(ite.hasNext())
+            for(Entry<String, HatInfo> e : Hats.proxy.playerWornHats.entrySet())
             {
-                Entry<String, HatInfo> e = ite.next();
-
                 playerNames.add(e.getKey());
             }
 
@@ -178,5 +179,5 @@ public class ProxyCommon
         }
     }
 
-    public HashMap<String, HatInfo> playerWornHats = new HashMap<String, HatInfo>();
+    public HashMap<String, HatInfo> playerWornHats = new HashMap<>();
 }
