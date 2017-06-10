@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.entity.EntityLivingBase;
@@ -86,7 +87,7 @@ public class RenderHat extends Render<EntityHat>
                 GlStateManager.pushMatrix();
                 GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
                 Render rend = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(hat.renderingParent);
-                ObfHelper.invokePreRenderCallback(rend, rend.getClass(), hat.renderingParent, renderTick);
+                ObfHelper.invokePreRenderCallback((RenderLivingBase)rend, rend.getClass(), hat.renderingParent, renderTick);
                 GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, buffer1);
                 GlStateManager.popMatrix();
 
@@ -116,7 +117,7 @@ public class RenderHat extends Render<EntityHat>
                                 GlStateManager.pushMatrix();
                                 GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, bufferr);
                                 Render rend1 = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(prevMorph);
-                                ObfHelper.invokePreRenderCallback(rend1, rend1.getClass(), prevMorph, renderTick);
+                                ObfHelper.invokePreRenderCallback((RenderLivingBase)rend1, rend1.getClass(), prevMorph, renderTick);
                                 GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, bufferr1);
                                 GlStateManager.popMatrix();
 
