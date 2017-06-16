@@ -2129,27 +2129,30 @@ public class GuiHatSelection extends GuiScreen
     @Override
     public void onChangeSliderValue(GuiSlider slider)
     {
-        if(slider.id == 5)
+        if(hat != null)
         {
-            colourR = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
-            hat.setR(colourR);
+            if(slider.id == 5)
+            {
+                colourR = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
+                hat.setR(colourR);
+            }
+            else if(slider.id == 6)
+            {
+                colourG = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
+                hat.setG(colourG);
+            }
+            else if(slider.id == 7)
+            {
+                colourB = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
+                hat.setB(colourB);
+            }
+            else if(slider.id == 29)
+            {
+                alpha = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
+                hat.setA(alpha);
+            }
         }
-        else if(slider.id == 6)
-        {
-            colourG = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
-            hat.setG(colourG);
-        }
-        else if(slider.id == 7)
-        {
-            colourB = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
-            hat.setB(colourB);
-        }
-        else if(slider.id == 29)
-        {
-            alpha = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
-            hat.setA(alpha);
-        }
-        else if(slider.id == ID_MOB_SLIDER)
+        if(slider.id == ID_MOB_SLIDER)
         {
             randoMob = (int)Math.round(slider.sliderValue * (slider.maxValue - slider.minValue) + slider.minValue);
         }
