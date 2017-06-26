@@ -1,11 +1,11 @@
 [
 {
-  "modid" : "Hats",
+  "modid" : "hats",
   "name" : "Hats",
   "version" : "${version}",
-  "url" : "http://ichun.us/mods/hats/",
+  "url" : "http://ichun.me/mods/hats/",
   "credits" : "",
-  "authors": [
+  "authorList": [
     "iChun"
   ],
   "description": "Adds a bunch of hats, as wells as the ability to add more, into Minecraft",
@@ -14,7 +14,7 @@
   "parent" : "",
   "screenshots": [
   ],
-  "dependancies": [
+  "dependencies": [
     "Forge"
   ]
 }
