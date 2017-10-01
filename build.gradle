@@ -52,7 +52,7 @@ processResources {
 }
 
 jar { 
-	exclude "hats/addons/**"
+	exclude "me/ichun/mods/hats/addons/**"
 }
 
 // deobf jars
@@ -65,7 +65,7 @@ task addonJar(type: Jar, dependsOn: "jar") {
 	from sourceSets.main.output
 	baseName = "HatStand"
 	version = "1.12.2-7.0.0"
-	include "hats/addons/**"
+	include "me/ichun/mods/hats/addons/**"
 }
 
 reobf 
