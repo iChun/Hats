@@ -21,8 +21,6 @@ public class ProxyClient extends ProxyCommon
         super.preInitMod();
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityHatStand.class, new TileRendererHatStand());
-
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(HatStand.blockHatStand), 0, new ModelResourceLocation("hatstand:HatStand", "inventory"));
     }
 
     @Override

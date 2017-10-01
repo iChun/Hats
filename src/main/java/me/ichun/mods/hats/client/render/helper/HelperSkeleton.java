@@ -4,6 +4,7 @@ import me.ichun.mods.hats.api.RenderOnEntityHelper;
 import me.ichun.mods.hats.common.Hats;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.entity.monster.EntitySkeleton;
 
 public class HelperSkeleton extends RenderOnEntityHelper {
@@ -11,7 +12,7 @@ public class HelperSkeleton extends RenderOnEntityHelper {
 	@Override
 	public Class helperForClass() 
 	{
-		return EntitySkeleton.class;
+		return AbstractSkeleton.class;
 	}
 
     @Override

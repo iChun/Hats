@@ -1,27 +1,26 @@
 package me.ichun.mods.hats.client.render.helper;
 
-import me.ichun.mods.hats.api.RenderOnEntityHelper;
 import me.ichun.mods.hats.common.Hats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.AbstractHorse;
-import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityLlama;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class HelperHorse extends RenderOnEntityHelper
+public class HelperLlama extends HelperHorse
 {
 
 	@Override
-	public Class helperForClass() 
+	public Class helperForClass()
 	{
-		return AbstractHorse.class;
+		return EntityLlama.class;
 	}
 
-    @Override
-    public boolean canWearHat(EntityLivingBase living)
-    {
-        return Hats.config.hatHorse == 1;
-    }
+	@Override
+	public boolean canWearHat(EntityLivingBase living)
+	{
+		return Hats.config.hatHorse == 1;
+	}
 
 	@Override
 	public float getPrevRotationYaw(EntityLivingBase living)
@@ -41,30 +40,30 @@ public class HelperHorse extends RenderOnEntityHelper
 	{
 		return (float)Math.toDegrees(((AbstractHorse)living).getRearingAmount(1.0F) * ((float)Math.PI / 4F));
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public float getRotationPitch(EntityLivingBase living)
 	{
 		return (float)Math.toDegrees(((AbstractHorse)living).getRearingAmount(1.0F) * ((float)Math.PI / 4F));
 	}
-	
+
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)
 	{
-		return 13F/16F;
+		return 14F/16F;
 	}
-	
+
 	@Override
 	public float getRotatePointHori(EntityLivingBase ent)
 	{
-		return -9F/16F;
+		return -3.5F/16F;
 	}
-	
+
 	@Override
 	public float getOffsetPointVert(EntityLivingBase ent)
 	{
-		return 8F/16F;
+		return 7.9F/16F;
 	}
 
 	@Override
@@ -72,12 +71,12 @@ public class HelperHorse extends RenderOnEntityHelper
 	{
 		return 0.0F;
 	}
-	
+
 	@Override
 	public float getHatScale(EntityLivingBase ent)
 	{
-		return 10F/8F;
+		return 11.75F/8F;
 	}
 
-	
+
 }

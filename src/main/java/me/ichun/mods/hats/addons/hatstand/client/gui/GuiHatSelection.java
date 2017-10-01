@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.client.config.GuiSlider;
@@ -988,7 +989,7 @@ public class GuiHatSelection extends GuiScreen
 
             this.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
             IBlockState state = HatStand.blockHatStand.getDefaultState().withProperty(BlockHatStand.TYPE, stand.hasBase ? stand.hasStand ? stand.hatName.isEmpty() ? 0 : 1 : stand.isOnFloor ? 2 : EnumFacing.getFront(stand.sideOn).ordinal() + 2 : 3);
-            RendererHelper.renderBakedModel(mc.getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state), -1, null);
+            RendererHelper.renderBakedModel(mc.getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state), -1, ItemStack.EMPTY);
 
             GlStateManager.translate(-0.5D, -0.5D, -0.5D);
 

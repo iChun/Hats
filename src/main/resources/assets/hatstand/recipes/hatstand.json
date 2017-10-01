@@ -9,7 +9,8 @@
       "item": "minecraft:stick"
     },
     "#": {
-      "item": "minecraft:wooden_slab"
+      "item": "minecraft:wooden_slab",
+      "data": 32767
     }
   },
   "result": {

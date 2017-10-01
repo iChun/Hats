@@ -40,6 +40,9 @@ public class ProxyCommon
     {
         getHats();
 
+        ProxyCommon.renderHelpers.put(AbstractHorse.class		, new HelperHorse());
+        ProxyCommon.renderHelpers.put(AbstractIllager.class		, new HelperIllager());
+        ProxyCommon.renderHelpers.put(AbstractSkeleton.class	, new HelperSkeleton());
         ProxyCommon.renderHelpers.put(EntityBat.class			, new HelperBat());
         ProxyCommon.renderHelpers.put(EntityBlaze.class			, new HelperBlaze());
         ProxyCommon.renderHelpers.put(EntityChicken.class		, new HelperChicken());
@@ -49,7 +52,7 @@ public class ProxyCommon
         ProxyCommon.renderHelpers.put(EntityGhast.class			, new HelperGhast());
         ProxyCommon.renderHelpers.put(EntityGiantZombie.class	, new HelperGiantZombie());
         ProxyCommon.renderHelpers.put(EntityGuardian.class		, new HelperGuardian());
-        ProxyCommon.renderHelpers.put(EntityHorse.class			, new HelperHorse());
+        ProxyCommon.renderHelpers.put(EntityLlama.class		    , new HelperLlama());
         ProxyCommon.renderHelpers.put(EntityOcelot.class		, new HelperOcelot());
         ProxyCommon.renderHelpers.put(EntityPig.class			, new HelperPig());
         ProxyCommon.renderHelpers.put(EntityPlayer.class		, new HelperPlayer());
@@ -57,14 +60,14 @@ public class ProxyCommon
         ProxyCommon.renderHelpers.put(EntityRabbit.class		, new HelperRabbit());
         ProxyCommon.renderHelpers.put(EntitySheep.class			, new HelperSheep());
         ProxyCommon.renderHelpers.put(EntityShulker.class		, new HelperShulker());
-        ProxyCommon.renderHelpers.put(EntitySkeleton.class		, new HelperSkeleton());
         ProxyCommon.renderHelpers.put(EntitySlime.class			, new HelperSlime());
         ProxyCommon.renderHelpers.put(EntitySpider.class		, new HelperSpider());
         ProxyCommon.renderHelpers.put(EntitySquid.class			, new HelperSquid());
+        ProxyCommon.renderHelpers.put(EntityVex.class	    	, new HelperVex());
         ProxyCommon.renderHelpers.put(EntityVillager.class		, new HelperVillager());
+        ProxyCommon.renderHelpers.put(EntityWither.class		, new HelperWither());
         ProxyCommon.renderHelpers.put(EntityWolf.class			, new HelperWolf());
         ProxyCommon.renderHelpers.put(EntityZombie.class		, new HelperZombie());
-        ProxyCommon.renderHelpers.put(EntityWither.class		, new HelperWither());
 
         getHatMobModSupport();//Done after initial mapping so that the new JSON can override the mod's vanilla helpers.
 
