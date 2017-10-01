@@ -75,7 +75,7 @@ public class PacketWornHatList extends AbstractPacket
     }
 
     @Override
-    public AbstractPacket execute(Side side, EntityPlayer player){ return null; }//hacky fix
+    public void execute(Side side, EntityPlayer player){}
 
     @Override
     public Side receivingSide()

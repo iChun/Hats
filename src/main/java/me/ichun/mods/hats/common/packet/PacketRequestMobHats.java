@@ -44,7 +44,7 @@ public class PacketRequestMobHats extends AbstractPacket
     }
 
     @Override
-    public AbstractPacket execute(Side side, EntityPlayer player)
+    public void execute(Side side, EntityPlayer player)
     {
         ArrayList<Integer> ids = new ArrayList<>();
         ArrayList<String> names = new ArrayList<>();
@@ -64,7 +64,7 @@ public class PacketRequestMobHats extends AbstractPacket
         }
         ids.add(-2);
 
-        return new PacketMobHatsList(ids, names);
+        Hats.channel.sendTo(new PacketMobHatsList(ids, names), player);
     }
 
     @Override

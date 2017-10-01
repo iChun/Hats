@@ -50,7 +50,7 @@ public class PacketSession extends AbstractPacket
     }
 
     @Override
-    public AbstractPacket execute(Side side, EntityPlayer player){return null;} //Hacky fix
+    public void execute(Side side, EntityPlayer player){}
 
     @Override
     public Side receivingSide()

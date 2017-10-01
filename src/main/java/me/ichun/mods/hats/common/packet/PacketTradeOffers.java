@@ -78,7 +78,7 @@ public class PacketTradeOffers extends AbstractPacket
     }
 
     @Override
-    public AbstractPacket execute(Side side, EntityPlayer player)
+    public void execute(Side side, EntityPlayer player)
     {
         if(side.isServer())
         {
@@ -96,7 +96,6 @@ public class PacketTradeOffers extends AbstractPacket
         {
             handleClient(side, player);
         }
-        return null;
     }
 
     @Override

@@ -47,13 +47,12 @@ public class PacketTradeReadyInfo extends AbstractPacket
     }
 
     @Override
-    public AbstractPacket execute(Side side, EntityPlayer player)
+    public void execute(Side side, EntityPlayer player)
     {
         if(side.isClient())
         {
             handleClient(side, player);
         }
-        return null;
     }
 
     @Override

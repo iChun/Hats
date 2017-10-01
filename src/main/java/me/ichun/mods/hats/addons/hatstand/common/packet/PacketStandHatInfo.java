@@ -70,7 +70,7 @@ public class PacketStandHatInfo extends AbstractPacket
     }
 
     @Override
-    public AbstractPacket execute(Side side, EntityPlayer player)
+    public void execute(Side side, EntityPlayer player)
     {
         TileEntity te = player.world.getTileEntity(pos);
 
@@ -105,7 +105,6 @@ public class PacketStandHatInfo extends AbstractPacket
             IBlockState state = stand.getWorld().getBlockState(pos);
             stand.getWorld().notifyBlockUpdate(pos, state, state, 3);
         }
-        return null;
     }
 
     @Override

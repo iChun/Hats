@@ -37,13 +37,12 @@ public class PacketKingOfTheHatInfo extends AbstractPacket
     }
 
     @Override
-    public AbstractPacket execute(Side side, EntityPlayer player)
+    public void execute(Side side, EntityPlayer player)
     {
         if(!hatsList.isEmpty())
         {
             HatHandler.populateHatsList(hatsList);
         }
-        return null;
     }
 
     @Override

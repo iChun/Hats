@@ -52,7 +52,7 @@ public class PacketPlayerHatSelection extends AbstractPacket
     }
 
     @Override
-    public AbstractPacket execute(Side side, EntityPlayer player)
+    public void execute(Side side, EntityPlayer player)
     {
         Hats.proxy.playerWornHats.put(player.getName(), new HatInfo(hatName, r, g, b, a));
 
@@ -72,7 +72,6 @@ public class PacketPlayerHatSelection extends AbstractPacket
         {
             HatHandler.requestHat(hatName, player);
         }
-        return null;
     }
 
     @Override

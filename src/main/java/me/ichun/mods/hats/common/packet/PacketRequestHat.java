@@ -31,10 +31,9 @@ public class PacketRequestHat extends AbstractPacket
     }
 
     @Override
-    public AbstractPacket execute(Side side, EntityPlayer player)
+    public void execute(Side side, EntityPlayer player)
     {
         HatHandler.sendHat(hatName, side.isServer() ? player : null);
-        return null;
     }
 
     @Override

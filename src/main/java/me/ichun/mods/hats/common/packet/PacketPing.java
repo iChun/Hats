@@ -44,7 +44,7 @@ public class PacketPing extends AbstractPacket
     }
 
     @Override
-    public AbstractPacket execute(Side side, EntityPlayer player)
+    public void execute(Side side, EntityPlayer player)
     {
         if(side.isServer())
         {
@@ -124,7 +124,6 @@ public class PacketPing extends AbstractPacket
         {
             handleClient();
         }
-        return null;
     }
 
     @Override
