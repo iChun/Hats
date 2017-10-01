@@ -142,11 +142,11 @@ public class PacketPing extends AbstractPacket
             {
                 if(pingFlag)
                 {
-                    FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiHatSelection(Minecraft.getMinecraft().thePlayer));
+                    FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().player, new GuiHatSelection(Minecraft.getMinecraft().player));
                 }
                 else
                 {
-                    Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentTranslation("hats.serverOnCommandGiverMode"));
+                    Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("hats.serverOnCommandGiverMode"));
                 }
                 break;
             }
@@ -169,7 +169,7 @@ public class PacketPing extends AbstractPacket
                 if(Minecraft.getMinecraft().currentScreen instanceof GuiTradeWindow)
                 {
                     FMLCommonHandler.instance().showGuiScreen(null);
-                    Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentTranslation("hats.trade.success"));
+                    Minecraft.getMinecraft().player.sendMessage(new TextComponentTranslation("hats.trade.success"));
                 }
                 break;
             }

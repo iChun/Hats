@@ -108,7 +108,7 @@ public class GuiHatSelection extends GuiScreen
     {
         if(Hats.config.playerHatsMode == 4)
         {
-            if(Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
+            if(Minecraft.getMinecraft().player.capabilities.isCreativeMode)
             {
                 HatHandler.repopulateHatsList();
             }
@@ -192,7 +192,7 @@ public class GuiHatSelection extends GuiScreen
 
             updateButtonList();
 
-            searchBar = new GuiTextField(0, this.fontRendererObj, this.width / 2 - 65, height - 24, 150, 20);
+            searchBar = new GuiTextField(0, this.fontRenderer, this.width / 2 - 65, height - 24, 150, 20);
             searchBar.setMaxStringLength(255);
             searchBar.setText(I18n.translateToLocal("hats.gui.search"));
             searchBar.setTextColor(0xAAAAAA);
@@ -452,7 +452,7 @@ public class GuiHatSelection extends GuiScreen
                 }
                 if(stand.head == 4)
                 {
-                    stand.gameProfile = Minecraft.getMinecraft().thePlayer.getGameProfile();
+                    stand.gameProfile = Minecraft.getMinecraft().player.getGameProfile();
                 }
                 head = stand.head;
                 justClickedButton = true;
@@ -794,7 +794,7 @@ public class GuiHatSelection extends GuiScreen
                     btn.displayString = btn.displayString.substring(0, 13) + "...";
                 }
             }
-            btn.drawButton(this.mc, par1, par2);
+            btn.drawButton(this.mc, par1, par2, par3);
 
             if(!(btn instanceof GuiSlider))
             {
@@ -813,15 +813,15 @@ public class GuiHatSelection extends GuiScreen
                 {
                     if(btn.id == ID_HAT_COLOUR_SWAP)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, (view == VIEW_HATS ? 176 : 0), 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, (view == VIEW_HATS ? 176 : 0), 0, 16, 16);
                     }
                     else if(btn.id == ID_NONE)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 32, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 32, 0, 16, 16);
                     }
                     else if(btn.id == ID_RANDOM)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 80, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 80, 0, 16, 16);
                     }
                 }
 
@@ -829,7 +829,7 @@ public class GuiHatSelection extends GuiScreen
             }
         }
 
-        drawString(fontRendererObj, "Viewing: " + currentDisplay, this.guiLeft, this.guiTop - 9, 0xffffff);
+        drawString(fontRenderer, "Viewing: " + currentDisplay, this.guiLeft, this.guiTop - 9, 0xffffff);
 
         this.mouseX = (float)par1;
         this.mouseY = (float)par2;
@@ -883,7 +883,7 @@ public class GuiHatSelection extends GuiScreen
             for(Object aPar1List : par1List)
             {
                 String s = (String)aPar1List;
-                int l = this.fontRendererObj.getStringWidth(s);
+                int l = this.fontRenderer.getStringWidth(s);
 
                 if(l > k)
                 {
@@ -927,7 +927,7 @@ public class GuiHatSelection extends GuiScreen
             for (int k2 = 0; k2 < par1List.size(); ++k2)
             {
                 String s1 = (String)par1List.get(k2);
-                this.fontRendererObj.drawStringWithShadow(s1, i1, j1, -1);
+                this.fontRenderer.drawStringWithShadow(s1, i1, j1, -1);
 
                 if (k2 == 0)
                 {
@@ -1001,7 +1001,7 @@ public class GuiHatSelection extends GuiScreen
 
             stand.info = tempInfo;
 
-            TileRendererHatStand.renderer.renderHatStand(stand, 0, 0, 0, 1.0F, -1, stand.gameProfile);
+            TileRendererHatStand.renderer.render(stand, 0, 0, 0, 1.0F, -1, 1F);
 
             stand.info = info;
 

@@ -58,8 +58,8 @@ public class TileEntityHatStand extends TileEntity
     {
         readFromNBT(pkt.getNbtCompound());
 
-        IBlockState state = worldObj.getBlockState(getPos());
-        worldObj.notifyBlockUpdate(getPos(), state, state, 3);
+        IBlockState state = world.getBlockState(getPos());
+        world.notifyBlockUpdate(getPos(), state, state, 3);
     }
 
     @Override

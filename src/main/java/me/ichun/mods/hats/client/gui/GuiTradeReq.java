@@ -5,10 +5,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
@@ -133,13 +133,13 @@ public class GuiTradeReq extends Gui
                 GlStateManager.disableLighting();
                 this.drawTexturedModalRect(i, j, 96, 202, 160, 32);
 
-                this.theGame.fontRendererObj.drawString(this.headerText, i + 30, j + 7, -256);
-                this.theGame.fontRendererObj.drawString(I18n.translateToLocalFormatted("hats.trade.tradeRequestDesc", theGame.gameSettings.getKeyDisplayString(Hats.config.guiKeyBind.keyIndex)), i + 30, j + 18, -1);
+                this.theGame.fontRenderer.drawString(this.headerText, i + 30, j + 7, -256);
+                this.theGame.fontRenderer.drawString(I18n.translateToLocalFormatted("hats.trade.tradeRequestDesc", theGame.gameSettings.getKeyDisplayString(Hats.config.guiKeyBind.keyIndex)), i + 30, j + 18, -1);
 
                 ResourceLocation rl = null;
-                for(int ii = 0; ii < theGame.theWorld.playerEntities.size(); ii++)
+                for(int ii = 0; ii < theGame.world.playerEntities.size(); ii++)
                 {
-                    AbstractClientPlayer player = (AbstractClientPlayer)theGame.theWorld.playerEntities.get(ii);
+                    AbstractClientPlayer player = (AbstractClientPlayer)theGame.world.playerEntities.get(ii);
                     if(player.getName().equalsIgnoreCase(this.hatNameText))
                     {
                         rl = player.getLocationSkin();
@@ -157,12 +157,12 @@ public class GuiTradeReq extends Gui
                     double size = 20D;
 
                     Tessellator tessellator = Tessellator.getInstance();
-                    VertexBuffer vertexbuffer = tessellator.getBuffer();
-                    vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-                    vertexbuffer.pos(i + xOff + 0, j + yOff + size, (double)this.zLevel).tex(8D / 64D, 16D / 32D).endVertex();
-                    vertexbuffer.pos(i + xOff + size, j + yOff + size, (double)this.zLevel).tex(16D / 64D, 16D / 32D).endVertex();
-                    vertexbuffer.pos(i + xOff + size, j + yOff + 0, (double)this.zLevel).tex(16D / 64D, 8D / 32D).endVertex();
-                    vertexbuffer.pos(i + xOff + 0, j + yOff + 0, (double)this.zLevel).tex(8D / 64D, 8D / 32D).endVertex();
+                    BufferBuilder bufferbuilder = tessellator.getBuffer();
+                    bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+                    bufferbuilder.pos(i + xOff + 0, j + yOff + size, (double)this.zLevel).tex(8D / 64D, 16D / 32D).endVertex();
+                    bufferbuilder.pos(i + xOff + size, j + yOff + size, (double)this.zLevel).tex(16D / 64D, 16D / 32D).endVertex();
+                    bufferbuilder.pos(i + xOff + size, j + yOff + 0, (double)this.zLevel).tex(16D / 64D, 8D / 32D).endVertex();
+                    bufferbuilder.pos(i + xOff + 0, j + yOff + 0, (double)this.zLevel).tex(8D / 64D, 8D / 32D).endVertex();
                     tessellator.draw();
 
                 }

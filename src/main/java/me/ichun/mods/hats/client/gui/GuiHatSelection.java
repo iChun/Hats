@@ -140,7 +140,7 @@ public class GuiHatSelection extends GuiScreen
     {
         if(Hats.config.playerHatsMode >= 4)
         {
-            if(Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode)
+            if(Minecraft.getMinecraft().player.capabilities.isCreativeMode)
             {
                 HatHandler.repopulateHatsList();
             }
@@ -262,7 +262,7 @@ public class GuiHatSelection extends GuiScreen
 
             updateButtonList();
 
-            searchBar = new GuiTextField(0, this.fontRendererObj, this.width / 2 - 65, height - 24, 150, 20);
+            searchBar = new GuiTextField(0, this.fontRenderer, this.width / 2 - 65, height - 24, 150, 20);
             searchBar.setMaxStringLength(255);
             searchBar.setText(I18n.translateToLocal("hats.gui.search"));
             searchBar.setTextColor(0xAAAAAA);
@@ -668,7 +668,7 @@ public class GuiHatSelection extends GuiScreen
     {
         if(btn.id == ID_MAKE_TRADE)
         {
-            FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiTradeMaker());
+            FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().player, new GuiTradeMaker());
             return;
         }
         else if(btn.id == ID_ACCEPT_TRADE && Hats.eventHandlerClient.tradeReq != null && Hats.eventHandlerClient.tradeReqTimeout > 0)
@@ -737,8 +737,8 @@ public class GuiHatSelection extends GuiScreen
                     GuiButton btn1 = buttonList.get(i);
                     if(btn1.id >= ID_NONE && btn1.id <= (ID_SEARCH - 1))
                     {
-                        btn1.xPosition = width / 2 + 89;
-                        btn1.yPosition = height / 2 - 85 + ((btn1.id - ID_NONE) * 21);
+                        btn1.x = width / 2 + 89;
+                        btn1.y = height / 2 - 85 + ((btn1.id - ID_NONE) * 21);
                     }
                     else if(btn1.id == ID_SEARCH)
                     {
@@ -913,8 +913,8 @@ public class GuiHatSelection extends GuiScreen
                         }
                     }
 
-                    buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 16 - 7, btn.yPosition, 20, 20, ""));
-                    buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 52 - 7, btn.yPosition, 20, 20, ""));
+                    buttonList.add(new GuiButton(ID_ADD, btn.x + 16 - 7, btn.y, 20, 20, ""));
+                    buttonList.add(new GuiButton(ID_CANCEL, btn.x + 52 - 7, btn.y, 20, 20, ""));
 
                     searchBar.setText(selectedButtonName);
                 }
@@ -957,15 +957,15 @@ public class GuiHatSelection extends GuiScreen
                         }
                     }
 
-                    buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 1, btn.yPosition, 20, 20, ""));
-                    buttonList.add(new GuiButton(ID_FAVOURITE, btn.xPosition + 23, btn.yPosition, 20, 20, ""));
-                    GuiButton btn1 = new GuiButton(ID_DELETE, btn.xPosition + 45, btn.yPosition, 20, 20, "");
+                    buttonList.add(new GuiButton(ID_ADD, btn.x + 1, btn.y, 20, 20, ""));
+                    buttonList.add(new GuiButton(ID_FAVOURITE, btn.x + 23, btn.y, 20, 20, ""));
+                    GuiButton btn1 = new GuiButton(ID_DELETE, btn.x + 45, btn.y, 20, 20, "");
                     if(HatHandler.isContributor(selectedButtonName))
                     {
                         btn1.enabled = false;
                     }
                     buttonList.add(btn1);
-                    buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 67, btn.yPosition, 20, 20, ""));
+                    buttonList.add(new GuiButton(ID_CANCEL, btn.x + 67, btn.y, 20, 20, ""));
                 }
                 else
                 {
@@ -1008,8 +1008,8 @@ public class GuiHatSelection extends GuiScreen
                             }
                         }
 
-                        buttonList.add(new GuiButton(ID_ADD, btn.xPosition + 16, btn.yPosition, 20, 20, ""));
-                        buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 52, btn.yPosition, 20, 20, ""));
+                        buttonList.add(new GuiButton(ID_ADD, btn.x + 16, btn.y, 20, 20, ""));
+                        buttonList.add(new GuiButton(ID_CANCEL, btn.x + 52, btn.y, 20, 20, ""));
 
                         adding = true;
 
@@ -1031,9 +1031,9 @@ public class GuiHatSelection extends GuiScreen
                             }
                         }
 
-                        buttonList.add(new GuiButton(ID_RENAME, btn.xPosition + 7, btn.yPosition, 20, 20, ""));
-                        buttonList.add(new GuiButton(ID_DELETE, btn.xPosition + 34, btn.yPosition, 20, 20, ""));
-                        buttonList.add(new GuiButton(ID_CANCEL, btn.xPosition + 61, btn.yPosition, 20, 20, ""));
+                        buttonList.add(new GuiButton(ID_RENAME, btn.x + 7, btn.y, 20, 20, ""));
+                        buttonList.add(new GuiButton(ID_DELETE, btn.x + 34, btn.y, 20, 20, ""));
+                        buttonList.add(new GuiButton(ID_CANCEL, btn.x + 61, btn.y, 20, 20, ""));
                     }
                     else
                     {
@@ -1415,7 +1415,7 @@ public class GuiHatSelection extends GuiScreen
 
             ArrayList<String> hatsCopy = new ArrayList<>(hatsList);
 
-            if(Hats.config.playerHatsMode >= 4 && !mc.thePlayer.capabilities.isCreativeMode)
+            if(Hats.config.playerHatsMode >= 4 && !mc.player.capabilities.isCreativeMode)
             {
                 for(int i = hatsCopy.size() - 1; i >= 0; i--)
                 {
@@ -1645,8 +1645,8 @@ public class GuiHatSelection extends GuiScreen
         else if(enabledButtons.contains(Integer.toString(btn.id - (ID_NONE - 1))))
         {
             enabledButtons.remove(Integer.toString(btn.id - (ID_NONE - 1)));
-            btn.xPosition = width - 24;
-            btn.yPosition = height / 2 - 93 + ((btn.id - ID_NONE) * 21);
+            btn.x = width - 24;
+            btn.y = height / 2 - 93 + ((btn.id - ID_NONE) * 21);
             for(GuiButton aButtonList : buttonList)
             {
                 GuiButton btn1 = (GuiButton)aButtonList;
@@ -1656,8 +1656,8 @@ public class GuiHatSelection extends GuiScreen
                     {
                         if(Integer.toString(btn1.id - (ID_NONE - 1)).equalsIgnoreCase(enabledButtons.get(i1)))
                         {
-                            btn1.xPosition = width / 2 + 89;
-                            btn1.yPosition = height / 2 - 85 + (i1 * 21);
+                            btn1.x = width / 2 + 89;
+                            btn1.y = height / 2 - 85 + (i1 * 21);
                             break;
                         }
                     }
@@ -1669,8 +1669,8 @@ public class GuiHatSelection extends GuiScreen
             if(!enabledButtons.contains(Integer.toString(btn.id - (ID_NONE - 1))))
             {
                 enabledButtons.add(Integer.toString(btn.id - (ID_NONE - 1)));
-                btn.xPosition = width / 2 + 89;
-                btn.yPosition = height / 2 - 85 + ((enabledButtons.size() - 1) * 21);
+                btn.x = width / 2 + 89;
+                btn.y = height / 2 - 85 + ((enabledButtons.size() - 1) * 21);
             }
         }
     }
@@ -1681,7 +1681,7 @@ public class GuiHatSelection extends GuiScreen
         if(mc == null)
         {
             mc = Minecraft.getMinecraft();
-            fontRendererObj = mc.fontRendererObj;
+            fontRenderer = mc.fontRenderer;
         }
         drawDefaultBackground();
 
@@ -1721,7 +1721,7 @@ public class GuiHatSelection extends GuiScreen
                     btn.displayString = btn.displayString.substring(0, 13) + "...";
                 }
             }
-            btn.drawButton(this.mc, par1, par2);
+            btn.drawButton(this.mc, par1, par2, par3);
 
             if(!(btn instanceof GuiSlider))
             {
@@ -1740,74 +1740,74 @@ public class GuiHatSelection extends GuiScreen
                 {
                     if(btn.id == ID_HAT_COLOUR_SWAP)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, (view == VIEW_HATS || view == VIEW_CATEGORY ? 16 : 0), 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, (view == VIEW_HATS || view == VIEW_CATEGORY ? 16 : 0), 0, 16, 16);
                     }
                     else if(btn.id == ID_NONE || btn.id == ID_CANCEL)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 32, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 32, 0, 16, 16);
                     }
                     else if(btn.id == ID_RANDOM)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 80, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 80, 0, 16, 16);
                     }
                     else if(btn.id == ID_HELP)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 96, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 96, 0, 16, 16);
                     }
                     else if(btn.id == ID_RELOAD_HATS)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 48, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 48, 0, 16, 16);
                     }
                     else if(btn.id == ID_FAVOURITES)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2 - (favourite > 3 ? 6 - favourite : favourite), 64, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2 - (favourite > 3 ? 6 - favourite : favourite), 64, 0, 16, 16);
                     }
                     else if(btn.id == ID_CATEGORIES)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 112, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 112, 0, 16, 16);
                     }
                     else if(btn.id == ID_PERSONALIZE)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 176, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 176, 0, 16, 16);
                     }
                     else if(btn.id == ID_ADD)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") && !category.equalsIgnoreCase(I18n.translateToLocal("hats.gui.contributors")) ? 224 : 160, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, view == VIEW_CATEGORY && !category.equalsIgnoreCase("Favourites") && !category.equalsIgnoreCase(I18n.translateToLocal("hats.gui.contributors")) ? 224 : 160, 0, 16, 16);
                     }
                     else if(btn.id == ID_RENAME)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 192, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 192, 0, 16, 16);
                     }
                     else if(btn.id == ID_DELETE)
                     {
                         if((view == VIEW_CATEGORY || view == VIEW_HATS) && isShiftKeyDown())
                         {
-                            drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 208, 0, 16, 16);
+                            drawTexturedModalRect(btn.x + 2, btn.y + 2, 208, 0, 16, 16);
                         }
                         else
                         {
-                            drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 144, 0, 16, 16);
+                            drawTexturedModalRect(btn.x + 2, btn.y + 2, 144, 0, 16, 16);
                         }
                     }
                     else if(btn.id == ID_FAVOURITE)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 64, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 64, 0, 16, 16);
                         if(!selectedButtonName.equalsIgnoreCase("") && HatHandler.isInFavourites(selectedButtonName))
                         {
-                            drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 32, 0, 16, 16);
+                            drawTexturedModalRect(btn.x + 2, btn.y + 2, 32, 0, 16, 16);
                         }
                     }
                     else if(btn.id == ID_SEARCH)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 128, 0, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 128, 0, 16, 16);
                     }
                     else if(btn.id == ID_MAKE_TRADE)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 82, 45, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 82, 45, 16, 16);
                     }
                     else if(btn.id == ID_ACCEPT_TRADE)
                     {
-                        drawTexturedModalRect(btn.xPosition + 2, btn.yPosition + 2, 98, 45, 16, 16);
+                        drawTexturedModalRect(btn.x + 2, btn.y + 2, 98, 45, 16, 16);
                     }
                 }
 
@@ -1815,7 +1815,7 @@ public class GuiHatSelection extends GuiScreen
             }
         }
 
-        drawString(fontRendererObj, I18n.translateToLocal("hats.gui.viewing") + ": " + currentDisplay, this.guiLeft + 1, this.guiTop - 9, 0xffffff);
+        drawString(fontRenderer, I18n.translateToLocal("hats.gui.viewing") + ": " + currentDisplay, this.guiLeft + 1, this.guiTop - 9, 0xffffff);
 
         this.mouseX = (float)par1;
         this.mouseY = (float)par2;
@@ -1827,7 +1827,7 @@ public class GuiHatSelection extends GuiScreen
         if(player != null && !player.capabilities.isCreativeMode && tempInfo != null && !tempInfo.hatName.isEmpty())
         {
             GlStateManager.disableDepth();
-            drawString(fontRendererObj, HatHandler.getHatRarityColour(tempInfo.hatName).toString() + I18n.translateToLocalFormatted("hats.gui.hatsCollected", Hats.eventHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName)) == null ? 1 : Hats.eventHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName))), this.guiLeft + 10, this.guiTop + ySize - 22, 0xffffff);
+            drawString(fontRenderer, HatHandler.getHatRarityColour(tempInfo.hatName).toString() + I18n.translateToLocalFormatted("hats.gui.hatsCollected", Hats.eventHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName)) == null ? 1 : Hats.eventHandlerClient.availableHats.get(HatHandler.getNameForHat(tempInfo.hatName))), this.guiLeft + 10, this.guiTop + ySize - 22, 0xffffff);
             GlStateManager.enableDepth();
         }
 
@@ -1953,7 +1953,7 @@ public class GuiHatSelection extends GuiScreen
             for(Object aPar1List : par1List)
             {
                 String s = (String)aPar1List;
-                int l = this.fontRendererObj.getStringWidth(s);
+                int l = this.fontRenderer.getStringWidth(s);
 
                 if(l > k)
                 {
@@ -1997,7 +1997,7 @@ public class GuiHatSelection extends GuiScreen
             for (int k2 = 0; k2 < par1List.size(); ++k2)
             {
                 String s1 = (String)par1List.get(k2);
-                this.fontRendererObj.drawStringWithShadow(s1, i1, j1, -1);
+                this.fontRenderer.drawStringWithShadow(s1, i1, j1, -1);
 
                 if (k2 == 0)
                 {
@@ -2059,7 +2059,7 @@ public class GuiHatSelection extends GuiScreen
             RenderManager rendermanager = Minecraft.getMinecraft().getRenderManager();
             rendermanager.setPlayerViewY(180.0F);
             rendermanager.setRenderShadow(false);
-            rendermanager.doRenderEntity(hat.renderingParent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
+            rendermanager.renderEntity(hat.renderingParent, 0.0D, 0.0D, 0.0D, 0.0F, 1.0F, false);
             rendermanager.setRenderShadow(true);
             int rend = Hats.config.renderHats;
             Hats.config.renderHats = 13131;
@@ -2080,7 +2080,7 @@ public class GuiHatSelection extends GuiScreen
             hat.info = tempInfo;
 
             rendermanager.setRenderShadow(false);
-            rendermanager.doRenderEntity(hat, 0.0D, 0.0D, 0.0D, hat.rotationYaw, 1.0F, false);
+            rendermanager.renderEntity(hat, 0.0D, 0.0D, 0.0D, hat.rotationYaw, 1.0F, false);
             rendermanager.setRenderShadow(true);
 
             hat.info = info;
@@ -2121,7 +2121,7 @@ public class GuiHatSelection extends GuiScreen
 
             if((adding || renaming) && searchBar.getText().equalsIgnoreCase(""))
             {
-                fontRendererObj.drawString("Category Name?", this.width / 2 - 61, height - 18, 0xAAAAAA);
+                fontRenderer.drawString("Category Name?", this.width / 2 - 61, height - 18, 0xAAAAAA);
             }
         }
     }

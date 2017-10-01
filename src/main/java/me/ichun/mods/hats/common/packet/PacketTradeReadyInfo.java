@@ -69,7 +69,7 @@ public class PacketTradeReadyInfo extends AbstractPacket
         {
             GuiTradeWindow trade = (GuiTradeWindow)Minecraft.getMinecraft().currentScreen;
 
-            if(trader1Name.equalsIgnoreCase(Minecraft.getMinecraft().thePlayer.getName()))
+            if(trader1Name.equalsIgnoreCase(Minecraft.getMinecraft().player.getName()))
             {
                 if(trade.selfReady && !trader1Ready)
                 {

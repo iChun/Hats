@@ -51,7 +51,7 @@ public class PacketRequestMobHats extends AbstractPacket
 
         for(Integer id : entIds)
         {
-            Entity ent = player.worldObj.getEntityByID(id);
+            Entity ent = player.world.getEntityByID(id);
             if(ent instanceof EntityLivingBase)
             {
                 String hatName = Hats.eventHandlerServer.mobHats.get(ent);

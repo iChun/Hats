@@ -113,7 +113,7 @@ public class EntityHat extends Entity
 			}
 		}
 		
-		lastUpdate = worldObj.getWorldTime();
+		lastUpdate = world.getWorldTime();
 
 		validateHatInfo();
 //		if(!(parent instanceof EntityPlayer))
@@ -128,13 +128,13 @@ public class EntityHat extends Entity
 	}
 	
 	@Override
-    public int getBrightnessForRender(float par1)
+    public int getBrightnessForRender()
     {
 		if(Hats.config.renderHats == 13131) //TODO double check this
 		{
 			return 15728880;
 		}
-        return super.getBrightnessForRender(par1);
+        return super.getBrightnessForRender();
     }
 	
 	public void validateHatInfo()

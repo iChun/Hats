@@ -28,6 +28,6 @@ public class ProxyClient extends ProxyCommon
     @Override
     public void openGui(EntityPlayer player, TileEntityHatStand stand)
     {
-        FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiHatSelection(stand));
+        FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().player, new GuiHatSelection(stand));
     }
 }

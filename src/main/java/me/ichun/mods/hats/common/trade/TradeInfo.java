@@ -52,7 +52,7 @@ public class TradeInfo
     {
         boolean trader1Alive = trader1.isEntityAlive();
         boolean trader2Alive = trader2.isEntityAlive();
-        boolean distanceCheck = trader1.getDistanceToEntity(trader2) < 16D;
+        boolean distanceCheck = trader1.getDistance(trader2) < 16D;
         boolean clearSpaceCheck = trader1.canEntityBeSeen(trader2);
         boolean sameDimension = trader1.dimension == trader2.dimension;
         if(!(trader1Alive && trader2Alive && distanceCheck && clearSpaceCheck && sameDimension))
@@ -234,19 +234,19 @@ public class TradeInfo
 
                 if(oldStack.isItemEqual(newStack) && ItemStack.areItemStackTagsEqual(oldStack, newStack))
                 {
-                    int difference = oldStack.stackSize - newStack.stackSize; //negative means you added more stuff.
+                    int difference = oldStack.getCount() - newStack.getCount(); //negative means you added more stuff.
                     oldItems.remove(i);
                     newItems.remove(j);
                     if(difference < 0)
                     {
                         ItemStack is = newStack.copy();
-                        is.stackSize = Math.abs(difference);
+                        is.setCount(Math.abs(difference));
                         newItems.add(j, is);
                     }
                     else
                     {
                         ItemStack is = oldStack.copy();
-                        is.stackSize = Math.abs(difference);
+                        is.setCount(Math.abs(difference));
                         oldItems.add(i, is);
                     }
                 }
@@ -260,8 +260,8 @@ public class TradeInfo
         }
         for(ItemStack is : oldItems)
         {
-            sendTradeMessage(I18n.translateToLocal("hats.trade.you") + " " + I18n.translateToLocal("hats.trade.removed") + " " + TextFormatting.WHITE.toString() + is.stackSize + " " + is.getDisplayName(), player1);
-            sendTradeMessage(player1.getName() + " " + I18n.translateToLocal("hats.trade.removed") + " " + TextFormatting.WHITE.toString() + is.stackSize + " " + is.getDisplayName(), player2);
+            sendTradeMessage(I18n.translateToLocal("hats.trade.you") + " " + I18n.translateToLocal("hats.trade.removed") + " " + TextFormatting.WHITE.toString() + is.getCount() + " " + is.getDisplayName(), player1);
+            sendTradeMessage(player1.getName() + " " + I18n.translateToLocal("hats.trade.removed") + " " + TextFormatting.WHITE.toString() + is.getCount() + " " + is.getDisplayName(), player2);
         }
 
         for(Map.Entry<String, Integer> e : newHats.entrySet())
@@ -271,8 +271,8 @@ public class TradeInfo
         }
         for(ItemStack is : newItems)
         {
-            sendTradeMessage(I18n.translateToLocal("hats.trade.you") + " " + I18n.translateToLocal("hats.trade.added") + " " + TextFormatting.WHITE.toString() + is.stackSize + " " + is.getDisplayName(), player1);
-            sendTradeMessage(player1.getName() + " " + I18n.translateToLocal("hats.trade.added") + " " + TextFormatting.WHITE.toString() + is.stackSize + " " + is.getDisplayName(), player2);
+            sendTradeMessage(I18n.translateToLocal("hats.trade.you") + " " + I18n.translateToLocal("hats.trade.added") + " " + TextFormatting.WHITE.toString() + is.getCount() + " " + is.getDisplayName(), player1);
+            sendTradeMessage(player1.getName() + " " + I18n.translateToLocal("hats.trade.added") + " " + TextFormatting.WHITE.toString() + is.getCount() + " " + is.getDisplayName(), player2);
         }
         resetReady();
     }

@@ -19,19 +19,19 @@ import java.util.List;
 public class CommandHats extends CommandBase {
 
     @Override
-    public String getCommandName()
+    public String getName()
     {
         return "hats";
     }
 
     @Override
-    public String getCommandUsage(ICommandSender par1ICommandSender)
+    public String getUsage(ICommandSender par1ICommandSender)
     {
-        return "/" + this.getCommandName() + "           " + I18n.translateToLocal("hats.command.help");
+        return "/" + this.getName() + "           " + I18n.translateToLocal("hats.command.help");
     }
 
     @Override
-    public List getCommandAliases()
+    public List getAliases()
     {
         return Arrays.asList("hat");
     }
@@ -47,30 +47,30 @@ public class CommandHats extends CommandBase {
             {
                 if("send".startsWith(command.toLowerCase()))
                 {
-                    icommandsender.addChatMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.send")));
+                    icommandsender.sendMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.send")));
                 }
                 else if("set".startsWith(command.toLowerCase()))
                 {
-                    icommandsender.addChatMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.set")));
+                    icommandsender.sendMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.set")));
                 }
                 else if("unlock".startsWith(command.toLowerCase()))
                 {
-                    icommandsender.addChatMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.unlock")));
+                    icommandsender.sendMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.unlock")));
                 }
             }
             else if(astring.length == 2)
             {
                 if("send".startsWith(command.toLowerCase()))
                 {
-                    icommandsender.addChatMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.send")));
+                    icommandsender.sendMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.send")));
                 }
                 else if("set".startsWith(command.toLowerCase()))
                 {
-                    icommandsender.addChatMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.set")));
+                    icommandsender.sendMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.set")));
                 }
                 else if("unlock".startsWith(command.toLowerCase()))
                 {
-                    icommandsender.addChatMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.unlock")));
+                    icommandsender.sendMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.help.unlock")));
                 }
             }
             else if(astring.length >= 3)
@@ -87,12 +87,12 @@ public class CommandHats extends CommandBase {
                 EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(playerName);
                 if(player == null)
                 {
-                    icommandsender.addChatMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocalFormatted("hats.command.notOnline", playerName)));
+                    icommandsender.sendMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocalFormatted("hats.command.notOnline", playerName)));
                     return;
                 }
                 if(!HatHandler.hasHat(hatName))
                 {
-                    icommandsender.addChatMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocalFormatted("hats.command.hatDoesNotExist", hatName)));
+                    icommandsender.sendMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocalFormatted("hats.command.hatDoesNotExist", hatName)));
                     return;
                 }
 
@@ -100,15 +100,15 @@ public class CommandHats extends CommandBase {
                 {
                     if(Hats.config.allowSendingOfHats == 0)
                     {
-                        icommandsender.addChatMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.serverDisabledHatSending")));
+                        icommandsender.sendMessage(new TextComponentTranslation("\u00A7c" + I18n.translateToLocal("hats.command.serverDisabledHatSending")));
                         return;
                     }
-                    icommandsender.addChatMessage(new TextComponentTranslation("\u00A77" + I18n.translateToLocalFormatted("hats.command.sendToPlayer", hatName, player.getName())));
+                    icommandsender.sendMessage(new TextComponentTranslation("\u00A77" + I18n.translateToLocalFormatted("hats.command.sendToPlayer", hatName, player.getName())));
                     HatHandler.sendHat(hatName, player);
                 }
                 else if("set".startsWith(command.toLowerCase()))
                 {
-                    icommandsender.addChatMessage(new TextComponentTranslation("\u00A77" + I18n.translateToLocalFormatted("hats.command.setPlayerHat", hatName, player.getName())));
+                    icommandsender.sendMessage(new TextComponentTranslation("\u00A77" + I18n.translateToLocalFormatted("hats.command.setPlayerHat", hatName, player.getName())));
                     Hats.proxy.playerWornHats.put(player.getName(), new HatInfo(hatName.toLowerCase(), 255, 255, 255, 255));
                     Hats.proxy.sendPlayerListOfWornHats(player, false, false);
                 }
@@ -118,18 +118,18 @@ public class CommandHats extends CommandBase {
                     {
                         if(player.capabilities.isCreativeMode)
                         {
-                            icommandsender.addChatMessage(new TextComponentTranslation("\u00A77" + I18n.translateToLocalFormatted("hats.command.playerIsInCreative", player.getName())));
+                            icommandsender.sendMessage(new TextComponentTranslation("\u00A77" + I18n.translateToLocalFormatted("hats.command.playerIsInCreative", player.getName())));
                         }
                         else
                         {
-                            icommandsender.addChatMessage(new TextComponentTranslation("\u00A77" + I18n.translateToLocalFormatted("hats.command.unlockHatForPlayer", hatName, player.getName())));
+                            icommandsender.sendMessage(new TextComponentTranslation("\u00A77" + I18n.translateToLocalFormatted("hats.command.unlockHatForPlayer", hatName, player.getName())));
                             Hats.console(I18n.translateToLocalFormatted("hats.command.adminNotify.unlockHatForPlayer", icommandsender.getName(), hatName, player.getName()));
                             HatHandler.unlockHat(player, hatName);
                         }
                     }
                     else
                     {
-                        icommandsender.addChatMessage(new TextComponentTranslation("\u00A77" + I18n.translateToLocal("hats.command.serverIsNotOnHatHuntingMode")));
+                        icommandsender.sendMessage(new TextComponentTranslation("\u00A77" + I18n.translateToLocal("hats.command.serverIsNotOnHatHuntingMode")));
                     }
                 }
             }
@@ -142,9 +142,9 @@ public class CommandHats extends CommandBase {
     }
 
     @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender par1ICommandSender, String[] args, @Nullable BlockPos pos)
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos)
     {
-        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "set", "send", "unlock") : args.length == 2 ? getListOfStringsMatchingLastWord(args, server.getAllUsernames()) : args.length == 3 ? getListOfStringsMatchingLastWord(args, HatHandler.getAllHatsAsArray()) : null;
+        return args.length == 1 ? getListOfStringsMatchingLastWord(args, "set", "send", "unlock") : args.length == 2 ? getListOfStringsMatchingLastWord(args, server.getOnlinePlayerNames()) : args.length == 3 ? getListOfStringsMatchingLastWord(args, HatHandler.getAllHatsAsArray()) : null;
     }
 
     public String getUsageString()

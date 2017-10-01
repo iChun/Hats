@@ -103,7 +103,7 @@ public class RenderHat extends Render<EntityHat>
                     float morphProgress = MorphApi.getApiImpl().morphProgress(player.getName(), Side.CLIENT);
                     if(MorphApi.getApiImpl().hasMorph(player.getName(), Side.CLIENT) && morphProgress < 1.0F)
                     {
-                        float prog = MathHelper.clamp_float((((morphProgress * MorphApi.getApiImpl().timeToCompleteMorph() + renderTick) / MorphApi.getApiImpl().timeToCompleteMorph()) - 1F/8F) / (6F/8F), 0.0F, 1.0F);
+                        float prog = MathHelper.clamp((((morphProgress * MorphApi.getApiImpl().timeToCompleteMorph() + renderTick) / MorphApi.getApiImpl().timeToCompleteMorph()) - 1F/8F) / (6F/8F), 0.0F, 1.0F);
                         EntityLivingBase prevMorph = MorphApi.getApiImpl().getPrevMorphEntity(player.getEntityWorld(), player.getName(), Side.CLIENT);
 
                         if(prevMorph != null)
@@ -172,7 +172,7 @@ public class RenderHat extends Render<EntityHat>
                 if(Hats.config.renderHats == 1)
                 {
                     GlStateManager.translate(0.0F, (float)-(hat.lastTickPosY - hat.parent.lastTickPosY) + (float)((hat.parent.getEntityBoundingBox().minY/* + hat.parent.yOffset*/) - (hat.parent.posY)), 0.0F);
-                    int i = hat.renderingParent.getBrightnessForRender(renderTick);
+                    int i = hat.renderingParent.getBrightnessForRender();
                     int j = i % 65536;
                     int k = i / 65536;
                     OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j / 1.0F, (float)k / 1.0F);
@@ -214,7 +214,7 @@ public class RenderHat extends Render<EntityHat>
                         float realProg = MorphApi.getApiImpl().morphProgress(player.getName(), Side.CLIENT);
                         if(MorphApi.getApiImpl().hasMorph(player.getName(), Side.CLIENT) && realProg < 1.0F)
                         {
-                            float prog = MathHelper.clamp_float((((realProg * MorphApi.getApiImpl().timeToCompleteMorph() + renderTick) / MorphApi.getApiImpl().timeToCompleteMorph()) - 1F/8F) / (6F/8F), 0.0F, 1.0F);
+                            float prog = MathHelper.clamp((((realProg * MorphApi.getApiImpl().timeToCompleteMorph() + renderTick) / MorphApi.getApiImpl().timeToCompleteMorph()) - 1F/8F) / (6F/8F), 0.0F, 1.0F);
                             EntityLivingBase prevMorph = MorphApi.getApiImpl().getPrevMorphEntity(player.getEntityWorld(), player.getName(), Side.CLIENT);
 
                             if(prevMorph != null)
@@ -263,11 +263,11 @@ public class RenderHat extends Render<EntityHat>
                                     {
                                         if(realProg <= 1F/8F)
                                         {
-                                            skinAlpha = MathHelper.clamp_float(((realProg * 80F + renderTick) / 80F) / (1F/8F), 0.0F, 1.0F);
+                                            skinAlpha = MathHelper.clamp(((realProg * 80F + renderTick) / 80F) / (1F/8F), 0.0F, 1.0F);
                                         }
                                         else if(realProg > 7F/8F)
                                         {
-                                            skinAlpha = MathHelper.clamp_float(1.0F - ((((realProg * 80F + renderTick) / 80F) - 7F/8F) / (1F/8F)), 0.0F, 1.0F);
+                                            skinAlpha = MathHelper.clamp(1.0F - ((((realProg * 80F + renderTick) / 80F) - 7F/8F) / (1F/8F)), 0.0F, 1.0F);
                                         }
                                         else
                                         {

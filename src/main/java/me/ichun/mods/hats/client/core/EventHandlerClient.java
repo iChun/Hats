@@ -73,9 +73,8 @@ public class EventHandlerClient
     {
         Minecraft mc = Minecraft.getMinecraft();
 
-        if(mc.theWorld != null)
+        if(mc.world != null)
         {
-            WorldClient world = mc.theWorld;
             if(event.phase == TickEvent.Phase.START)
             {
                 currentHatRenders = 0;
@@ -119,10 +118,10 @@ public class EventHandlerClient
     @SubscribeEvent
     public void worldTick(TickEvent.ClientTickEvent event)
     {
-        if(event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().theWorld != null)
+        if(event.phase == TickEvent.Phase.END && Minecraft.getMinecraft().world != null)
         {
             Minecraft mc = Minecraft.getMinecraft();
-            WorldClient world = mc.theWorld;
+            WorldClient world = mc.world;
 
             //            for(int i = 0 ; i < world.loadedEntityList.size(); i++)
             //            {
@@ -147,14 +146,14 @@ public class EventHandlerClient
             if(SessionState.showJoinMessage == 1)
             {
                 SessionState.showJoinMessage = 0;
-                mc.thePlayer.addChatMessage(new TextComponentTranslation(Hats.config.playerHatsMode == 4 ? I18n.translateToLocal("hats.firstJoin.hatHunting") : Hats.config.playerHatsMode == 6 ? I18n.translateToLocal("hats.firstJoin.timeActive") : I18n.translateToLocal("hats.firstJoin.kingOfTheHat.hasKing")));
+                mc.player.sendMessage(new TextComponentTranslation(Hats.config.playerHatsMode == 4 ? I18n.translateToLocal("hats.firstJoin.hatHunting") : Hats.config.playerHatsMode == 6 ? I18n.translateToLocal("hats.firstJoin.timeActive") : I18n.translateToLocal("hats.firstJoin.kingOfTheHat.hasKing")));
             }
             if(Hats.config.enableInServersWithoutMod == 1 && SessionState.serverHasMod == 0 || SessionState.serverHasMod == 1)
             {
                 for(int i = 0; i < world.playerEntities.size(); i++)
                 {
                     EntityPlayer player = world.playerEntities.get(i);
-                    if(SessionState.serverHasMod == 0 && Hats.config.shouldOtherPlayersHaveHats == 0 && player != Minecraft.getMinecraft().thePlayer || !player.isEntityAlive())
+                    if(SessionState.serverHasMod == 0 && Hats.config.shouldOtherPlayersHaveHats == 0 && player != Minecraft.getMinecraft().player || !player.isEntityAlive())
                     {
                         continue;
                     }
@@ -162,7 +161,7 @@ public class EventHandlerClient
                     EntityHat hat = hats.get(player.getName());
                     if(hat == null || hat.isDead)
                     {
-                        if(player.getName().equalsIgnoreCase(mc.thePlayer.getName()))
+                        if(player.getName().equalsIgnoreCase(mc.player.getName()))
                         {
                             //Assume respawn
                             for(Map.Entry<String, EntityHat> e : hats.entrySet())
@@ -176,10 +175,10 @@ public class EventHandlerClient
                             requestedMobHats.clear();
                         }
 
-                        HatInfo hatInfo = (SessionState.serverHasMod == 1 ? getPlayerHat(player.getName()) : ((Hats.config.randomHat == 1 || Hats.config.randomHat == 2 && player != mc.thePlayer) ? HatHandler.getRandomHatFromList(HatHandler.getAllHats(), false) : Hats.favouriteHatInfo));
+                        HatInfo hatInfo = (SessionState.serverHasMod == 1 ? getPlayerHat(player.getName()) : ((Hats.config.randomHat == 1 || Hats.config.randomHat == 2 && player != mc.player) ? HatHandler.getRandomHatFromList(HatHandler.getAllHats(), false) : Hats.favouriteHatInfo));
                         hat = new EntityHat(world, player, hatInfo);
                         hats.put(player.getName(), hat);
-                        world.spawnEntityInWorld(hat);
+                        world.spawnEntity(hat);
                     }
                 }
             }
@@ -226,7 +225,7 @@ public class EventHandlerClient
                     }
                     if(clock % 107L == 0)
                     {
-                        if((lastHitKey > 100 || lastHitKey == 0 && posX == mc.thePlayer.posX && posY == mc.thePlayer.posY && posZ == mc.thePlayer.posZ) && (rotationYaw == mc.thePlayer.rotationYaw && rotationPitch == mc.thePlayer.rotationPitch || posX == mc.thePlayer.posX && posY == mc.thePlayer.posY && posZ == mc.thePlayer.posZ || mc.thePlayer.ridingEntity != null) || iChunUtil.eventHandlerClient.hasScreen)
+                        if((lastHitKey > 100 || lastHitKey == 0 && posX == mc.player.posX && posY == mc.player.posY && posZ == mc.player.posZ) && (rotationYaw == mc.player.rotationYaw && rotationPitch == mc.player.rotationPitch || posX == mc.player.posX && posY == mc.player.posY && posZ == mc.player.posZ || mc.player.ridingEntity != null) || iChunUtil.eventHandlerClient.hasScreen)
                         {
                             if(isActive)
                             {
@@ -244,11 +243,11 @@ public class EventHandlerClient
                                 Hats.channel.sendToServer(new PacketPing(1, true));
                             }
                         }
-                        rotationYaw = mc.thePlayer.rotationYaw;
-                        rotationPitch = mc.thePlayer.rotationPitch;
-                        posX = mc.thePlayer.posX;
-                        posY = mc.thePlayer.posY;
-                        posZ = mc.thePlayer.posZ;
+                        rotationYaw = mc.player.rotationYaw;
+                        rotationPitch = mc.player.rotationPitch;
+                        posX = mc.player.posX;
+                        posY = mc.player.posY;
+                        posZ = mc.player.posZ;
                     }
                 }
             }
@@ -273,7 +272,7 @@ public class EventHandlerClient
                             HatInfo hatInfo = living.getRNG().nextFloat() < ((float)Hats.config.randomMobHat / 100F) ? (Hats.config.randomHat >= 1 ? HatHandler.getRandomHatFromList(HatHandler.getAllHats(), false) : Hats.favouriteHatInfo) : new HatInfo();
                             hat = new EntityHat(world, living, hatInfo);
                             mobHats.put(living.getEntityId(), hat);
-                            world.spawnEntityInWorld(hat);
+                            world.spawnEntity(hat);
                         }
                         else if(!requestMobHats.contains(living.getEntityId()) && !requestedMobHats.contains(living.getEntityId()))
                         {
@@ -289,7 +288,7 @@ public class EventHandlerClient
             while(ite.hasNext())
             {
                 Map.Entry<String, EntityHat> e = ite.next();
-                if(e.getValue().worldObj.provider.getDimension() != world.provider.getDimension() || (world.getWorldTime() - e.getValue().lastUpdate) > 10L)
+                if(e.getValue().world.provider.getDimension() != world.provider.getDimension() || (world.getWorldTime() - e.getValue().lastUpdate) > 10L)
                 {
                     e.getValue().setDead();
                     ite.remove();
@@ -301,7 +300,7 @@ public class EventHandlerClient
             while(ite1.hasNext())
             {
                 Map.Entry<Integer, EntityHat> e = ite1.next();
-                if(e.getValue().worldObj.provider.getDimension() != world.provider.getDimension() || (world.getWorldTime() - e.getValue().lastUpdate) > 10L)
+                if(e.getValue().world.provider.getDimension() != world.provider.getDimension() || (world.getWorldTime() - e.getValue().lastUpdate) > 10L)
                 {
                     e.getValue().setDead();
                     ite1.remove();
@@ -364,11 +363,11 @@ public class EventHandlerClient
                 }
                 else if(Hats.config.playerHatsMode == 2)
                 {
-                    mc.thePlayer.addChatMessage(new TextComponentTranslation("hats.lockedMode"));
+                    mc.player.sendMessage(new TextComponentTranslation("hats.lockedMode"));
                 }
-                else if(Hats.config.playerHatsMode == 5 && !SessionState.currentKing.equalsIgnoreCase(mc.thePlayer.getName()))
+                else if(Hats.config.playerHatsMode == 5 && !SessionState.currentKing.equalsIgnoreCase(mc.player.getName()))
                 {
-                    mc.thePlayer.addChatMessage(new TextComponentTranslation("hats.kingOfTheHat.notKing", SessionState.currentKing));
+                    mc.player.sendMessage(new TextComponentTranslation("hats.kingOfTheHat.notKing", SessionState.currentKing));
                 }
                 else
                 {

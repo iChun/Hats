@@ -72,7 +72,7 @@ public class PacketStandHatInfo extends AbstractPacket
     @Override
     public AbstractPacket execute(Side side, EntityPlayer player)
     {
-        TileEntity te = player.worldObj.getTileEntity(pos);
+        TileEntity te = player.world.getTileEntity(pos);
 
         if(te instanceof TileEntityHatStand)
         {

@@ -75,16 +75,16 @@ public class HatRendererHelper
                     diffB *= (info.recolour - renderTick) / 20F;
                     diffA *= (info.recolour - renderTick) / 20F;
 
-                    GlStateManager.color((info.colourR - diffR) / 255.0F, (info.colourG - diffG) / 255.0F, (info.colourB - diffB) / 255.0F, MathHelper.clamp_float(alpha * ((info.alpha - diffA) / 255.0F), 0.0F, 1.0F));
+                    GlStateManager.color((info.colourR - diffR) / 255.0F, (info.colourG - diffG) / 255.0F, (info.colourB - diffB) / 255.0F, MathHelper.clamp(alpha * ((info.alpha - diffA) / 255.0F), 0.0F, 1.0F));
                 }
                 else
                 {
-                    GlStateManager.color((float)info.colourR / 255.0F, (float)info.colourG / 255.0F, (float)info.colourB / 255.0F, MathHelper.clamp_float(alpha * ((float)info.alpha / 255.0F), 0.0F, 1.0F));
+                    GlStateManager.color((float)info.colourR / 255.0F, (float)info.colourG / 255.0F, (float)info.colourB / 255.0F, MathHelper.clamp(alpha * ((float)info.alpha / 255.0F), 0.0F, 1.0F));
                 }
             }
             else
             {
-                GlStateManager.color(1.0F, 1.0F, 1.0F, MathHelper.clamp_float(alpha, 0.0F, 1.0F));
+                GlStateManager.color(1.0F, 1.0F, 1.0F, MathHelper.clamp(alpha, 0.0F, 1.0F));
             }
 
             GlStateManager.scale(-1.0F, -1.0F, 1.0F);

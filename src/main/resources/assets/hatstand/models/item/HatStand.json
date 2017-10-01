@@ -1,5 +1,5 @@
 {
-    "parent": "hatstand:block/HatStandWithStand",
+    "parent": "hatstand:block/hatstandwithstand",
     "display": {
         "thirdperson": {
             "rotation": [ 10, -45, 170 ],

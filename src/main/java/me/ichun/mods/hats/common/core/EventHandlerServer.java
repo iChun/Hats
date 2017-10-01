@@ -267,30 +267,26 @@ public class EventHandlerServer
             itemsListCopy.add(is.copy());
         }
 
-        for(int i = origin.inventory.mainInventory.length - 1; i >= 0; i--)
+        for(int i = origin.inventory.mainInventory.size() - 1; i >= 0; i--)
         {
-            ItemStack is = origin.inventory.mainInventory[i];
-            if(is != null)
+            ItemStack is = origin.inventory.mainInventory.get(i);
+            if(!is.isEmpty())
             {
                 for(int j = itemsListCopy.size() - 1; j >= 0; j--)
                 {
                     ItemStack is1 = itemsListCopy.get(j);
                     if(is1.isItemEqual(is) && ItemStack.areItemStackTagsEqual(is, is1))
                     {
-                        while(is.stackSize > 0 && is1.stackSize > 0)
+                        while(is.getCount() > 0 && is1.getCount() > 0)
                         {
-                            is.stackSize--;
-                            is1.stackSize--;
+                            is.shrink(1);
+                            is1.shrink(1);
                         }
-                        if(is1.stackSize <= 0)
+                        if(is1.getCount() <= 0)
                         {
                             itemsListCopy.remove(j);
                         }
                     }
-                }
-                if(is.stackSize <= 0)
-                {
-                    origin.inventory.mainInventory[i] = null;
                 }
                 origin.inventory.markDirty();
             }
@@ -303,12 +299,12 @@ public class EventHandlerServer
                 ItemStack is1 = itemsList.get(i);
                 if(is1.isItemEqual(is) && ItemStack.areItemStackTagsEqual(is, is1))
                 {
-                    while(is.stackSize > 0 && is1.stackSize > 0)
+                    while(is.getCount() > 0 && is1.getCount() > 0)
                     {
-                        is.stackSize--;
-                        is1.stackSize--;
+                        is.shrink(1);
+                        is1.shrink(1);
                     }
-                    if(is1.stackSize <= 0)
+                    if(is1.getCount() <= 0)
                     {
                         itemsList.remove(i);
                     }
@@ -421,9 +417,9 @@ public class EventHandlerServer
         EntityLivingBase living = (EntityLivingBase)event.getEntity();
 
         boolean fromSpawner = false;
-        for(int k = 0; k < event.getEntity().worldObj.loadedTileEntityList.size(); k++)
+        for(int k = 0; k < event.getEntity().world.loadedTileEntityList.size(); k++)
         {
-            TileEntity te = event.getEntity().worldObj.loadedTileEntityList.get(k);
+            TileEntity te = event.getEntity().world.loadedTileEntityList.get(k);
             if(!HatHandler.isMobSpawner(te.getClass(), te.getClass()))
             {
                 continue;
@@ -432,12 +428,12 @@ public class EventHandlerServer
             MobSpawnerBaseLogic logic = HatHandler.getMobSpawnerLogic(te.getClass(), te);
             if(logic.isActivated())
             {
-                Entity entity = EntityList.createEntityByName(logic.getEntityNameToSpawn(), logic.getSpawnerWorld());
+                Entity entity = EntityList.createEntityByIDFromName(logic.getEntityId(), logic.getSpawnerWorld()); //This needs to be updated, mob spawners have weighted spawns.
                 if(entity != null)
                 {
                     if(living.getClass() == entity.getClass())
                     {
-                        List list = logic.getSpawnerWorld().getEntitiesWithinAABB(entity.getClass(), new AxisAlignedBB((double)logic.getSpawnerPosition().getX(), (double)logic.getSpawnerPosition().getY(), (double)logic.getSpawnerPosition().getZ(), (double)(logic.getSpawnerPosition().getX() + 1), (double)(logic.getSpawnerPosition().getY() + 1), (double)(logic.getSpawnerPosition().getZ() + 1)).expand((double)(4 * 2), 4.0D, (double)(4 * 2)));
+                        List list = logic.getSpawnerWorld().getEntitiesWithinAABB(entity.getClass(), new AxisAlignedBB((double)logic.getSpawnerPosition().getX(), (double)logic.getSpawnerPosition().getY(), (double)logic.getSpawnerPosition().getZ(), (double)(logic.getSpawnerPosition().getX() + 1), (double)(logic.getSpawnerPosition().getY() + 1), (double)(logic.getSpawnerPosition().getZ() + 1)).grow((double)(4 * 2), 4.0D, (double)(4 * 2)));
                         if(list.contains(living))
                         {
                             fromSpawner = true;
@@ -472,9 +468,9 @@ public class EventHandlerServer
             {
                 if(Hats.config.playerHatsMode == 4)
                 {
-                    if(!(event.getEntityLiving() instanceof EntityPlayer) && event.getSource().getEntity() instanceof EntityPlayer && !((EntityPlayer)event.getSource().getEntity()).capabilities.isCreativeMode)
+                    if(!(event.getEntityLiving() instanceof EntityPlayer) && event.getSource().getTrueSource() instanceof EntityPlayer && !((EntityPlayer)event.getSource().getTrueSource()).capabilities.isCreativeMode)
                     {
-                        Hats.eventHandlerServer.playerKilledEntity(event.getEntityLiving(), (EntityPlayer)event.getSource().getEntity());
+                        Hats.eventHandlerServer.playerKilledEntity(event.getEntityLiving(), (EntityPlayer)event.getSource().getTrueSource());
                     }
                 }
 
@@ -482,9 +478,9 @@ public class EventHandlerServer
                 {
                     EntityPlayer player = (EntityPlayer)event.getEntityLiving();
                     EntityPlayer executer = null;
-                    if(event.getSource().getEntity() instanceof EntityPlayer)
+                    if(event.getSource().getTrueSource() instanceof EntityPlayer)
                     {
-                        executer = (EntityPlayer)event.getSource().getEntity();
+                        executer = (EntityPlayer)event.getSource().getTrueSource();
                     }
                     if(Hats.config.playerHatsMode == 5)
                     {
@@ -495,19 +491,19 @@ public class EventHandlerServer
                             {
                                 Hats.eventHandlerServer.updateNewKing(executer.getName(), null, true);
                                 Hats.eventHandlerServer.updateNewKing(executer.getName(), executer, true);
-                                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentTranslation("hats.kingOfTheHat.update.playerSlayed", player.getName(), executer.getName()));
+                                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(new TextComponentTranslation("hats.kingOfTheHat.update.playerSlayed", player.getName(), executer.getName()));
                             }
                             else
                             {
-                                List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList();
+                                List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
                                 List<EntityPlayerMP> list = new ArrayList(players);
                                 list.remove(player);
                                 if(!list.isEmpty())
                                 {
-                                    EntityPlayer newKing = list.get(player.worldObj.rand.nextInt(list.size()));
+                                    EntityPlayer newKing = list.get(player.world.rand.nextInt(list.size()));
                                     Hats.eventHandlerServer.updateNewKing(newKing.getName(), null, true);
                                     Hats.eventHandlerServer.updateNewKing(newKing.getName(), newKing, true);
-                                    FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentTranslation("hats.kingOfTheHat.update.playerDied", player.getName(), newKing.getName()));
+                                    FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(new TextComponentTranslation("hats.kingOfTheHat.update.playerDied", player.getName(), newKing.getName()));
                                 }
                             }
                         }
@@ -526,7 +522,7 @@ public class EventHandlerServer
 
                             if(newKingEnt != null && !newHats.isEmpty())
                             {
-                                HatHandler.unlockHat(newKingEnt, newHats.get(newKingEnt.worldObj.rand.nextInt(newHats.size())));
+                                HatHandler.unlockHat(newKingEnt, newHats.get(newKingEnt.world.rand.nextInt(newHats.size())));
                             }
                         }
                     }
@@ -567,7 +563,7 @@ public class EventHandlerServer
         {
             //There is No king around now, so technically no players online
             Hats.eventHandlerServer.updateNewKing(event.player.getName(), null, false);
-            FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentTranslation("hats.kingOfTheHat.update.playerJoin", event.player.getName()));
+            FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(new TextComponentTranslation("hats.kingOfTheHat.update.playerJoin", event.player.getName()));
         }
 
         String playerHats = event.player.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG).getString("Hats_unlocked");
@@ -665,15 +661,15 @@ public class EventHandlerServer
         if(Hats.config.playerHatsMode == 5 && SessionState.currentKingServer.equalsIgnoreCase(event.player.getName()))
         {
             //King logged out
-            List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerList();
+            List<EntityPlayerMP> players = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers();
             List<EntityPlayerMP> list = new ArrayList(players);
             list.remove(event.player);
             if(!list.isEmpty())
             {
-                EntityPlayer newKing = list.get(event.player.worldObj.rand.nextInt(list.size()));
+                EntityPlayer newKing = list.get(event.player.world.rand.nextInt(list.size()));
                 Hats.eventHandlerServer.updateNewKing(newKing.getName(), null, true);
                 Hats.eventHandlerServer.updateNewKing(newKing.getName(), newKing, true);
-                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendChatMsg(new TextComponentTranslation("hats.kingOfTheHat.update.playerLeft", event.player.getName(), newKing.getName()));
+                FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().sendMessage(new TextComponentTranslation("hats.kingOfTheHat.update.playerLeft", event.player.getName(), newKing.getName()));
             }
         }
 

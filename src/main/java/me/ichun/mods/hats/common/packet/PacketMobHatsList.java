@@ -80,13 +80,13 @@ public class PacketMobHatsList extends AbstractPacket
     {
         for(int i = 0; i < Math.min(mobIds.size(), hatNames.size()); i++)
         {
-            Entity ent = Minecraft.getMinecraft().theWorld.getEntityByID(mobIds.get(i));
+            Entity ent = Minecraft.getMinecraft().world.getEntityByID(mobIds.get(i));
             if(ent != null && ent instanceof EntityLivingBase)
             {
                 HatInfo hatInfo = new HatInfo(hatNames.get(i));
-                EntityHat hat = new EntityHat(ent.worldObj, (EntityLivingBase)ent, hatInfo);
+                EntityHat hat = new EntityHat(ent.world, (EntityLivingBase)ent, hatInfo);
                 Hats.eventHandlerClient.mobHats.put(ent.getEntityId(), hat);
-                ent.worldObj.spawnEntityInWorld(hat);
+                ent.world.spawnEntity(hat);
             }
         }
     }

@@ -136,8 +136,8 @@ public class GuiHatUnlocked extends Gui
                 GlStateManager.disableLighting();
                 this.drawTexturedModalRect(i, j, 96, 202, 160, 32);
 
-                this.theGame.fontRendererObj.drawString(this.headerText, i + 30, j + 7, -256);
-                this.theGame.fontRendererObj.drawString(this.hatNameText, i + 30, j + 18, -1);
+                this.theGame.fontRenderer.drawString(this.headerText, i + 30, j + 7, -256);
+                this.theGame.fontRenderer.drawString(this.hatNameText, i + 30, j + 18, -1);
 
                 RenderHelper.enableGUIStandardItemLighting();
                 GlStateManager.disableLighting();

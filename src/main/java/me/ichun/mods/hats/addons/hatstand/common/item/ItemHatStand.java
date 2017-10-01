@@ -48,7 +48,7 @@ public class ItemHatStand extends ItemBlock
             {
                 TileEntityHatStand stand = (TileEntityHatStand)te;
 
-                int orientation = (MathHelper.floor_double((double)(((player.rotationYaw + 180F) * 4F) / 360F) - 0.5D) & 3);
+                int orientation = (MathHelper.floor((double)(((player.rotationYaw + 180F) * 4F) / 360F) - 0.5D) & 3);
                 switch(side.getIndex())
                 {
                     default:break;

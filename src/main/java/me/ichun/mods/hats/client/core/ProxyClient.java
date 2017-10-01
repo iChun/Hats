@@ -54,7 +54,7 @@ public class ProxyClient extends ProxyCommon
     @Override
     public void openHatsGui()
     {
-        FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiHatSelection(Minecraft.getMinecraft().thePlayer));
+        FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().player, new GuiHatSelection(Minecraft.getMinecraft().player));
     }
 
     @Override

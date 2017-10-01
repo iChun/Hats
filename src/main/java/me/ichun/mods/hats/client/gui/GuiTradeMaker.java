@@ -33,18 +33,18 @@ public class GuiTradeMaker extends GuiScreen
     @Override
     public void updateScreen()
     {
-        if(mc.theWorld.getWorldTime() % 10L == 3 || forced)
+        if(mc.world.getWorldTime() % 10L == 3 || forced)
         {
             forced = false;
             players.clear();
-            for(int i = 0; i < mc.theWorld.playerEntities.size(); i++)
+            for(int i = 0; i < mc.world.playerEntities.size(); i++)
             {
-                EntityPlayer player = mc.theWorld.playerEntities.get(i);
-                if(player == mc.thePlayer)
+                EntityPlayer player = mc.world.playerEntities.get(i);
+                if(player == mc.player)
                 {
                     continue;
                 }
-                if(player.isEntityAlive() && !players.contains(player.getName()) && player.getDistanceToEntity(mc.thePlayer) < 16D && player.canEntityBeSeen(mc.thePlayer))
+                if(player.isEntityAlive() && !players.contains(player.getName()) && player.getDistance(mc.player) < 16D && player.canEntityBeSeen(mc.player))
                 {
                     players.add(player.getName());
                 }
@@ -93,7 +93,7 @@ public class GuiTradeMaker extends GuiScreen
         if(mc == null)
         {
             mc = Minecraft.getMinecraft();
-            fontRendererObj = mc.fontRendererObj;
+            fontRenderer = mc.fontRenderer;
         }
         drawDefaultBackground();
 
@@ -103,7 +103,7 @@ public class GuiTradeMaker extends GuiScreen
         int l = this.guiTop;
         this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
 
-        drawString(fontRendererObj, I18n.translateToLocal("hats.trade.selectTrader"), this.guiLeft + 1, this.guiTop - 9, 0xffffff);
+        drawString(fontRenderer, I18n.translateToLocal("hats.trade.selectTrader"), this.guiLeft + 1, this.guiTop - 9, 0xffffff);
 
         super.drawScreen(par1, par2, par3);
     }

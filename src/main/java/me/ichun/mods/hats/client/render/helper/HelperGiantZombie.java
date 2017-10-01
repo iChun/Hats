@@ -24,7 +24,7 @@ public class HelperGiantZombie extends RenderOnEntityHelper
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)
 	{
-		return ent.isSneaking() ? ent == Minecraft.getMinecraft().thePlayer ? 23F/16F : 21F/16F : 24F/16F ;
+		return ent.isSneaking() ? ent == Minecraft.getMinecraft().player ? 23F/16F : 21F/16F : 24F/16F ;
 	}
 	
 	@Override

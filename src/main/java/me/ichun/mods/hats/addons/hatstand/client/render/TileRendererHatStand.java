@@ -11,14 +11,13 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.DefaultPlayerSkin;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import java.util.Map;
 import java.util.UUID;
 
-public class TileRendererHatStand extends TileEntitySpecialRenderer
+public class TileRendererHatStand extends TileEntitySpecialRenderer<TileEntityHatStand>
 {
     public static final ResourceLocation texSkele		 = new ResourceLocation("textures/entity/skeleton/skeleton.png");
     public static final ResourceLocation texSkeleWither	 = new ResourceLocation("textures/entity/skeleton/wither_skeleton.png");
@@ -48,8 +47,11 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
         renderer = this;
     }
 
-    public void renderHatStand(TileEntityHatStand stand, double d, double d1, double d2, float f, int destroyState, GameProfile profile)
+    @Override
+    public void render(TileEntityHatStand stand, double d, double d1, double d2, float f, int destroyState, float alpha)
     {
+        GameProfile profile = stand.gameProfile;
+
         GlStateManager.alphaFunc(GL11.GL_GREATER, 16F / 255F);
         GlStateManager.pushMatrix();
 
@@ -191,12 +193,4 @@ public class TileRendererHatStand extends TileEntitySpecialRenderer
         GlStateManager.popMatrix();
         GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
     }
-
-    @Override
-    public void renderTileEntityAt(TileEntity tileentity, double d0, double d1,
-                                   double d2, float f, int destroyState) {
-        this.renderHatStand((TileEntityHatStand)tileentity, d0, d1, d2, f, destroyState, ((TileEntityHatStand)tileentity).gameProfile);
-
-    }
-
 }

@@ -61,7 +61,7 @@ public class PacketString extends AbstractPacket
 
                     EntityPlayerMP plyr = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(plyr1);
 
-                    if(plyr != null && plyr.isEntityAlive() && plyr.getDistanceToEntity(player) < 16D && plyr.canEntityBeSeen(player) && plyr.dimension == player.dimension)
+                    if(plyr != null && plyr.isEntityAlive() && plyr.getDistance(player) < 16D && plyr.canEntityBeSeen(player) && plyr.dimension == player.dimension)
                     {
                         TradeRequest tr1 = Hats.eventHandlerServer.playerTradeRequests.get(player.getName());
 
@@ -81,7 +81,7 @@ public class PacketString extends AbstractPacket
                     }
                     else
                     {
-                        player.addChatMessage(new TextComponentTranslation("hats.trade.cannotFindTrader", plyr1));
+                        player.sendMessage(new TextComponentTranslation("hats.trade.cannotFindTrader", plyr1));
                     }
                     break;
                 }
@@ -92,20 +92,20 @@ public class PacketString extends AbstractPacket
                     TradeRequest tr = Hats.eventHandlerServer.playerTradeRequests.get(player.getName());
                     if(tr == null)
                     {
-                        player.addChatMessage(new TextComponentTranslation("hats.trade.cannotAcceptTrade"));
+                        player.sendMessage(new TextComponentTranslation("hats.trade.cannotAcceptTrade"));
                         break;
                     }
 
                     EntityPlayerMP plyr = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(plyr1);
 
-                    if(plyr != null && plyr.isEntityAlive() && plyr.getDistanceToEntity(player) < 16D && plyr.canEntityBeSeen(player) && plyr.dimension == player.dimension)
+                    if(plyr != null && plyr.isEntityAlive() && plyr.getDistance(player) < 16D && plyr.canEntityBeSeen(player) && plyr.dimension == player.dimension)
                     {
                         Hats.eventHandlerServer.playerTradeRequests.remove(player.getName());
                         Hats.eventHandlerServer.initializeTrade((EntityPlayerMP)player, plyr);
                     }
                     else
                     {
-                        player.addChatMessage(new TextComponentTranslation("hats.trade.cannotAcceptTrade"));
+                        player.sendMessage(new TextComponentTranslation("hats.trade.cannotAcceptTrade"));
                     }
                     break;
                 }
@@ -218,7 +218,7 @@ public class PacketString extends AbstractPacket
             }
             case 3: //Begin Trade session
             {
-                FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().thePlayer, new GuiTradeWindow(pingString));
+                FMLClientHandler.instance().displayGuiScreen(Minecraft.getMinecraft().player, new GuiTradeWindow(pingString));
                 Hats.eventHandlerClient.tradeReq = null;
                 Hats.eventHandlerClient.tradeReqTimeout = 0;
                 break;

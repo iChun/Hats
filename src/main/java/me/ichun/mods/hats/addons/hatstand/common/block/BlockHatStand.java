@@ -109,7 +109,7 @@ public class BlockHatStand extends Block
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         TileEntity te = world.getTileEntity(pos);
         if(world.isRemote && te instanceof TileEntityHatStand)
@@ -128,7 +128,7 @@ public class BlockHatStand extends Block
     }
 
     @Override
-    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity)
+    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB mask, List<AxisAlignedBB> list, Entity collidingEntity, boolean isActualState)
     {
         TileEntity te = world.getTileEntity(pos);
         if(te instanceof TileEntityHatStand)
@@ -136,11 +136,11 @@ public class BlockHatStand extends Block
             AxisAlignedBB base = getBlockBoundsForBase(world, (TileEntityHatStand)te);
             if(base != null)
             {
-                if(base.offset(pos).intersectsWith(mask))
+                if(base.offset(pos).intersects(mask))
                 {
                     list.add(base.offset(pos));
                 }
-                if(STAND.offset(pos).intersectsWith(mask))
+                if(STAND.offset(pos).intersects(mask))
                 {
                     list.add(STAND.offset(pos));
                 }
@@ -149,7 +149,7 @@ public class BlockHatStand extends Block
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block)
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos)
     {
         TileEntity te = world.getTileEntity(pos);
         if(te instanceof TileEntityHatStand)

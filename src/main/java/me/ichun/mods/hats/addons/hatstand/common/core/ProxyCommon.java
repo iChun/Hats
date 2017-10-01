@@ -17,15 +17,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ProxyCommon
 {
-
     public void preInitMod()
     {
-        HatStand.blockHatStand = GameRegistry.register((new BlockHatStand(Material.WOOD)).setHardness(0.5F).setCreativeTab(CreativeTabs.DECORATIONS).setRegistryName(new ResourceLocation("hatstand", "HatStand")).setUnlocalizedName("hats.addon.hatstands.block"));
-        GameRegistry.register(new ItemHatStand(HatStand.blockHatStand).setRegistryName(HatStand.blockHatStand.getRegistryName()));
-
-        GameRegistry.addRecipe(new ItemStack(HatStand.blockHatStand, 1),
-                "S", "#", '#', Blocks.WOODEN_SLAB, 'S', Items.STICK);
-
         GameRegistry.registerTileEntity(TileEntityHatStand.class, "HatStand");
 
         HatStand.channel = new PacketChannel("HatStand", PacketStandHatInfo.class);

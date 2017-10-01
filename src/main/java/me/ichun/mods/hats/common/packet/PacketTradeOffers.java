@@ -69,7 +69,7 @@ public class PacketTradeOffers extends AbstractPacket
 
         for(int i = 0; i < itemCount; i++)
         {
-            ItemStack is = ItemStack.loadItemStackFromNBT(ByteBufUtils.readTag(buffer));
+            ItemStack is = new ItemStack(ByteBufUtils.readTag(buffer));
             if(is != null)
             {
                 tradeItems.add(is);
@@ -131,7 +131,7 @@ public class PacketTradeOffers extends AbstractPacket
                 float currentBoxes = (float)Math.ceil((float)Math.max(trade.theirHatsForTrade.size(), 3) / 3F) * 2 + (float)Math.ceil((float)Math.max(tradeSize, 6) / 6F) - 3;
                 if(currentBoxes > 0)
                 {
-                    trade.theirScrollProg = MathHelper.clamp_float(trade.theirScrollProg * (trade.theirItemsForTrade.size() > tradeSize ? ((currentBoxes) / (currentBoxes + 1)) : ((currentBoxes) / (currentBoxes - 1))), 0.0F, 1.0F);
+                    trade.theirScrollProg = MathHelper.clamp(trade.theirScrollProg * (trade.theirItemsForTrade.size() > tradeSize ? ((currentBoxes) / (currentBoxes + 1)) : ((currentBoxes) / (currentBoxes - 1))), 0.0F, 1.0F);
                 }
             }
             else if(hatsSize != trade.theirHatsForTrade.size() && (trade.theirHatsForTrade.size() % 3 == 1 && hatsSize % 3 == 0 || trade.theirHatsForTrade.size() % 3 == 0 && hatsSize % 3 == 1))
@@ -139,7 +139,7 @@ public class PacketTradeOffers extends AbstractPacket
                 float currentBoxes = (float)Math.ceil((float)Math.max(hatsSize, 3) / 3F) * 2 + (float)Math.ceil((float)Math.max(trade.theirItemsForTrade.size(), 6) / 6F) - 3;
                 if(currentBoxes > 0)
                 {
-                    trade.theirScrollProg = MathHelper.clamp_float(trade.theirScrollProg * (trade.theirHatsForTrade.size() > hatsSize ? ((currentBoxes) / (currentBoxes + 2)) : ((currentBoxes) / (currentBoxes - 2))), 0.0F, 1.0F);
+                    trade.theirScrollProg = MathHelper.clamp(trade.theirScrollProg * (trade.theirHatsForTrade.size() > hatsSize ? ((currentBoxes) / (currentBoxes + 2)) : ((currentBoxes) / (currentBoxes - 2))), 0.0F, 1.0F);
                 }
             }
         }
