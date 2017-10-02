@@ -15,7 +15,7 @@ compileJava {
 }
 
 // Requires iChunUtil to run. Just put iChunUtil-deobf.jar in the /libs/ folder and iChunUtil_AT.cfg in the /src/api/resources/ folder or it won't compile.
-version = "1.12.2-7.0.0"
+version = "1.12.2-7.0.1"
 group = "hats"
 archivesBaseName = "Hats"
 
@@ -64,7 +64,7 @@ task deobfJar(type: Jar) {
 task addonJar(type: Jar, dependsOn: "jar") {
 	from sourceSets.main.output
 	baseName = "HatStand"
-	version = "1.12.2-7.0.0"
+	version = "1.12.2-7.0.1"
 	include "me/ichun/mods/hats/addons/**"
 }
 
