@@ -75,6 +75,6 @@ public class HatStand
     @SubscribeEvent
     public void onModelRegistry(ModelRegistryEvent event)
     {
-        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(HatStand.blockHatStand), 0, new ModelResourceLocation("hatstand:HatStand", "inventory"));
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(HatStand.blockHatStand), 0, new ModelResourceLocation("hatstand:hatstand", "inventory"));
     }
 }
