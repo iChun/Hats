@@ -72,7 +72,7 @@ reobf
 { 
 	addonJar
 	{ 
-		classpath = configurations.compile
+		classpath = sourceSets.main.compileClasspath
 	} 
 }
 
