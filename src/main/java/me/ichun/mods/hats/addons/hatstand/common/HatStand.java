@@ -27,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @Mod(modid = HatStand.MOD_ID, name = HatStand.MOD_NAME,
         version = HatStand.VERSION,
-        guiFactory = "me.ichun.mods.ichunutil.common.core.config.GenericModGuiFactory",
+        guiFactory = iChunUtil.GUI_CONFIG_FACTORY,
         dependencies = "required-after:hats@[" + iChunUtil.VERSION_MAJOR + ".0.0,)",
         acceptableRemoteVersions = "[" + iChunUtil.VERSION_MAJOR +".0.0," + iChunUtil.VERSION_MAJOR + ".1.0)",
         acceptedMinecraftVersions = iChunUtil.MC_VERSION_RANGE

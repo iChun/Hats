@@ -15,7 +15,7 @@ compileJava {
 }
 
 // Requires iChunUtil to run. Just put iChunUtil-deobf.jar in the /libs/ folder and iChunUtil_AT.cfg in the /src/api/resources/ folder or it won't compile.
-version = "1.12.2-7.0.1"
+version = "1.12.2-7.0.2"
 group = "hats"
 archivesBaseName = "Hats"
 
