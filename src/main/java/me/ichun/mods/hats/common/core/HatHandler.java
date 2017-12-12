@@ -813,7 +813,6 @@ public class HatHandler
     public static boolean isPlayersContributorHat(String hatName, String playerName)
     {
         return hatName.toLowerCase().startsWith("(c)") && hatName.toLowerCase().contains(playerName.toLowerCase())
-                || hatName.equalsIgnoreCase("(C) iChun") && playerName.equalsIgnoreCase("ohaiiChun") //special casing for initial contrib hats.
                 || hatName.equalsIgnoreCase("(C) Mr. Haz") && playerName.equalsIgnoreCase("damien95")
                 || hatName.equalsIgnoreCase("(C) Fridgeboy") && playerName.equalsIgnoreCase("lacsap32");
     }
