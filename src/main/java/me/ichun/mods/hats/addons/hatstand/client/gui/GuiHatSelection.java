@@ -988,7 +988,7 @@ public class GuiHatSelection extends GuiScreen
             GlStateManager.enableNormalize();
 
             this.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            IBlockState state = HatStand.blockHatStand.getDefaultState().withProperty(BlockHatStand.TYPE, stand.hasBase ? stand.hasStand ? stand.hatName.isEmpty() ? 0 : 1 : stand.isOnFloor ? 2 : EnumFacing.getFront(stand.sideOn).ordinal() + 2 : 3);
+            IBlockState state = HatStand.blockHatStand.getDefaultState().withProperty(BlockHatStand.TYPE, stand.hasBase ? stand.hasStand ? stand.hatName.isEmpty() ? 0 : 1 : stand.isOnFloor ? 2 : EnumFacing.byIndex(stand.sideOn).ordinal() + 2 : 3);
             RendererHelper.renderBakedModel(mc.getBlockRendererDispatcher().getBlockModelShapes().getModelForState(state), -1, ItemStack.EMPTY);
 
             GlStateManager.translate(-0.5D, -0.5D, -0.5D);
@@ -1010,9 +1010,9 @@ public class GuiHatSelection extends GuiScreen
 
             GlStateManager.popMatrix();
             GlStateManager.disableRescaleNormal();
-            OpenGlHelper.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+            GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
             GlStateManager.disableTexture2D();
-            OpenGlHelper.setActiveTexture(OpenGlHelper.defaultTexUnit);
+            GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
             RenderHelper.disableStandardItemLighting();
         }

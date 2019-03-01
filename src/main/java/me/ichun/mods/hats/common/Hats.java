@@ -19,6 +19,7 @@ import java.io.File;
 
 @Mod(modid = Hats.MOD_ID, name = Hats.MOD_NAME,
         version = Hats.VERSION,
+        certificateFingerprint = iChunUtil.CERT_FINGERPRINT,
         guiFactory = iChunUtil.GUI_CONFIG_FACTORY,
         dependencies = "required-after:ichunutil@[" + iChunUtil.VERSION_MAJOR +".0.2," + (iChunUtil.VERSION_MAJOR + 1) + ".0.0)",
         acceptableRemoteVersions = "[" + iChunUtil.VERSION_MAJOR +".0.0," + iChunUtil.VERSION_MAJOR + ".1.0)",
@@ -26,9 +27,10 @@ import java.io.File;
 )
 public class Hats
 {
+    public static final String VERSION = iChunUtil.VERSION_MAJOR + ".1.0";
+
     public static final String MOD_NAME = "Hats";
     public static final String MOD_ID = "hats";
-    public static final String VERSION = iChunUtil.VERSION_MAJOR + ".0.0";
 
     public static final Logger LOGGER = Logger.createLogger(MOD_NAME);
 

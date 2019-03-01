@@ -34,9 +34,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 )
 public class HatStand
 {
+    public static final String VERSION = iChunUtil.VERSION_MAJOR + ".0.1";
+
     public static final String MOD_NAME = "HatStand";
     public static final String MOD_ID = "hatstand";
-    public static final String VERSION = iChunUtil.VERSION_MAJOR + ".0.0";
 
     public static PacketChannel channel;
 
@@ -61,7 +62,7 @@ public class HatStand
     @SubscribeEvent
     public void onRegisterBlock(RegistryEvent.Register<Block> event)
     {
-        HatStand.blockHatStand = (new BlockHatStand(Material.WOOD)).setHardness(0.5F).setCreativeTab(CreativeTabs.DECORATIONS).setRegistryName(new ResourceLocation("hatstand", "hatstand")).setUnlocalizedName("hats.addon.hatstands.block");
+        HatStand.blockHatStand = (new BlockHatStand(Material.WOOD)).setHardness(0.5F).setCreativeTab(CreativeTabs.DECORATIONS).setRegistryName(new ResourceLocation("hatstand", "hatstand")).setTranslationKey("hats.addon.hatstands.block");
         event.getRegistry().register(HatStand.blockHatStand);
     }
 

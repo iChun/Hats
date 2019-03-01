@@ -90,7 +90,7 @@ public class BlockHatStand extends Block
         if(te instanceof TileEntityHatStand)
         {
             TileEntityHatStand stand = (TileEntityHatStand)te;
-            return state.withProperty(TYPE, stand.hasBase ? stand.hasStand ? stand.hatName.isEmpty() ? 0 : 1 : stand.isOnFloor ? 2 : EnumFacing.getFront(stand.sideOn).ordinal() + 2 : 3);
+            return state.withProperty(TYPE, stand.hasBase ? stand.hasStand ? stand.hatName.isEmpty() ? 0 : 1 : stand.isOnFloor ? 2 : EnumFacing.byIndex(stand.sideOn).ordinal() + 2 : 3);
         }
         return state;
     }
@@ -155,7 +155,7 @@ public class BlockHatStand extends Block
         {
             TileEntityHatStand stand = (TileEntityHatStand)te;
 
-            if(!world.isSideSolid(pos.offset(EnumFacing.getFront(stand.sideOn), -1), EnumFacing.getFront(stand.sideOn), false))
+            if(!world.isSideSolid(pos.offset(EnumFacing.byIndex(stand.sideOn), -1), EnumFacing.byIndex(stand.sideOn), false))
             {
                 world.setBlockToAir(pos);
                 spawnAsEntity(world, pos, new ItemStack(HatStand.blockHatStand, 1));
