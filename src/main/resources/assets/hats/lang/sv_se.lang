@@ -1,167 +1,286 @@
-hats.firstJoin.hatHunting=[Hats] servern är på Hat jakt läge! Döda en mobb med en hatt för att låsa upp den!
-hats.firstJoin.kingOfTheHat.hasKing=[Hats] servern är på konungen av hatt-läge! Döda kungen och hävda hans rätt att bära en hatt!
-hats.kingOfTheHat.update.playerJoin=[Hats] Bravo! %s är nu den nya kungen!
-hats.kingOfTheHat.update.playerDied=[Hats] %1$ s dog! %2$ s är nu den nya kungen!
-hats.kingOfTheHat.update.playerSlayed=[Hats] %1$ s har dräpts! %2$ s är nu den nya kungen!
-hats.kingOfTheHat.update.playerLeft=[Hats] %1$ s lämnade servern! %2$ s är nu den nya kungen!
-hats.trade.tradeWith=Trading med %s
+hats.firstJoin.hatHunting=[Hats] Servern är i hattjaktläge! Döda en varelse med en hatt för att låsa upp den!
+hats.firstJoin.kingOfTheHat.hasKing=[Hats] Servern är i kungläge! Döda kungen och ta över rättigheten att bära en hatt!
+hats.firstJoin.timeActive=[Hats] Servern är i aktivitetsläge! Spendera aktiv tid på servern för att låsa upp hattar!
+hats.kingOfTheHat.update.playerJoin=[Hats] Hurra! %s är nu den nya kungen!
+hats.kingOfTheHat.update.playerDied=[Hats] %1$s dog! %2$s är nu den nya kungen!
+hats.kingOfTheHat.update.playerSlayed=[Hats] %1$s mördades! %2$s är nu den nya kungen!
+hats.kingOfTheHat.update.playerLeft=[Hats] %1$s lämnade servern! %2$s är nu den nya kungen!
+hats.kingOfTheHat.notKing=[Hats] Du är inte kungen, %s är det! Du kan inte bära en hatt!
+hats.lockedMode=[Hats] Server är i låst läge! Du får inte ändra hattar!
+hats.trade.tradeWith=Byter med %s
 hats.trade.yourHats=Dina hattar
-hats.trade.yourInventory=Ditt inventori:
-hats.trade.yourOfferings=Dina erbjudanden:
-hats.trade.theirOfferings=%s's erbjudanden:
-hats.trade.waitingForOffer=Väntar för någon att göra ett erbjudande.
-hats.trade.tradeNotReady=Inte redo att handla.
-hats.trade.tradeReady=Redo att handla.
-hats.trade.makeTrade= Gör handel
-hats.trade.waitingForReady=Väntar på båda parter att acceptera handeln.
-hats.trade.cancelTrade=Avbryt handel
-hats.Command= hatt kommandon
-hats.Command.Help=Skriv /hats för hela listan.
-hats.Command.Help.send=/hats send <spelare> <hatt namn> skicka en hatt till spelaren.
-hats.Command.Help.Set=/hats set <spelare> <hatt namn> sätt en spelares hatt.
-hats.Command.Help.Unlock=/hats unlock <spelare> <hatt namn> låser upp en hatt för en spelare.
-hats.command.notOnline=%s är inte online!
+hats.trade.yourInventory=Din utrustning
+hats.trade.yourOfferings=Vad du vill byta
+hats.trade.theirOfferings=Vad %s vill byta
+hats.trade.waitingForOffer=Väntar på att någon ska erbjuda någonting.
+hats.trade.tradeNotReady=Inte redo att byta.
+hats.trade.tradeReady=Redo att byta.
+hats.trade.makeTrade=Genomför byte
+hats.trade.waitingForReady=Väntar på att båda parterna ska bli redo.
+hats.trade.bothReady=Båda parter är redo att byta.
+hats.trade.cancelTrade=Avbryt bytet
+hats.trade.waitingForYou=Väntar på att du ska bekräfta
+hats.trade.waitingForThem=Väntar på att den andra parten ska bekräfta
+hats.trade.you=Du
+hats.trade.added=lade till
+hats.trade.removed=tog bort
+hats.trade.ready=Du är redo
+hats.trade.readyThem=%s är redo
+hats.trade.notReady=Du är inte redo
+hats.trade.notReadyThem=%s är inte redo
+hats.trade.selectTrader=Välj en spelare att byta med
+hats.trade.newTradeRequest=Ny bytesbegäran
+hats.trade.tradeRequestDesc=Tryck på %s för detaljer
+hats.trade=Byt med spelare i närheten
+hats.trade.acceptRequestGeneral=Acceptera byte
+hats.trade.acceptRequestSpecific=Acceptera byte från %1$s (%2$s)
+hats.trade.cannotFindTrader=[Hats] Kan inte byta! %s kan inte hittas!
+hats.trade.cannotAcceptTrade=[Hats] Kan inte acceptera byte! Begäran är nu ogiltig!
+hats.trade.terminatePrefix=Byte avbröts.
+hats.trade.terminate1=%s dog.
+hats.trade.terminate2=Du och %s hamnade för långt bort!
+hats.trade.terminate3=Någonting är i vägen för dig!
+hats.trade.terminate4=%s avbröt bytet.
+hats.trade.terminate5=%s är i en annan dimension.
+hats.trade.success=[Hats] Bytet genomfördes.
+hats.command=Hattkommandon
+hats.command.help=Skriv "hats" för en fullständig lista.
+hats.command.help.send=Skicka en hatt till en spelare: /hats send [spelare] [hattnamn]
+hats.command.help.set=Ändra en spelarhatt: /hats set [spelare] [hattnamn]
+hats.command.help.unlock=Lås upp en hatt för en spelare: /hats unlock [spelare] [hattnamn]
+hats.command.notOnline=%s är inte ansluten!
 hats.command.hatDoesNotExist=%s finns inte!
-hats.command.serverDisabledHatSending=Server har inaktiverat att skicka hattar!
-hats.command.sendToPlayer=Sending %1$ s %2$ s
-hats.command.setPlayerHat=Setting %1$ s %2$ s
-hats.command.playerIsInCreative=%s är i kreativ!
-hats.command.unlockHatForPlayer=Unlocking %1$ s %2$ s
-hats.command.adminNotify.unlockHatForPlayer=%1$s olåst %2$ s för %3$ s
-hats.command.serverIsNotOnHatHuntingMode=Servern är inte i hatt jakt läge!
-hats.serverOnCommandGiverMode=Servern har hattar i kommandot "Giver" läge. Du kan inte ge kommandon!
-hats.hatUnlocked=Hat upplåst!
-hats.GUI.search=sök
+hats.command.serverDisabledHatSending=Servern har inaktiverat möjligheten att skicka hattar!
+hats.command.sendToPlayer=Skickade [%1$s] till %2$s
+hats.command.setPlayerHat=Gav [%1$s] till %2$s
+hats.command.playerIsInCreative=%s är i kreativt läge!
+hats.command.unlockHatForPlayer=Låser upp [%1$s] för %2$s
+hats.command.adminNotify.unlockHatForPlayer=%1$s låser upp [%2$s] för %3$s
+hats.command.serverIsNotOnHatHuntingMode=Servern är inte i hattjaktläge!
+hats.serverOnCommandGiverMode=Servern är i kommandoläge. Du kan inte använda kommandot för att ge spelare hattar!
+hats.hatUnlocked=Hatt låstes upp!
+hats.gui.alpha=Alfa
+hats.gui.search=Sök
 hats.gui.allHats=Alla hattar
-hats.gui.addNew=lägg till nya
-hats.gui.firstPerson=Första personen
+hats.gui.addNew=Lägg till ny
+hats.gui.firstPerson=1:a person
 hats.gui.showHats=Visa hattar
-Hats.GUI.Contributors=Bidragande
-hats.GUI.Category=Kategori
-hats.GUI.Categories=kategorier
-hats.GUI.colorizer=Kulörväljare
-hats.gui.hatsList=Hat lista
-hats.gui.resetSide=Återställ sida?
-hats.GUI.randomobs=RandoMobs
-hats.GUI.personalize=Personifiera
-hats.GUI.Viewing=Visar
-hats.gui.discardChanges=Avbryt ändringar?
+hats.gui.contributors=Bidragsgivare
+hats.gui.category=Kategori
+hats.gui.categories=Kategorier
+hats.gui.colorizer=Färgväljare
+hats.gui.hatsList=Hattlista
+hats.gui.resetSide=Nollställ sidpanel
+hats.gui.randomobs=RandoMobs
+hats.gui.personalize=Anpassa
+hats.gui.viewing=Visar
+hats.gui.discardChanges=Släng ändringar
 hats.gui.removeHat=Ta bort hatt
-hats.gui.randomHat=Slumpmässig hatt
-hats.gui.randomCategory=Slumpmässig kategori
-hats.gui.randomColor=Slumpmässig färg
-hats.gui.resetColor=Återställ färg
-hats.gui.reloadAllHats=ladda om alla hattar?
-hats.gui.discardAllChanges=Detta tar bort alla ändringar.
-hats.GUI.favorites=Favoriter
+hats.gui.randomHat=Slumpartad hatt
+hats.gui.randomCategory=Slumpartad kategori
+hats.gui.randomColor=Slumpartad färg
+hats.gui.resetColor=Nollställ färg
+hats.gui.reloadAllHats=Uppdatera alla hattar
+hats.gui.discardAllChanges=Detta kommer att slänga alla ändringar.
+hats.gui.favorites=Favoriter
 hats.gui.invalidName=Ogiltigt namn!
 hats.gui.addCategory=Lägg till kategori
-hats.gui.addToCategory=Lägg till kategori
+hats.gui.addToCategory=Lägg till i kategori
 hats.gui.removeFromCategory=Ta bort från kategori
 hats.gui.areYouSure=Är du säker?
 hats.gui.clickConfirm=Klicka igen för att bekräfta
 hats.gui.deleteCategory=Radera kategori
-hats.gui.deleteCategory.desc1=Detta raderar alla hattar
-hats.gui.deleteCategory.desc2=i denna kategorin och laddar om
-hats.gui.deleteCategory.desc3=GUI'n.
-hats.gui.doubleClickConfirm=Dubbel Klicka för att bekräfta
-hats.gui.disableHat=Inaktivera hatt?
-hats.gui.disableHat.desc1=Detta kommer att inaktivera den hatten från
-hats.gui.disableHat.desc2=alla kategorier och ladda om
-hats.gui.disableHat.desc3=GUI'n. Detta kommer inte
+hats.gui.deleteCategory.desc1=Detta kommer att ta bort alla
+hats.gui.deleteCategory.desc2=hattar i denna kategori och
+hats.gui.deleteCategory.desc3=uppdatera gränssnittet.
+hats.gui.doubleClickConfirm=Dubbelklicka för att bekräfta
+hats.gui.disableHat=Inaktivera hatt
+hats.gui.disableHat.desc1=Detta kommer inaktivera denna hatt
+hats.gui.disableHat.desc2=från alla kategorier och uppdatera
+hats.gui.disableHat.desc3=gränssnittet. Detta kommer inte att
 hats.gui.disableHat.desc4=radera filen.
-hats.gui.deleteHat=Radera hatt?
-hats.gui.deleteHat.desc1=Detta kommer att ta bort denna hatt från
-hats.gui.deleteHat.desc2=all kategorier och ladda om
-hats.gui.deleteHat.desc3=GUI'n.
-hats.gui.renameCategory=Döp om kategori?
-hats.gui.renameCategory.desc1=Detta kommer att uppdatera GUI'n!
+hats.gui.deleteHat=Radera hatt
+hats.gui.deleteHat.desc1=Detta kommer ta bort denna hatt från
+hats.gui.deleteHat.desc2=alla kategorier och uppdatera
+hats.gui.deleteHat.desc3=gränssnittet.
+hats.gui.renameCategory=Byt namn på kategori
+hats.gui.renameCategory.desc1=Detta kommer att uppdatera gränssnittet!
 hats.gui.removeFromFavorites=Ta bort från favoriter
 hats.gui.addToFavorites=Lägg till i favoriter
-hats.gui.resetButtonsOnSide=Återställ knapparna på sidan av GUI'n?
- 
-hats.gui.helpInfo1.desc1=Shift Klicka på hatten
+hats.gui.resetButtonsOnSide=Nollställ knapparna på sidan av gränssnittet
+hats.gui.hatsCollected=%s exemplar
+
+hats.gui.helpInfo1.desc1=Shift-klicka på hattknappen
 hats.gui.helpInfo1.desc2=för fler alternativ!
-hats.gui.helpInfo1.desc3=Du kan inte skift Klicka på
-hats.gui.helpInfo1.desc4=hatten du bär
-hats.gui.helpInfo1.desc5=dock.
- 
+hats.gui.helpInfo1.desc3=Dessvärre kan du inte Shift-
+hats.gui.helpInfo1.desc4=klicka på hatten som du bär
+hats.gui.helpInfo1.desc5=för tillfället.
+
 hats.gui.helpInfo2.desc1=Om du är på en server som inte har
-hats.gui.helpInfo2.desc2=moddet, och en annan spelare har moddet
-hats.gui.helpInfo2.desc3=så kommer ni inte kunna se varandras hattar.
- 
-hats.gui.helpInfo3.desc1=Viste du vet att du alltid kan få fler hattar?
-hats.gui.helpInfo3.desc2=Techne Online har en massa
-hats.gui.helpInfo3.desc3=gemenskaps gjorde hattar som du
-hats.gui.helpInfo3.desc4=kan ladda ner och installera.
- 
-hats.gui.helpInfo4.desc1=du kan också göra din egen hatt!
-hats.gui.helpInfo4.desc2=Du behöver Techne och du göra en hatt med den.
-hats.gui.helpInfo4.desc3=En "huvud" model är placerad i mitten
-hats.gui.helpInfo4.desc4=av trä blocket. Dess storlek är
-hats.gui.helpInfo4.desc5=8 x 8 x 8. Gör din hatt på det!
- 
-hats.gui.helpInfo5.desc1=Viste du vet att du kan göra dina egna kategorier?
-hats.gui.helpInfo5.desc2=Klicka på knappen kategorier (eller C, på tangentbordet)
-hats.gui.helpInfo5.desc3=och Tryck på "Lägg till ny" knappen.
- 
-hats.gui.helpInfo6.desc1=Viste du vet att om din vän inte
-hats.gui.helpInfo6.desc2=har hatten du bär, du skickar hatten
-hats.gui.helpInfo6.desc3=to servern, och det får skickas till din vän.
-hats.gui.helpInfo6.desc4= (endast på servrar med moddet)
- 
-hats.gui.helpInfo7.desc1=Shift Klicka på slumpmässigt Hat ger dig
-hats.gui.helpInfo7.desc2=en slummässigt vald hatt och färg!
- 
-hats.gui.helpInfo8.desc1=Shift Klicka på knappen "slumpmässig färg"
-hats.gui.helpInfo8.desc2=så återställs alla färger.
- 
-hats.gui.helpInfo9.desc1=Du kan slå TAB eller T och snabbt markera
-hats.gui.helpInfo9.desc2=sökfältet.
- 
-hats.gui.helpInfo10.desc1=Viste du att detta mod var inledningsvis
-hats.gui.helpInfo10.desc2=gjort för ett 96 timmars modding maraton
-hats.gui.helpInfo10.desc3=som heter ModJam?
-hats.gui.helpInfo10.desc4=Det kom på andra plats och gjordes och är
-hats.gui.helpInfo10.desc5=närvarande underhållet av iChun.
- 
-hats.gui.helpInfo11.desc1=Hattar med spelares namn är till
-hats.gui.helpInfo11.desc2=några personer som gjort ett betydande
-hats.gui.helpInfo11.desc3=bidrag till moddet, i termer
-hats.gui.helpInfo11.desc4=av utveckling, testning, modell bidrag
-hats.gui.helpInfo11.desc5=och stöd.
-hats.gui.helpInfo11.desc6=Direwolf20 är bara en bonus.
- 
-hats.gui.helpInfo12.desc1=Shift Klicka på listan "hattar" kommer att ta
-hats.gui.helpInfo12.desc2=dig ur en kategori och tillbaka till alla
+hats.gui.helpInfo2.desc2=modden kommer andra spelare med
+hats.gui.helpInfo2.desc3=modden inte kunna se din hatt.
+
+hats.gui.helpInfo3.desc1=Visste du att du alltid kan få tag på
+hats.gui.helpInfo3.desc2=fler hattar? Techne Online har ett gäng
+hats.gui.helpInfo3.desc3=hattar som gemenskapen har gjort och du
+hats.gui.helpInfo3.desc4=kan ladda ned och installera.
+
+hats.gui.helpInfo4.desc1=Du kan också göra dina egna hattar! Du
+hats.gui.helpInfo4.desc2=behöver Techne så kan göra en hatt med
+hats.gui.helpInfo4.desc3=det. En huvudmodell placeras i mitten
+hats.gui.helpInfo4.desc4=av träblocket. Dess storlek är 8x8x8.
+hats.gui.helpInfo4.desc5=Gör din hatt utifrån det!
+
+hats.gui.helpInfo5.desc1=Visste du att du kan göra dina egna kategorier?
+hats.gui.helpInfo5.desc2=Klicka på kategoriknappen (eller C, på ditt
+hats.gui.helpInfo5.desc3=tangentbord) och sedan knappen "Lägg till ny".
+
+hats.gui.helpInfo6.desc1=Visste du att om din kompis inte har
+hats.gui.helpInfo6.desc2=hatten du bär skickar du hatten till
+hats.gui.helpInfo6.desc3=servern och den skickas till din kompis.
+hats.gui.helpInfo6.desc4=(Endast på servrar som har modden.)
+
+hats.gui.helpInfo7.desc1=Shift-klicka på knappen "Slumpartad hatt"
+hats.gui.helpInfo7.desc2=för att få en slumpartad hatt OCH färg!
+
+hats.gui.helpInfo8.desc1=Shift-klicka på knappen "Slumpartad färg"
+hats.gui.helpInfo8.desc2=för att nollställa alla färger.
+
+hats.gui.helpInfo9.desc1=Du kan trycka på TAB eller T för
+hats.gui.helpInfo9.desc2=att snabbt markera sökfältet.
+
+hats.gui.helpInfo10.desc1=Visste du att denna mod ursprungligen var
+hats.gui.helpInfo10.desc2=gjord för att ett 96-timmar långt
+hats.gui.helpInfo10.desc3=modningsmaraton som hette ModJam
+hats.gui.helpInfo10.desc4=Den hamnade på andra plats samt gjordes
+hats.gui.helpInfo10.desc5=och underhålls för tillfället av iChun.
+
+hats.gui.helpInfo11.desc1=Spelarhattarna som modden lade till är
+hats.gui.helpInfo11.desc2=namnen på några av personerna som gjorde
+hats.gui.helpInfo11.desc3=ett avsevärt bidrag i modden vad det
+hats.gui.helpInfo11.desc4=gäller utveckling, testande, modellbidrag
+hats.gui.helpInfo11.desc5=och support.
+hats.gui.helpInfo11.desc6=Direwolf20 är dock bara en bonus.
+
+hats.gui.helpInfo12.desc1=När du Shift-klickar på hattlistan går du
+hats.gui.helpInfo12.desc2=ut från en kategori och tillbaka till alla
 hats.gui.helpInfo12.desc3=hattar.
- 
-hats.gui.helpInfo13.desc1=Högerklicka på sökfältet
-hats.gui.helpInfo13.desc2=för att avmarkera den.
- 
-hats.gui.helpInfo14.desc1=Du kan inaktivera hattar i stället för att ta bort
-hats.gui.helpInfo14.desc2=dem. Bara hålla Shift när du tar bort.
- 
-hats.gui.helpInfo15.desc1=Om du klickar på SHIFT-F så
-hats.gui.helpInfo15.desc2=lägger du till eller tar bort
-hats.gui.helpInfo15.desc3=från favoriter som du för närvarande bär.
- 
-hats.gui.helpInfo16.desc1=Knappen för att "Anpassa" är
-hats.gui.helpInfo16.desc2="P"
-hats.gui.helpInfo16.desc3=i fall du av misstag
-hats.gui.helpInfo16.desc4=inaktiverar knappen.
- 
-hats.gui.helpInfo17.desc1=Om du har en bidragsgivares hatt,
-hats.gui.helpInfo17.desc2=så kan du använda den i hatt
-hats.gui.helpInfo17.desc3=Hunting läget.
- 
-hats.gui.helpInfo18.desc1=(C) i hatten
-hats.gui.helpInfo18.desc2=representerar en hatt som läggs till som ett tack
-hats.gui.helpInfo18.desc3=för en donation till moddet!
- 
-hats.gui.helpInfo19.desc1=Viste du vet att du kan anpassa
-hats.gui.helpInfo19.desc2=if mobs har hattar? Dess i den
-hats.gui.helpInfo19.desc3="Personalize" fliken
- 
-hats.addon.hatstands.gui.base=Bas
-hats.addon.hatstands.gui.stand=Stå
+
+hats.gui.helpInfo13.desc1=Du kan högerklicka på sökfältet
+hats.gui.helpInfo13.desc2=för att rensa det.
+
+hats.gui.helpInfo14.desc1=Du kan inaktivera hattar stället för att radera
+hats.gui.helpInfo14.desc2=dem. Håll bara ned Shift när du raderar.
+
+hats.gui.helpInfo15.desc1=Tryck på Shift-F för att lägga till
+hats.gui.helpInfo15.desc2=eller ta bort hatten du bär
+hats.gui.helpInfo15.desc3=för tillfället som favorit.
+
+hats.gui.helpInfo16.desc1=Kortkommandot för
+hats.gui.helpInfo16.desc2=alternativet "Anpassa" är P
+hats.gui.helpInfo16.desc3=ifall du har inaktiverat 
+hats.gui.helpInfo16.desc4=knappen av misstag.
+
+hats.gui.helpInfo17.desc1=Om du har en bidragsgivar-
+hats.gui.helpInfo17.desc2=hatt kan du använda den i 
+hats.gui.helpInfo17.desc3=hattjaktläget.
+
+hats.gui.helpInfo18.desc1=Ett (C) i hattnamnet representerar
+hats.gui.helpInfo18.desc2=en hatt som lades till som ett tack
+hats.gui.helpInfo18.desc3=för en donation till modden!
+
+hats.gui.helpInfo19.desc1=Visste du att du kan konfigurera
+hats.gui.helpInfo19.desc2=om varelser kan ha hattar. Det
+hats.gui.helpInfo19.desc3=finns i fliken "Anpassa"
+
+hats.addon.hatstands.gui.base=Grund
+hats.addon.hatstands.gui.stand=Stativ
+
+tile.hats.addon.hatstands.block.name=Hattstativ
+
+hats.config.cat.globalOptions.name=Globala alternativ
+hats.config.cat.serverOptions.name=Serveralternativ
+hats.config.cat.clientOnly.name=Klientalternativ
+hats.config.cat.randoMobOptions.name=RandoMob-alternativ
+
+hats.config.cat.globalOptions.comment=Dessa inställningar påverkar både servrarna och klienterna som läser in modden.
+hats.config.cat.serverOptions.comment=Dessa inställningar påverkar endast servern som läser in modden.
+hats.config.cat.clientOnly.comment=Dessa inställningar påverkar endast klienten som läser in modden.
+hats.config.cat.randoMobOptions.comment=Dessa inställningar påverkar antingen klienten\nför randoMob-inställningar eller hattjaktläget.
+
+hats.config.prop.safeLoad.name=Säker inläsning
+hats.config.prop.allowSendingOfHats.name=Tillåt att skicka hattar
+hats.config.prop.allowReceivingOfHats.name=Tillåt att ta emot hattar
+hats.config.prop.modMobSupport.name=Modvarelsestöd för hattar
+hats.config.prop.readLocalModMobSupport.name=Läs lokalt modvarelsestöd
+hats.config.prop.playerHatsMode.name=Spelarhattsläge
+hats.config.prop.firstJoinMessage.name=Anslutningsmeddelande
+hats.config.prop.lockedHat.name=Hatt för låst läge
+hats.config.prop.startTime.name=Starttid
+hats.config.prop.timeIncrement.name=Tidsökning
+hats.config.prop.resetPlayerHatsOnDeath.name=Nollställ hattar vid död
+hats.config.prop.hatRarity.name=Aktivera hattsällsynthet
+hats.config.prop.hatGenerationSeed.name=Hattgenereringsfrö
+hats.config.prop.renderInFirstPerson.name=Rendera i första person
+hats.config.prop.enableInServersWithoutMod.name=Aktivera på modlösa servrar
+hats.config.prop.shouldOtherPlayersHaveHats.name=Hattar åt andra spelare
+hats.config.prop.randomHat.name=Slumpartad hatt
+hats.config.prop.favouriteHat.name=Favorithatt
+hats.config.prop.favouriteHatColourizer.name=Färg på favorithatt
+hats.config.prop.guiKeyBind.name=Öppna hattgränssnittet
+hats.config.prop.personalizeEnabled.name=Anpassa kategorier
+hats.config.prop.maxHatRenders.name=Max. antal hattrenderingar
+hats.config.prop.showContributorHatsInGui.name=Visa bidragsgivarhattar
+hats.config.prop.renderHats.name=Rendera hattar
+hats.config.prop.randomMobHat.name=Slumpartade hattar på varelser
+hats.config.prop.useRandomContributorHats.name=Använd slumpartade bidragsgivarhattar
+hats.config.prop.hatBat.name=Hattar på fladdermöss
+hats.config.prop.hatBlaze.name=Hattar på brännare
+hats.config.prop.hatChicken.name=Hattar på hönor
+hats.config.prop.hatCow.name=Hattar på kor
+hats.config.prop.hatCreeper.name=Hattar på creepers
+hats.config.prop.hatEnderman.name=Hattar på endermän
+hats.config.prop.hatGhast.name=Hattar på ghastar
+hats.config.prop.hatGuardian.name=Hattar på väktare
+hats.config.prop.hatHorse.name=Hattar på hästar
+hats.config.prop.hatOcelot.name=Hattar på ozeloter
+hats.config.prop.hatPig.name=Hattar på grisar
+hats.config.prop.hatPolarBear.name=Hattar på isbjörnar
+hats.config.prop.hatRabbit.name=Hattar på kaniner
+hats.config.prop.hatSheep.name=Hattar på får
+hats.config.prop.hatShulker.name=Hattar på shulkers
+hats.config.prop.hatSkeleton.name=Hattar på skelett
+hats.config.prop.hatSlime.name=Hattar på slemkubar
+hats.config.prop.hatSpider.name=Hattar på spindlar
+hats.config.prop.hatSquid.name=Hattar på bläckfiskar
+hats.config.prop.hatVillager.name=Hattar på bybor
+hats.config.prop.hatWither.name=Hattar på withers
+hats.config.prop.hatWolf.name=Hattar på vargar
+hats.config.prop.hatZombie.name=Hattar på zombier
+
+hats.config.prop.safeLoad.comment=Aktiverar säker inläsning.\nSäker inläsning tvingar modden att avvisa Techne-modellfiler\nsom har andra filformat än xml och png.
+hats.config.prop.allowSendingOfHats.comment=Gör det möjligt att skicka modellfiler till serverklienten
+hats.config.prop.allowReceivingOfHats.comment=Gör det möjligt att ta emot modellfiler från serverklienten
+hats.config.prop.modMobSupport.comment=Aktiverar modstöd för varelser
+hats.config.prop.readLocalModMobSupport.comment=Läs den lokala modsupportfilen för varelser\n(HatModMobSupport.json) från mappen "hats".\nOm detta inaktiveras kommer den ta onlineversionen på GitHub.\nAnvänd detta för att testa anpassade varelsehattar.
+hats.config.prop.playerHatsMode.comment=Spelarhattsläge\n1 = Fritt läge, alla spelare får välja vilken hatt de\nvill bära.\n2 = Låst läge, alla spelare måste bära samma hatt,\nsom definieras i konfigurationen.\n3 = Kommandoläge, de som kan använda kommandon\nbestämmer vilken hatt du bär.\n4 = Hattjaktläge, om du ser en varelse med\nen hatt och dödar den låser du upp den\n5 = Kungläge, endast en spelare får bära en hatt.\nKungen måste försvara sin position eller förlora\nkronan!\n6 = Aktivitetsläge, ju längre spelarna är aktiva\npå servern desto fler hattar låser de upp.
+hats.config.prop.firstJoinMessage.comment=Skickar ett meddelande till spelare som\nansluter till en server för första gången
+hats.config.prop.lockedHat.comment=Vilken hatt som spelare ska bära i låst läge (när playerHatsMode är 2).\nOm du vill att olika spelare ska bära olika hattar, använd kommandoläget.
+hats.config.prop.startTime.comment=Används när playerHatsMode är 6\nTiden som krävs för att vara aktiv på servern\noch låsa upp den första hatten. (I tick)
+hats.config.prop.timeIncrement.comment=Används när playerHatsMode är 6\nDen extra tidsmängden som krävs för att nå nästa hattnivå.\nStandard är 125 (vilket är 1,25 %).\nFör 200 % tid, ange 20000
+hats.config.prop.resetPlayerHatsOnDeath.comment=Om spelarnas hattar bör nollställas när de dör.\nEndast i lägen där hattar kan låsas upp
+hats.config.prop.hatRarity.comment=Om hattar bör ha sin egen sällsynthet
+hats.config.prop.hatGenerationSeed.comment=Det slumpartade fröet för hattgenereringen. Används för\nhattjakt- och aktivitetsläget. Var god ange inte 0,\nfastän sällsyntheten kommer vara aktiverad på\nservern, på klienten är det markerat som en indikator\natt sällsynthet är inaktiverat.
+hats.config.prop.renderInFirstPerson.comment=Om din hatt bör renderas i första person
+hats.config.prop.enableInServersWithoutMod.comment=Aktiverar hattar på servrar som saknar modden
+hats.config.prop.shouldOtherPlayersHaveHats.comment=Om andra spelare endast bör ha hattar när det\när aktiverat på servrar som saknar modden.
+hats.config.prop.randomHat.comment=Om varje spelare ska ha en slumpartad hatt.\nDetta innebär att hattarna ändras emellanåt.\n0 = Nej\n1 = Ja\n2 = Ja, förutom mig!\nFungerar endast när detta aktiveras på servrar som saknar modden
+hats.config.prop.favouriteHat.comment=Vilken hatt du vill använda på servrar som saknar modden.\nFungerar endast när randomHat är 0.
+hats.config.prop.favouriteHatColourizer.comment=Färgen du vill ha på din favorithatt.\nOm du inte vill välja någon kan du lämna detta som #ffffff\n(Googla "html-färger" eller "webbfärger" om du inte förstår vad detta är)\nAnvänder formatet "#färgindex", d.v.s. #ffffff för vit.
+hats.config.prop.guiKeyBind.comment=Kortkommando för att öppna gränssnittet där man väljer hattar
+hats.config.prop.personalizeEnabled.comment=Denna konfiguration är till för att anpassa ditt gränssnitt.\nVar god ändra inte detta om du inte vet vad du håller på med.
+hats.config.prop.maxHatRenders.comment=Maximalt antal hattar att rendera under en tick
+hats.config.prop.showContributorHatsInGui.comment=Visar bidragsgivarnas hattar i gränssnittet
+hats.config.prop.renderHats.comment=Om hattar ska renderas
+hats.config.prop.randomMobHat.comment=Om varelser har en slumpartad chans att ha en hatt\n0 = Inaktiverad (0 %)\n100 = Alla varelser (100 %)\n(Klient) Detta följer inställningen randomHat, vilket innebär att om\nrandomHat är 0 kommer alla varelser använda inställningen favouriteHat
+hats.config.prop.useRandomContributorHats.comment=Tillåt att bidragsgivarnas hattar används när en slumpartad hatt hämtas\n0 - 100 %
