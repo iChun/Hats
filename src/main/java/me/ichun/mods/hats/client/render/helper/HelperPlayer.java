@@ -19,7 +19,7 @@ public class HelperPlayer extends RenderOnEntityHelper
 	@Override
 	public float getRotatePointVert(EntityLivingBase ent)
 	{
-	    float point = (ent.isSneaking() ? ent == Minecraft.getMinecraft().player ? 21F/16F : 17.5F/16F : 24.1F/16F);
+	    float point = (ent.isSneaking() ? ent == Minecraft.getMinecraft().player ? 19F/16F : 17.5F/16F : 24.1F/16F);
 		return isFirstPerson(ent) ? point + 0.22F : point;
 	}
 	
@@ -46,7 +46,17 @@ public class HelperPlayer extends RenderOnEntityHelper
     {
         return isFirstPerson(ent) ? ent.rotationYaw : ent.rotationYawHead;
     }
-    
+
+    @Override
+    public float getHatScale(EntityLivingBase ent)
+    {
+        if(ent instanceof EntityPlayer && ent.isElytraFlying())
+        {
+            return 0.0F;
+        }
+        return super.getHatScale(ent);
+    }
+
     public boolean isFirstPerson(EntityLivingBase ent)
     {
         return (ent == Minecraft.getMinecraft().getRenderViewEntity() &&

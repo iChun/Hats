@@ -78,6 +78,12 @@ public class RenderHat extends Render<EntityHat>
                     }
                 }
 
+                Render rend = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(hat.renderingParent);
+                if(!(rend instanceof RenderLivingBase))
+                {
+                    return;
+                }
+
                 float renderTick = par9;
                 helper.renderTick = renderTick;
 
@@ -86,7 +92,6 @@ public class RenderHat extends Render<EntityHat>
 
                 GlStateManager.pushMatrix();
                 GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
-                Render rend = Minecraft.getMinecraft().getRenderManager().getEntityRenderObject(hat.renderingParent);
                 ObfHelper.invokePreRenderCallback((RenderLivingBase)rend, rend.getClass(), hat.renderingParent, renderTick);
                 GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, buffer1);
                 GlStateManager.popMatrix();
