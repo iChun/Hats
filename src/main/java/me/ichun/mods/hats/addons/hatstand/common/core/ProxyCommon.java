@@ -11,8 +11,6 @@ public class ProxyCommon
 {
     public void preInitMod()
     {
-        GameRegistry.registerTileEntity(TileEntityHatStand.class, "HatStand");
-
         HatStand.channel = new PacketChannel("HatStand", PacketStandHatInfo.class);
     }
 

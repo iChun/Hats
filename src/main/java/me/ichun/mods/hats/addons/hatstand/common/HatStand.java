@@ -3,6 +3,7 @@ package me.ichun.mods.hats.addons.hatstand.common;
 import me.ichun.mods.hats.addons.hatstand.common.block.BlockHatStand;
 import me.ichun.mods.hats.addons.hatstand.common.core.ProxyCommon;
 import me.ichun.mods.hats.addons.hatstand.common.item.ItemHatStand;
+import me.ichun.mods.hats.addons.hatstand.common.tileentity.TileEntityHatStand;
 import me.ichun.mods.ichunutil.common.core.network.PacketChannel;
 import me.ichun.mods.ichunutil.common.iChunUtil;
 import me.ichun.mods.ichunutil.common.module.update.UpdateChecker;
@@ -11,6 +12,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -22,6 +24,7 @@ import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -34,7 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 )
 public class HatStand
 {
-    public static final String VERSION = iChunUtil.VERSION_MAJOR + ".0.1";
+    public static final String VERSION = iChunUtil.VERSION_MAJOR + ".1.0";
 
     public static final String MOD_NAME = "HatStand";
     public static final String MOD_ID = "hatstand";
@@ -64,6 +67,8 @@ public class HatStand
     {
         HatStand.blockHatStand = (new BlockHatStand(Material.WOOD)).setHardness(0.5F).setCreativeTab(CreativeTabs.DECORATIONS).setRegistryName(new ResourceLocation("hatstand", "hatstand")).setTranslationKey("hats.addon.hatstands.block");
         event.getRegistry().register(HatStand.blockHatStand);
+
+        GameRegistry.registerTileEntity(TileEntityHatStand.class, new ResourceLocation("hatstand", "HatStand"));
     }
 
     @SubscribeEvent

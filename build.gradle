@@ -64,7 +64,7 @@ task deobfJar(type: Jar) {
 task addonJar(type: Jar, dependsOn: "jar") {
 	from sourceSets.main.output
 	baseName = "HatStand"
-	version = "1.12.2-7.0.1"
+	version = "1.12.2-7.1.0"
 	include "me/ichun/mods/hats/addons/**"
 }
 
