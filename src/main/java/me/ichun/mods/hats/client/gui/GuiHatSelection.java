@@ -9,6 +9,7 @@ import me.ichun.mods.hats.common.core.SessionState;
 import me.ichun.mods.hats.common.entity.EntityHat;
 import me.ichun.mods.hats.common.packet.PacketPlayerHatSelection;
 import me.ichun.mods.hats.common.packet.PacketString;
+import me.ichun.mods.ichunutil.client.gui.config.GuiConfigs;
 import me.ichun.mods.ichunutil.client.keybind.KeyBind;
 import me.ichun.mods.ichunutil.common.iChunUtil;
 import net.minecraft.client.Minecraft;
@@ -702,8 +703,7 @@ public class GuiHatSelection extends GuiScreen
             }
             else if(btn.id == ID_SET_KEY)
             {
-                settingKey = true;
-                btn.displayString = "GUI: >???<";
+                Minecraft.getMinecraft().displayGuiScreen(new GuiConfigs(null));
             }
             else if(btn.id == ID_SET_FP)
             {
