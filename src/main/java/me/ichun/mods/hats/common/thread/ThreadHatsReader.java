@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.net.ssl.HttpsURLConnection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
@@ -40,12 +41,12 @@ public class ThreadHatsReader extends Thread
             int hatDownloaded = 0;
             try
             {
-                URL var1 = new URL("http://www.creeperrepo.net/ichun/static/hatstabula.xml");
+                URL var1 = new URL("https://dist.creeper.host/ichun/static/hatstabula.xml");
 
                 DocumentBuilderFactory var2 = DocumentBuilderFactory.newInstance();
                 DocumentBuilder var3 = var2.newDocumentBuilder();
                 //Add a timeout of 60 seconds to getting the list, MC stalls without sound for some users.
-                URLConnection con = var1.openConnection();
+                HttpsURLConnection con = (HttpsURLConnection)var1.openConnection();
                 con.setConnectTimeout(60000);
                 con.setReadTimeout(60000);
                 Document var4 = var3.parse(con.getInputStream());
@@ -70,7 +71,7 @@ public class ThreadHatsReader extends Thread
 
                             if(var11 > 0L)
                             {
-                                url = url.replaceAll(" ", "%20");
+                                url = url.replaceAll(" ", "%20").replaceAll("http://cdn.redstone.tech", "https://dist.creeper.host"); //creeperhost repo url change fix
                                 if(downloadResource(new URL(url), new File(hatsFolder, var10), var11))
                                 {
                                     hatDownloaded++;
@@ -202,7 +203,7 @@ public class ThreadHatsReader extends Thread
 
         byte[] var5 = new byte[4096];
 
-        URLConnection con = par1URL.openConnection();
+        HttpsURLConnection con = (HttpsURLConnection)par1URL.openConnection();
         con.setConnectTimeout(15000);
         con.setReadTimeout(15000);
         DataInputStream var6 = new DataInputStream(con.getInputStream());
