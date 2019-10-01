@@ -14,6 +14,7 @@ import java.util.Map;
 
 public class ThreadGetModMobSupport extends Thread
 {
+    //TODO get the mod mob support MUCH later. Doing it too early may accidentally initialize mod classes out of their intended order, causing third party crashes. Sorry Azanor!
     public ThreadGetModMobSupport()
     {
         this.setName("Hats Mod Mob Support Thread");

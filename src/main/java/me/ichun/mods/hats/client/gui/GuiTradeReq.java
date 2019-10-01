@@ -21,7 +21,7 @@ import java.util.ArrayList;
 @SideOnly(Side.CLIENT)
 public class GuiTradeReq extends Gui
 {
-    private static final ResourceLocation texAchi = new ResourceLocation("textures/gui/achievement/achievement_background.png");
+    private static final ResourceLocation texAchi = new ResourceLocation("textures/gui/toasts.png");
 
     /** Holds the instance of the game (Minecraft) */
     private Minecraft theGame;
@@ -131,7 +131,7 @@ public class GuiTradeReq extends Gui
                 GlStateManager.enableTexture2D();
                 this.theGame.getTextureManager().bindTexture(texAchi);
                 GlStateManager.disableLighting();
-                this.drawTexturedModalRect(i, j, 96, 202, 160, 32);
+                this.drawTexturedModalRect(i, j, 0, 0, 160, 32);
 
                 this.theGame.fontRenderer.drawString(this.headerText, i + 30, j + 7, -256);
                 this.theGame.fontRenderer.drawString(I18n.translateToLocalFormatted("hats.trade.tradeRequestDesc", theGame.gameSettings.getKeyDisplayString(Hats.config.guiKeyBind.keyIndex)), i + 30, j + 18, -1);
@@ -159,10 +159,10 @@ public class GuiTradeReq extends Gui
                     Tessellator tessellator = Tessellator.getInstance();
                     BufferBuilder bufferbuilder = tessellator.getBuffer();
                     bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-                    bufferbuilder.pos(i + xOff + 0, j + yOff + size, (double)this.zLevel).tex(8D / 64D, 16D / 32D).endVertex();
-                    bufferbuilder.pos(i + xOff + size, j + yOff + size, (double)this.zLevel).tex(16D / 64D, 16D / 32D).endVertex();
-                    bufferbuilder.pos(i + xOff + size, j + yOff + 0, (double)this.zLevel).tex(16D / 64D, 8D / 32D).endVertex();
-                    bufferbuilder.pos(i + xOff + 0, j + yOff + 0, (double)this.zLevel).tex(8D / 64D, 8D / 32D).endVertex();
+                    bufferbuilder.pos(i + xOff + 0, j + yOff + size, (double)this.zLevel).tex(8D / 64D, 16D / 64D).endVertex();
+                    bufferbuilder.pos(i + xOff + size, j + yOff + size, (double)this.zLevel).tex(16D / 64D, 16D / 64D).endVertex();
+                    bufferbuilder.pos(i + xOff + size, j + yOff + 0, (double)this.zLevel).tex(16D / 64D, 8D / 64D).endVertex();
+                    bufferbuilder.pos(i + xOff + 0, j + yOff + 0, (double)this.zLevel).tex(8D / 64D, 8D / 64D).endVertex();
                     tessellator.draw();
 
                 }

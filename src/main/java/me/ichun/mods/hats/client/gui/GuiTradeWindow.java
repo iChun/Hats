@@ -59,7 +59,7 @@ public class GuiTradeWindow extends GuiScreen
     public ArrayList<ItemStack> theirItemsForTrade;
     public TreeMap<String, Integer> theirHatsForTrade;
 
-    public ItemStack grabbedStack = ItemStack.EMPTY;
+    public ItemStack grabbedStack = null;
 
     public int hatSlots = 3;
     public int invSlots = 12;
@@ -226,9 +226,9 @@ public class GuiTradeWindow extends GuiScreen
         int tradeSize = ourItemsForTrade.size();
         boolean flag = false;
         boolean scroll = true;
-        if(grabbedStack.isEmpty())
+        if(grabbedStack == null)
         {
-            if(!is.isEmpty())
+            if(is != null)
             {
                 if(btn == 0)
                 {
@@ -719,7 +719,7 @@ public class GuiTradeWindow extends GuiScreen
 
     public void drawForeground(int x, int y, float par3)
     {
-        if(!grabbedStack.isEmpty())
+        if(grabbedStack != null)
         {
             drawItemStack(grabbedStack, x - 8, y - 8);
         }
