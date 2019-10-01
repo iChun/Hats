@@ -21,6 +21,7 @@ public class EntityHat extends Entity
 	public EntityLivingBase renderingParent; 
 	public boolean render;
 	public String hatName;
+	public int parentDimension;
 	
 	public HatInfoClient info;
 	
@@ -68,7 +69,8 @@ public class EntityHat extends Entity
 		hatName = hatInfo.hatName;
 		
 		setLocationAndAngles(parent.posX, parent.getEntityBoundingBox().minY, parent.posZ, parent.rotationYaw, parent.rotationPitch);
-		
+		parentDimension = parent.dimension;
+
 		reColour = 0;
 		
 		prevR = 0;
@@ -96,11 +98,13 @@ public class EntityHat extends Entity
 			reColour--;
 		}
 		
-		if(parent == null || !parent.isEntityAlive() || parent.isChild())
+		if(parent == null || !parent.isEntityAlive() || parent.isChild() || parentDimension != parent.dimension)
 		{
 			setDead();
 			return;
 		}
+
+		parentDimension = parent.dimension;
 		
 		if(iChunUtil.hasMorphMod() && parent instanceof EntityPlayer)
 		{
