@@ -10,10 +10,7 @@ import me.ichun.mods.ichunutil.common.module.update.UpdateChecker;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
+import net.minecraftforge.fml.common.event.*;
 
 import java.io.File;
 
@@ -88,6 +85,15 @@ public class Hats
         eventHandlerServer.playerTradeRequests.clear();
         eventHandlerServer.activeTrades.clear();
         proxy.playerWornHats.clear();
+    }
+
+    @Mod.EventHandler
+    public void onFingerprintViolation(FMLFingerprintViolationEvent event)
+    {
+        if(event.getSource() != null && event.getSource().isFile())
+        {
+            LOGGER.warn("The file " + event.getSource().getName() + " has been modified. Support for the mod will not be provided.");
+        }
     }
 
     public static void console(String s, boolean warning)
