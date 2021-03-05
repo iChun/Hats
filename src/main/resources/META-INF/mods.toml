@@ -1,0 +1,21 @@
+modLoader="javafml"
+loaderVersion="[34,)" #forge version dep
+license="GNU Lesser General Public License v3.0"
+issueTrackerURL="https://github.com/iChun/Hats/issues"
+
+[[mods]]
+    modId="hats"
+    version="${file.jarVersion}" #mandatory
+    displayName="Hats"
+    displayURL="https://ichun.me/mods/hats/"
+    authors="iChun"
+    description='''
+    Adds a bunch of hats, as wells as the ability to add more, into Minecraft
+    '''
+
+[[dependencies.googlyeyes]]
+    modId="ichunutil"
+    mandatory=true
+    versionRange="[10.0.0,11)"
+    ordering="NONE"
+    side="BOTH"

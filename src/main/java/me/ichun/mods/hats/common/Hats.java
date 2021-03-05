@@ -1,116 +1,103 @@
 package me.ichun.mods.hats.common;
 
+import me.ichun.mods.hats.client.config.ConfigClient;
 import me.ichun.mods.hats.client.core.EventHandlerClient;
-import me.ichun.mods.hats.common.core.*;
-import me.ichun.mods.ichunutil.common.core.Logger;
-import me.ichun.mods.ichunutil.common.core.config.ConfigHandler;
-import me.ichun.mods.ichunutil.common.core.network.PacketChannel;
-import me.ichun.mods.ichunutil.common.iChunUtil;
-import me.ichun.mods.ichunutil.common.module.update.UpdateChecker;
+import me.ichun.mods.hats.common.config.ConfigCommon;
+import me.ichun.mods.hats.common.config.ConfigServer;
+import me.ichun.mods.hats.common.core.EventHandlerServer;
+import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.thread.ThreadReadHats;
+import me.ichun.mods.ichunutil.common.head.HeadHandler;
+import me.ichun.mods.ichunutil.common.network.PacketChannel;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.io.File;
-
-@Mod(modid = Hats.MOD_ID, name = Hats.MOD_NAME,
-        version = Hats.VERSION,
-        certificateFingerprint = iChunUtil.CERT_FINGERPRINT,
-        guiFactory = iChunUtil.GUI_CONFIG_FACTORY,
-        dependencies = "required-after:ichunutil@[" + iChunUtil.VERSION_MAJOR +".0.2," + (iChunUtil.VERSION_MAJOR + 1) + ".0.0)",
-        acceptableRemoteVersions = "[" + iChunUtil.VERSION_MAJOR +".1.0," + iChunUtil.VERSION_MAJOR + ".2.0)",
-        acceptedMinecraftVersions = iChunUtil.MC_VERSION_RANGE
-)
+@Mod(Hats.MOD_ID)
 public class Hats
 {
-    public static final String VERSION = iChunUtil.VERSION_MAJOR + ".1.0";
-
     public static final String MOD_NAME = "Hats";
     public static final String MOD_ID = "hats";
+    public static final String PROTOCOL = "1"; //Network protocol
 
-    public static final Logger LOGGER = Logger.createLogger(MOD_NAME);
+    public static final Logger LOGGER = LogManager.getLogger();
+
+    public static ConfigCommon configCommon;
+    public static ConfigClient configClient;
+    public static ConfigServer configServer;
+
+    public static EventHandlerClient eventHandlerClient;
+    public static EventHandlerServer eventHandlerServer;
 
     public static PacketChannel channel;
 
-    public static Config config;
+    private static ThreadReadHats threadReadHats;
 
-    public static HatInfo favouriteHatInfo = new HatInfo();
-
-    @Instance(MOD_ID)
-    public static Hats instance;
-
-    @SidedProxy(clientSide = "me.ichun.mods.hats.client.core.ProxyClient", serverSide = "me.ichun.mods.hats.common.core.ProxyCommon")
-    public static ProxyCommon proxy;
-
-    public static EventHandlerServer eventHandlerServer;
-    public static EventHandlerClient eventHandlerClient;
-
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event)
+    public Hats()
     {
-        HatHandler.hatsFolder = new File(event.getModConfigurationDirectory().getParent(), "/mods/hats");
-        if(!HatHandler.hatsFolder.exists())
+        if(!HatResourceHandler.init())
         {
-            HatHandler.hatsFolder.mkdirs();
+            return;
         }
+        configCommon = new ConfigCommon().init();
+        configServer = new ConfigServer().init();
 
-        config = ConfigHandler.registerConfig(new Config(event.getSuggestedConfigurationFile()));
+        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        proxy.preInitMod();
+        bus.addListener(this::finishLoading);
 
-        UpdateChecker.registerMod(new UpdateChecker.ModVersionInfo(MOD_NAME, iChunUtil.VERSION_OF_MC, VERSION, false));
+        MinecraftForge.EVENT_BUS.register(eventHandlerServer = new EventHandlerServer());
+
+        //no packets yet.
+        //TODO make it server optional.
+//        channel = new PacketChannel(new ResourceLocation(MOD_ID, "channel"), PROTOCOL);
+
+
+        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+            configClient = new ConfigClient().init();
+
+            MinecraftForge.EVENT_BUS.register(eventHandlerClient = new EventHandlerClient());
+
+            ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> me.ichun.mods.ichunutil.client.core.EventHandlerClient::getConfigGui);
+        });
+
+        threadReadHats = new ThreadReadHats();
+        threadReadHats.start();
     }
 
-    @Mod.EventHandler
-    public void serverStarting(FMLServerAboutToStartEvent event)
+    private void finishLoading(FMLLoadCompleteEvent event)
     {
-        SessionState.serverHasMod = 1;
-        SessionState.currentKing = "";
-
-        proxy.initCommands(event.getServer());
-    }
-
-    @Mod.EventHandler
-    public void serverStarted(FMLServerStartedEvent event)
-    {
-    }
-
-    @Mod.EventHandler
-    public void serverStopped(FMLServerStoppedEvent event)
-    {
-        eventHandlerServer.mobHats.clear();
-        eventHandlerServer.playerHats.clear();
-        eventHandlerServer.playerActivity.clear();
-        eventHandlerServer.playerTradeRequests.clear();
-        eventHandlerServer.activeTrades.clear();
-        proxy.playerWornHats.clear();
-    }
-
-    @Mod.EventHandler
-    public void onFingerprintViolation(FMLFingerprintViolationEvent event)
-    {
-        if(event.getSource() != null && event.getSource().isFile())
+        //Thanks ichttt
+        if(threadReadHats.latch.getCount() > 0)
         {
-            LOGGER.warn("The file " + event.getSource().getName() + " has been modified. Support for the mod will not be provided.");
+            Hats.LOGGER.info("Waiting for file reader thread to finish");
+            try
+            {
+                threadReadHats.latch.await();
+            }
+            catch(InterruptedException e)
+            {
+                Hats.LOGGER.error("Got interrupted while waiting for FileReaderThread to finish");
+                e.printStackTrace();
+            }
         }
-    }
+        threadReadHats = null; //enjoy this thread, GC.
 
-    public static void console(String s, boolean warning)
-    {
-        StringBuilder sb = new StringBuilder();
-        if(warning)
-        {
-            LOGGER.warn(sb.append("[").append(VERSION).append("] ").append(s).toString());
-        }
-        else
-        {
-            LOGGER.info(sb.append("[").append(VERSION).append("] ").append(s).toString());
-        }
-    }
 
-    public static void console(String s)
-    {
-        console(s, false);
+        HeadHandler.init(); //initialise our head trackers
+
+        if(FMLEnvironment.dist.isClient())
+        {
+            eventHandlerClient.addLayers(); //Let's add the layers
+        }
     }
 }
