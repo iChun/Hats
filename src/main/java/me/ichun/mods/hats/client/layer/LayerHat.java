@@ -1,6 +1,7 @@
 package me.ichun.mods.hats.client.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
@@ -149,10 +150,10 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
                 //render the project
                 int overlay = LivingRenderer.getPackedOverlay(living, 0.0F);
-                Project project = HatResourceHandler.HATS.get(Screen.hasControlDown() ? "Headphones" : "Skyrim Hat");
-                if(project != null)
+                HatInfo hatInfo = HatResourceHandler.HATS.get(Screen.hasControlDown() ? "Headphones" : "Skyrim Hat");
+                if(hatInfo.project != null)
                 {
-                    project.getModel().render(stack, null, packedLightIn, overlay, 1F, 1F, 1F, 1F);
+                    hatInfo.project.getModel().render(stack, null, packedLightIn, overlay, 1F, 1F, 1F, 1F);
                 }
 
                 stack.pop();

@@ -15,9 +15,6 @@ public class ConfigClient extends ConfigBase
     @Prop(min = 0, max = 1000)
     public int maxHatRenders = 200;
 
-    @Prop
-    public boolean renderInFirstPerson = false;
-
     public ConfigClient()
     {
         super(ModLoadingContext.get().getActiveContainer().getModId() + "-client.toml");

@@ -12,7 +12,6 @@ import javax.annotation.Nonnull;
 public class ConfigCommon extends ConfigBase
 {
     @CategoryDivider(name = "general")
-    @Prop
     public boolean attemptToFixOldHats = true; //TODO not used.
 
     public ConfigCommon()

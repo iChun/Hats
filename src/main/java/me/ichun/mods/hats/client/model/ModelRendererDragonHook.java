@@ -2,10 +2,10 @@ package me.ichun.mods.hats.client.model;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
+import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
-import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -14,10 +14,6 @@ import net.minecraft.client.renderer.entity.EnderDragonRenderer;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.monster.GuardianEntity;
-import net.minecraft.entity.monster.SlimeEntity;
-import net.minecraft.entity.passive.DolphinEntity;
-import net.minecraft.entity.passive.horse.AbstractHorseEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class ModelRendererDragonHook extends ModelRenderer
@@ -103,10 +99,10 @@ public class ModelRendererDragonHook extends ModelRenderer
                 stack.scale(scale, scale, scale);
 
                 int overlay = LivingRenderer.getPackedOverlay(living, 0.0F);
-                Project project = HatResourceHandler.HATS.get(Screen.hasControlDown() ? "Headphones" : "Skyrim Hat");
-                if(project != null)
+                HatInfo hatInfo = HatResourceHandler.HATS.get(Screen.hasControlDown() ? "Headphones" : "Skyrim Hat");
+                if(hatInfo.project != null)
                 {
-                    project.getModel().render(stack, null, packedLightIn, overlay, 1F, 1F, 1F, 1F);
+                    hatInfo.project.getModel().render(stack, null, packedLightIn, overlay, 1F, 1F, 1F, 1F);
                 }
             }
 
