@@ -8,12 +8,12 @@ import java.util.Random;
 
 public class HatPool
 {
-    public final ArrayList<String> hatsInPool = new ArrayList<>();
+    public final ArrayList<HatInfo> hatsInPool = new ArrayList<>();
     private final Random rand = new Random(); //only used for getting a hat, no need to be tied to server rand.
 
     public EnumRarity forcedRarity = null;
 
-    public String getRandomHat()
+    public HatInfo getRandomHat()
     {
         if(hatsInPool.size() == 1)
         {
@@ -22,7 +22,7 @@ public class HatPool
         return hatsInPool.get(rand.nextInt(hatsInPool.size()));
     }
 
-    public void addHatToPool(String s)
+    public void addHatToPool(HatInfo s)
     {
         if(!hatsInPool.contains(s))
         {

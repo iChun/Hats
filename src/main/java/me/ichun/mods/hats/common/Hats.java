@@ -6,9 +6,13 @@ import me.ichun.mods.hats.common.config.ConfigCommon;
 import me.ichun.mods.hats.common.config.ConfigServer;
 import me.ichun.mods.hats.common.core.EventHandlerServer;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.packet.PacketEntityHatDetails;
+import me.ichun.mods.hats.common.packet.PacketPing;
+import me.ichun.mods.hats.common.packet.PacketRequestEntityHatDetails;
 import me.ichun.mods.hats.common.thread.ThreadReadHats;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.network.PacketChannel;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -59,7 +63,7 @@ public class Hats
 
         //no packets yet.
         //TODO make it server optional.
-//        channel = new PacketChannel(new ResourceLocation(MOD_ID, "channel"), PROTOCOL);
+        channel = new PacketChannel(new ResourceLocation(MOD_ID, "channel"), PROTOCOL, PacketPing.class, PacketRequestEntityHatDetails.class, PacketEntityHatDetails.class);
 
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {

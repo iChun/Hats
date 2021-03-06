@@ -2,6 +2,7 @@ package me.ichun.mods.hats.common.config;
 
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.EnumRarity;
+import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.ichunutil.common.config.ConfigBase;
 import me.ichun.mods.ichunutil.common.config.annotations.CategoryDivider;
 import me.ichun.mods.ichunutil.common.config.annotations.Prop;
@@ -43,12 +44,11 @@ public class ConfigServer extends ConfigBase
         add("110"); //Legendary - Gold
     }};
 
-    @Prop(min = 0.0D, max = 1.0D)
-    public double peripheralSpawnChance = 0.4D;
-
     public double peripheralCostMultiplier = 0.4D;
 
     public double salesCostMultiplier = 10D;
+
+    public double bossHatChanceBonus = 0.1D;
 
     public double bossRarityBonus = 0.2D;
 
@@ -59,6 +59,7 @@ public class ConfigServer extends ConfigBase
     //======================================================//
 
     public transient ArrayList<Double> rarityMeasure = new ArrayList<>();
+    public transient ArrayList<Double> rarityIndividual = new ArrayList<>();
 
     public transient EnumMap<EnumRarity, Integer> coinByRarity = new EnumMap<>(EnumRarity.class);
 
@@ -82,6 +83,7 @@ public class ConfigServer extends ConfigBase
 
         //Calculate the rarities
         rarityMeasure.clear();
+        rarityIndividual.clear();
         if(rarityWeight.size() != totalRarities)
         {
             Hats.LOGGER.warn("We don't have (exactly) " + totalRarities + " different rarity weights! Any shortage will be replaced with 0");
@@ -108,6 +110,7 @@ public class ConfigServer extends ConfigBase
         for(Integer weight : weights)
         {
             stack += (double)weight;
+            rarityIndividual.add(weight / (double)total);
             rarityMeasure.add(stack / total);
         }
         //Done calculating rarities
@@ -135,6 +138,8 @@ public class ConfigServer extends ConfigBase
             coinByRarity.put(rarities[i], costs.get(i));
         }
         //Done calculating coin costs.
+
+        HatHandler.allocateHatPools();
     }
 
     public boolean numbersOnly(Object o)

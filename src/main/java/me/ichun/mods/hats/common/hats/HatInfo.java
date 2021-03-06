@@ -93,6 +93,7 @@ public class HatInfo
     {
         public @Nonnull final String name;
         public @Nullable String parent;
+        public EnumRarity rarity;
         public final HashSet<Project.Part> parts = new HashSet<>();
 
         public Peripheral(String name)
@@ -103,6 +104,11 @@ public class HatInfo
         public void setParent(String s)
         {
             this.parent = s;
+        }
+
+        public void setRarity(EnumRarity rarity)
+        {
+            this.rarity = rarity;
         }
     }
 }

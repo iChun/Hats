@@ -1,11 +1,11 @@
 package me.ichun.mods.hats.client.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
-import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -14,10 +14,8 @@ import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
-import net.minecraft.client.renderer.model.ModelRenderer;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.fish.PufferfishEntity;
-import net.minecraft.entity.passive.fish.TropicalFishEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
 import net.minecraft.util.math.vector.Vector3f;
 
 @SuppressWarnings("unchecked")
@@ -31,6 +29,11 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
     @Override
     public void render(MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, LivingEntity living, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
     {
+        if(Hats.eventHandlerClient.renderCount >= Hats.configClient.maxHatRenders)
+        {
+            return;
+        }
+
         HeadInfo helper = HeadHandler.getHelper(living.getClass());
         if(helper != null && !helper.noTopInfo)
         {
@@ -45,25 +48,37 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
             {
                 return;
             }
-            int headCount = helper.getHeadCount(living); //TODO test tabula rendering outside overworld
 
-            for(int i = 0; i < headCount; i++) //TODO figure out why changing dimension fucks up the render
+            int overlay = LivingRenderer.getPackedOverlay(living, 0.0F);
+            renderHat(helper, renderer, stack, packedLightIn, overlay, living, partialTicks);
+        }
+    }
+
+    public static boolean renderHat(HeadInfo helper, LivingRenderer<?, ?> renderer, MatrixStack stack, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks)
+    {
+        int headCount = helper.getHeadCount(living); //TODO test tabula rendering outside overworld
+
+        boolean flag = false;
+
+        for(int i = 0; i < headCount; i++) //TODO figure out why changing dimension fucks up the render
+        {
+            if(living.isInvisible() && helper.affectedByInvisibility(living, -1, i))
             {
-                if(living.isInvisible() && helper.affectedByInvisibility(living, -1, i))
-                {
-                    return;
-                }
+                continue;
+            }
 
-                float hatScale = helper.getHatScale(living, stack, partialTicks, i);
+            float hatScale = helper.getHatScale(living, stack, partialTicks, i);
 
-                if(hatScale <= 0F)
-                {
-                    continue;
-                }
-                hatScale *= 1.005F; //to reduce Z-fighting
+            if(hatScale <= 0F)
+            {
+                continue;
+            }
+            hatScale *= 1.005F; //to reduce Z-fighting
 
-                stack.push();
+            stack.push();
 
+            if(!(living instanceof EnderDragonEntity))
+            {
                 // thepatcat: Creatures only get googly eyes in adulthood. It's science.
                 helper.preChildEntHeadRenderCalls(living, stack, renderer);
 
@@ -75,8 +90,9 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 stack.rotate(Vector3f.XP.rotationDegrees(helper.getHeadPitch(living, stack, partialTicks, -1, i)));
 
                 helper.postHeadTranslation(living, stack, partialTicks);
+            }
 
-                //This stack of code is needed for automating the location for future mobs
+            //This stack of code is needed for automating the location for future mobs
 /*
                 if(living instanceof TropicalFishEntity
                         || living instanceof PufferfishEntity
@@ -126,38 +142,41 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 }
                 else
 */
+            {
+                float[] headPoint = helper.getHatOffsetFromJoint(living, stack, partialTicks, i);
+                stack.translate(-headPoint[0], -headPoint[1], -headPoint[2]);
+
+                float[] armorOffset = helper.getHeadArmorOffset(living, stack, partialTicks, i);
+                if(armorOffset != null)
                 {
-                    float[] headPoint = helper.getHatOffsetFromJoint(living, stack, partialTicks, i);
-                    stack.translate(-headPoint[0], -headPoint[1], -headPoint[2]);
-
-                    float[] armorOffset = helper.getHeadArmorOffset(living, stack, partialTicks, i);
-                    if(armorOffset != null)
-                    {
-                        stack.translate(-armorOffset[0], -armorOffset[1], -armorOffset[2]);
-                    }
-
-                    stack.rotate(Vector3f.YP.rotationDegrees(helper.getHatYaw(living, stack, partialTicks, i)));
-                    stack.rotate(Vector3f.XP.rotationDegrees(helper.getHatPitch(living, stack, partialTicks, i)));
-
-                    stack.scale(hatScale, hatScale, hatScale);
-
-                    float armorScale = helper.getHeadArmorScale(living, stack, partialTicks, i);
-                    if(armorScale != 1F)
-                    {
-                        stack.scale(armorScale, armorScale, armorScale);
-                    }
+                    stack.translate(-armorOffset[0], -armorOffset[1], -armorOffset[2]);
                 }
 
-                //render the project
-                int overlay = LivingRenderer.getPackedOverlay(living, 0.0F);
-                HatInfo hatInfo = HatResourceHandler.HATS.get(Screen.hasControlDown() ? "Headphones" : "Skyrim Hat");
-                if(hatInfo.project != null)
-                {
-                    hatInfo.project.getModel().render(stack, null, packedLightIn, overlay, 1F, 1F, 1F, 1F);
-                }
+                stack.rotate(Vector3f.YP.rotationDegrees(helper.getHatYaw(living, stack, partialTicks, i)));
+                stack.rotate(Vector3f.XP.rotationDegrees(helper.getHatPitch(living, stack, partialTicks, i)));
 
-                stack.pop();
+                stack.scale(hatScale, hatScale, hatScale);
+
+                float armorScale = helper.getHeadArmorScale(living, stack, partialTicks, i);
+                if(armorScale != 1F)
+                {
+                    stack.scale(armorScale, armorScale, armorScale);
+                }
             }
+
+            //render the project
+            HatInfo hatInfo = HatResourceHandler.HATS.get(Screen.hasControlDown() ? "Headphones" : "Skyrim Hat");
+            if(hatInfo.project != null)
+            {
+                hatInfo.project.getModel().render(stack, null, packedLightIn, packedOverlayIn, 1F, 1F, 1F, 1F);
+
+                Hats.eventHandlerClient.renderCount++;
+
+                flag = true;
+            }
+
+            stack.pop();
         }
+        return flag;
     }
 }
