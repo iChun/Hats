@@ -44,7 +44,7 @@ public class ConfigServer extends ConfigBase
         add("110"); //Legendary - Gold
     }};
 
-    public double peripheralCostMultiplier = 0.4D;
+    public double accessoryCostMultiplier = 0.4D;
 
     public double salesCostMultiplier = 10D;
 

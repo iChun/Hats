@@ -2,6 +2,7 @@ package me.ichun.mods.hats.common.hats;
 
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
+import net.minecraft.util.text.TextFormatting;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -9,22 +10,28 @@ import java.util.*;
 
 public class HatInfo
 {
-    public final String name;
-    public final Project project;
-    public final ArrayList<Peripheral> peripherals = new ArrayList<>();
+    public final @Nonnull String name;
+    public final @Nonnull Project project;
+    public final ArrayList<Accessory> accessories = new ArrayList<>();
+    public EnumRarity rarity;
 
     public String forcedPool;
     public EnumRarity forcedRarity;
 
     public UUID contributorUUID;
 
-    public HatInfo(String name, Project project)
+    public HatInfo(@Nonnull String name, @Nonnull Project project)
     {
         this.name = name;
         this.project = project;
 
         findMeta();
-        findPeripherals();
+        findAccessories();
+    }
+
+    public String getDisplayName()
+    {
+        return (contributorUUID != null ? TextFormatting.AQUA : rarity != null ? rarity.getColour() : TextFormatting.WHITE).toString() + name;
     }
 
     private void findMeta()
@@ -53,52 +60,76 @@ public class HatInfo
         }
     }
 
-    private void findPeripherals()
+    private void findAccessories()
     {
-        HashMap<String, Peripheral> peripheralHashMap = new HashMap<>();
+        HashMap<String, Accessory> accessoryHashMap = new HashMap<>();
         for(Project.Part part : project.getAllParts())
         {
             String name = null;
             String parent = null;
+            String displayName = null;
             for(String note : part.notes)
             {
-                if(note.startsWith("hats-peripheral:"))
+                if(note.startsWith("hats-accessory:"))
                 {
-                    name = note.substring("hats-peripheral:".length()).trim();
+                    name = note.substring("hats-accessory:".length()).trim();
                 }
-                if(note.startsWith("hats-peripheral-parent:"))
+                if(note.startsWith("hats-accessory-parent:"))
                 {
-                    parent = note.substring("hats-peripheral-parent:".length()).trim();
+                    parent = note.substring("hats-accessory-parent:".length()).trim();
+                }
+                if(note.startsWith("hats-accessory-name:"))
+                {
+                    displayName = note.substring("hats-accessory-name:".length()).trim();
                 }
             }
 
             if(name != null)
             {
                 final String nameFinal = name;
-                Peripheral peripheral = peripheralHashMap.computeIfAbsent(name, k -> new Peripheral(nameFinal));
+                Accessory accessory = accessoryHashMap.computeIfAbsent(name, k -> new Accessory(nameFinal));
 
                 if(parent != null)
                 {
-                    peripheral.setParent(parent);
+                    accessory.setParent(parent);
                 }
 
-                peripheral.parts.add(part);
+                if(displayName != null)
+                {
+                    accessory.setDisplayName(displayName);
+                }
+
+                accessory.parts.add(part);
             }
         }
 
-        peripherals.addAll(peripheralHashMap.values());
+        accessories.addAll(accessoryHashMap.values());
     }
 
-    public static class Peripheral
+    public void setAccessoriesState(ArrayList<String> enabled)
+    {
+        for(Accessory accessory : accessories)
+        {
+            accessory.show(enabled.contains(accessory.name));
+        }
+    }
+
+    public static class Accessory
     {
         public @Nonnull final String name;
+        public @Nullable String displayName;
         public @Nullable String parent;
-        public EnumRarity rarity;
+        public @Nullable EnumRarity rarity; //This is only set on the server!
         public final HashSet<Project.Part> parts = new HashSet<>();
 
-        public Peripheral(String name)
+        public Accessory(String name)
         {
             this.name = name;
+        }
+
+        public void setDisplayName(String s)
+        {
+            this.displayName = s;
         }
 
         public void setParent(String s)
@@ -109,6 +140,14 @@ public class HatInfo
         public void setRarity(EnumRarity rarity)
         {
             this.rarity = rarity;
+        }
+
+        public void show(boolean show)
+        {
+            for(Project.Part part : parts)
+            {
+                part.showModel = show;
+            }
         }
     }
 }

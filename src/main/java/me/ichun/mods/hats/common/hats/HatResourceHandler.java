@@ -1,5 +1,6 @@
 package me.ichun.mods.hats.common.hats;
 
+import com.google.common.base.Splitter;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.ichun.mods.hats.common.Hats;
@@ -8,6 +9,7 @@ import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.FileUtils;
 
+import javax.annotation.Nonnull;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,12 +19,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class HatResourceHandler
 {
     public static final HashMap<String, HatInfo> HATS = new HashMap<>(); //Our reliance on Tabula is staggering.
+    public static final Splitter COLON_SPLITTER = Splitter.on(":").trimResults().omitEmptyStrings();
 
     private static Path hatsDir;
     private static boolean init;
@@ -158,9 +162,30 @@ public class HatResourceHandler
         }
     }
 
-    private static HatInfo createHatInfoFor(String name, Project project)
+    private static HatInfo createHatInfoFor(@Nonnull String name, @Nonnull Project project)
     {
         return new HatInfo(name, project);
+    }
+
+    public static HatInfo getAndSetAccessories(String details)
+    {
+        List<String> strings = COLON_SPLITTER.splitToList(details);
+        if(!strings.isEmpty())
+        {
+            HatInfo info = HATS.get(strings.get(0));
+            if(info != null)
+            {
+                ArrayList<String> accessories = new ArrayList<>();
+                for(int i = 1; i < strings.size(); i++)
+                {
+                    accessories.add(strings.get(i));
+                }
+                info.setAccessoriesState(accessories);
+
+                return info;
+            }
+        }
+        return null;
     }
 
     private static void repairOldHat(File file, Project project)

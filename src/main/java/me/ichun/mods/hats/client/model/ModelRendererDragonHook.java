@@ -4,6 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import me.ichun.mods.hats.client.layer.LayerHat;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import net.minecraft.client.Minecraft;
@@ -71,10 +72,31 @@ public class ModelRendererDragonHook extends ModelRenderer
 
         LivingEntity living = parentModel.dragonInstance;
 
-        if(LayerHat.renderHat(helper, null, stack, packedLightIn, packedOverlayIn, living, lastPartialTick))
+        if(living.getPersistentData().contains(HatHandler.NBT_HAT_KEY) && living.getPersistentData().getCompound(HatHandler.NBT_HAT_KEY).contains(HatHandler.NBT_HAT_SET_KEY))
         {
-            IRenderTypeBuffer.Impl bufferIn = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-            bufferIn.getBuffer(RENDER_TYPE_RESET);
+            //we have hat data
+            String hatDetails = HatHandler.getHatDetails(living);
+            if(!hatDetails.isEmpty()) // if it's empty, we don't actually have the details yet, or actually there's no hat.
+            {
+                if(LayerHat.renderHat(helper, null, stack, packedLightIn, packedOverlayIn, living, lastPartialTick, hatDetails))
+                {
+                    IRenderTypeBuffer.Impl bufferIn = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+                    bufferIn.getBuffer(RENDER_TYPE_RESET);
+                }
+            }
+        }
+        else
+        {
+            //we don't have the hat data
+            if(Hats.eventHandlerClient.serverHasMod)
+            {
+                Hats.eventHandlerClient.requestHatDetails(living);
+                HatHandler.assignNoHat(living);
+            }
+            else if(living.getRNG().nextDouble() < Hats.configClient.hatChance && Hats.eventHandlerClient.connectionAge > 100) //assign a random hat, client-only after all. 5 second connection cooldown
+            {
+                HatHandler.assignHat(living);
+            }
         }
     }
 }

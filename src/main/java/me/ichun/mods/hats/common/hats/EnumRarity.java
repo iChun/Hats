@@ -14,4 +14,9 @@ public enum EnumRarity
     private final TextFormatting colour;
 
     EnumRarity(TextFormatting colour) {this.colour = colour;}
+
+    public TextFormatting getColour()
+    {
+        return colour;
+    }
 }

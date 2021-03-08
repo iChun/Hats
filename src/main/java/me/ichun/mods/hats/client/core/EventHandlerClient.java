@@ -21,6 +21,7 @@ import java.util.Map;
 public class EventHandlerClient
 {
     public boolean serverHasMod;
+    public int connectionAge;
     public int renderCount;
     public ArrayList<Integer> requestedHats = new ArrayList<>();
 
@@ -28,6 +29,7 @@ public class EventHandlerClient
     public void onClientConnection(ClientPlayerNetworkEvent.LoggedInEvent event)
     {
         serverHasMod = false;
+        connectionAge = 0;
     }
 
     @SubscribeEvent
@@ -42,11 +44,16 @@ public class EventHandlerClient
     {
         if(event.phase == TickEvent.Phase.END)
         {
-            if(!requestedHats.isEmpty())
+            if(Minecraft.getInstance().world != null)
             {
-                Hats.channel.sendToServer(new PacketRequestEntityHatDetails(requestedHats.toArray(new Integer[0])));
+                connectionAge++;
 
-                requestedHats.clear();
+                if(!requestedHats.isEmpty())
+                {
+                    Hats.channel.sendToServer(new PacketRequestEntityHatDetails(requestedHats.toArray(new Integer[0])));
+
+                    requestedHats.clear(); //we don't clear on world unload. No harm to request, server won't find the entity.
+                }
             }
         }
     }

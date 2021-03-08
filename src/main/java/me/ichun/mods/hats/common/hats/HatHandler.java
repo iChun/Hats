@@ -1,20 +1,25 @@
 package me.ichun.mods.hats.common.hats;
 
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.packet.PacketNewHatPart;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.*;
 
-public class HatHandler
+public class HatHandler //Handles most of the server-related things.
 {
     public static final EnumMap<EnumRarity, ArrayList<HatPool>> HAT_POOLS = new EnumMap<>(EnumRarity.class);
     public static final Random RAND = new Random();
     public static final String NBT_HAT_KEY = "HatsTag";
     public static final String NBT_HAT_SET_KEY = "HatSet";
+
+    private static HatsSavedData saveData;
 
     public static void allocateHatPools()
     {
@@ -44,11 +49,11 @@ public class HatHandler
                 pool.forcedRarity = hatInfo.forcedRarity;
             }
 
-            for(HatInfo.Peripheral peripheral : hatInfo.peripherals)
+            for(HatInfo.Accessory accessory : hatInfo.accessories)
             {
-                RAND.setSeed(Math.abs((Hats.configServer.randSeed + entry.getKey() + peripheral.name).hashCode()) * 420744333L); //Chat contributed random
+                RAND.setSeed(Math.abs((Hats.configServer.randSeed + entry.getKey() + accessory.name).hashCode()) * 420744333L); //Chat contributed random
 
-                peripheral.rarity = getRarityForChance(RAND.nextDouble());
+                accessory.setRarity(getRarityForChance(RAND.nextDouble()));
             }
         }
 
@@ -64,7 +69,12 @@ public class HatHandler
 
             RAND.setSeed(Math.abs((Hats.configServer.randSeed + entry.getKey()).hashCode()) * 154041013L); //Chat contributed random
 
-            ArrayList<HatPool> hats = HAT_POOLS.computeIfAbsent(getRarityForChance(RAND.nextDouble()), k -> new ArrayList<>());
+            EnumRarity rarity = getRarityForChance(RAND.nextDouble());
+            ArrayList<HatPool> hats = HAT_POOLS.computeIfAbsent(rarity, k -> new ArrayList<>());
+            for(HatInfo hatInfo : pool.hatsInPool)
+            {
+                hatInfo.rarity = rarity;
+            }
             hats.add(pool);
         }
     }
@@ -137,30 +147,30 @@ public class HatHandler
         HatInfo hatInfo = pool.getRandomHat();
         sb.append(hatInfo.name);
 
-        ArrayList<HatInfo.Peripheral> spawningPeripherals = new ArrayList<>();
-        for(HatInfo.Peripheral peripheral : hatInfo.peripherals)
+        ArrayList<HatInfo.Accessory> spawningAccessories = new ArrayList<>();
+        for(HatInfo.Accessory accessory : hatInfo.accessories)
         {
-            RAND.setSeed(Math.abs((Hats.configServer.randSeed + peripheral.name).hashCode()) * 53579997854L); //Chat contributed random
-            double periphChance = Hats.configServer.rarityIndividual.get(peripheral.rarity.ordinal());
+            RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID() + accessory.name).hashCode()) * 53579997854L); //Chat contributed random
+            double accChance = Hats.configServer.rarityIndividual.get(accessory.rarity.ordinal());
             if(isBoss)
             {
-                periphChance += Hats.configServer.bossRarityBonus;
+                accChance += Hats.configServer.bossRarityBonus;
             }
-            if(RAND.nextDouble() < periphChance) //spawn the peripheral
+            if(RAND.nextDouble() < accChance) //spawn the accessory
             {
-                spawningPeripherals.add(peripheral);
+                spawningAccessories.add(accessory);
             }
         }
 
-        for(HatInfo.Peripheral peripheral : spawningPeripherals)
+        for(HatInfo.Accessory accessory : spawningAccessories)
         {
-            if(peripheral.parent != null && !isParentInList(spawningPeripherals, peripheral.parent))
+            if(accessory.parent != null && !isParentInList(spawningAccessories, accessory.parent))
             {
                 continue; //we ain't spawning you, go find your parent first!
             }
 
             sb.append(":");
-            sb.append(peripheral.name);
+            sb.append(accessory.name);
         }
 
         tag.putString(NBT_HAT_SET_KEY, sb.toString());
@@ -168,13 +178,18 @@ public class HatHandler
         ent.getPersistentData().put(NBT_HAT_KEY, tag);
     }
 
-    public static void denyHat(LivingEntity ent)
+    public static void assignSpecificHat(LivingEntity ent, String s)
     {
         CompoundNBT tag = ent.getPersistentData().getCompound(NBT_HAT_KEY);
 
-        tag.putString(NBT_HAT_SET_KEY, "");
+        tag.putString(NBT_HAT_SET_KEY, s);
 
         ent.getPersistentData().put(NBT_HAT_KEY, tag);
+    }
+
+    public static void assignNoHat(LivingEntity ent)
+    {
+        assignSpecificHat(ent, "");
     }
 
     public static String getHatDetails(LivingEntity ent)
@@ -184,15 +199,108 @@ public class HatHandler
         return tag.getString(NBT_HAT_SET_KEY);
     }
 
-    private static boolean isParentInList(ArrayList<HatInfo.Peripheral> peripherals, String parent)
+    private static boolean isParentInList(ArrayList<HatInfo.Accessory> accessories, String parent)
     {
-        for(HatInfo.Peripheral peripheral : peripherals)
+        for(HatInfo.Accessory accessory : accessories)
         {
-            if(parent.equals(peripheral.parent))
+            if(parent.equals(accessory.name))
             {
                 return true;
             }
         }
         return false;
+    }
+
+    public static void setSaveData(HatsSavedData data)
+    {
+        saveData = data;
+    }
+
+    public static void addHat(ServerPlayerEntity player, String hatDetails)
+    {
+        List<String> strings = HatResourceHandler.COLON_SPLITTER.splitToList(hatDetails);
+        if(!strings.isEmpty())
+        {
+            HatInfo info = HatResourceHandler.getAndSetAccessories(hatDetails);
+            if(info != null)
+            {
+                boolean foundBase = false; //if stays false, this is a new hat.
+
+                String hatName = strings.get(0);
+                HatsSavedData.HatPart hatBase = null;
+                HatsSavedData.PlayerHatData playerHatData = saveData.playerHats.computeIfAbsent(player.getGameProfile().getId(), k -> new HatsSavedData.PlayerHatData(player.getGameProfile().getId()));
+                for(HatsSavedData.HatPart hatPart : playerHatData.hatParts)
+                {
+                    if(hatName.equals(hatPart.name))
+                    {
+                        hatBase = hatPart;
+                        hatBase.count++;
+                        foundBase = true;
+                        break;
+                    }
+                }
+
+                if(hatBase == null)
+                {
+                    playerHatData.hatParts.add(hatBase = new HatsSavedData.HatPart(hatName));//this already sets the count to 1.
+                }
+
+                ArrayList<String> newAccessoriesName = new ArrayList<>();
+
+                boolean newAccessory = false;
+                for(int i = 1; i < strings.size(); i++)
+                {
+                    String accessoryName = strings.get(i);
+                    boolean foundAccessory = false;
+                    for(HatsSavedData.HatPart accessory : hatBase.hatParts)
+                    {
+                        if(accessoryName.equals(accessory.name))
+                        {
+                            accessory.count++;
+                            foundAccessory = true;
+                            break;
+                        }
+                    }
+
+                    if(!foundAccessory)
+                    {
+                        newAccessory = true;
+                        hatBase.hatParts.add(new HatsSavedData.HatPart(accessoryName));
+                        newAccessoriesName.add(accessoryName);
+                    }
+                }
+
+                if(!foundBase || newAccessory) //there's something new
+                {
+                    StringBuilder sb = new StringBuilder(hatName);
+                    ArrayList<String> names = new ArrayList<>();
+                    names.add(info.getDisplayName());
+
+                    for(String s : newAccessoriesName)
+                    {
+                        for(HatInfo.Accessory accessory : info.accessories)
+                        {
+                            if(accessory.name.equals(s)) //oh hey we found it.
+                            {
+                                sb.append(":");
+                                sb.append(s);
+
+                                String displayName = "- ";
+                                if(accessory.rarity != null)
+                                {
+                                    displayName += accessory.rarity.getColour().toString();
+                                }
+                                displayName += accessory.displayName;
+                                names.add(displayName);
+                            }
+                        }
+                    }
+
+                    Hats.channel.sendTo(new PacketNewHatPart(!foundBase, sb.toString(), names), player);
+                }
+
+                saveData.markDirty();
+            }
+        }
     }
 }

@@ -1,13 +1,14 @@
 package me.ichun.mods.hats.client.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
@@ -16,6 +17,7 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.client.renderer.entity.model.EntityModel;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.vector.Vector3f;
 
 @SuppressWarnings("unchecked")
@@ -29,7 +31,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
     @Override
     public void render(MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, LivingEntity living, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
     {
-        if(Hats.eventHandlerClient.renderCount >= Hats.configClient.maxHatRenders)
+        if(Hats.eventHandlerClient.renderCount >= Hats.configClient.maxHatRenders && !(living instanceof PlayerEntity))
         {
             return;
         }
@@ -49,16 +51,37 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 return;
             }
 
-            int overlay = LivingRenderer.getPackedOverlay(living, 0.0F);
-            renderHat(helper, renderer, stack, packedLightIn, overlay, living, partialTicks);
+            if(living.getPersistentData().contains(HatHandler.NBT_HAT_KEY) && living.getPersistentData().getCompound(HatHandler.NBT_HAT_KEY).contains(HatHandler.NBT_HAT_SET_KEY))
+            {
+                //we have hat data
+                String hatDetails = HatHandler.getHatDetails(living);
+                if(!hatDetails.isEmpty()) // if it's empty, we don't actually have the details yet, or actually there's no hat.
+                {
+                    int overlay = LivingRenderer.getPackedOverlay(living, 0.0F);
+                    renderHat(helper, renderer, stack, packedLightIn, overlay, living, partialTicks, hatDetails);
+                }
+            }
+            else
+            {
+                //we don't have the hat data
+                if(Hats.eventHandlerClient.serverHasMod)
+                {
+                    Hats.eventHandlerClient.requestHatDetails(living);
+                    HatHandler.assignNoHat(living);
+                }
+                else if(living.getRNG().nextDouble() < Hats.configClient.hatChance && Hats.eventHandlerClient.connectionAge > 100) //assign a random hat, client-only after all. 5 second connection cooldown
+                {
+                    HatHandler.assignHat(living);
+                }
+            }
         }
     }
 
-    public static boolean renderHat(HeadInfo helper, LivingRenderer<?, ?> renderer, MatrixStack stack, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks)
+    public static boolean renderHat(HeadInfo helper, LivingRenderer<?, ?> renderer, MatrixStack stack, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks, String hatDetails)
     {
         int headCount = helper.getHeadCount(living); //TODO test tabula rendering outside overworld
 
-        boolean flag = false;
+        boolean flag = false; //TODO find out from the server about our headinfos.
 
         for(int i = 0; i < headCount; i++) //TODO figure out why changing dimension fucks up the render
         {
@@ -165,14 +188,19 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
             }
 
             //render the project
-            HatInfo hatInfo = HatResourceHandler.HATS.get(Screen.hasControlDown() ? "Headphones" : "Skyrim Hat");
-            if(hatInfo.project != null)
+            HatInfo hatInfo = HatResourceHandler.getAndSetAccessories(hatDetails);
+            if(hatInfo != null) //TODO test the plumbob alpha levels, do we need blend? We need cull in render type.
             {
+                hatInfo.project.updateModel();
                 hatInfo.project.getModel().render(stack, null, packedLightIn, packedOverlayIn, 1F, 1F, 1F, 1F);
 
                 Hats.eventHandlerClient.renderCount++;
 
                 flag = true;
+            }
+            else
+            {
+                //TODO we have to ask the server for the Hat.
             }
 
             stack.pop();

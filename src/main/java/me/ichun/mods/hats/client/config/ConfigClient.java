@@ -15,6 +15,12 @@ public class ConfigClient extends ConfigBase
     @Prop(min = 0, max = 1000)
     public int maxHatRenders = 200;
 
+    @Prop(min = 0.0D, max = 1.0D)
+    public double hatChance = 0.1D;
+
+    @Prop(min = 0, max = 5)
+    public int hatUnlockString = 0;
+
     public ConfigClient()
     {
         super(ModLoadingContext.get().getActiveContainer().getModId() + "-client.toml");
