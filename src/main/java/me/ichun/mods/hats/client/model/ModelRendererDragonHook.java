@@ -78,9 +78,9 @@ public class ModelRendererDragonHook extends ModelRenderer
             String hatDetails = HatHandler.getHatDetails(living);
             if(!hatDetails.isEmpty()) // if it's empty, we don't actually have the details yet, or actually there's no hat.
             {
-                if(LayerHat.renderHat(helper, null, stack, packedLightIn, packedOverlayIn, living, lastPartialTick, hatDetails))
+                IRenderTypeBuffer.Impl bufferIn = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
+                if(LayerHat.renderHat(helper, null, stack, bufferIn, packedLightIn, packedOverlayIn, living, lastPartialTick, hatDetails))
                 {
-                    IRenderTypeBuffer.Impl bufferIn = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
                     bufferIn.getBuffer(RENDER_TYPE_RESET);
                 }
             }

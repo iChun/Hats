@@ -1,14 +1,18 @@
 package me.ichun.mods.hats.common.hats;
 
+import me.ichun.mods.hats.client.model.ModelHat;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class HatInfo
+        implements Comparable<HatInfo>
 {
     public final @Nonnull String name;
     public final @Nonnull Project project;
@@ -19,6 +23,9 @@ public class HatInfo
     public EnumRarity forcedRarity;
 
     public UUID contributorUUID;
+
+    @OnlyIn(Dist.CLIENT)
+    public ModelHat model;
 
     public HatInfo(@Nonnull String name, @Nonnull Project project)
     {
@@ -32,6 +39,23 @@ public class HatInfo
     public String getDisplayName()
     {
         return (contributorUUID != null ? TextFormatting.AQUA : rarity != null ? rarity.getColour() : TextFormatting.WHITE).toString() + name;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public ModelHat getModel()
+    {
+        if(model == null)
+        {
+            model = new ModelHat(this);
+        }
+        return model;
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public void destroy()
+    {
+        //Don't need to destroy the model
+        project.destroy();
     }
 
     private void findMeta()
@@ -114,7 +138,14 @@ public class HatInfo
         }
     }
 
+    @Override
+    public int compareTo(HatInfo o)
+    {
+        return name.compareTo(o.name);
+    }
+
     public static class Accessory
+            implements Comparable<Accessory>
     {
         public @Nonnull final String name;
         public @Nullable String displayName;
@@ -148,6 +179,14 @@ public class HatInfo
             {
                 part.showModel = show;
             }
+        }
+
+        @Override
+        public int compareTo(Accessory o)
+        {
+            String com = displayName != null ? displayName : name;
+            String their = o.displayName != null ? o.displayName : o.name;
+            return com.compareTo(their);
         }
     }
 }

@@ -10,6 +10,7 @@ import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.IEntityRenderer;
 import net.minecraft.client.renderer.entity.LivingRenderer;
@@ -58,7 +59,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 if(!hatDetails.isEmpty()) // if it's empty, we don't actually have the details yet, or actually there's no hat.
                 {
                     int overlay = LivingRenderer.getPackedOverlay(living, 0.0F);
-                    renderHat(helper, renderer, stack, packedLightIn, overlay, living, partialTicks, hatDetails);
+                    renderHat(helper, renderer, stack, bufferIn, packedLightIn, overlay, living, partialTicks, hatDetails);
                 }
             }
             else
@@ -77,7 +78,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
         }
     }
 
-    public static boolean renderHat(HeadInfo helper, LivingRenderer<?, ?> renderer, MatrixStack stack, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks, String hatDetails)
+    public static boolean renderHat(HeadInfo helper, LivingRenderer<?, ?> renderer, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks, String hatDetails)
     {
         int headCount = helper.getHeadCount(living); //TODO test tabula rendering outside overworld
 
@@ -189,10 +190,9 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
             //render the project
             HatInfo hatInfo = HatResourceHandler.getAndSetAccessories(hatDetails);
-            if(hatInfo != null) //TODO test the plumbob alpha levels, do we need blend? We need cull in render type.
+            if(hatInfo != null)
             {
-                hatInfo.project.updateModel();
-                hatInfo.project.getModel().render(stack, null, packedLightIn, packedOverlayIn, 1F, 1F, 1F, 1F);
+                hatInfo.getModel().render(stack, bufferIn.getBuffer(RenderType.getEntityTranslucentCull(hatInfo.project.getNativeImageResourceLocation())), packedLightIn, packedOverlayIn, 1F, 1F, 1F, 1F);
 
                 Hats.eventHandlerClient.renderCount++;
 
