@@ -2,6 +2,7 @@ package me.ichun.mods.hats.common.hats;
 
 import me.ichun.mods.hats.client.model.ModelHat;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
@@ -80,6 +81,10 @@ public class HatInfo
             if(note.startsWith("hats-contributor-uuid:"))
             {
                 contributorUUID = UUID.fromString(note.substring("hats-contributor-uuid:".length()).trim());
+            }
+            if(note.startsWith("hats-contributor-mini-me:") && contributorUUID == null)
+            {
+                contributorUUID = EntityHelper.UUID_EXAMPLE;
             }
         }
     }

@@ -103,7 +103,18 @@ public class ElementHatsScrollView extends ElementFertile
             {
                 if(scrollVert != null)
                 {
-                    scrollVert.secondHandScroll(dist);
+                    //calculate the total item width/height
+                    int padding = 3;
+                    int useableWidth = getWidth() - padding;
+                    int maxPerRow = (int)Math.floor(useableWidth / 50F); //this max hat renders we can have a row. 50 = min hat render width
+                    if(maxPerRow > elements.size())
+                    {
+                        maxPerRow = elements.size();
+                    }
+                    int rowCount = (int)Math.ceil(elements.size() / (float)maxPerRow);
+                    int totalItemHeight = (70 + padding) * rowCount + padding; //70 = min hat render height
+
+                    scrollVert.secondHandScroll((dist * 70 / totalItemHeight) * 2D);
                     return true;
                 }
             }

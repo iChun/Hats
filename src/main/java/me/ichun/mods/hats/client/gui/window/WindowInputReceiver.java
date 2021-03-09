@@ -83,6 +83,9 @@ public class WindowInputReceiver extends Window<WorkspaceHats>
 
     public void correct()
     {
+        driftPitch = driftPitch % 360F;
+        driftYaw = driftYaw % 360F;
+
         if(headingCamDist < -1.2F)
         {
             headingCamDist = -1.2F;

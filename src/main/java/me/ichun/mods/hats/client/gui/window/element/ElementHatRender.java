@@ -4,42 +4,59 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
+import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.Theme;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Fragment;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementClickable;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementRightClickable;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Vector3f;
 
 import javax.annotation.Nonnull;
+import java.text.DecimalFormat;
 import java.util.function.Consumer;
 
-public class ElementHatRender extends ElementClickable
+public class ElementHatRender<T extends ElementHatRender>  extends ElementRightClickable<T>
 {
+    public static final DecimalFormat FORMATTER = new DecimalFormat("#,###,###");
+
     public HatsSavedData.HatPart hatDetails;
     public boolean toggleState;
 
-    public ElementHatRender(@Nonnull Fragment parent, HatsSavedData.HatPart hatDeets, Consumer callback)
+    public ElementHatRender(@Nonnull Fragment parent, HatsSavedData.HatPart hatDeets, Consumer<T> callback, Consumer<T> rmbCallback)
     {
-        super(parent, callback);
+        super(parent, callback, rmbCallback);
         this.hatDetails = hatDeets;
     }
 
-    public ElementHatRender setToggled(boolean flag)
+    public <T extends ElementHatRender<?>> T setToggled(boolean flag)
     {
         toggleState = flag;
-        return this;
+        return (T)this;
     }
 
     @Override
     public void onClickRelease()
     {
-        toggleState = !toggleState;
+        if(!toggleState)
+        {
+            toggleState = true;
+        }
+    }
+
+    @Override
+    public void onRightClickRelease()
+    {
+        if(toggleState)
+        {
+            toggleState = false;
+        }
     }
 
     @Override
@@ -114,19 +131,18 @@ public class ElementHatRender extends ElementClickable
         String hatName = info != null ? info.getDisplayName() : "";
 
         float scale = 0.5F;
-        int rotationCount = -1;
         String s = reString(hatName, (int)((height - 4) / scale));
 
         stack.push();
-        stack.translate(getRight() - 5, getTop() + (height / 2F), 0F);
-        stack.rotate(Vector3f.ZP.rotationDegrees(90F * rotationCount));
-        stack.translate(-(height / 2F) + 3, -(getFontRenderer().FONT_HEIGHT) / 2F + 2, 100F);
+        stack.translate(getRight() - 5, getTop() + (height * scale), 0F);
+        stack.rotate(Vector3f.ZP.rotationDegrees(-90F));
+        stack.translate(-(height * scale) + 3, -(getFontRenderer().FONT_HEIGHT) * scale + 2, 100F);
         stack.scale(scale, scale, scale);
 
         //draw the text
         if(renderMinecraftStyle())
         {
-            getFontRenderer().drawStringWithShadow(stack, s, 0, 0, getMinecraftFontColour());
+            getFontRenderer().drawString(stack, s, 0, 0, getMinecraftFontColour());
         }
         else
         {
@@ -134,6 +150,27 @@ public class ElementHatRender extends ElementClickable
         }
 
         stack.pop();
+
+        if(!(Minecraft.getInstance().player.isCreative() && !Hats.configServer.enableCreativeModeHadHunting)) //doesn't use an inventory
+        {
+            s = "x" + FORMATTER.format(hatDetails.count);
+
+            stack.push();
+            stack.translate(getLeft() + 3, getBottom() - (getFontRenderer().FONT_HEIGHT) * scale - 1, 100F);
+            stack.scale(scale, scale, scale);
+
+            //draw the text
+            if(renderMinecraftStyle())
+            {
+                getFontRenderer().drawString(stack, s, 0, 0, getMinecraftFontColour());
+            }
+            else
+            {
+                getFontRenderer().drawString(stack, s, 0, 0, Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim));
+            }
+
+            stack.pop();
+        }
     }
 
     @Override

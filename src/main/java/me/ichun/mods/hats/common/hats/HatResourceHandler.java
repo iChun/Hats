@@ -4,6 +4,7 @@ import com.google.common.base.Splitter;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.module.tabula.formats.ImportList;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -27,6 +28,8 @@ public class HatResourceHandler
 {
     public static final HashMap<String, HatInfo> HATS = new HashMap<>(); //Our reliance on Tabula is staggering.
     public static final Splitter COLON_SPLITTER = Splitter.on(":").trimResults().omitEmptyStrings();
+
+    public static ArrayList<HatsSavedData.HatPart> HAT_PARTS = new ArrayList<>();
 
     private static Path hatsDir;
     private static boolean init;
@@ -107,6 +110,8 @@ public class HatResourceHandler
         File dir = getHatsDir().toFile();
         count += scourForHats(dir);
 
+        HAT_PARTS = getAllHatsAsHatParts(1);
+
         Hats.LOGGER.info("Loaded {} hats.", count);
     }
 
@@ -149,10 +154,10 @@ public class HatResourceHandler
                 Hats.LOGGER.warn("Loaded an old Tabula file. Updating to new Tabula & Hats format: {}", file);
             }
 
-//            if(file.getName().startsWith("(C) ")) //it's a contributor hat
-//            {
-//                parseMeta(file, project);
-//            }
+            //            if(file.getName().startsWith("(C) ")) //it's a contributor hat
+            //            {
+            //                parseMeta(file, project);
+            //            }
 
             String hatName = file.getName().substring(0, file.getName().length() - 4);
 
@@ -186,6 +191,54 @@ public class HatResourceHandler
             }
         }
         return null;
+    }
+
+    public static ArrayList<HatsSavedData.HatPart> getAllHatsAsHatParts(int count)
+    {
+        ArrayList<HatsSavedData.HatPart> hatParts = new ArrayList<>();
+        HATS.forEach((s, info) -> {
+            HatsSavedData.HatPart part;
+            hatParts.add(part = new HatsSavedData.HatPart(info.name));
+            part.count = count;
+
+            for(HatInfo.Accessory accessory : info.accessories)
+            {
+                HatsSavedData.HatPart acc1;
+                part.hatParts.add(acc1 = new HatsSavedData.HatPart(accessory.name));
+                acc1.count = count;
+            }
+        });
+        return hatParts;
+    }
+
+    public static ArrayList<HatsSavedData.HatPart> getAllHatPartsWithInventory(ArrayList<HatsSavedData.HatPart> inventory)
+    {
+        ArrayList<HatsSavedData.HatPart> hatParts = getAllHatsAsHatParts(0);
+        for(HatsSavedData.HatPart invPart : inventory)
+        {
+            for(HatsSavedData.HatPart hatPart : hatParts)
+            {
+                if(hatPart.name.equals(invPart.name))
+                {
+                    hatPart.count = invPart.count;
+
+                    for(HatsSavedData.HatPart acc : hatPart.hatParts)
+                    {
+                        for(HatsSavedData.HatPart invAcc : invPart.hatParts)
+                        {
+                            if(acc.name.equals(invAcc.name))
+                            {
+                                acc.count = invAcc.count;
+                                break;
+                            }
+                        }
+                    }
+
+                    break;
+                }
+            }
+        }
+        return hatParts;
     }
 
     private static void repairOldHat(File file, Project project)

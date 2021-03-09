@@ -6,6 +6,8 @@ import me.ichun.mods.hats.client.gui.window.WindowHatsList;
 import me.ichun.mods.hats.client.gui.window.WindowInputReceiver;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.Workspace;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import net.minecraft.client.Minecraft;
@@ -14,6 +16,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 
 public class WorkspaceHats extends Workspace
 {
@@ -56,6 +59,16 @@ public class WorkspaceHats extends Workspace
         int padding = 10;
         windowHatsList.setWidth((int)Math.floor((width / 2F)) - padding);
         super.resize(mc, width, height);
+    }
+
+    public ArrayList<HatsSavedData.HatPart> getHatPartSource()
+    {
+        boolean useInventory = true;
+        if(Minecraft.getInstance().player.isCreative() && !Hats.configServer.enableCreativeModeHadHunting)
+        {
+            useInventory = false;
+        }
+        return useInventory ? Hats.eventHandlerClient.hatsInventory.hatParts : HatResourceHandler.HAT_PARTS;
     }
 
     @Override
