@@ -11,12 +11,15 @@ import me.ichun.mods.ichunutil.client.tracker.ClientEntityTracker;
 import me.ichun.mods.ichunutil.client.tracker.entity.EntityTracker;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.IngameMenuScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.entity.EnderDragonRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
 import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
@@ -26,6 +29,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -42,6 +46,7 @@ public class EventHandlerClient
     public int openMenuAnimation;
     public boolean lastHideGui;
     public float originalPitch;
+    public float guiX, guiY, guiYaw, guiPitch, guiDist;
 
     @SubscribeEvent
     public void onClientConnection(ClientPlayerNetworkEvent.LoggedInEvent event)
@@ -84,11 +89,16 @@ public class EventHandlerClient
                     openMenuAnimation++;
                 }
 
-                openedHatsInventory = Minecraft.getInstance().currentScreen instanceof WorkspaceHats;
+                openedHatsInventory = mc.currentScreen instanceof WorkspaceHats;
             }
             else if(openMenuAnimation > 0)
             {
                 openMenuAnimation--;
+
+                if(mc.currentScreen instanceof IngameMenuScreen) //we double escaped. RESET ASAP
+                {
+                    openMenuAnimation = 0;
+                }
 
                 if(openMenuAnimation <= 0)
                 {
@@ -122,11 +132,11 @@ public class EventHandlerClient
                 oriRend.prevRotationPitch = oriRend.rotationPitch = (float)(originalPitch + (-originalPitch * progSin)); //set the pitch to 0 because we're hacky like that.
 
                 //yaw and pitchCam - change from player's rotations
-                float yawCam = (float)(-160F * progSin);
-                float pitchCam = (float)(-(oriRend.rotationPitch + oriRend.rotationPitch) * progSin);
+                float yawCam = (float)((-160F + guiYaw) * progSin);
+                float pitchCam = (float)((-(oriRend.rotationPitch + oriRend.rotationPitch) + guiPitch) * progSin);
                 if(mc.gameSettings.getPointOfView().func_243193_b()) //func_243193_b == isReversed
                 {
-                    yawCam += (float)(180F * progSin);;
+                    yawCam += (float)(180F * progSin);
                 }
 
                 //yaw and pitchFromPlayer - distance calculation from player
@@ -137,25 +147,36 @@ public class EventHandlerClient
                 }
                 float pitchFromPlayer = -(oriRend.rotationPitch + pitchCam);
                 Vector3d revLookVec = EntityHelper.getVectorForRotation(pitchFromPlayer, yawFromPlayer);
-                double dist = 1.4D * progPowHalf;
+                double dist = (1.4D + guiDist) * progPowHalf;
                 if(!mc.gameSettings.getPointOfView().func_243192_a()) //func_243192_a == isFirstPerson
                 {
                     dist -= (4.0D * progSin); //minus the third person dist. 4.0D from ActiveRenderInfo
                 }
 
-                RayTraceResult camPoint = EntityHelper.rayTrace(oriRend.getEntityWorld(), oriRend.getEyePosition(event.renderTickTime), oriRend.getEyePosition(event.renderTickTime).add(revLookVec.mul(dist, dist, dist)), oriRend, false, RayTraceContext.BlockMode.COLLIDER, b -> true, RayTraceContext.FluidMode.NONE, e -> true);
-
                 Vector3d upHeadVec = EntityHelper.getVectorForRotation(oriRend.rotationPitch - 90F, oriRend.rotationYaw);
-                double upOff = 0.25D;
+                double upOff = (0.25D + guiY);
 
                 Vector3d sideVec = EntityHelper.getVectorForRotation(oriRend.rotationPitch, yawFromPlayer - 90);
-                double sideOff = 0.75D * (mc.getMainWindow().getWidth() / (float)mc.getMainWindow().getHeight()) / (16F/9F);
+                double sideOff = (0.8D + guiX) * (mc.getMainWindow().getWidth() / (float)mc.getMainWindow().getHeight()) / (16F/9F);
 
                 double offX = (upOff * upHeadVec.getX() * progSin) + (sideOff * sideVec.getX() * progSq);
                 double offY = (upOff * upHeadVec.getY() * progSin) + (sideOff * sideVec.getY() * progSq);
                 double offZ = (upOff * upHeadVec.getZ() * progSin) + (sideOff * sideVec.getZ() * progSq);
 
-                renderViewEntity.forceSetPosition(camPoint.getHitVec().getX() + offX, (camPoint.getHitVec().getY() - oriRend.getEyeHeight()) + offY, camPoint.getHitVec().getZ() + offZ);
+                Vector3d rendEyePos = oriRend.getEyePosition(event.renderTickTime);
+                RayTraceResult camPoint = EntityHelper.rayTrace(oriRend.getEntityWorld(), rendEyePos, rendEyePos.add(revLookVec.mul(dist, dist, dist)).add(offX, offY, offZ), oriRend, false, RayTraceContext.BlockMode.COLLIDER, b -> true, RayTraceContext.FluidMode.NONE, e -> true);
+
+                if(camPoint.getType() != RayTraceResult.Type.MISS)
+                {
+                    Vector3d difference = camPoint.getHitVec().subtract(rendEyePos).normalize().mul(0.2D, 0.2D, 0.2D);
+
+                    renderViewEntity.forceSetPosition(camPoint.getHitVec().getX() - difference.getX(), (camPoint.getHitVec().getY() - oriRend.getEyeHeight()) - difference.getY(), camPoint.getHitVec().getZ() - difference.getZ());
+                }
+                else
+                {
+                    renderViewEntity.forceSetPosition(camPoint.getHitVec().getX(), (camPoint.getHitVec().getY() - oriRend.getEyeHeight()), camPoint.getHitVec().getZ());
+                }
+
                 renderViewEntity.prevRotationYaw = renderViewEntity.rotationYaw = oriRend.rotationYaw + yawCam;
                 renderViewEntity.prevRotationPitch = renderViewEntity.rotationPitch = oriRend.rotationPitch + pitchCam;
             }
@@ -170,31 +191,67 @@ public class EventHandlerClient
         }
     }
 
-    public void openHatsMenu() //TODO fallback (including in swimming or sleeping pose)
+    public void openHatsMenu()
     {
         Minecraft mc = Minecraft.getInstance();
         if(mc.world != null && mc.renderViewEntity != null)
         {
-            mc.displayGuiScreen(new WorkspaceHats(mc.currentScreen));
+            boolean fallback = Hats.configClient.forceGuiFallback || !Hats.configServer.allowFancyHatsGui || !(mc.player.getPose() == Pose.STANDING || mc.player.getPose() == Pose.CROUCHING);
+            if(!fallback)
+            {
+                float yawFromPlayer = mc.renderViewEntity.rotationYaw - 160F;
+                if(!mc.gameSettings.getPointOfView().func_243193_b()) //func_243193_b == isReversed
+                {
+                    yawFromPlayer += 180F;
+                }
+                float pitchFromPlayer = 0F;
+                Vector3d revLookVec = EntityHelper.getVectorForRotation(pitchFromPlayer, yawFromPlayer);
+                double dist = 1.4D;
+                if(!mc.gameSettings.getPointOfView().func_243192_a()) //func_243192_a == isFirstPerson
+                {
+                    dist -= (4.0D); //minus the third person dist. 4.0D from ActiveRenderInfo
+                }
 
-            openedHatsInventory = true;
-            openMenuAnimation = 0;
+                Vector3d upHeadVec = EntityHelper.getVectorForRotation(mc.renderViewEntity.rotationPitch - 90F, mc.renderViewEntity.rotationYaw);
+                double upOff = 0.25D;
 
-            lastHideGui = mc.gameSettings.hideGUI;
-            mc.gameSettings.hideGUI = true;
+                Vector3d sideVec = EntityHelper.getVectorForRotation(mc.renderViewEntity.rotationPitch, yawFromPlayer - 90);
+                double sideOff = 0.75D * (mc.getMainWindow().getWidth() / (float)mc.getMainWindow().getHeight()) / (16F / 9F);
 
-            originalPitch = mc.renderViewEntity.rotationPitch;
+                double offX = (upOff * upHeadVec.getX()) + (sideOff * sideVec.getX());
+                double offY = (upOff * upHeadVec.getY()) + (sideOff * sideVec.getY());
+                double offZ = (upOff * upHeadVec.getZ()) + (sideOff * sideVec.getZ());
 
-            renderViewEntity = EntityDummy.create(mc.world, mc.renderViewEntity);
-            renderViewEntity.setParent(mc.renderViewEntity);
-            renderViewEntity.setEntityId(ClientEntityTracker.getNextEntId());
-            renderViewEntity.setLocationAndAngles(mc.renderViewEntity.getPosX(), mc.renderViewEntity.getPosY(), mc.renderViewEntity.getPosZ() - 2, mc.renderViewEntity.rotationYaw, mc.renderViewEntity.rotationPitch);
-            renderViewEntity.prevRotationPitch = renderViewEntity.rotationPitch;
-            renderViewEntity.prevRotationYaw = renderViewEntity.rotationYaw;
+                RayTraceResult camPoint = EntityHelper.rayTrace(mc.renderViewEntity.getEntityWorld(), mc.renderViewEntity.getEyePosition(1F), mc.renderViewEntity.getEyePosition(1F).add(revLookVec.mul(dist, dist, dist)).add(offX, offY, offZ), mc.renderViewEntity, false, RayTraceContext.BlockMode.COLLIDER, b -> true, RayTraceContext.FluidMode.NONE, e -> true);
+
+                fallback = !camPoint.getType().equals(RayTraceResult.Type.MISS);
+            }
+
+            mc.displayGuiScreen(new WorkspaceHats(mc.currentScreen, fallback, mc.player));
+
+            if(!fallback)
+            {
+                guiX = guiY = guiYaw = guiPitch = guiDist = 0;
+
+                openedHatsInventory = true;
+                openMenuAnimation = 0;
+
+                lastHideGui = mc.gameSettings.hideGUI;
+                mc.gameSettings.hideGUI = true;
+
+                originalPitch = mc.renderViewEntity.rotationPitch;
+
+                renderViewEntity = EntityDummy.create(mc.world, mc.renderViewEntity);
+                renderViewEntity.setParent(mc.renderViewEntity);
+                renderViewEntity.setEntityId(ClientEntityTracker.getNextEntId());
+                renderViewEntity.setLocationAndAngles(mc.renderViewEntity.getPosX(), mc.renderViewEntity.getPosY(), mc.renderViewEntity.getPosZ() - 2, mc.renderViewEntity.rotationYaw, mc.renderViewEntity.rotationPitch);
+                renderViewEntity.prevRotationPitch = renderViewEntity.rotationPitch;
+                renderViewEntity.prevRotationYaw = renderViewEntity.rotationYaw;
+            }
         }
     }
 
-    public void closeHatsMenu()
+    public void closeHatsMenu() //TODO do we need this?
     {
         //restore things
         Minecraft mc = Minecraft.getInstance();
@@ -217,6 +274,7 @@ public class EventHandlerClient
             return;
         }
 
+        boolean added = false;
         for(int i = hatsInventory.hatParts.size() - 1; i >= 0; i--)
         {
             HatsSavedData.HatPart part = hatsInventory.hatParts.get(i);
@@ -225,9 +283,16 @@ public class EventHandlerClient
                 //yeet the old, yoink the new
                 hatsInventory.hatParts.remove(i);
                 hatsInventory.hatParts.add(i, hatPart);
+                added = true;
                 break;
             }
         }
+        if(!added)
+        {
+            hatsInventory.hatParts.add(hatPart);
+        }
+
+        Collections.sort(hatsInventory.hatParts);
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

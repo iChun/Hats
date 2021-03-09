@@ -54,7 +54,11 @@ public class ConfigServer extends ConfigBase
 
 
     @CategoryDivider(name = "others")
-    public boolean userSubmissionsRequireApproval = true;
+    public boolean userSubmissionsRequireApproval = true; //TODO this config
+
+    public boolean allowFancyHatsGui = true;
+
+    public boolean enableCreativeModeHadHunting = false; //TODO this config
 
     //======================================================//
 

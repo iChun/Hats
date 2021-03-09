@@ -12,5 +12,10 @@
   "hats.toast.unlock.hat": "Hat",
   "hats.toast.unlock.accessory": "Accessory",
 
-  "hats.gui.selection.title": "Hats Menu"
+  "hats.gui.selection.title": "Hats Menu",
+
+  "hats.gui.window.hatsList": "Hats List",
+
+  "hats.gui.window.hatsList.title": "Your Hats"
+
 }

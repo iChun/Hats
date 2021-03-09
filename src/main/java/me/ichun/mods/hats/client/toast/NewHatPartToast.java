@@ -91,6 +91,7 @@ public class NewHatPartToast implements IToast
 
             IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
             hatInfo.getModel().render(stack, irendertypebuffer$impl.getBuffer(RenderType.getEntityTranslucent(hatInfo.project.getNativeImageResourceLocation())), 15728880, OverlayTexture.NO_OVERLAY, 1F, 1F, 1F, 1F);
+            irendertypebuffer$impl.finish();
 
             stack.pop();
 

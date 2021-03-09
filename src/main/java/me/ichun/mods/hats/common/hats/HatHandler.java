@@ -314,11 +314,28 @@ public class HatHandler //Handles most of the server-related things.
 
         HatsSavedData.PlayerHatData playerHatData = saveData.playerHats.get(player.getGameProfile().getId());
 
-        if(playerHatData != null)
+        if(playerHatData == null)
         {
-            return playerHatData.write(new CompoundNBT());
+            playerHatData = new HatsSavedData.PlayerHatData(player.getGameProfile().getId());
+
+            ArrayList<HatPool> hatPools = HAT_POOLS.get(EnumRarity.LEGENDARY);
+            for(HatPool hatPool : hatPools)
+            {
+                if(hatPool.forcedRarity == EnumRarity.LEGENDARY) //likely our contributors.
+                {
+                    for(HatInfo hatInfo : hatPool.hatsInPool)
+                    {
+                        if(hatInfo.contributorUUID != null && hatInfo.contributorUUID.equals(player.getGameProfile().getId())) //AMAGA WE FOUND A CONTRIBUTOR
+                        {
+                            playerHatData.hatParts.add(new HatsSavedData.HatPart(hatInfo.name));//this already sets the count to 1.
+                        }
+                    }
+                }
+            }
+
+            saveData.playerHats.put(player.getGameProfile().getId(), playerHatData);
         }
 
-        return new CompoundNBT();
+        return playerHatData.write(new CompoundNBT());
     }
 }

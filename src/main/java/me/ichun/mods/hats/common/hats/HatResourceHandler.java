@@ -99,7 +99,7 @@ public class HatResourceHandler
         return hatsDir;
     }
 
-    public static void loadAllHats()
+    public static void loadAllHats() //TODO hat accessory clash layer
     {
         HATS.clear();
 

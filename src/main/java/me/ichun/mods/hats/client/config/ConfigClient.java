@@ -24,7 +24,9 @@ public class ConfigClient extends ConfigBase
     public boolean guiMinecraftStyle = true;
 
     @Prop(min = 1)
-    public int guiAnimationTime = 20;
+    public int guiAnimationTime = 10;
+
+    public boolean forceGuiFallback = false;
 
     public ConfigClient()
     {

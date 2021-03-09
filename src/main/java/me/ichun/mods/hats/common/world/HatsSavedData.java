@@ -97,6 +97,7 @@ public class HatsSavedData extends WorldSavedData
     }
 
     public static class HatPart
+            implements Comparable<HatPart>
     {
         public String name;
         public int count;
@@ -146,6 +147,12 @@ public class HatsSavedData extends WorldSavedData
             }
 
             return tag;
+        }
+
+        @Override
+        public int compareTo(HatPart o)
+        {
+            return name.compareTo(o.name);
         }
     }
 }
