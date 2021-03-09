@@ -2,7 +2,7 @@ package me.ichun.mods.hats.common;
 
 import me.ichun.mods.hats.client.config.ConfigClient;
 import me.ichun.mods.hats.client.core.EventHandlerClient;
-import me.ichun.mods.hats.client.gui.WorkspaceHats;
+import me.ichun.mods.hats.client.entity.EntityDummy;
 import me.ichun.mods.hats.common.config.ConfigCommon;
 import me.ichun.mods.hats.common.config.ConfigServer;
 import me.ichun.mods.hats.common.core.EventHandlerServer;
@@ -10,16 +10,13 @@ import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.hats.common.packet.*;
 import me.ichun.mods.hats.common.thread.ThreadReadHats;
 import me.ichun.mods.ichunutil.client.key.KeyBind;
-import me.ichun.mods.ichunutil.client.tracker.ClientEntityTracker;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.network.PacketChannel;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.settings.IKeyConflictContext;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -85,7 +82,7 @@ public class Hats
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             configClient = new ConfigClient().init();
 
-            ClientEntityTracker.init(FMLJavaModLoadingContext.get().getModEventBus()); //we use this for the client-based entity for GUI rendering
+            EntityDummy.init(bus); //we use this for the client-based entity for GUI rendering
 
             MinecraftForge.EVENT_BUS.register(eventHandlerClient = new EventHandlerClient());
 

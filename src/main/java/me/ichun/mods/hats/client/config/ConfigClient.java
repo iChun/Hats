@@ -23,6 +23,9 @@ public class ConfigClient extends ConfigBase
 
     public boolean guiMinecraftStyle = true;
 
+    @Prop(min = 1)
+    public int guiAnimationTime = 20;
+
     public ConfigClient()
     {
         super(ModLoadingContext.get().getActiveContainer().getModId() + "-client.toml");
