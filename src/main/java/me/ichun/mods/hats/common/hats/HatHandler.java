@@ -2,14 +2,17 @@ package me.ichun.mods.hats.common.hats;
 
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.packet.PacketNewHatPart;
+import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 public class HatHandler //Handles most of the server-related things.
@@ -21,7 +24,7 @@ public class HatHandler //Handles most of the server-related things.
 
     private static HatsSavedData saveData;
 
-    public static void allocateHatPools()
+    public static void allocateHatPools() //TODO loading method when receiving a hat from the server.
     {
         HAT_POOLS.clear();
 
@@ -285,13 +288,7 @@ public class HatHandler //Handles most of the server-related things.
                                 sb.append(":");
                                 sb.append(s);
 
-                                String displayName = "- ";
-                                if(accessory.rarity != null)
-                                {
-                                    displayName += accessory.rarity.getColour().toString();
-                                }
-                                displayName += accessory.displayName;
-                                names.add(displayName);
+                                names.add("- " + accessory.getDisplayName());
                             }
                         }
                     }
@@ -299,8 +296,29 @@ public class HatHandler //Handles most of the server-related things.
                     Hats.channel.sendTo(new PacketNewHatPart(!foundBase, sb.toString(), names), player);
                 }
 
+                Hats.channel.sendTo(new PacketUpdateHats(hatBase.write(new CompoundNBT()), false), player);
+
                 saveData.markDirty();
             }
         }
+    }
+
+    public static @Nonnull CompoundNBT getPlayerHatsNBT(PlayerEntity player)
+    {
+        if(saveData == null)
+        {
+            Hats.LOGGER.error("We're trying to get the save data for a player without having loaded the save! Player: {}", player.getName());
+            Thread.dumpStack();
+            return new CompoundNBT();
+        }
+
+        HatsSavedData.PlayerHatData playerHatData = saveData.playerHats.get(player.getGameProfile().getId());
+
+        if(playerHatData != null)
+        {
+            return playerHatData.write(new CompoundNBT());
+        }
+
+        return new CompoundNBT();
     }
 }

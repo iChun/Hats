@@ -17,7 +17,7 @@ public class HatInfo
     public final @Nonnull String name;
     public final @Nonnull Project project;
     public final ArrayList<Accessory> accessories = new ArrayList<>();
-    public EnumRarity rarity;
+    public EnumRarity rarity; //Config synching should set this for the client
 
     public String forcedPool;
     public EnumRarity forcedRarity;
@@ -150,7 +150,7 @@ public class HatInfo
         public @Nonnull final String name;
         public @Nullable String displayName;
         public @Nullable String parent;
-        public @Nullable EnumRarity rarity; //This is only set on the server!
+        public @Nullable EnumRarity rarity; //Config synching should set this for the client
         public final HashSet<Project.Part> parts = new HashSet<>();
 
         public Accessory(String name)
@@ -161,6 +161,11 @@ public class HatInfo
         public void setDisplayName(String s)
         {
             this.displayName = s;
+        }
+
+        public String getDisplayName()
+        {
+            return (rarity != null ? rarity.getColour() : TextFormatting.WHITE).toString() + (displayName != null ? displayName : name);
         }
 
         public void setParent(String s)

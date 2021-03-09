@@ -1,9 +1,11 @@
 package me.ichun.mods.hats.client.core;
 
+import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.layer.LayerHat;
 import me.ichun.mods.hats.client.model.ModelRendererDragonHook;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.packet.PacketRequestEntityHatDetails;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EnderDragonRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
@@ -24,6 +26,7 @@ public class EventHandlerClient
     public int connectionAge;
     public int renderCount;
     public ArrayList<Integer> requestedHats = new ArrayList<>();
+    public HatsSavedData.PlayerHatData hatsInventory;
 
     @SubscribeEvent
     public void onClientConnection(ClientPlayerNetworkEvent.LoggedInEvent event)
@@ -37,6 +40,7 @@ public class EventHandlerClient
     {
         serverHasMod = false;
         requestedHats.clear();
+        hatsInventory = null;
     }
 
     @SubscribeEvent
@@ -67,11 +71,38 @@ public class EventHandlerClient
         }
     }
 
+    public void openHatsMenu()
+    {
+        Minecraft.getInstance().displayGuiScreen(new WorkspaceHats(Minecraft.getInstance().currentScreen));
+    }
+
     public void requestHatDetails(LivingEntity ent)
     {
         if(serverHasMod)
         {
             requestedHats.add(ent.getEntityId());
+        }
+    }
+
+    public void updateHatInventory(HatsSavedData.HatPart hatPart)
+    {
+        if(hatsInventory == null)
+        {
+            Hats.LOGGER.error("We're updating our hats inventory without an inventory!");
+            Thread.dumpStack();
+            return;
+        }
+
+        for(int i = hatsInventory.hatParts.size() - 1; i >= 0; i--)
+        {
+            HatsSavedData.HatPart part = hatsInventory.hatParts.get(i);
+            if(part.name.equals(hatPart.name)) //same part
+            {
+                //yeet the old, yoink the new
+                hatsInventory.hatParts.remove(i);
+                hatsInventory.hatParts.add(i, hatPart);
+                break;
+            }
         }
     }
 

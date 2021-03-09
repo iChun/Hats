@@ -3,6 +3,7 @@ package me.ichun.mods.hats.common.core;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.packet.PacketPing;
+import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -56,6 +57,7 @@ public class EventHandlerServer
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
     {
         Hats.channel.sendTo(new PacketPing(), (ServerPlayerEntity)event.getPlayer()); //TODO disable this and the client will think the server doesn't have the mod.
+        Hats.channel.sendTo(new PacketUpdateHats(HatHandler.getPlayerHatsNBT(event.getPlayer()), true), (ServerPlayerEntity)event.getPlayer());
     }
 
     @SubscribeEvent

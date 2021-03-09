@@ -21,6 +21,8 @@ public class ConfigClient extends ConfigBase
     @Prop(min = 0, max = 5)
     public int hatUnlockString = 0;
 
+    public boolean guiMinecraftStyle = true;
+
     public ConfigClient()
     {
         super(ModLoadingContext.get().getActiveContainer().getModId() + "-client.toml");

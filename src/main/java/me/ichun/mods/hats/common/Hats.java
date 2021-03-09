@@ -2,27 +2,38 @@ package me.ichun.mods.hats.common;
 
 import me.ichun.mods.hats.client.config.ConfigClient;
 import me.ichun.mods.hats.client.core.EventHandlerClient;
+import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.common.config.ConfigCommon;
 import me.ichun.mods.hats.common.config.ConfigServer;
 import me.ichun.mods.hats.common.core.EventHandlerServer;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.hats.common.packet.*;
 import me.ichun.mods.hats.common.thread.ThreadReadHats;
+import me.ichun.mods.ichunutil.client.key.KeyBind;
+import me.ichun.mods.ichunutil.client.tracker.ClientEntityTracker;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.network.PacketChannel;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.client.util.InputMappings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.settings.IKeyConflictContext;
+import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.glfw.GLFW;
 
 @Mod(Hats.MOD_ID)
 public class Hats
@@ -66,20 +77,31 @@ public class Hats
                 PacketEntityHatDetails.class,
                 PacketRequestHeadInfos.class,
                 PacketHeadInfos.class,
-                PacketNewHatPart.class
+                PacketNewHatPart.class,
+                PacketUpdateHats.class
         );
 
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             configClient = new ConfigClient().init();
 
+            ClientEntityTracker.init(FMLJavaModLoadingContext.get().getModEventBus()); //we use this for the client-based entity for GUI rendering
+
             MinecraftForge.EVENT_BUS.register(eventHandlerClient = new EventHandlerClient());
+
+            bus.addListener(this::onClientInit);
 
             ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> me.ichun.mods.ichunutil.client.core.EventHandlerClient::getConfigGui);
         });
 
         threadReadHats = new ThreadReadHats();
         threadReadHats.start();
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void onClientInit(FMLClientSetupEvent event)
+    {
+        new KeyBind(new KeyBinding("hats.key.hatsMenu", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM.getOrMakeInput(GLFW.GLFW_KEY_H), "key.categories.ui"), keyBind -> eventHandlerClient.openHatsMenu(), null);
     }
 
     private void finishLoading(FMLLoadCompleteEvent event)

@@ -2,11 +2,15 @@
   "config.hats.prop.maxHatRenders.name": "Max Hat Renders",
   "config.hats.prop.maxHatRenders.desc": "Maximum number of hats to render in one frame.",
 
+  "hats.key.hatsMenu": "Hats Menu",
+
   "hats.toast.unlock.template1": "%s Unlocked!",
   "hats.toast.unlock.template2": "New %s!",
   "hats.toast.unlock.template3": "%s Acquired!",
   "hats.toast.unlock.template4": "%s Collected!",
   "hats.toast.unlock.template5": "%s Get!",
   "hats.toast.unlock.hat": "Hat",
-  "hats.toast.unlock.accessory": "Accessory"
+  "hats.toast.unlock.accessory": "Accessory",
+
+  "hats.gui.selection.title": "Hats Menu"
 }
