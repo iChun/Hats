@@ -19,7 +19,6 @@ import java.util.HashMap;
 public class ModelHat extends Model //A VERY dumbed down version of ModelTabula
 {
     public final @Nonnull HatInfo info;
-    private boolean compiled = false;
     public HashMap<ModelRenderer, Project.Part> partMap = new HashMap<>();
 
     public ModelHat(@Nonnull HatInfo info)
@@ -40,12 +39,6 @@ public class ModelHat extends Model //A VERY dumbed down version of ModelTabula
             modelRenderer.showModel = part.showModel;
             modelRenderer.render(matrixStack, iVertexBuilder, light, overlay, r, g, b, alpha);
         }));
-    }
-
-    public void compile()
-    {
-        partMap.clear();
-
     }
 
     public void populateModel(Collection<? super ModelRenderer> parts, Project.Part part)

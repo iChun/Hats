@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 public class WindowHatsList extends Window<WorkspaceHats>
 {
-    public WindowHatsList(WorkspaceHats parent)
+    public WindowHatsList(WorkspaceHats parent) //TODO reduce renderCount by 1 to make sure we render the hat.
     {
         super(parent);
 
@@ -119,18 +119,16 @@ public class WindowHatsList extends Window<WorkspaceHats>
 //            elements.add(sortButton);
 
             ElementScrollBar<?> sv = new ElementScrollBar<>(this, ElementScrollBar.Orientation.VERTICAL, 0.6F);
-            sv.setConstraint(new Constraint(sv).top(this, Constraint.Property.Type.TOP, padding)
+            sv.constraints().top(this, Constraint.Property.Type.TOP, padding)
                     .bottom(searchIcon, Constraint.Property.Type.TOP, padding) // 10 + 20 + 10, bottom + button height + padding
-                    .right(this, Constraint.Property.Type.RIGHT, padding)
-            );
+                    .right(this, Constraint.Property.Type.RIGHT, padding);
             elements.add(sv);
 
             list = new ElementHatsScrollView(this).setScrollVertical(sv);
-            list.setConstraint(new Constraint(list).top(this, Constraint.Property.Type.TOP, padding + 1)
+            list.constraints().top(this, Constraint.Property.Type.TOP, padding + 1)
                     .bottom(searchIcon, Constraint.Property.Type.TOP, padding + 1)
                     .left(this, Constraint.Property.Type.LEFT, padding + 1)
-                    .right(sv, Constraint.Property.Type.LEFT, padding + 1)
-            );
+                    .right(sv, Constraint.Property.Type.LEFT, padding + 1);
             elements.add(list);
 
             updateSearch("");
@@ -163,10 +161,6 @@ public class WindowHatsList extends Window<WorkspaceHats>
                         HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, btn.hatDetails.name);
                     }
                 }, btn -> {
-                    if(HatHandler.getHatDetails(parentFragment.parent.hatEntity).startsWith(btn.hatDetails.name)) //we're selected
-                    {
-                        HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, "");
-                    }
                 }
                 );
                 hat.setToggled(parentFragment.parent.hatDetails.startsWith(part.name));

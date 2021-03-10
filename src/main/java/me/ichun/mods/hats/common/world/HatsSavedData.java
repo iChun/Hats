@@ -101,6 +101,8 @@ public class HatsSavedData extends WorldSavedData
     {
         public String name;
         public int count;
+        public boolean isFavourite;
+        public float[] colouriser = new float[3]; //0 0 0 = no change to colours. goes up to 1 1 1 for black
         public ArrayList<HatPart> hatParts = new ArrayList<>(); //yay infinite recursion
 
         public HatPart(){}
@@ -115,6 +117,9 @@ public class HatsSavedData extends WorldSavedData
         {
             name = tag.getString("name");
             count = tag.getInt("count");
+            isFavourite = tag.getBoolean("isFavourite");
+
+            colouriser = new float[] { tag.getFloat("clrR"), tag.getFloat("clrG"), tag.getFloat("clrB") };
 
             int count = tag.getInt("partCount");
 
@@ -136,6 +141,11 @@ public class HatsSavedData extends WorldSavedData
         {
             tag.putString("name", name);
             tag.putInt("count", count);
+            tag.putBoolean("isFavourite", isFavourite);
+
+            tag.putFloat("clrR", colouriser[0]);
+            tag.putFloat("clrG", colouriser[1]);
+            tag.putFloat("clrB", colouriser[2]);
 
             tag.putInt("partCount", hatParts.size());
 

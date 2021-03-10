@@ -4,7 +4,7 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
-import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.client.gui.window.WindowHatOptions;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
@@ -13,7 +13,6 @@ import me.ichun.mods.ichunutil.client.gui.bns.Theme;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Fragment;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementRightClickable;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Vector3f;
@@ -23,6 +22,8 @@ import java.util.function.Consumer;
 
 public class ElementHatRender<T extends ElementHatRender>  extends ElementRightClickable<T>
 {
+    public static final String HAMBURGER = "\u2261";//"≡";
+
     public HatsSavedData.HatPart hatDetails;
     public boolean toggleState;
 
@@ -39,6 +40,46 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
     }
 
     @Override
+    public boolean mouseReleased(double mouseX, double mouseY, int button) //we extended ElementRightClickable but we're not really much of that anymore
+    {
+        boolean flag = super.mouseReleased(mouseX, mouseY, button); // unsets dragging;
+        parentFragment.setListener(null); //we're a one time click, stop focusing on us
+        if(!disabled && isMouseOver(mouseX, mouseY))
+        {
+            if(button == 0 || button == 1)
+            {
+                trigger();
+                if(button == 1 || isOverHamburger(mouseX, mouseY))
+                {
+                    spawnOptionsButtons();
+                }
+            }
+        }
+        return flag;
+    }
+
+    public boolean isOverHamburger(double mouseX, double mouseY)
+    {
+        return isMouseBetween(mouseX, getLeft(), getLeft() + 3 + getFontRenderer().getStringWidth(HAMBURGER) + 2) && isMouseBetween(mouseY, getTop(), getTop() + getFontRenderer().FONT_HEIGHT + 2);
+    }
+
+    public void spawnOptionsButtons()
+    {
+        //Spawn the window and set focus to it.
+        WindowHatOptions windowHatOptions = new WindowHatOptions((WorkspaceHats)getWorkspace(), this);
+        windowHatOptions.setPosX(getLeft() - 21);
+        windowHatOptions.setPosY(getTop());
+        windowHatOptions.setWidth(getWidth() + 21);
+        windowHatOptions.setHeight(getHeight());
+        if(windowHatOptions.getWorkspace().hasInit())
+        {
+            windowHatOptions.init();
+        }
+        windowHatOptions.getWorkspace().addWindow(windowHatOptions);
+        windowHatOptions.getWorkspace().setListener(windowHatOptions);
+    }
+
+    @Override
     public void onClickRelease()
     {
         if(!toggleState)
@@ -50,10 +91,6 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
     @Override
     public void onRightClickRelease()
     {
-        if(toggleState)
-        {
-            toggleState = false;
-        }
     }
 
     @Override
@@ -107,7 +144,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
             setScissor();
 
             RenderSystem.pushMatrix();
-            RenderSystem.translatef(0F, 0F, 500F);
+            RenderSystem.translatef(0F, 0F, 300F);
 
             LivingEntity livingEnt = ((WorkspaceHats)getWorkspace()).hatEntity;
 
@@ -130,7 +167,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        RenderHelper.drawColour(stack, 0, 0, 0, 80, getRight() - 10, getTop(), 10, height, 0);
+        RenderHelper.drawColour(stack, 0, 0, 0, 80, getRight() - 10, getTop() + 1, 9, height - 2, 0);
 
         RenderSystem.disableBlend();
 
@@ -142,18 +179,11 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
         stack.push();
         stack.translate(getRight() - 5, getTop() + (height * scale), 0F);
         stack.rotate(Vector3f.ZP.rotationDegrees(-90F));
-        stack.translate(-(height * scale) + 3, -(getFontRenderer().FONT_HEIGHT) * scale + 2, 600F);
+        stack.translate(-(height * scale) + 3, -(getFontRenderer().FONT_HEIGHT) * scale + 2, 375F);
         stack.scale(scale, scale, scale);
 
         //draw the text
-        if(renderMinecraftStyle())
-        {
-            getFontRenderer().drawString(stack, s, 0, 0, getMinecraftFontColour());
-        }
-        else
-        {
-            getFontRenderer().drawString(stack, s, 0, 0, Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim));
-        }
+        getFontRenderer().drawString(stack, s, 0, 0, renderMinecraftStyle() ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim));
 
         stack.pop();
 
@@ -162,18 +192,24 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
             s = "x" + WorkspaceHats.FORMATTER.format(hatDetails.count);
 
             stack.push();
-            stack.translate(getLeft() + 3, getBottom() - (getFontRenderer().FONT_HEIGHT) * scale - 1, 600F);
+            stack.translate(getLeft() + 3, getBottom() - (getFontRenderer().FONT_HEIGHT) * scale - 1, 375F);
             stack.scale(scale, scale, scale);
 
             //draw the text
-            if(renderMinecraftStyle())
-            {
-                getFontRenderer().drawString(stack, s, 0, 0, getMinecraftFontColour());
-            }
-            else
-            {
-                getFontRenderer().drawString(stack, s, 0, 0, Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim));
-            }
+            getFontRenderer().drawString(stack, s, 0, 0, renderMinecraftStyle() ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim));
+
+            stack.pop();
+        }
+
+        if(hover) //only if we're hovering
+        {
+            stack.push();
+
+            stack.translate(0F, 0F, 375F);
+
+            boolean isHoveringHamburger = isOverHamburger(mouseX, mouseY);
+
+            getFontRenderer().drawString(stack, HAMBURGER, getLeft() + 3, getTop() + 2, renderMinecraftStyle() ? isHoveringHamburger ? 16777120 : 14737632 : Theme.getAsHex(isHoveringHamburger ? getTheme().font : getTheme().fontDim));
 
             stack.pop();
         }

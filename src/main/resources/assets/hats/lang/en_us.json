@@ -17,6 +17,16 @@
   "hats.gui.window.hatsList": "Hats List",
   "hats.gui.window.sidebar": "Sidebar",
 
-  "hats.gui.window.hatsList.title": "Your Hats"
+  "hats.gui.window.hat.sidebar": "Hat Sidebar",
 
+  "hats.gui.window.hatsList.title": "Your Hats",
+
+  "hats.gui.button.removeHat": "Remove Hat",
+  "hats.gui.button.randomHat": "Random Hat",
+  "hats.gui.button.sortingOptions": "Sorting Options",
+  "hats.gui.button.hatResourceManagement": "Hat Resource Management",
+
+  "hats.gui.button.colourise": "Colorize",
+  "hats.gui.button.personalise": "Accessorize",
+  "hats.gui.button.favouriteHat": "Favourite"
 }

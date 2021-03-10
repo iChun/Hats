@@ -151,6 +151,7 @@ public class HatHandler //Handles most of the server-related things.
         sb.append(hatInfo.name);
 
         ArrayList<HatInfo.Accessory> spawningAccessories = new ArrayList<>();
+        HashMap<String, ArrayList<HatInfo.Accessory>> conflicts = new HashMap<>();
         for(HatInfo.Accessory accessory : hatInfo.accessories)
         {
             RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID() + accessory.name).hashCode()) * 53579997854L); //Chat contributed random
@@ -162,6 +163,23 @@ public class HatHandler //Handles most of the server-related things.
             if(RAND.nextDouble() < accChance) //spawn the accessory
             {
                 spawningAccessories.add(accessory);
+                if(accessory.conflictLayer != null) //look for conflicts for accessories  that already got to spawn
+                {
+                    conflicts.computeIfAbsent(accessory.conflictLayer, k -> new ArrayList<>()).add(accessory);
+                }
+            }
+        }
+
+        //if there are no conflicts, remove
+        conflicts.entrySet().removeIf(entry -> entry.getValue().size() <= 1);
+
+        for(ArrayList<HatInfo.Accessory> conflictAccessories : conflicts.values())
+        {
+            while(conflictAccessories.size() > 1)
+            {
+                HatInfo.Accessory acc = conflictAccessories.get(ent.getRNG().nextInt(conflictAccessories.size()));// YOU LOST THE COIN TOSS
+                spawningAccessories.remove(acc);
+                conflictAccessories.remove(acc);
             }
         }
 

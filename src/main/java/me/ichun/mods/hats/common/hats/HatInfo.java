@@ -97,6 +97,7 @@ public class HatInfo
             String name = null;
             String parent = null;
             String displayName = null;
+            String conflictLayer = null;
             for(String note : part.notes)
             {
                 if(note.startsWith("hats-accessory:"))
@@ -110,6 +111,10 @@ public class HatInfo
                 if(note.startsWith("hats-accessory-name:"))
                 {
                     displayName = note.substring("hats-accessory-name:".length()).trim();
+                }
+                if(note.startsWith("hats-accessory-layer:"))
+                {
+                    conflictLayer = note.substring("hats-accessory-layer:".length()).trim();
                 }
             }
 
@@ -126,6 +131,11 @@ public class HatInfo
                 if(displayName != null)
                 {
                     accessory.setDisplayName(displayName);
+                }
+
+                if(conflictLayer != null)
+                {
+                    accessory.setConflictLayer(conflictLayer);
                 }
 
                 accessory.parts.add(part);
@@ -155,6 +165,7 @@ public class HatInfo
         public @Nonnull final String name;
         public @Nullable String displayName;
         public @Nullable String parent;
+        public @Nullable String conflictLayer;
         public @Nullable EnumRarity rarity; //Config synching should set this for the client
         public final HashSet<Project.Part> parts = new HashSet<>();
 
@@ -176,6 +187,11 @@ public class HatInfo
         public void setParent(String s)
         {
             this.parent = s;
+        }
+
+        public void setConflictLayer(String s)
+        {
+            this.conflictLayer = s;
         }
 
         public void setRarity(EnumRarity rarity)

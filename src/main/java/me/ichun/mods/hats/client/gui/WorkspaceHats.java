@@ -14,7 +14,11 @@ import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
@@ -58,6 +62,7 @@ public class WorkspaceHats extends Workspace
         windowHatsList.setWidth((int)Math.floor((getWidth() / 2F)) - (padding + 22));
         windowHatsList.constraint.apply();
 
+        //space from the list = 2 px
         windowSidebar.constraints().left(windowHatsList, Constraint.Property.Type.RIGHT, 2).top(windowHatsList, Constraint.Property.Type.TOP, 0).bottom(windowHatsList, Constraint.Property.Type.BOTTOM, 0);
         windowSidebar.setWidth(20);
         windowSidebar.constraint.apply();
@@ -74,7 +79,7 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void renderWindows(MatrixStack stack, int mouseX, int mouseY, float partialTick)
+    public void renderWindows(MatrixStack stack, int mouseX, int mouseY, float partialTick) //TODO alert when new hat unlocked??
     {
         boolean invisibleEnt = hatEntity.isInvisible();
         if(invisibleEnt)
@@ -87,7 +92,7 @@ public class WorkspaceHats extends Workspace
             RenderSystem.depthMask(true);
 
             RenderSystem.pushMatrix();
-            RenderSystem.translatef(0F, 0F, 400F);
+            RenderSystem.translatef(0F, 0F, 200F);
             float zoom = (windowInput.camDist * 40);
             int x = (int)((windowHatsList.getLeft() / 2F) - windowInput.x * 40);
             int y = (int)((getHeight() / 4 * 3F + windowInput.y * 40) + (hatEntity.getHeight() / 2) * 50F - zoom);
@@ -128,11 +133,53 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void renderBackground(MatrixStack stack)
+    public void renderBackground(MatrixStack stack) //TODO test B&S theme.
     {
         if(fallback)
         {
             this.renderBackground(stack, 0);
+        }
+        else
+        {
+            //taken from AbstractGui.fillGradient
+            RenderSystem.disableTexture();
+            RenderSystem.enableBlend();
+            RenderSystem.disableAlphaTest();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.shadeModel(7425);
+            Tessellator tessellator = Tessellator.getInstance();
+            Matrix4f matrix = stack.getLast().getMatrix();
+            BufferBuilder builder = tessellator.getBuffer();
+            builder.begin(7, DefaultVertexFormats.POSITION_COLOR);
+            //draw the original bits
+            int z = getBlitOffset();
+            fillGradient(matrix, builder, windowHatsList.getRight() - (int)(windowHatsList.getWidth() / 2F), 0, width, height, z, 0xc0101010, 0xd0101010);
+
+            float x1 = windowHatsList.getLeft() - 20;
+            float x2 = windowHatsList.getRight() - (int)(windowHatsList.getWidth() / 2F);
+            float y1 = 0;
+            float y2 = height;
+
+            int colorA = 0xc0101010;
+            int colorB = 0xd0101010;
+            float f = (float)(colorA >> 24 & 255) / 255.0F;
+            float f1 = (float)(colorA >> 16 & 255) / 255.0F;
+            float f2 = (float)(colorA >> 8 & 255) / 255.0F;
+            float f3 = (float)(colorA & 255) / 255.0F;
+            float f4 = (float)(colorB >> 24 & 255) / 255.0F;
+            float f5 = (float)(colorB >> 16 & 255) / 255.0F;
+            float f6 = (float)(colorB >> 8 & 255) / 255.0F;
+            float f7 = (float)(colorB & 255) / 255.0F;
+            builder.pos(matrix, x2, y1, (float)z).color(f1, f2, f3, f).endVertex();
+            builder.pos(matrix, x1, y1, (float)z).color(f1, f2, f3, 0).endVertex();
+            builder.pos(matrix, x1, y2, (float)z).color(f5, f6, f7, 0).endVertex();
+            builder.pos(matrix, x2, y2, (float)z).color(f5, f6, f7, f4).endVertex();
+
+            tessellator.draw();
+            RenderSystem.shadeModel(7424);
+            RenderSystem.disableBlend();
+            RenderSystem.enableAlphaTest();
+            RenderSystem.enableTexture();
         }
 
         RenderSystem.pushMatrix();
