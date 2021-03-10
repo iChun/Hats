@@ -19,8 +19,6 @@ public class HatHandler //Handles most of the server-related things.
 {
     public static final EnumMap<EnumRarity, ArrayList<HatPool>> HAT_POOLS = new EnumMap<>(EnumRarity.class);
     public static final Random RAND = new Random();
-    public static final String NBT_HAT_KEY = "HatsTag";
-    public static final String NBT_HAT_SET_KEY = "HatSet";
 
     private static HatsSavedData saveData;
 
@@ -112,7 +110,7 @@ public class HatHandler //Handles most of the server-related things.
         {
             for(String disabledName : Hats.configServer.disabledMobs)
             {
-                if(ent.getType().getRegistryName().equals(new ResourceLocation(disabledName)))
+                if(new ResourceLocation(disabledName).equals(ent.getType().getRegistryName()))
                 {
                     return false;
                 }
@@ -122,14 +120,19 @@ public class HatHandler //Handles most of the server-related things.
         return false;
     }
 
+    public static HatsSavedData.HatPart getHatPart(LivingEntity ent)
+    {
+        return ent.getCapability(HatsSavedData.HatPart.CAPABILITY_INSTANCE).orElseThrow(() -> new IllegalArgumentException("Entity " + ent.getName().getUnformattedComponentText() + " has no hat capabilities"));
+    }
+
     public static boolean hasBeenRandomlyAllocated(LivingEntity ent)
     {
-        return ent.getPersistentData().getCompound(NBT_HAT_KEY).contains(NBT_HAT_SET_KEY);
+        return getHatPart(ent).count >= 0;
     }
 
     public static void assignHat(LivingEntity ent)
     {
-        CompoundNBT tag = ent.getPersistentData().getCompound(NBT_HAT_KEY);
+        HatsSavedData.HatPart hatPart = getHatPart(ent);
 
         RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID().toString()).hashCode()) * 425480085L); //Chat contributed random
 
@@ -145,10 +148,9 @@ public class HatHandler //Handles most of the server-related things.
         ArrayList<HatPool> hatPools = HAT_POOLS.get(rarity);
         HatPool pool = hatPools.get(RAND.nextInt(hatPools.size()));
 
-        StringBuilder sb = new StringBuilder();
-
         HatInfo hatInfo = pool.getRandomHat();
-        sb.append(hatInfo.name);
+        hatPart.name = hatInfo.name;
+        hatPart.count = 1;
 
         ArrayList<HatInfo.Accessory> spawningAccessories = new ArrayList<>();
         HashMap<String, ArrayList<HatInfo.Accessory>> conflicts = new HashMap<>();
@@ -190,34 +192,28 @@ public class HatHandler //Handles most of the server-related things.
                 continue; //we ain't spawning you, go find your parent first!
             }
 
-            sb.append(":");
-            sb.append(accessory.name);
+            HatsSavedData.HatPart accToSpawn = new HatsSavedData.HatPart(accessory.name);
+            hatPart.hatParts.add(accToSpawn);
         }
-
-        tag.putString(NBT_HAT_SET_KEY, sb.toString());
-
-        ent.getPersistentData().put(NBT_HAT_KEY, tag);
     }
 
-    public static void assignSpecificHat(LivingEntity ent, String s)
+    public static void assignSpecificHat(LivingEntity ent, HatsSavedData.HatPart part)
     {
-        CompoundNBT tag = ent.getPersistentData().getCompound(NBT_HAT_KEY);
-
-        tag.putString(NBT_HAT_SET_KEY, s);
-
-        ent.getPersistentData().put(NBT_HAT_KEY, tag);
+        HatsSavedData.HatPart hatPart = getHatPart(ent);
+        if(part != null)
+        {
+            hatPart.copy(part);
+        }
+        else
+        {
+            hatPart.name = "";
+            hatPart.count = 0;
+        }
     }
 
     public static void assignNoHat(LivingEntity ent)
     {
-        assignSpecificHat(ent, "");
-    }
-
-    public static String getHatDetails(LivingEntity ent)
-    {
-        CompoundNBT tag = ent.getPersistentData().getCompound(NBT_HAT_KEY);
-
-        return tag.getString(NBT_HAT_SET_KEY);
+        assignSpecificHat(ent, null);
     }
 
     private static boolean isParentInList(ArrayList<HatInfo.Accessory> accessories, String parent)
@@ -237,87 +233,82 @@ public class HatHandler //Handles most of the server-related things.
         saveData = data;
     }
 
-    public static void addHat(ServerPlayerEntity player, String hatDetails)
+    public static void addHat(ServerPlayerEntity player, HatsSavedData.HatPart addedHat) //TODO test this
     {
-        List<String> strings = HatResourceHandler.COLON_SPLITTER.splitToList(hatDetails);
-        if(!strings.isEmpty())
+        HatInfo info = HatResourceHandler.getAndSetAccessories(addedHat);
+        if(info != null) //it's a valid hat
         {
-            HatInfo info = HatResourceHandler.getAndSetAccessories(hatDetails);
-            if(info != null)
-            {
-                boolean foundBase = false; //if stays false, this is a new hat.
+            boolean foundBase = false; //if stays false, this is a new hat.
 
-                String hatName = strings.get(0);
-                HatsSavedData.HatPart hatBase = null;
-                HatsSavedData.PlayerHatData playerHatData = saveData.playerHats.computeIfAbsent(player.getGameProfile().getId(), k -> new HatsSavedData.PlayerHatData(player.getGameProfile().getId()));
-                for(HatsSavedData.HatPart hatPart : playerHatData.hatParts)
+            String hatName = addedHat.name;
+            HatsSavedData.HatPart hatBase = null;
+            HatsSavedData.PlayerHatData playerHatData = saveData.playerHats.computeIfAbsent(player.getGameProfile().getId(), k -> new HatsSavedData.PlayerHatData(player.getGameProfile().getId()));
+            for(HatsSavedData.HatPart hatPart : playerHatData.hatParts)
+            {
+                if(hatName.equals(hatPart.name))
                 {
-                    if(hatName.equals(hatPart.name))
+                    hatBase = hatPart;
+                    hatBase.count += addedHat.count;
+                    foundBase = true;
+                    break;
+                }
+            }
+
+            if(hatBase == null)
+            {
+                playerHatData.hatParts.add(hatBase = new HatsSavedData.HatPart(hatName));//this already sets the count to 1.
+            }
+
+            ArrayList<HatsSavedData.HatPart> newAccessoriesName = new ArrayList<>();
+
+            boolean newAccessory = false;
+            for(int i = 1; i < addedHat.hatParts.size(); i++)
+            {
+                HatsSavedData.HatPart accessoryName = addedHat.hatParts.get(i);
+                boolean foundAccessory = false;
+                for(HatsSavedData.HatPart accessory : hatBase.hatParts)
+                {
+                    if(accessoryName.name.equals(accessory.name))
                     {
-                        hatBase = hatPart;
-                        hatBase.count++;
-                        foundBase = true;
+                        accessory.count += accessoryName.count;
+                        foundAccessory = true;
                         break;
                     }
                 }
 
-                if(hatBase == null)
+                if(!foundAccessory)
                 {
-                    playerHatData.hatParts.add(hatBase = new HatsSavedData.HatPart(hatName));//this already sets the count to 1.
+                    newAccessory = true;
+                    hatBase.hatParts.add(accessoryName.createCopy());
+                    newAccessoriesName.add(accessoryName);
                 }
-
-                ArrayList<String> newAccessoriesName = new ArrayList<>();
-
-                boolean newAccessory = false;
-                for(int i = 1; i < strings.size(); i++)
-                {
-                    String accessoryName = strings.get(i);
-                    boolean foundAccessory = false;
-                    for(HatsSavedData.HatPart accessory : hatBase.hatParts)
-                    {
-                        if(accessoryName.equals(accessory.name))
-                        {
-                            accessory.count++;
-                            foundAccessory = true;
-                            break;
-                        }
-                    }
-
-                    if(!foundAccessory)
-                    {
-                        newAccessory = true;
-                        hatBase.hatParts.add(new HatsSavedData.HatPart(accessoryName));
-                        newAccessoriesName.add(accessoryName);
-                    }
-                }
-
-                if(!foundBase || newAccessory) //there's something new
-                {
-                    StringBuilder sb = new StringBuilder(hatName);
-                    ArrayList<String> names = new ArrayList<>();
-                    names.add(info.getDisplayName());
-
-                    for(String s : newAccessoriesName)
-                    {
-                        for(HatInfo.Accessory accessory : info.accessories)
-                        {
-                            if(accessory.name.equals(s)) //oh hey we found it.
-                            {
-                                sb.append(":");
-                                sb.append(s);
-
-                                names.add("- " + accessory.getDisplayName());
-                            }
-                        }
-                    }
-
-                    Hats.channel.sendTo(new PacketNewHatPart(!foundBase, sb.toString(), names), player);
-                }
-
-                Hats.channel.sendTo(new PacketUpdateHats(hatBase.write(new CompoundNBT()), false), player);
-
-                saveData.markDirty();
             }
+
+            if(!foundBase || newAccessory) //there's something new
+            {
+                HatsSavedData.HatPart part = new HatsSavedData.HatPart(hatName);
+                ArrayList<String> names = new ArrayList<>();
+                names.add(info.getDisplayName());
+
+                for(HatsSavedData.HatPart s : newAccessoriesName)
+                {
+                    for(HatInfo.Accessory accessory : info.accessories)
+                    {
+                        if(accessory.name.equals(s.name)) //oh hey we found it.
+                        {
+                            part.hatParts.add(s);
+
+                            names.add("- " + accessory.getDisplayName());
+                        }
+                    }
+                }
+
+                Hats.channel.sendTo(new PacketNewHatPart(!foundBase, part, names), player);
+            }
+
+            Hats.channel.sendTo(new PacketUpdateHats(hatBase.write(new CompoundNBT()), false), player);
+
+            saveData.markDirty();
         }
     }
 

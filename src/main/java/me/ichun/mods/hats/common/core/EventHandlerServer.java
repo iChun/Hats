@@ -5,12 +5,14 @@ import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.packet.PacketPing;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -20,6 +22,16 @@ import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 
 public class EventHandlerServer
 {
+    @SubscribeEvent
+    public void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event)
+    {
+        Entity entity = event.getObject();
+        if(entity instanceof LivingEntity)
+        {
+            event.addCapability(HatsSavedData.HatPart.CAPABILITY_IDENTIFIER, new HatsSavedData.HatPart.CapProvider(new HatsSavedData.HatPart()));
+        }
+    }
+
     @SubscribeEvent
     public void onEntityJoinedWorld(EntityJoinWorldEvent event)
     {
@@ -45,10 +57,10 @@ public class EventHandlerServer
     {
         if(!event.getEntityLiving().getEntityWorld().isRemote && !(event.getEntityLiving() instanceof PlayerEntity) && event.getSource().getTrueSource() instanceof ServerPlayerEntity && !(event.getSource().getTrueSource() instanceof FakePlayer))
         {
-            String hatDetails = HatHandler.getHatDetails(event.getEntityLiving());
-            if(!hatDetails.isEmpty())
+            HatsSavedData.HatPart hatPart = HatHandler.getHatPart(event.getEntityLiving());
+            if(hatPart.isAHat())
             {
-                HatHandler.addHat((ServerPlayerEntity)event.getSource().getTrueSource(), hatDetails);
+                HatHandler.addHat((ServerPlayerEntity)event.getSource().getTrueSource(), hatPart);
             }
         }
     }

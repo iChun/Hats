@@ -28,5 +28,7 @@
 
   "hats.gui.button.colourise": "Colorize",
   "hats.gui.button.personalise": "Accessorize",
-  "hats.gui.button.favouriteHat": "Favourite"
+  "hats.gui.button.favouriteHat": "Favorite",
+
+  "hats.gui.button.reset": "Reset"
 }

@@ -1,11 +1,11 @@
 package me.ichun.mods.hats.client.layer;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import net.minecraft.client.Minecraft;
@@ -32,7 +32,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
     @Override
     public void render(MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, LivingEntity living, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
     {
-        if(Hats.eventHandlerClient.renderCount >= Hats.configClient.maxHatRenders && !(living instanceof PlayerEntity))
+        if(Hats.eventHandlerClient.renderCount >= Hats.configClient.maxHatRenders && !(living instanceof PlayerEntity) || living.removed)
         {
             return;
         }
@@ -52,14 +52,14 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 return;
             }
 
-            if(living.getPersistentData().contains(HatHandler.NBT_HAT_KEY) && living.getPersistentData().getCompound(HatHandler.NBT_HAT_KEY).contains(HatHandler.NBT_HAT_SET_KEY))
+            if(HatHandler.hasBeenRandomlyAllocated(living))
             {
-                //we have hat data
-                String hatDetails = HatHandler.getHatDetails(living);
-                if(!hatDetails.isEmpty()) // if it's empty, we don't actually have the details yet, or actually there's no hat.
+                HatsSavedData.HatPart hatPart = HatHandler.getHatPart(living);
+                if(hatPart.isAHat())
                 {
+                    //we have hat data
                     int overlay = LivingRenderer.getPackedOverlay(living, 0.0F);
-                    renderHat(helper, renderer, stack, bufferIn, packedLightIn, overlay, living, partialTicks, hatDetails);
+                    renderHat(helper, renderer, stack, bufferIn, packedLightIn, overlay, living, partialTicks, hatPart);
                 }
             }
             else
@@ -78,7 +78,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
         }
     }
 
-    public static boolean renderHat(HeadInfo helper, LivingRenderer<?, ?> renderer, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks, String hatDetails)
+    public static boolean renderHat(HeadInfo helper, LivingRenderer<?, ?> renderer, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks, HatsSavedData.HatPart hatDetails)
     {
         int headCount = helper.getHeadCount(living); //TODO test tabula rendering outside overworld
 
@@ -86,7 +86,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
         for(int i = 0; i < headCount; i++) //TODO figure out why changing dimension fucks up the render
         {
-            if(living.isInvisible() && helper.affectedByInvisibility(living, -1, i))
+            if(living.isInvisible() && helper.affectedByInvisibility(living, -1, i) && !Hats.eventHandlerClient.forceRenderWhenInvisible)
             {
                 continue;
             }

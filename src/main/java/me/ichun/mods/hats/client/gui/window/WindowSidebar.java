@@ -56,9 +56,9 @@ public class WindowSidebar extends Window<WorkspaceHats>
 
             int padding = 2;
 
-            //CANCEL button
+            //CANCEL button //TODO disable the button when there's no hat
             btnStack = new ElementButtonTextured<>(this, TEX_CANCEL, btn -> {
-                HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, ""); //remove the current hat
+                HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, null); //remove the current hat
 
                 for(Element<?> element : ((WindowHatsList.ViewHatsList)parent.parent.windowHatsList.currentView).list.elements)
                 {

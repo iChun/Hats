@@ -10,13 +10,15 @@ import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.*;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementScrollBar;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTextField;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTexture;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -146,7 +148,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
             list.elements.clear();
             for(HatsSavedData.HatPart part : hatPartSource)
             {
-                ElementHatRender<?> hat = new ElementHatRender<>(list, part, btn -> {
+                ElementHatRender<?> hat = new ElementHatRender<>(list, part.createCopy(), btn -> {
                     ElementHatsScrollView scrollView = (ElementHatsScrollView)btn.parentFragment;
                     if(btn.toggleState) //we're selected
                     {
@@ -158,12 +160,12 @@ public class WindowHatsList extends Window<WorkspaceHats>
                             }
                         }
 
-                        HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, btn.hatDetails.name);
+                        HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, btn.hatDetails);
                     }
                 }, btn -> {
                 }
                 );
-                hat.setToggled(parentFragment.parent.hatDetails.startsWith(part.name));
+                hat.setToggled(parentFragment.parent.hatDetails.name.equals(part.name));
                 hat.setSize(50, 70);
                 list.addElement(hat);
             }

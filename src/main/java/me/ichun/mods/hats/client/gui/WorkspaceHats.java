@@ -2,6 +2,7 @@ package me.ichun.mods.hats.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import me.ichun.mods.hats.client.gui.window.WindowHalfGreyout;
 import me.ichun.mods.hats.client.gui.window.WindowHatsList;
 import me.ichun.mods.hats.client.gui.window.WindowInputReceiver;
 import me.ichun.mods.hats.client.gui.window.WindowSidebar;
@@ -10,6 +11,7 @@ import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.Workspace;
+import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
@@ -31,7 +33,7 @@ public class WorkspaceHats extends Workspace
 
     public final boolean fallback;
     public final @Nonnull LivingEntity hatEntity;
-    public final String hatDetails;
+    public final HatsSavedData.HatPart hatDetails;
 
     public int age;
 
@@ -46,7 +48,7 @@ public class WorkspaceHats extends Workspace
 
         this.fallback = fallback || hatEntity != Minecraft.getInstance().player;
         this.hatEntity = hatEntity;
-        this.hatDetails = HatHandler.getHatDetails(hatEntity);
+        this.hatDetails = HatHandler.getHatPart(hatEntity).createCopy();
 
         addWindow(windowHatsList = new WindowHatsList(this));
         addWindow(windowSidebar = new WindowSidebar(this));
@@ -130,6 +132,16 @@ public class WorkspaceHats extends Workspace
     public boolean mouseDragged(double mouseX, double mouseY, int button, double distX, double distY)
     {
         return (this.getListener() != null && this.isDragging()) && this.getListener().mouseDragged(mouseX, mouseY, button, distX, distY);
+    }
+
+    @Override
+    public void addWindowWithGreyout(Window<?> window) //TODO why are users randomly being allocated hats.
+    {
+        WindowHalfGreyout greyout = new WindowHalfGreyout(this, window);
+        addWindow(greyout);
+        greyout.init();
+
+        addWindow(window);
     }
 
     @Override

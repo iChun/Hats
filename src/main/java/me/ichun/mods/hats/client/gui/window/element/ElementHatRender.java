@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.gui.window.WindowHatOptions;
+import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
@@ -42,7 +43,11 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) //we extended ElementRightClickable but we're not really much of that anymore
     {
-        boolean flag = super.mouseReleased(mouseX, mouseY, button); // unsets dragging;
+//        boolean flag = super.mouseReleased(mouseX, mouseY, button); // unsets dragging;
+        //copied out mouseReleased so we don't call ElementClickable's
+        this.setDragging(false);
+        boolean flag = getListener() != null && getListener().mouseReleased(mouseX, mouseY, button);
+
         parentFragment.setListener(null); //we're a one time click, stop focusing on us
         if(!disabled && isMouseOver(mouseX, mouseY))
         {
@@ -63,7 +68,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
         return isMouseBetween(mouseX, getLeft(), getLeft() + 3 + getFontRenderer().getStringWidth(HAMBURGER) + 2) && isMouseBetween(mouseY, getTop(), getTop() + getFontRenderer().FONT_HEIGHT + 2);
     }
 
-    public void spawnOptionsButtons()
+    public void spawnOptionsButtons() //TODO fix buttons spawning above/below the hats list?
     {
         //Spawn the window and set focus to it.
         WindowHatOptions windowHatOptions = new WindowHatOptions((WorkspaceHats)getWorkspace(), this);
@@ -135,7 +140,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
         int top = Math.max(getTop() + 1, parentFragment.getTop());
         int bottom = Math.min(getBottom() - 1, parentFragment.getBottom());
 
-        HatInfo info = HatResourceHandler.getAndSetAccessories(hatDetails.name);
+        HatInfo info = HatResourceHandler.getAndSetAccessories(hatDetails);
         if(bottom - top > 0)
         {
             RenderSystem.enableDepthTest();
@@ -148,11 +153,23 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
 
             LivingEntity livingEnt = ((WorkspaceHats)getWorkspace()).hatEntity;
 
-            String originalHat = HatHandler.getHatDetails(livingEnt);
+            HatsSavedData.HatPart originalHat = HatHandler.getHatPart(livingEnt).createCopy();
 
-            HatHandler.assignSpecificHat(livingEnt, info != null ? info.name : "");
+            HatHandler.assignSpecificHat(livingEnt, hatDetails);
+
+            if(Hats.configClient.invisibleEntityInHatSelector)
+            {
+                Hats.eventHandlerClient.forceRenderWhenInvisible = true;
+                livingEnt.setInvisible(true);
+            }
 
             InventoryScreen.drawEntityOnScreen(getLeft() + (getWidth() / 2), (int)(getBottom() + livingEnt.getEyeHeight() * 32F), Math.max(50 - (int)(livingEnt.getWidth() * 10), 10), 20, -10, livingEnt);
+
+            if(Hats.configClient.invisibleEntityInHatSelector)
+            {
+                Hats.eventHandlerClient.forceRenderWhenInvisible = false;
+                livingEnt.setInvisible(false);
+            }
 
             HatHandler.assignSpecificHat(livingEnt, originalHat);
 

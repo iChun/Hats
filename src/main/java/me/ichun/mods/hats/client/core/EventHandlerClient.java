@@ -12,7 +12,6 @@ import me.ichun.mods.ichunutil.client.tracker.entity.EntityTracker;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.IngameMenuScreen;
-import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.entity.EnderDragonRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
@@ -47,6 +46,7 @@ public class EventHandlerClient
     public boolean lastHideGui;
     public float originalPitch;
     public float guiX, guiY, guiYaw, guiPitch, guiDist;
+    public boolean forceRenderWhenInvisible;
 
     @SubscribeEvent
     public void onClientConnection(ClientPlayerNetworkEvent.LoggedInEvent event)
@@ -153,15 +153,14 @@ public class EventHandlerClient
                     dist -= (4.0D * progSin); //minus the third person dist. 4.0D from ActiveRenderInfo
                 }
 
-                Vector3d upHeadVec = EntityHelper.getVectorForRotation(oriRend.rotationPitch - 90F, oriRend.rotationYaw);
                 double upOff = (0.25D + guiY);
 
                 Vector3d sideVec = EntityHelper.getVectorForRotation(oriRend.rotationPitch, yawFromPlayer - 90);
                 double sideOff = (0.8D + guiX) * (mc.getMainWindow().getWidth() / (float)mc.getMainWindow().getHeight()) / (16F/9F);
 
-                double offX = (upOff * upHeadVec.getX() * progSin) + (sideOff * sideVec.getX() * progSq);
-                double offY = (upOff * upHeadVec.getY() * progSin) + (sideOff * sideVec.getY() * progSq);
-                double offZ = (upOff * upHeadVec.getZ() * progSin) + (sideOff * sideVec.getZ() * progSq);
+                double offX = (sideOff * sideVec.getX() * progSq);
+                double offY = (upOff * progSin) + (sideOff * sideVec.getY() * progSq);
+                double offZ = (sideOff * sideVec.getZ() * progSq);
 
                 Vector3d rendEyePos = oriRend.getEyePosition(event.renderTickTime);
                 RayTraceResult camPoint = EntityHelper.rayTrace(oriRend.getEntityWorld(), rendEyePos, rendEyePos.add(revLookVec.mul(dist, dist, dist)).add(offX, offY, offZ), oriRend, false, RayTraceContext.BlockMode.COLLIDER, b -> true, RayTraceContext.FluidMode.NONE, e -> true);

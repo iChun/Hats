@@ -20,15 +20,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class HatResourceHandler
 {
     public static final HashMap<String, HatInfo> HATS = new HashMap<>(); //Our reliance on Tabula is staggering.
-    public static final Splitter COLON_SPLITTER = Splitter.on(":").trimResults().omitEmptyStrings();
-
     public static ArrayList<HatsSavedData.HatPart> HAT_PARTS = new ArrayList<>();
 
     private static Path hatsDir;
@@ -172,23 +169,14 @@ public class HatResourceHandler
         return new HatInfo(name, project);
     }
 
-    public static HatInfo getAndSetAccessories(String details)
+    public static HatInfo getAndSetAccessories(HatsSavedData.HatPart part)
     {
-        List<String> strings = COLON_SPLITTER.splitToList(details);
-        if(!strings.isEmpty())
+        HatInfo info = HATS.get(part.name);
+        if(info != null)
         {
-            HatInfo info = HATS.get(strings.get(0));
-            if(info != null)
-            {
-                ArrayList<String> accessories = new ArrayList<>();
-                for(int i = 1; i < strings.size(); i++)
-                {
-                    accessories.add(strings.get(i));
-                }
-                info.setAccessoriesState(accessories);
+            info.setAccessoriesState(part.hatParts);
 
-                return info;
-            }
+            return info;
         }
         return null;
     }
@@ -211,7 +199,7 @@ public class HatResourceHandler
         return hatParts;
     }
 
-    public static ArrayList<HatsSavedData.HatPart> getAllHatPartsWithInventory(ArrayList<HatsSavedData.HatPart> inventory)
+    public static ArrayList<HatsSavedData.HatPart> getAllHatPartsWithInventory(ArrayList<HatsSavedData.HatPart> inventory) //TODO sorting, loading all hat parts with user customisation, synching
     {
         ArrayList<HatsSavedData.HatPart> hatParts = getAllHatsAsHatParts(0);
         for(HatsSavedData.HatPart invPart : inventory)

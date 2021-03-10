@@ -5,6 +5,7 @@ import com.mojang.blaze3d.vertex.IVertexBuilder;
 import me.ichun.mods.hats.client.layer.LayerHat;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import net.minecraft.client.Minecraft;
@@ -34,7 +35,7 @@ public class ModelRendererDragonHook extends ModelRenderer
     @SuppressWarnings("unchecked")
     public void render(MatrixStack stack, IVertexBuilder bufferInUnused, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha)
     {
-        if(parentModel.dragonInstance == null)
+        if(parentModel.dragonInstance == null || parentModel.dragonInstance.removed)
         {
             return;
         }
@@ -72,14 +73,14 @@ public class ModelRendererDragonHook extends ModelRenderer
 
         LivingEntity living = parentModel.dragonInstance;
 
-        if(living.getPersistentData().contains(HatHandler.NBT_HAT_KEY) && living.getPersistentData().getCompound(HatHandler.NBT_HAT_KEY).contains(HatHandler.NBT_HAT_SET_KEY))
+        if(HatHandler.hasBeenRandomlyAllocated(living))
         {
-            //we have hat data
-            String hatDetails = HatHandler.getHatDetails(living);
-            if(!hatDetails.isEmpty()) // if it's empty, we don't actually have the details yet, or actually there's no hat.
+            HatsSavedData.HatPart hatPart = HatHandler.getHatPart(living);
+            if(hatPart.isAHat())
             {
+                //we have hat data
                 IRenderTypeBuffer.Impl bufferIn = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-                if(LayerHat.renderHat(helper, null, stack, bufferIn, packedLightIn, packedOverlayIn, living, lastPartialTick, hatDetails))
+                if(LayerHat.renderHat(helper, null, stack, bufferIn, packedLightIn, packedOverlayIn, living, lastPartialTick, hatPart))
                 {
                     bufferIn.getBuffer(RENDER_TYPE_RESET);
                 }

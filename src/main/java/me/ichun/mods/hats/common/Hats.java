@@ -9,28 +9,36 @@ import me.ichun.mods.hats.common.core.EventHandlerServer;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.hats.common.packet.*;
 import me.ichun.mods.hats.common.thread.ThreadReadHats;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.key.KeyBind;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.network.PacketChannel;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.nbt.INBT;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
+
+import javax.annotation.Nullable;
 
 @Mod(Hats.MOD_ID)
 public class Hats
@@ -63,6 +71,7 @@ public class Hats
 
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        bus.addListener(this::onCommonSetup);
         bus.addListener(this::finishLoading);
 
         MinecraftForge.EVENT_BUS.register(eventHandlerServer = new EventHandlerServer());
@@ -86,7 +95,7 @@ public class Hats
 
             MinecraftForge.EVENT_BUS.register(eventHandlerClient = new EventHandlerClient());
 
-            bus.addListener(this::onClientInit);
+            bus.addListener(this::onClientSetup);
 
             ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> me.ichun.mods.ichunutil.client.core.EventHandlerClient::getConfigGui);
         });
@@ -95,8 +104,27 @@ public class Hats
         threadReadHats.start();
     }
 
+    private void onCommonSetup(FMLCommonSetupEvent event)
+    {
+        //We don't need a proper IStorage / factory: https://github.com/MinecraftForge/MinecraftForge/issues/7622
+        CapabilityManager.INSTANCE.register(HatsSavedData.HatPart.class, new Capability.IStorage<HatsSavedData.HatPart>() {
+            @Nullable
+            @Override
+            public INBT writeNBT(Capability<HatsSavedData.HatPart> capability, HatsSavedData.HatPart instance, Direction side)
+            {
+                return null;
+            }
+
+            @Override
+            public void readNBT(Capability<HatsSavedData.HatPart> capability, HatsSavedData.HatPart instance, Direction side, INBT nbt)
+            {
+
+            }
+        }, () -> null);
+    }
+
     @OnlyIn(Dist.CLIENT)
-    private void onClientInit(FMLClientSetupEvent event)
+    private void onClientSetup(FMLClientSetupEvent event)
     {
         new KeyBind(new KeyBinding("hats.key.hatsMenu", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM.getOrMakeInput(GLFW.GLFW_KEY_H), "key.categories.ui"), keyBind -> eventHandlerClient.openHatsMenu(), null);
     }

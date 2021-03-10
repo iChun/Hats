@@ -28,6 +28,8 @@ public class ConfigClient extends ConfigBase
 
     public boolean forceGuiFallback = false;
 
+    public boolean invisibleEntityInHatSelector = false;
+
     public ConfigClient()
     {
         super(ModLoadingContext.get().getActiveContainer().getModId() + "-client.toml");

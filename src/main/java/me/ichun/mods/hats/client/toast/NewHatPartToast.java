@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.toasts.IToast;
 import net.minecraft.client.gui.toasts.ToastGui;
@@ -26,13 +27,13 @@ import java.util.Random;
 @OnlyIn(Dist.CLIENT)
 public class NewHatPartToast implements IToast
 {
-    private final String hatDetails;
+    private final HatsSavedData.HatPart hatDetails;
     private final ITextComponent title;
     private final List<ITextComponent> subtitles;
     private long firstDrawTime;
     private boolean newDisplay;
 
-    public NewHatPartToast(String hatDetails, boolean newHat, ArrayList<String> names)
+    public NewHatPartToast(HatsSavedData.HatPart hatDetails, boolean newHat, ArrayList<String> names)
     {
         this.hatDetails = hatDetails;
         String type = I18n.format(newHat ? "hats.toast.unlock.hat" : "hats.toast.unlock.accessory");

@@ -2,6 +2,7 @@ package me.ichun.mods.hats.common.hats;
 
 import me.ichun.mods.hats.client.model.ModelHat;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.util.text.TextFormatting;
@@ -145,11 +146,22 @@ public class HatInfo
         accessories.addAll(accessoryHashMap.values());
     }
 
-    public void setAccessoriesState(ArrayList<String> enabled)
+    public void setAccessoriesState(ArrayList<HatsSavedData.HatPart> enabled)
     {
         for(Accessory accessory : accessories)
         {
-            accessory.show(enabled.contains(accessory.name));
+            boolean show = false;
+
+            for(HatsSavedData.HatPart enabledAccessory : enabled)
+            {
+                if(accessory.name.equals(enabledAccessory.name))
+                {
+                    show = true;
+                    break;
+                }
+            }
+
+            accessory.show(show);
         }
     }
 

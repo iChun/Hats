@@ -1,10 +1,12 @@
 package me.ichun.mods.hats.common.packet;
 
 import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.network.AbstractPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -14,11 +16,11 @@ import java.util.HashMap;
 
 public class PacketEntityHatDetails extends AbstractPacket
 {
-    public HashMap<Integer, String> entIdToHat;
+    public HashMap<Integer, HatsSavedData.HatPart> entIdToHat;
 
     public PacketEntityHatDetails(){}
 
-    public PacketEntityHatDetails(HashMap<Integer, String> entIdToHat)
+    public PacketEntityHatDetails(HashMap<Integer, HatsSavedData.HatPart> entIdToHat)
     {
         this.entIdToHat = entIdToHat;
     }
@@ -27,20 +29,25 @@ public class PacketEntityHatDetails extends AbstractPacket
     public void writeTo(PacketBuffer buf)
     {
         buf.writeInt(entIdToHat.size());
+
         entIdToHat.forEach((i, s) -> {
             buf.writeInt(i);
-            buf.writeString(s);
+            buf.writeCompoundTag(s.write(new CompoundNBT()));
         });
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public void readFrom(PacketBuffer buf)
     {
         entIdToHat = new HashMap<>();
         int count = buf.readInt();
+
         for(int i = 0; i < count; i++)
         {
-            entIdToHat.put(buf.readInt(), readString(buf));
+            HatsSavedData.HatPart part = new HatsSavedData.HatPart();
+            entIdToHat.put(buf.readInt(), part);
+            part.read(buf.readCompoundTag());
         }
     }
 

@@ -2,6 +2,7 @@ package me.ichun.mods.hats.common.packet;
 
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.network.AbstractPacket;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -45,17 +46,17 @@ public class PacketRequestEntityHatDetails extends AbstractPacket
     public void process(NetworkEvent.Context context)
     {
         context.enqueueWork(() -> {
-            HashMap<Integer, String> entIdToHat = new HashMap<>();
+            HashMap<Integer, HatsSavedData.HatPart> entIdToHat = new HashMap<>();
 
             for(int entId : entIds)
             {
                 Entity ent = context.getSender().getServerWorld().getEntityByID(entId);
                 if(ent instanceof LivingEntity)
                 {
-                    String hat = HatHandler.getHatDetails((LivingEntity)ent);
-                    if(!hat.isEmpty())
+                    HatsSavedData.HatPart hatPart = HatHandler.getHatPart((LivingEntity)ent);
+                    if(hatPart.isAHat())
                     {
-                        entIdToHat.put(entId, hat);
+                        entIdToHat.put(entId, hatPart);
                     }
                 }
             }
