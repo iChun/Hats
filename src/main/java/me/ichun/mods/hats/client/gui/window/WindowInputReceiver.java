@@ -86,13 +86,27 @@ public class WindowInputReceiver extends Window<WorkspaceHats>
         driftPitch = driftPitch % 360F;
         driftYaw = driftYaw % 360F;
 
-        if(headingCamDist < -1.2F)
+        if(parent.fallback)
         {
-            headingCamDist = -1.2F;
+            if(headingCamDist < -5F)
+            {
+                headingCamDist = -5F;
+            }
+            else if(headingCamDist > 1F)
+            {
+                headingCamDist = 1F;
+            }
         }
-        else if(headingCamDist > 4F)
+        else
         {
-            headingCamDist = 4F;
+            if(headingCamDist < -1.2F)
+            {
+                headingCamDist = -1.2F;
+            }
+            else if(headingCamDist > 4F)
+            {
+                headingCamDist = 4F;
+            }
         }
 
         if(headingX < -4F)

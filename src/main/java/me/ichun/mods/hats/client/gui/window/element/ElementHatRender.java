@@ -19,13 +19,10 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Vector3f;
 
 import javax.annotation.Nonnull;
-import java.text.DecimalFormat;
 import java.util.function.Consumer;
 
 public class ElementHatRender<T extends ElementHatRender>  extends ElementRightClickable<T>
 {
-    public static final DecimalFormat FORMATTER = new DecimalFormat("#,###,###");
-
     public HatsSavedData.HatPart hatDetails;
     public boolean toggleState;
 
@@ -60,18 +57,22 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
     }
 
     @Override
-    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick) //TODO disable hat render if no count.
     {
         super.render(stack, mouseX, mouseY, partialTick);
         if(renderMinecraftStyle())
         {
-            renderMinecraftStyleButton(stack, getLeft(), getTop(), width, height, parentFragment.isDragging() && parentFragment.getListener() == this || toggleState ? ButtonState.CLICK : hover ? ButtonState.HOVER : ButtonState.IDLE);
+            renderMinecraftStyleButton(stack, getLeft(), getTop(), width, height, disabled || parentFragment.isDragging() && parentFragment.getListener() == this || toggleState ? ButtonState.CLICK : hover ? ButtonState.HOVER : ButtonState.IDLE);
         }
         else
         {
             fill(stack, getTheme().elementButtonBorder, 0);
             int[] colour;
-            if(parentFragment.isDragging() && parentFragment.getListener() == this)
+            if(disabled)
+            {
+                colour = getTheme().elementButtonBackgroundInactive;
+            }
+            else if(parentFragment.isDragging() && parentFragment.getListener() == this)
             {
                 colour = getTheme().elementButtonClick;
             }
@@ -105,6 +106,9 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
 
             setScissor();
 
+            RenderSystem.pushMatrix();
+            RenderSystem.translatef(0F, 0F, 500F);
+
             LivingEntity livingEnt = ((WorkspaceHats)getWorkspace()).hatEntity;
 
             String originalHat = HatHandler.getHatDetails(livingEnt);
@@ -114,6 +118,8 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
             InventoryScreen.drawEntityOnScreen(getLeft() + (getWidth() / 2), (int)(getBottom() + livingEnt.getEyeHeight() * 32F), Math.max(50 - (int)(livingEnt.getWidth() * 10), 10), 20, -10, livingEnt);
 
             HatHandler.assignSpecificHat(livingEnt, originalHat);
+
+            RenderSystem.popMatrix();
 
             resetScissorToParent();
 
@@ -136,7 +142,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
         stack.push();
         stack.translate(getRight() - 5, getTop() + (height * scale), 0F);
         stack.rotate(Vector3f.ZP.rotationDegrees(-90F));
-        stack.translate(-(height * scale) + 3, -(getFontRenderer().FONT_HEIGHT) * scale + 2, 100F);
+        stack.translate(-(height * scale) + 3, -(getFontRenderer().FONT_HEIGHT) * scale + 2, 600F);
         stack.scale(scale, scale, scale);
 
         //draw the text
@@ -151,12 +157,12 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
 
         stack.pop();
 
-        if(!(Minecraft.getInstance().player.isCreative() && !Hats.configServer.enableCreativeModeHadHunting)) //doesn't use an inventory
+        if(((WorkspaceHats)getWorkspace()).usePlayerInventory())
         {
-            s = "x" + FORMATTER.format(hatDetails.count);
+            s = "x" + WorkspaceHats.FORMATTER.format(hatDetails.count);
 
             stack.push();
-            stack.translate(getLeft() + 3, getBottom() - (getFontRenderer().FONT_HEIGHT) * scale - 1, 100F);
+            stack.translate(getLeft() + 3, getBottom() - (getFontRenderer().FONT_HEIGHT) * scale - 1, 600F);
             stack.scale(scale, scale, scale);
 
             //draw the text

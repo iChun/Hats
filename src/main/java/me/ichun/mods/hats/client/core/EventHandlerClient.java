@@ -194,9 +194,15 @@ public class EventHandlerClient
     public void openHatsMenu()
     {
         Minecraft mc = Minecraft.getInstance();
-        if(mc.world != null && mc.renderViewEntity != null)
+        if(mc.world != null && mc.player != null)
         {
-            boolean fallback = Hats.configClient.forceGuiFallback || !Hats.configServer.allowFancyHatsGui || !(mc.player.getPose() == Pose.STANDING || mc.player.getPose() == Pose.CROUCHING);
+            boolean fallback = Hats.configClient.forceGuiFallback
+                    || !Hats.configServer.allowFancyHatsGui
+                    || !(mc.player.getPose() == Pose.STANDING || mc.player.getPose() == Pose.CROUCHING)
+                    || mc.player != mc.renderViewEntity
+                    || mc.player.getBrightness() <= 0.15F
+                    || mc.player.isInvisible()
+                    ;
             if(!fallback)
             {
                 float yawFromPlayer = mc.renderViewEntity.rotationYaw - 160F;

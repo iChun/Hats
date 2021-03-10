@@ -10,15 +10,13 @@ import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementScrollBar;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTextField;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTexture;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.*;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -56,6 +54,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
             {
                 resize(parent.getMinecraft(), parent.width, parent.height);
             }
+            parent.windowSidebar.constraint.apply();
         }
         super.render(stack, mouseX, mouseY, partialTick);
     }
@@ -93,8 +92,31 @@ public class WindowHatsList extends Window<WorkspaceHats>
             ElementTextField textField = new ElementTextField(this);
             textField.setId("search");
             textField.setResponder(this::updateSearch).setSize(70, 12);
-            textField.setConstraint(new Constraint(textField).left(searchIcon, Constraint.Property.Type.RIGHT, 2).bottom(searchIcon, Constraint.Property.Type.BOTTOM, 1).top(searchIcon, Constraint.Property.Type.TOP, 1));
+            textField.setConstraint(new Constraint(textField).left(searchIcon, Constraint.Property.Type.RIGHT, 2).bottom(searchIcon, Constraint.Property.Type.BOTTOM, 1).top(searchIcon, Constraint.Property.Type.TOP, 1).width(this, Constraint.Property.Type.WIDTH, 40));
             elements.add(textField);
+
+            //TODO sort menu - alphabetical / rarity / count
+            //TODO in sort menu - show all hats?
+            //TODO show unowned hats at the bottom?
+            //TODO sync with server regarding hats list.
+
+//
+//            ArrayList<String> test = new ArrayList<>();
+//            test.add("ABC");
+//            test.add("asdas");
+//            test.add("djdjdj");
+//            ElementDropdownContextMenu<?> sortButton = new ElementDropdownContextMenu<>(this, "Sort by...", test, ((menu, item) -> {
+//                if(item.selected)
+//                {
+//                    ElementDropdownContextMenu<?> contextMenu = (ElementDropdownContextMenu<?>)menu;
+//                    contextMenu.text = item.getObject().toString().trim();
+//
+////                    changeProfile(contextMenu.text);
+//                }
+//            }));
+//            sortButton.setSize(70, 16);
+//            sortButton.setConstraint(new Constraint(sortButton).right(this, Constraint.Property.Type.RIGHT, padding).bottom(this, Constraint.Property.Type.BOTTOM, padding).width(this, Constraint.Property.Type.WIDTH, 40));
+//            elements.add(sortButton);
 
             ElementScrollBar<?> sv = new ElementScrollBar<>(this, ElementScrollBar.Orientation.VERTICAL, 0.6F);
             sv.setConstraint(new Constraint(sv).top(this, Constraint.Property.Type.TOP, padding)
