@@ -140,7 +140,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
         int top = Math.max(getTop() + 1, parentFragment.getTop());
         int bottom = Math.min(getBottom() - 1, parentFragment.getBottom());
 
-        HatInfo info = HatResourceHandler.getAndSetAccessories(hatDetails);
+        HatInfo info = HatResourceHandler.getInfoAndSetToPart(hatDetails);
         if(bottom - top > 0)
         {
             RenderSystem.enableDepthTest();

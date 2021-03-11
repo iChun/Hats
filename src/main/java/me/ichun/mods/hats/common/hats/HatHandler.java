@@ -13,6 +13,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class HatHandler //Handles most of the server-related things.
@@ -49,13 +50,6 @@ public class HatHandler //Handles most of the server-related things.
             {
                 pool.forcedRarity = hatInfo.forcedRarity;
             }
-
-            for(HatInfo.Accessory accessory : hatInfo.accessories)
-            {
-                RAND.setSeed(Math.abs((Hats.configServer.randSeed + entry.getKey() + accessory.name).hashCode()) * 420744333L); //Chat contributed random
-
-                accessory.setRarity(getRarityForChance(RAND.nextDouble()));
-            }
         }
 
         for(Map.Entry<String, HatPool> entry : poolsByName.entrySet())
@@ -74,7 +68,7 @@ public class HatHandler //Handles most of the server-related things.
             ArrayList<HatPool> hats = HAT_POOLS.computeIfAbsent(rarity, k -> new ArrayList<>());
             for(HatInfo hatInfo : pool.hatsInPool)
             {
-                hatInfo.rarity = rarity;
+                hatInfo.setRarity(rarity);
             }
             hats.add(pool);
         }
@@ -136,10 +130,8 @@ public class HatHandler //Handles most of the server-related things.
 
         RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID().toString()).hashCode()) * 425480085L); //Chat contributed random
 
-        boolean isBoss = !ent.isNonBoss();
-
         double chance = RAND.nextDouble();
-        if(isBoss)
+        if(!ent.isNonBoss())
         {
             chance += Hats.configServer.bossRarityBonus;
         }
@@ -152,49 +144,7 @@ public class HatHandler //Handles most of the server-related things.
         hatPart.name = hatInfo.name;
         hatPart.count = 1;
 
-        ArrayList<HatInfo.Accessory> spawningAccessories = new ArrayList<>();
-        HashMap<String, ArrayList<HatInfo.Accessory>> conflicts = new HashMap<>();
-        for(HatInfo.Accessory accessory : hatInfo.accessories)
-        {
-            RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID() + accessory.name).hashCode()) * 53579997854L); //Chat contributed random
-            double accChance = Hats.configServer.rarityIndividual.get(accessory.rarity.ordinal());
-            if(isBoss)
-            {
-                accChance += Hats.configServer.bossRarityBonus;
-            }
-            if(RAND.nextDouble() < accChance) //spawn the accessory
-            {
-                spawningAccessories.add(accessory);
-                if(accessory.conflictLayer != null) //look for conflicts for accessories  that already got to spawn
-                {
-                    conflicts.computeIfAbsent(accessory.conflictLayer, k -> new ArrayList<>()).add(accessory);
-                }
-            }
-        }
-
-        //if there are no conflicts, remove
-        conflicts.entrySet().removeIf(entry -> entry.getValue().size() <= 1);
-
-        for(ArrayList<HatInfo.Accessory> conflictAccessories : conflicts.values())
-        {
-            while(conflictAccessories.size() > 1)
-            {
-                HatInfo.Accessory acc = conflictAccessories.get(ent.getRNG().nextInt(conflictAccessories.size()));// YOU LOST THE COIN TOSS
-                spawningAccessories.remove(acc);
-                conflictAccessories.remove(acc);
-            }
-        }
-
-        for(HatInfo.Accessory accessory : spawningAccessories)
-        {
-            if(accessory.parent != null && !isParentInList(spawningAccessories, accessory.parent))
-            {
-                continue; //we ain't spawning you, go find your parent first!
-            }
-
-            HatsSavedData.HatPart accToSpawn = new HatsSavedData.HatPart(accessory.name);
-            hatPart.hatParts.add(accToSpawn);
-        }
+        hatInfo.assignAccessoriesToPart(hatPart, ent);
     }
 
     public static void assignSpecificHat(LivingEntity ent, HatsSavedData.HatPart part)
@@ -216,97 +166,99 @@ public class HatHandler //Handles most of the server-related things.
         assignSpecificHat(ent, null);
     }
 
-    private static boolean isParentInList(ArrayList<HatInfo.Accessory> accessories, String parent)
-    {
-        for(HatInfo.Accessory accessory : accessories)
-        {
-            if(parent.equals(accessory.name))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static void setSaveData(HatsSavedData data)
     {
         saveData = data;
     }
 
-    public static void addHat(ServerPlayerEntity player, HatsSavedData.HatPart addedHat) //TODO test this
+    private static void addNamesOfLackingParts(ArrayList<String> names, @Nullable HatsSavedData.HatPart source, @Nonnull HatsSavedData.HatPart target)
     {
-        HatInfo info = HatResourceHandler.getAndSetAccessories(addedHat);
+        //We do it for this level's children first
+        ArrayList<String> parts = new ArrayList<>();
+        for(HatsSavedData.HatPart hatPart : target.hatParts)
+        {
+            parts.add(hatPart.name);
+        }
+        if(source != null)
+        {
+            for(HatsSavedData.HatPart part : source.hatParts)
+            {
+                parts.remove(part.name);
+            }
+        }
+        names.addAll(parts);
+
+        //look for the next level's pairs to compare.
+        for(HatsSavedData.HatPart nextTarget : target.hatParts)
+        {
+            HatsSavedData.HatPart nextSource = null;
+            if(source != null)
+            {
+                for(HatsSavedData.HatPart part : source.hatParts)
+                {
+                    if(part.name.equals(nextTarget.name))
+                    {
+                        nextSource = part;
+                    }
+                }
+            }
+            addNamesOfLackingParts(names, nextSource, nextTarget);
+        }
+    }
+
+    public static void addHat(ServerPlayerEntity player, HatsSavedData.HatPart hatToAdd)
+    {
+        HatInfo info = HatResourceHandler.HATS.get(hatToAdd.name);
         if(info != null) //it's a valid hat
         {
             boolean foundBase = false; //if stays false, this is a new hat.
 
-            String hatName = addedHat.name;
-            HatsSavedData.HatPart hatBase = null;
+            //We're looking if this hat has been unlocked before.
+            HatsSavedData.HatPart inventoryHat = null;
             HatsSavedData.PlayerHatData playerHatData = saveData.playerHats.computeIfAbsent(player.getGameProfile().getId(), k -> new HatsSavedData.PlayerHatData(player.getGameProfile().getId()));
             for(HatsSavedData.HatPart hatPart : playerHatData.hatParts)
             {
-                if(hatName.equals(hatPart.name))
+                if(hatToAdd.name.equals(hatPart.name))
                 {
-                    hatBase = hatPart;
-                    hatBase.count += addedHat.count;
+                    inventoryHat = hatPart;
                     foundBase = true;
                     break;
                 }
             }
 
-            if(hatBase == null)
+            //We can't find the hat, it has not been unlocked before.
+            if(inventoryHat == null)
             {
-                playerHatData.hatParts.add(hatBase = new HatsSavedData.HatPart(hatName).setNew());//this already sets the count to 1.
+                playerHatData.hatParts.add(inventoryHat = new HatsSavedData.HatPart(hatToAdd.name).setNew());
+                inventoryHat.count = 0; //we are adding the added hat at the end.
             }
 
-            ArrayList<HatsSavedData.HatPart> newAccessoriesName = new ArrayList<>();
+            ArrayList<String> names = new ArrayList<>();
+            names.add(info.getDisplayName());
 
-            boolean newAccessory = false;
-            for(int i = 1; i < addedHat.hatParts.size(); i++)
+            ArrayList<String> accessoryNames = new ArrayList<>();
+            addNamesOfLackingParts(accessoryNames, inventoryHat, hatToAdd);
+
+            inventoryHat.add(hatToAdd);
+
+            if(!accessoryNames.isEmpty())
             {
-                HatsSavedData.HatPart accessoryName = addedHat.hatParts.get(i);
-                boolean foundAccessory = false;
-                for(HatsSavedData.HatPart accessory : hatBase.hatParts)
+                for(String accessoryName : accessoryNames)
                 {
-                    if(accessoryName.name.equals(accessory.name))
+                    String dispName = info.getDisplayNameFor(accessoryName);
+                    if(dispName != null)
                     {
-                        accessory.count += accessoryName.count;
-                        foundAccessory = true;
-                        break;
+                        names.add("- " + dispName);
                     }
                 }
-
-                if(!foundAccessory)
-                {
-                    newAccessory = true;
-                    hatBase.hatParts.add(accessoryName.createCopy().setNew());
-                    newAccessoriesName.add(accessoryName);
-                }
             }
 
-            if(!foundBase || newAccessory) //there's something new
+            if(!foundBase || !accessoryNames.isEmpty()) //there's something new
             {
-                HatsSavedData.HatPart part = new HatsSavedData.HatPart(hatName);
-                ArrayList<String> names = new ArrayList<>();
-                names.add(info.getDisplayName());
-
-                for(HatsSavedData.HatPart s : newAccessoriesName)
-                {
-                    for(HatInfo.Accessory accessory : info.accessories)
-                    {
-                        if(accessory.name.equals(s.name)) //oh hey we found it.
-                        {
-                            part.hatParts.add(s);
-
-                            names.add("- " + accessory.getDisplayName());
-                        }
-                    }
-                }
-
-                Hats.channel.sendTo(new PacketNewHatPart(!foundBase, part, names), player);
+                Hats.channel.sendTo(new PacketNewHatPart(!foundBase, hatToAdd, names), player);
             }
 
-            Hats.channel.sendTo(new PacketUpdateHats(hatBase.write(new CompoundNBT()), false), player);
+            Hats.channel.sendTo(new PacketUpdateHats(inventoryHat.write(new CompoundNBT()), false), player);
 
             saveData.markDirty();
         }

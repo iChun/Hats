@@ -107,7 +107,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 helper.preChildEntHeadRenderCalls(living, stack, renderer);
 
                 float[] joint = helper.getHeadJointOffset(living, stack, partialTicks, -1, i);
-                stack.translate(-joint[0], -joint[1] - 0.0025F, -joint[2]); //to fight Z-fighting
+                stack.translate(-joint[0], -joint[1] - 0.00225F, -joint[2]); //to fight Z-fighting
 
                 stack.rotate(Vector3f.ZP.rotationDegrees(helper.getHeadRoll(living, stack, partialTicks, -1, i)));
                 stack.rotate(Vector3f.YP.rotationDegrees(helper.getHeadYaw(living, stack, partialTicks, -1, i)));
@@ -189,10 +189,10 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
             }
 
             //render the project
-            HatInfo hatInfo = HatResourceHandler.getAndSetAccessories(hatDetails);
+            HatInfo hatInfo = HatResourceHandler.getInfoAndSetToPart(hatDetails);
             if(hatInfo != null) //TODO conflicts layers? if accessories are shared
             {
-                hatInfo.getModel().render(stack, bufferIn.getBuffer(RenderType.getEntityTranslucentCull(hatInfo.project.getNativeImageResourceLocation())), packedLightIn, packedOverlayIn, 1F, 1F, 1F, 1F);
+                hatInfo.render(stack, bufferIn, packedLightIn, packedOverlayIn);
 
                 Hats.eventHandlerClient.renderCount++;
 

@@ -3,6 +3,7 @@ package me.ichun.mods.hats.client.model;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import me.ichun.mods.hats.common.hats.HatInfo;
+import me.ichun.mods.ichunutil.client.model.tabula.ModelTabula;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Model;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 public class ModelHat extends Model //A VERY dumbed down version of ModelTabula
 {
     public final @Nonnull HatInfo info;
+    public ArrayList<ModelRenderer> models = new ArrayList<>();
     public HashMap<ModelRenderer, Project.Part> partMap = new HashMap<>();
 
     public ModelHat(@Nonnull HatInfo info)
@@ -29,16 +31,18 @@ public class ModelHat extends Model //A VERY dumbed down version of ModelTabula
         textureWidth = info.project.texWidth;
         textureHeight = info.project.texHeight;
 
-        info.project.parts.forEach(part -> populateModel(new ArrayList<>(), part));
+        info.project.parts.forEach(part -> populateModel(models, part));
     }
 
     @Override
     public void render(MatrixStack matrixStack, IVertexBuilder iVertexBuilder, int light, int overlay, float r, float g, float b, float alpha)
     {
-        partMap.forEach(((modelRenderer, part) -> {
-            modelRenderer.showModel = part.showModel;
-            modelRenderer.render(matrixStack, iVertexBuilder, light, overlay, r, g, b, alpha);
-        }));
+        partMap.forEach(((modelRenderer, part) -> modelRenderer.showModel = part.showModel));
+
+        for(ModelRenderer model : models)
+        {
+            model.render(matrixStack, iVertexBuilder, light, overlay, r, g, b, alpha);
+        }
     }
 
     public void populateModel(Collection<? super ModelRenderer> parts, Project.Part part)

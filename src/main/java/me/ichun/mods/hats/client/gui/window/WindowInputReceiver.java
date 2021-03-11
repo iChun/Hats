@@ -54,8 +54,8 @@ public class WindowInputReceiver extends Window<WorkspaceHats>
         {
             Hats.eventHandlerClient.guiX = lastX + (x - lastX) * partialTick;
             Hats.eventHandlerClient.guiY = lastY + (y - lastY) * partialTick;
-            Hats.eventHandlerClient.guiYaw = lastDriftYaw + (driftYaw - lastDriftYaw) * partialTick;
-            Hats.eventHandlerClient.guiPitch = lastDriftPitch + (driftPitch - lastDriftPitch) * partialTick;
+            Hats.eventHandlerClient.guiYaw = (lastDriftYaw + (driftYaw - lastDriftYaw) * partialTick) % 360F;
+            Hats.eventHandlerClient.guiPitch = (lastDriftPitch + (driftPitch - lastDriftPitch) * partialTick) % 360F;
             Hats.eventHandlerClient.guiDist = lastCamDist + (camDist - lastCamDist) * partialTick;
         }
     }
@@ -83,9 +83,6 @@ public class WindowInputReceiver extends Window<WorkspaceHats>
 
     public void correct()
     {
-        driftPitch = driftPitch % 360F;
-        driftYaw = driftYaw % 360F;
-
         if(parent.fallback)
         {
             if(headingCamDist < -5F)

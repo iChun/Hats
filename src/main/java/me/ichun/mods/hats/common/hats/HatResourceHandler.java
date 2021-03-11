@@ -1,6 +1,5 @@
 package me.ichun.mods.hats.common.hats;
 
-import com.google.common.base.Splitter;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.ichun.mods.hats.common.Hats;
@@ -26,6 +25,8 @@ import java.util.zip.ZipInputStream;
 public class HatResourceHandler
 {
     public static final HashMap<String, HatInfo> HATS = new HashMap<>(); //Our reliance on Tabula is staggering.
+    private static final ArrayList<HatInfo> HAT_ACCESSORIES = new ArrayList<>(); //Only used when loading all the hats.
+
     public static ArrayList<HatsSavedData.HatPart> HAT_PARTS = new ArrayList<>();
 
     private static Path hatsDir;
@@ -101,15 +102,17 @@ public class HatResourceHandler
 
     public static void loadAllHats() //TODO hat accessory clash layer
     {
-        HATS.clear();
+        HATS.clear(); //TODO synchronised method + syncronised list
 
         int count = 0;
         File dir = getHatsDir().toFile();
         count += scourForHats(dir);
 
+        accessoriseHatInfos();
+
         HAT_PARTS = getAllHatsAsHatParts(1);
 
-        Hats.LOGGER.info("Loaded {} hats.", count);
+        Hats.LOGGER.info("Loaded {} files.", count);
     }
 
     private static int scourForHats(File dir)
@@ -158,7 +161,16 @@ public class HatResourceHandler
 
             String hatName = file.getName().substring(0, file.getName().length() - 4);
 
-            HATS.put(hatName, createHatInfoFor(hatName, project));
+            HatInfo hatInfo = createHatInfoFor(hatName, project);
+
+            if(hatInfo.accessoryFor == null) //it is a base had
+            {
+                HATS.put(hatName, hatInfo);
+            }
+            else
+            {
+                HAT_ACCESSORIES.add(hatInfo);
+            }
 
             return true;
         }
@@ -169,14 +181,46 @@ public class HatResourceHandler
         return new HatInfo(name, project);
     }
 
-    public static HatInfo getAndSetAccessories(HatsSavedData.HatPart part)
+    public static void accessoriseHatInfos()
     {
-        HatInfo info = HATS.get(part.name);
-        if(info != null)
+        HashMap<String, ArrayList<HatInfo>> accessoriesByHat = new HashMap<>();
+        for(HatInfo hatAccessory : HAT_ACCESSORIES)
         {
-            info.setAccessoriesState(part.hatParts);
+            accessoriesByHat.computeIfAbsent(hatAccessory.accessoryFor, k -> new ArrayList<>()).add(hatAccessory);
+        }
 
-            return info;
+        accessoriesByHat.forEach((hatName, hatInfos) -> {
+            if(HATS.containsKey(hatName))
+            {
+                HATS.get(hatName).accessorise(hatInfos);
+
+                if(!hatInfos.isEmpty())
+                {
+                    for(HatInfo orphan : hatInfos)
+                    {
+                        Hats.LOGGER.warn("We couldn't find the hat parent for {}", orphan.project.saveFile);
+                    }
+                }
+            }
+            else
+            {
+                for(HatInfo orphan : hatInfos)
+                {
+                    Hats.LOGGER.warn("We couldn't find the hat base for {}", orphan.project.saveFile);
+                }
+            }
+        });
+
+        HAT_ACCESSORIES.clear(); //we don't need you anymore
+    }
+
+    public static HatInfo getInfoAndSetToPart(HatsSavedData.HatPart part)
+    {
+        HatInfo hatInfo = HATS.get(part.name);
+        if(hatInfo != null)
+        {
+            hatInfo.matchPart(part);
+            return hatInfo;
         }
         return null;
     }
@@ -184,18 +228,7 @@ public class HatResourceHandler
     public static ArrayList<HatsSavedData.HatPart> getAllHatsAsHatParts(int count)
     {
         ArrayList<HatsSavedData.HatPart> hatParts = new ArrayList<>();
-        HATS.forEach((s, info) -> {
-            HatsSavedData.HatPart part;
-            hatParts.add(part = new HatsSavedData.HatPart(info.name));
-            part.count = count;
-
-            for(HatInfo.Accessory accessory : info.accessories)
-            {
-                HatsSavedData.HatPart acc1;
-                part.hatParts.add(acc1 = new HatsSavedData.HatPart(accessory.name)); //TODO I'm not allocating the accessories properly.
-                acc1.count = count;
-            }
-        });
+        HATS.forEach((s, info) -> hatParts.add(info.getAsHatPart(count)));
         return hatParts;
     }
 
@@ -206,22 +239,8 @@ public class HatResourceHandler
         {
             for(HatsSavedData.HatPart hatPart : hatParts)
             {
-                if(hatPart.name.equals(invPart.name))
+                if(hatPart.add(invPart))
                 {
-                    hatPart.count = invPart.count;
-
-                    for(HatsSavedData.HatPart acc : hatPart.hatParts)
-                    {
-                        for(HatsSavedData.HatPart invAcc : invPart.hatParts)
-                        {
-                            if(acc.name.equals(invAcc.name))
-                            {
-                                acc.count = invAcc.count;
-                                break;
-                            }
-                        }
-                    }
-
                     break;
                 }
             }

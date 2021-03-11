@@ -77,7 +77,7 @@ public class NewHatPartToast implements IToast
             this.func_238533_a_(stack, toastGui, i, 32 - i1, k - i1, i1);
         }
 
-        HatInfo hatInfo = HatResourceHandler.getAndSetAccessories(hatDetails);
+        HatInfo hatInfo = HatResourceHandler.getInfoAndSetToPart(hatDetails);
         if(hatInfo != null) //TODO test plumbob
         {
             RenderSystem.enableDepthTest();
