@@ -11,14 +11,11 @@ import net.minecraftforge.common.util.LazyOptional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class HatsSavedData extends WorldSavedData
 {
-    public static final String ID = "HatsSave";
+    public static final String ID = "hats_save";
     public HashMap<UUID, PlayerHatData> playerHats = new HashMap<>();
 
     public HatsSavedData()
@@ -114,7 +111,8 @@ public class HatsSavedData extends WorldSavedData
         public String name = "";
         public int count = -1;
         public boolean isFavourite;
-        public float[] colouriser = new float[3]; //0 0 0 = no change to colours. goes up to 1 1 1 for black
+        public boolean isNew;
+        public float[] colouriser = new float[] { 0F, 0F, 0F }; //0 0 0 = no change to colours. goes up to 1 1 1 for black
         public ArrayList<HatPart> hatParts = new ArrayList<>(); //yay infinite recursion
 
         public HatPart(){}
@@ -125,20 +123,26 @@ public class HatsSavedData extends WorldSavedData
             count = 1;
         }
 
+        public HatPart setNew()
+        {
+            isNew = true;
+            return this;
+        }
+
         public void copy(HatPart part)
         {
             name = part.name;
             count = part.count;
             isFavourite = part.isFavourite;
             colouriser = part.colouriser.clone();
-            
+
             hatParts.clear();
             for(HatPart hatPart : part.hatParts)
             {
                 hatParts.add(hatPart.createCopy());
             }
         }
-        
+
         public HatPart createCopy()
         {
             HatPart part = new HatPart();
@@ -149,6 +153,19 @@ public class HatsSavedData extends WorldSavedData
         public boolean isAHat()
         {
             return !name.isEmpty() && count >= 0;
+        }
+
+        public boolean hasNew()
+        {
+            boolean newStuff = isNew;
+            if(!isNew)
+            {
+                for(HatPart hatPart : hatParts)
+                {
+                    newStuff = newStuff | hatPart.hasNew();
+                }
+            }
+            return newStuff;
         }
 
         public boolean add(HatPart part)
@@ -177,11 +194,41 @@ public class HatsSavedData extends WorldSavedData
             return false;
         }
 
+        public boolean isIdenticalCustomisation(HatPart part)
+        {
+            if(name.equals(part.name) && isFavourite == part.isFavourite && Arrays.equals(colouriser, part.colouriser) && hatParts.size() == part.hatParts.size())
+            {
+                //compare the hatParts
+                for(HatPart hatPart : hatParts)
+                {
+                    boolean foundTwin = false;
+
+                    for(HatPart hatPart1 : part.hatParts)
+                    {
+                        if(hatPart.isIdenticalCustomisation(hatPart1)) //compares as well
+                        {
+                            foundTwin = true;
+                            break;
+                        }
+                    }
+
+                    if(!foundTwin)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
         public void read(CompoundNBT tag)
         {
             name = tag.getString("name");
             count = tag.getInt("count");
             isFavourite = tag.getBoolean("isFavourite");
+
+            isNew = tag.getBoolean("isNew");
 
             colouriser = new float[] { tag.getFloat("clrR"), tag.getFloat("clrG"), tag.getFloat("clrB") };
 
@@ -206,6 +253,8 @@ public class HatsSavedData extends WorldSavedData
             tag.putString("name", name);
             tag.putInt("count", count);
             tag.putBoolean("isFavourite", isFavourite);
+
+            tag.putBoolean("isNew", isNew);
 
             tag.putFloat("clrR", colouriser[0]);
             tag.putFloat("clrG", colouriser[1]);

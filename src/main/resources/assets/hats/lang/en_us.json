@@ -30,5 +30,7 @@
   "hats.gui.button.personalise": "Accessorize",
   "hats.gui.button.favouriteHat": "Favorite",
 
-  "hats.gui.button.reset": "Reset"
+  "hats.gui.button.reset": "Reset",
+
+  "hats.plugin.tabula.button": "Open Hat"
 }

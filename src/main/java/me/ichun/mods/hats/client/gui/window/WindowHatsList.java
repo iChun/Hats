@@ -146,7 +146,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
             Collections.sort(hatPartSource);
 
             list.elements.clear();
-            for(HatsSavedData.HatPart part : hatPartSource)
+            for(HatsSavedData.HatPart part : hatPartSource) //TODO how to render hats without accessories???
             {
                 ElementHatRender<?> hat = new ElementHatRender<>(list, part.createCopy(), btn -> {
                     ElementHatsScrollView scrollView = (ElementHatsScrollView)btn.parentFragment;

@@ -3,6 +3,7 @@ package me.ichun.mods.hats.common;
 import me.ichun.mods.hats.client.config.ConfigClient;
 import me.ichun.mods.hats.client.core.EventHandlerClient;
 import me.ichun.mods.hats.client.entity.EntityDummy;
+import me.ichun.mods.hats.client.module.tabula.HatsTabulaPlugin;
 import me.ichun.mods.hats.common.config.ConfigCommon;
 import me.ichun.mods.hats.common.config.ConfigServer;
 import me.ichun.mods.hats.common.core.EventHandlerServer;
@@ -27,11 +28,13 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ExtensionPoint;
+import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
 import org.apache.logging.log4j.LogManager;
@@ -96,6 +99,7 @@ public class Hats
             MinecraftForge.EVENT_BUS.register(eventHandlerClient = new EventHandlerClient());
 
             bus.addListener(this::onClientSetup);
+            bus.addListener(this::enqueueIMC);
 
             ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> me.ichun.mods.ichunutil.client.core.EventHandlerClient::getConfigGui);
         });
@@ -127,6 +131,12 @@ public class Hats
     private void onClientSetup(FMLClientSetupEvent event)
     {
         new KeyBind(new KeyBinding("hats.key.hatsMenu", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM.getOrMakeInput(GLFW.GLFW_KEY_H), "key.categories.ui"), keyBind -> eventHandlerClient.openHatsMenu(), null);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void enqueueIMC(final InterModEnqueueEvent event)
+    {
+        InterModComms.sendTo("tabula", "plugin", HatsTabulaPlugin::new);
     }
 
     private void finishLoading(FMLLoadCompleteEvent event)

@@ -81,7 +81,7 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void renderWindows(MatrixStack stack, int mouseX, int mouseY, float partialTick) //TODO alert when new hat unlocked??
+    public void renderWindows(MatrixStack stack, int mouseX, int mouseY, float partialTick) //TODO ! on a hat when new hat/accesory unlocked??
     {
         boolean invisibleEnt = hatEntity.isInvisible();
         if(invisibleEnt)

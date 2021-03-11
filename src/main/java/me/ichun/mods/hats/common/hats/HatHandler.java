@@ -256,7 +256,7 @@ public class HatHandler //Handles most of the server-related things.
 
             if(hatBase == null)
             {
-                playerHatData.hatParts.add(hatBase = new HatsSavedData.HatPart(hatName));//this already sets the count to 1.
+                playerHatData.hatParts.add(hatBase = new HatsSavedData.HatPart(hatName).setNew());//this already sets the count to 1.
             }
 
             ArrayList<HatsSavedData.HatPart> newAccessoriesName = new ArrayList<>();
@@ -279,7 +279,7 @@ public class HatHandler //Handles most of the server-related things.
                 if(!foundAccessory)
                 {
                     newAccessory = true;
-                    hatBase.hatParts.add(accessoryName.createCopy());
+                    hatBase.hatParts.add(accessoryName.createCopy().setNew());
                     newAccessoriesName.add(accessoryName);
                 }
             }
