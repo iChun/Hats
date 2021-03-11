@@ -150,33 +150,37 @@ public class HatInfo
                     Hats.LOGGER.error("Cannot find Hat Rarity of {}", name);
                 }
             }
-            if(note.startsWith("hats-pool:"))
+            else if(note.startsWith("hats-pool:"))
             {
                 forcedPool = note.substring("hats-pool:".length()).trim();
             }
-            if(note.startsWith("hats-contributor-uuid:"))
+            else if(note.startsWith("hats-contributor-uuid:"))
             {
                 contributorUUID = UUID.fromString(note.substring("hats-contributor-uuid:".length()).trim());
             }
-            if(note.startsWith("hats-contributor-mini-me:") && contributorUUID == null)
+            else if(note.startsWith("hats-contributor-mini-me:") && contributorUUID == null)
             {
                 contributorUUID = EntityHelper.UUID_EXAMPLE;
             }
-            if(note.startsWith("hats-accessory:"))
+            else if(note.startsWith("hats-accessory:"))
             {
                 accessoryFor = note.substring("hats-accessory:".length()).trim();
             }
-            if(note.startsWith("hats-accessory-layer:"))
+            else if(note.startsWith("hats-accessory-layer:"))
             {
                 accessoryLayer = note.substring("hats-accessory-layer:".length()).trim();
             }
-            if(note.startsWith("hats-accessory-parent:"))
+            else if(note.startsWith("hats-accessory-parent:"))
             {
                 accessoryParent = note.substring("hats-accessory-parent:".length()).trim();
             }
-            if(note.startsWith("hats-accessory-hide-parent-part:"))
+            else if(note.startsWith("hats-accessory-hide-parent-part:"))
             {
                 hideParent.add(note.substring("hats-accessory-hide-parent-part:".length()).trim());
+            }
+            else if(note.startsWith("hats"))
+            {
+                Hats.LOGGER.warn("We found a hats meta we don't understand: {} in Project: {}", note, project.saveFile);
             }
         }
     }

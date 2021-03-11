@@ -112,6 +112,7 @@ public class HatsSavedData extends WorldSavedData
         public int count = -1;
         public boolean isFavourite;
         public boolean isNew;
+        public boolean isShowing;
         public float[] colouriser = new float[] { 0F, 0F, 0F, 0F }; //0 0 0 0 = no change to colours. goes up to 1 1 1 1 for black & invisible
         public ArrayList<HatPart> hatParts = new ArrayList<>(); //yay infinite recursion
 
@@ -134,6 +135,7 @@ public class HatsSavedData extends WorldSavedData
             name = part.name;
             count = part.count;
             isFavourite = part.isFavourite;
+            isShowing = part.isShowing;
             colouriser = part.colouriser.clone();
 
             hatParts.clear();
@@ -196,7 +198,7 @@ public class HatsSavedData extends WorldSavedData
 
         public boolean isIdenticalCustomisation(HatPart part)
         {
-            if(name.equals(part.name) && isFavourite == part.isFavourite && Arrays.equals(colouriser, part.colouriser) && hatParts.size() == part.hatParts.size())
+            if(name.equals(part.name) && isFavourite == part.isFavourite && isShowing == part.isShowing && Arrays.equals(colouriser, part.colouriser) && hatParts.size() == part.hatParts.size())
             {
                 //compare the hatParts
                 for(HatPart hatPart : hatParts)
@@ -230,6 +232,8 @@ public class HatsSavedData extends WorldSavedData
 
             isNew = tag.getBoolean("isNew");
 
+            isShowing = tag.getBoolean("isShowing");
+
             colouriser = new float[] { tag.getFloat("clrR"), tag.getFloat("clrG"), tag.getFloat("clrB"), tag.getFloat("clrA") };
 
             int count = tag.getInt("partCount");
@@ -255,6 +259,8 @@ public class HatsSavedData extends WorldSavedData
             tag.putBoolean("isFavourite", isFavourite);
 
             tag.putBoolean("isNew", isNew);
+
+            tag.putBoolean("isShowing", isShowing);
 
             tag.putFloat("clrR", colouriser[0]);
             tag.putFloat("clrG", colouriser[1]);
