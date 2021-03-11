@@ -136,7 +136,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
             updateSearch("");
         }
 
-        public void updateSearch(String query)
+        public void updateSearch(String query) //TODO hide contributor hats filter
         {
             List<HatsSavedData.HatPart> hatPartSource = ((WorkspaceHats)getWorkspace()).getHatPartSource();
             if(!query.isEmpty())

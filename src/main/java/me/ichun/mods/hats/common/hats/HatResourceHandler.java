@@ -192,7 +192,7 @@ public class HatResourceHandler
             for(HatInfo.Accessory accessory : info.accessories)
             {
                 HatsSavedData.HatPart acc1;
-                part.hatParts.add(acc1 = new HatsSavedData.HatPart(accessory.name));
+                part.hatParts.add(acc1 = new HatsSavedData.HatPart(accessory.name)); //TODO I'm not allocating the accessories properly.
                 acc1.count = count;
             }
         });
