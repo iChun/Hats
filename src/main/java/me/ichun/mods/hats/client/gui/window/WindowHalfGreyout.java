@@ -3,23 +3,42 @@ package me.ichun.mods.hats.client.gui.window;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
+import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.WindowGreyout;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Matrix4f;
 
 public class WindowHalfGreyout extends WindowGreyout<WorkspaceHats>
 {
+    public int age = 0;
+    public float renderTick = 0F;
+
     public WindowHalfGreyout(WorkspaceHats parent, Window<?> attached)
     {
         super(parent, attached);
     }
 
     @Override
+    public void tick()
+    {
+        super.tick();
+
+        age++;
+    }
+
+    @Override
     public void renderBackground(MatrixStack stack) //I know, ew.
     {
+        float prog = 1F;
+        if(age <= Hats.configClient.guiAnimationTime)
+        {
+            prog = (float)Math.sin(Math.toRadians(MathHelper.clamp(((age + renderTick) / Hats.configClient.guiAnimationTime), 0F, 1F) * 90F));
+        }
+
         //taken from AbstractGui.fillGradient
         RenderSystem.disableTexture();
         RenderSystem.enableBlend();
@@ -36,15 +55,15 @@ public class WindowHalfGreyout extends WindowGreyout<WorkspaceHats>
         int colorB = 0xd0101010;
 
         float x1 = parent.windowHatsList.getRight() - (int)(parent.windowHatsList.getWidth() / 2F);
-        float x2 = 0;
-        float y1 = width;
+        float x2 = width;
+        float y1 = 0;
         float y2 = height;
 
-        float f = (float)(colorA >> 24 & 255) / 255.0F;
+        float f = (float)(colorA >> 24 & 255) / 255.0F * prog;
         float f1 = (float)(colorA >> 16 & 255) / 255.0F;
         float f2 = (float)(colorA >> 8 & 255) / 255.0F;
         float f3 = (float)(colorA & 255) / 255.0F;
-        float f4 = (float)(colorB >> 24 & 255) / 255.0F;
+        float f4 = (float)(colorB >> 24 & 255) / 255.0F * prog;
         float f5 = (float)(colorB >> 16 & 255) / 255.0F;
         float f6 = (float)(colorB >> 8 & 255) / 255.0F;
         float f7 = (float)(colorB & 255) / 255.0F;
@@ -59,11 +78,11 @@ public class WindowHalfGreyout extends WindowGreyout<WorkspaceHats>
         y1 = 0;
         y2 = height;
 
-        f = (float)(colorA >> 24 & 255) / 255.0F;
+        f = (float)(colorA >> 24 & 255) / 255.0F * prog;
         f1 = (float)(colorA >> 16 & 255) / 255.0F;
         f2 = (float)(colorA >> 8 & 255) / 255.0F;
         f3 = (float)(colorA & 255) / 255.0F;
-        f4 = (float)(colorB >> 24 & 255) / 255.0F;
+        f4 = (float)(colorB >> 24 & 255) / 255.0F * prog;
         f5 = (float)(colorB >> 16 & 255) / 255.0F;
         f6 = (float)(colorB >> 8 & 255) / 255.0F;
         f7 = (float)(colorB & 255) / 255.0F;
@@ -82,6 +101,7 @@ public class WindowHalfGreyout extends WindowGreyout<WorkspaceHats>
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
     {
+        renderTick = partialTick;
         renderBackground(stack);
 
         if(!parent.getEventListeners().contains(attachedWindow))
@@ -97,7 +117,7 @@ public class WindowHalfGreyout extends WindowGreyout<WorkspaceHats>
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        if(mouseX > width / 2F && isMouseOver(mouseX, mouseY)) //only the second half of the screen
+        if(mouseX > parent.windowHatsList.getLeft() && isMouseOver(mouseX, mouseY)) //only the second half of the screen
         {
             parent.removeWindow(attachedWindow);
             parent.removeWindow(this);

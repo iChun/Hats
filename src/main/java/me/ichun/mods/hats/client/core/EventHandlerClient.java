@@ -201,7 +201,7 @@ public class EventHandlerClient
         if(mc.world != null && mc.player != null)
         {
             boolean fallback = Hats.configClient.forceGuiFallback
-                    || Hats.configServer.enabledGuiStyle == 2
+                    || Hats.configServer.enabledGuiStyle == 1
                     || !(mc.player.getPose() == Pose.STANDING || mc.player.getPose() == Pose.CROUCHING)
                     || mc.player != mc.renderViewEntity
                     || mc.player.getBrightness() <= 0.15F

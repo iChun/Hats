@@ -55,7 +55,7 @@ public class ConfigServer extends ConfigBase
 
     public double bossHatChanceBonus = 0.1D;
 
-    public double bossRarityBonus = 0.2D;
+    public double bossRarityBonus = 0.2D; //TODO new hat toast config
 
 
     @CategoryDivider(name = "others")

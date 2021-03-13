@@ -78,6 +78,7 @@ public class WorkspaceHats extends Workspace
         int padding = 10;
         windowHatsList.setWidth((int)Math.floor((width / 2F)) - (padding + 22));
         super.resize(mc, width, height);
+        windowSidebar.resize(mc, width, height);
     }
 
     @Override

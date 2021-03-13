@@ -98,7 +98,6 @@ public class WindowHatOptions extends Window<WorkspaceHats>
         public ArrayList<Element<?>> buttons = new ArrayList<>();
 
         public int age;
-        public boolean showColouriser;
 
         public ViewHatOptions(@Nonnull WindowHatOptions parent)
         {
@@ -111,12 +110,17 @@ public class WindowHatOptions extends Window<WorkspaceHats>
 
             //COLOURISE
             btnStack = new ElementButtonTextured<>(this, TEX_COLOURISE, btn -> {
-                showColouriser = !showColouriser;
-                handleShowColouriser(showColouriser);
-            }); //TODO support for coloriser
+                WindowSetColouriser windowSetColouriser = new WindowSetColouriser(parent.parent, parent.parentElement);
+                windowSetColouriser.pos(parent.parentElement.getLeft(), parent.parentElement.getTop());
+                windowSetColouriser.size(parent.parentElement.getWidth(), parent.parentElement.getHeight());
+                parent.parent.addWindowWithGreyout(windowSetColouriser);
+                windowSetColouriser.init();
+
+                parent.parent.removeWindow(parent);
+            });
             btnStack.setTooltip(I18n.format("hats.gui.button.colourise"));
             btnStack.setSize(20, 20);
-            btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(this, Constraint.Property.Type.TOP, 0);
+            btnStack.constraints().right(this, Constraint.Property.Type.LEFT, 1).top(this, Constraint.Property.Type.TOP, 0);
             elements.add(btnStack);
             buttons.add(btnStack);
             btnStackLast = btnStack;
@@ -125,7 +129,7 @@ public class WindowHatOptions extends Window<WorkspaceHats>
             btnStack = new ElementButtonTextured<>(this, TEX_PERSONALISE, btn -> {}); //TODO open a new GUI for accesorise?
             btnStack.setTooltip(I18n.format("hats.gui.button.personalise"));
             btnStack.setSize(20, 20);
-            btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
+            btnStack.constraints().right(this, Constraint.Property.Type.LEFT, 1).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
             elements.add(btnStack);
             buttons.add(btnStack);
             btnStackLast = btnStack;
@@ -133,118 +137,18 @@ public class WindowHatOptions extends Window<WorkspaceHats>
             //FAVOURITE
             ElementToggleTextured<?> btnToggle = new ElementToggleTextured<>(this, I18n.format("hats.gui.button.favouriteHat"), TEX_FAVOURITE, btn -> {}); //TODO handle this
             btnToggle.setSize(20, 20);
-            btnToggle.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
+            btnToggle.constraints().right(this, Constraint.Property.Type.LEFT, 1).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
             elements.add(btnToggle);
             buttons.add(btnToggle);
         }
 
         @Override
-        public void renderBackground(MatrixStack stack)
-        {
-            if(showColouriser)
-            {
-                renderColourizerBackground(stack);
-            }
-        }
-
-        private void renderColourizerBackground(MatrixStack stack)
-        {
-            posX += 21;
-            width -= 21;
-            if(renderMinecraftStyle())
-            {
-                RenderSystem.enableAlphaTest();
-                //draw the corners
-                bindTexture(Fragment.VANILLA_TABS);
-
-                //fill space
-                RenderHelper.draw(stack, getLeft() + 4, getTop() + 4, width - 8, height - 8, 0, 4D/256D, 24D/256D, 36D/256D, 60D/256D); //fill space
-
-                //draw borders
-                RenderHelper.draw(stack, getLeft(), getTop() + 4, 4, height - 8, 0, 0D/256D, 4D/256D, 36D/256D, 60D/256D); //left border
-                RenderHelper.draw(stack, getLeft() + 4, getTop(), width - 8, 4, 0, 4D/256D, 24D/256D, 32D/256D, 36D/256D); //top border
-                RenderHelper.draw(stack, getRight() - 4, getTop() + 4, 4, height - 8, 0, 24D/256D, 28D/256D, 36D/256D, 60D/256D); //right border
-                RenderHelper.draw(stack, getLeft() + 4, getBottom() - 4, width - 8, 4, 0, 4D/256D, 24D/256D, 124D/256D, 128D/256D); //bottom left
-
-                //draw corners
-                RenderHelper.draw(stack, getLeft(), getTop(), 4, 4, 0, 0D/256D, 4D/256D, 32D/256D, 36D/256D); //top left
-                RenderHelper.draw(stack, getRight() - 4, getTop(), 4, 4, 0, 24D/256D, 28D/256D, 32D/256D, 36D/256D); //top right
-                RenderHelper.draw(stack, getLeft(), getBottom() - 4, 4, 4, 0, 0D/256D, 4D/256D, 124D/256D, 128D/256D); //bottom left
-                RenderHelper.draw(stack, getRight() - 4, getBottom() - 4, 4, 4, 0, 24D/256D, 28D/256D, 124D/256D, 128D/256D); //bottom left
-            }
-            else
-            {
-                fill(stack, getTheme().windowBorder, 0);
-                fill(stack, getTheme().windowBackground, 3);
-            }
-            width += 21;
-            posX -= 21;
-        }
+        public void renderBackground(MatrixStack stack){}
 
         @Override
         public boolean mouseScrolled(double mouseX, double mouseY, double amount)
         {
             return super.mouseScrolled(mouseX, mouseY, amount); //TODO allow scroll passthrough
-        }
-
-        public void handleShowColouriser(boolean show)
-        {
-            if(show)
-            {
-                ElementButton<?> reset = new ElementButton<>(this, "hats.gui.button.reset", btn -> {
-
-                });
-                reset.setSize(parentFragment.parentElement.getWidth() - 10, 14);
-                reset.constraints().bottom(this, Constraint.Property.Type.BOTTOM, 3).right(this, Constraint.Property.Type.RIGHT, 5);
-                reset.setId("colouriserReset");
-                elements.add(reset);
-
-                //Scrolls minimum width = 14.
-                int scrollPadding = (int)Math.floor(((getWidth() - 21) - (14 * 3)) / 4F);
-                ElementScrollBar<?> svB = new ElementScrollBar<>(this, ElementScrollBar.Orientation.VERTICAL, 0.13F); //100%?
-                svB.constraints().top(this, Constraint.Property.Type.TOP, 3).bottom(reset, Constraint.Property.Type.TOP, 2).right(this, Constraint.Property.Type.RIGHT, scrollPadding);
-                svB.setId("colouriserB");
-                svB.setScrollProg(0F); //TODO set this
-                elements.add(svB);
-
-                ElementTextWrapper textB = new ElementTextWrapper(this);
-                textB.setText("B");
-                textB.constraints().bottom(reset, Constraint.Property.Type.TOP, 1).left(svB, Constraint.Property.Type.LEFT, 0);
-                textB.setId("colouriserTextB");
-                elements.add(textB);
-
-                ElementScrollBar<?> svG = new ElementScrollBar<>(this, ElementScrollBar.Orientation.VERTICAL, 0.13F); //100%?
-                svG.constraints().top(this, Constraint.Property.Type.TOP, 3).bottom(reset, Constraint.Property.Type.TOP, 2).right(svB, Constraint.Property.Type.LEFT, scrollPadding);
-                svG.setId("colouriserG");
-                svG.setScrollProg(0F); //TODO set this
-                elements.add(svG);
-
-                ElementTextWrapper textG = new ElementTextWrapper(this);
-                textG.setText("G");
-                textG.constraints().bottom(reset, Constraint.Property.Type.TOP, 1).left(svG, Constraint.Property.Type.LEFT, 0);
-                textG.setId("colouriserTextG");
-                elements.add(textG);
-
-                ElementScrollBar<?> svR = new ElementScrollBar<>(this, ElementScrollBar.Orientation.VERTICAL, 0.13F); //100%?
-                svR.constraints().top(this, Constraint.Property.Type.TOP, 3).bottom(reset, Constraint.Property.Type.TOP, 2).right(svG, Constraint.Property.Type.LEFT, scrollPadding);
-                svR.setId("colouriserR");
-                svR.setScrollProg(0F); //TODO set this
-                elements.add(svR);
-
-                ElementTextWrapper textR = new ElementTextWrapper(this);
-                textR.setText("R");
-                textR.constraints().bottom(reset, Constraint.Property.Type.TOP, 1).left(svR, Constraint.Property.Type.LEFT, 0);
-                textR.setId("colouriserTextR");
-                elements.add(textR);
-
-                this.init();
-            }
-            else
-            {
-                elements.removeIf(e -> e.id != null && e.id.startsWith("colouriser"));
-
-                this.init();
-            }
         }
 
         @Override
@@ -272,14 +176,11 @@ public class WindowHatOptions extends Window<WorkspaceHats>
 
             stack.pop();
 
-            if(!showColouriser)
-            {
-                parentFragment.parentElement.parentFragment.setScissor();
+            parentFragment.parentElement.parentFragment.setScissor();
 
-                parentFragment.parentElement.render(stack, mouseX, mouseY, partialTick);
+            parentFragment.parentElement.render(stack, mouseX, mouseY, partialTick);
 
-                resetScissorToParent();
-            }
+            resetScissorToParent();
         }
 
         @Override
