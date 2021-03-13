@@ -101,10 +101,10 @@ public class NewHatPartToast implements IToast
         }
 
         float spacing = 28.0F;
-        toastGui.getMinecraft().fontRenderer.func_243248_b(stack, this.title, spacing, 7.0F, -256);
+        toastGui.getMinecraft().fontRenderer.drawText(stack, this.title, spacing, 7.0F, -256);
 
         for(int k1 = 0; k1 < subtitles.size(); ++k1) {
-            toastGui.getMinecraft().fontRenderer.func_243248_b(stack, subtitles.get(k1), spacing, (float)(18 + k1 * 12), -1);
+            toastGui.getMinecraft().fontRenderer.drawText(stack, subtitles.get(k1), spacing, (float)(18 + k1 * 12), -1);
         }
 
         return delta - this.firstDrawTime < 5000L ? IToast.Visibility.SHOW : IToast.Visibility.HIDE;

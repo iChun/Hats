@@ -23,7 +23,7 @@ public class HatHandler //Handles most of the server-related things.
 
     private static HatsSavedData saveData;
 
-    public static void allocateHatPools() //TODO loading method when receiving a hat from the server.
+    public static synchronized void allocateHatPools() //Server and client shares the same pools //TODO loading method when receiving a hat from the server.
     {
         HAT_POOLS.clear();
 
@@ -72,6 +72,8 @@ public class HatHandler //Handles most of the server-related things.
             }
             hats.add(pool);
         }
+
+        Hats.LOGGER.info("Allocated Hat Pools.");
     }
 
     public static EnumRarity getRarityForChance(double chance)
@@ -90,7 +92,7 @@ public class HatHandler //Handles most of the server-related things.
     public static double getHatChance(LivingEntity ent)
     {
         double chance = Hats.configServer.hatChance;
-        if(!ent.isNonBoss())
+        if(!ent.canChangeDimension()) //Old isNonBoss()
         {
             chance += Hats.configServer.bossHatChanceBonus;
         }
@@ -131,7 +133,7 @@ public class HatHandler //Handles most of the server-related things.
         RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID().toString()).hashCode()) * 425480085L); //Chat contributed random
 
         double chance = RAND.nextDouble();
-        if(!ent.isNonBoss())
+        if(!ent.canChangeDimension()) //Old isNonBoss()
         {
             chance += Hats.configServer.bossRarityBonus;
         }

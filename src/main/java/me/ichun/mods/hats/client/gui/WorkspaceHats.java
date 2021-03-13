@@ -29,7 +29,7 @@ import java.util.ArrayList;
 
 public class WorkspaceHats extends Workspace
 {
-    public static final DecimalFormat FORMATTER = new DecimalFormat("#,###,###");
+    public static final DecimalFormat FORMATTER = new DecimalFormat("#,###,###"); //TODO double check the access transformers, which Heads do we no longer need
 
     public final boolean fallback;
     public final @Nonnull LivingEntity hatEntity;
@@ -135,7 +135,7 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void addWindowWithGreyout(Window<?> window) //TODO why are users randomly being allocated hats.
+    public void addWindowWithGreyout(Window<?> window) //TODO window for ALL available hats.
     {
         WindowHalfGreyout greyout = new WindowHalfGreyout(this, window);
         addWindow(greyout);

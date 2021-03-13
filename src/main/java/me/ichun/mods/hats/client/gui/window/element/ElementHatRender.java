@@ -191,7 +191,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
         String hatName = info != null ? info.getDisplayName() : "";
 
         float scale = 0.5F;
-        String s = reString(hatName, (int)((height - 4) / scale));
+        String s = reString(hatName, (int)((height - 6) / scale));
 
         stack.push();
         stack.translate(getRight() - 5, getTop() + (height * scale), 0F);

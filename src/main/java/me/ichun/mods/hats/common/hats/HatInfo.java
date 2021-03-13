@@ -45,7 +45,7 @@ public class HatInfo
     public float[] colouriser = new float[] { 1F, 1F, 1F, 1F }; //hatpart is invert of this
     public boolean hidden = false; //true to disable rendering
 
-    public HatInfo(@Nonnull String name, @Nonnull Project project)
+    public HatInfo(@Nonnull String name, @Nonnull Project project) //TODO head top/eye analyser for HeadInfo
     {
         this.name = name;
         this.project = project;
@@ -158,9 +158,9 @@ public class HatInfo
             {
                 contributorUUID = UUID.fromString(note.substring("hats-contributor-uuid:".length()).trim());
             }
-            else if(note.startsWith("hats-contributor-mini-me:") && contributorUUID == null)
+            else if(note.startsWith("hats-contributor-mini-me:"))
             {
-                contributorUUID = EntityHelper.UUID_EXAMPLE;
+                if(contributorUUID == null) contributorUUID = EntityHelper.UUID_EXAMPLE;
             }
             else if(note.startsWith("hats-accessory:"))
             {
@@ -178,7 +178,7 @@ public class HatInfo
             {
                 hideParent.add(note.substring("hats-accessory-hide-parent-part:".length()).trim());
             }
-            else if(note.startsWith("hats"))
+            else if(note.startsWith("hat"))
             {
                 Hats.LOGGER.warn("We found a hats meta we don't understand: {} in Project: {}", note, project.saveFile);
             }
@@ -281,7 +281,7 @@ public class HatInfo
             double accChance = Hats.configServer.rarityIndividual.get(accessory.getRarity().ordinal()); //calling getRarity sets the accessory's rarity.
 
             HatHandler.RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID() + getFullName()).hashCode()) * 53579997854L); //Chat contributed random
-            if(!ent.isNonBoss())
+            if(!ent.canChangeDimension()) //TODO Old isNonBoss(). Needs a new config or maybe set it in the JSON
             {
                 accChance += Hats.configServer.bossRarityBonus;
             }

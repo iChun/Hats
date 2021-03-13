@@ -192,11 +192,16 @@ public class EventHandlerClient
 
     public void openHatsMenu()
     {
+        if(Hats.configServer.enabledGuiStyle <= 0) //disable opening.
+        {
+            return;
+        }
+
         Minecraft mc = Minecraft.getInstance();
         if(mc.world != null && mc.player != null)
         {
             boolean fallback = Hats.configClient.forceGuiFallback
-                    || !Hats.configServer.allowFancyHatsGui
+                    || Hats.configServer.enabledGuiStyle == 2
                     || !(mc.player.getPose() == Pose.STANDING || mc.player.getPose() == Pose.CROUCHING)
                     || mc.player != mc.renderViewEntity
                     || mc.player.getBrightness() <= 0.15F

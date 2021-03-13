@@ -7,8 +7,12 @@ import me.ichun.mods.ichunutil.common.config.ConfigBase;
 import me.ichun.mods.ichunutil.common.config.annotations.CategoryDivider;
 import me.ichun.mods.ichunutil.common.config.annotations.Prop;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.annotation.Nonnull;
@@ -44,7 +48,8 @@ public class ConfigServer extends ConfigBase
         add("110"); //Legendary - Gold
     }};
 
-    public double accessoryCostMultiplier = 0.4D;
+    @Prop(min = 0)
+    public double accessoryCostMultiplier = 1.5D;
 
     public double salesCostMultiplier = 10D;
 
@@ -56,9 +61,10 @@ public class ConfigServer extends ConfigBase
     @CategoryDivider(name = "others")
     public boolean userSubmissionsRequireApproval = true; //TODO this config
 
-    public boolean allowFancyHatsGui = true;
+    @Prop(min = 0, max = 2)
+    public int enabledGuiStyle = 2; //0 = disabled, 1 = simple, 2 = fancy
 
-    public boolean enableCreativeModeHadHunting = false; //TODO this config
+    public boolean enableCreativeModeHadHunting = false;
 
     //======================================================//
 
@@ -73,8 +79,13 @@ public class ConfigServer extends ConfigBase
     }
 
     @Override
-    public void onConfigLoaded()
+    public synchronized void onConfigLoaded() //synchronised cause a client and server share it.
     {
+        if(EffectiveSide.get().isClient() && (ServerLifecycleHooks.getCurrentServer() != null && !ServerLifecycleHooks.getCurrentServer().isSinglePlayer())) //we're on single player, let's not reload the pool.
+        {
+            return;
+        }
+
         if(randSeed.isEmpty())
         {
             randSeed = RandomStringUtils.randomAscii(Project.IDENTIFIER_LENGTH);

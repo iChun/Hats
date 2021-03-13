@@ -19,12 +19,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class HatResourceHandler
 {
-    public static final HashMap<String, HatInfo> HATS = new HashMap<>(); //Our reliance on Tabula is staggering.
+    //Make it concurrent just in case we need to reload hats on client whilst integrated server is accessing?? Just in case
+    public static final ConcurrentHashMap<String, HatInfo> HATS = new ConcurrentHashMap<>(); //Our reliance on Tabula is staggering.
     private static final ArrayList<HatInfo> HAT_ACCESSORIES = new ArrayList<>(); //Only used when loading all the hats.
 
     public static ArrayList<HatsSavedData.HatPart> HAT_PARTS = new ArrayList<>();
@@ -100,19 +102,22 @@ public class HatResourceHandler
         return hatsDir;
     }
 
-    public static void loadAllHats() //TODO hat accessory clash layer
+    public static synchronized void loadAllHats() //TODO hat accessory clash layer
     {
-        HATS.clear(); //TODO synchronised method + syncronised list
+        HATS.clear();
+        HAT_ACCESSORIES.clear();
 
         int count = 0;
         File dir = getHatsDir().toFile();
         count += scourForHats(dir);
 
+        int accessoryCount = HAT_ACCESSORIES.size();
+
         accessoriseHatInfos();
 
         HAT_PARTS = getAllHatsAsHatParts(1);
 
-        Hats.LOGGER.info("Loaded {} files.", count);
+        Hats.LOGGER.info("Loaded {} files. {} are accessories.", count, accessoryCount);
     }
 
     private static int scourForHats(File dir)
@@ -181,7 +186,7 @@ public class HatResourceHandler
         return new HatInfo(name, project);
     }
 
-    public static void accessoriseHatInfos()
+    public static void accessoriseHatInfos() //TODO sticky piston hat?
     {
         HashMap<String, ArrayList<HatInfo>> accessoriesByHat = new HashMap<>();
         for(HatInfo hatAccessory : HAT_ACCESSORIES)
