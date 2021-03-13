@@ -126,7 +126,15 @@ public class WindowHatOptions extends Window<WorkspaceHats>
             btnStackLast = btnStack;
 
             //ACCESSORISE
-            btnStack = new ElementButtonTextured<>(this, TEX_PERSONALISE, btn -> {}); //TODO open a new GUI for accesorise?
+            btnStack = new ElementButtonTextured<>(this, TEX_PERSONALISE, btn -> {
+                WindowSetAccessory windowSetAccessory = new WindowSetAccessory(parent.parent, parent.parentElement);
+                windowSetAccessory.pos(parent.parentElement.getLeft(), parent.parentElement.getTop());
+                windowSetAccessory.size(parent.parentElement.getWidth(), parent.parentElement.getHeight());
+                parent.parent.addWindowWithGreyout(windowSetAccessory);
+                windowSetAccessory.init();
+
+                parent.parent.removeWindow(parent);
+            }); //TODO open a new GUI for accesorise?
             btnStack.setTooltip(I18n.format("hats.gui.button.personalise"));
             btnStack.setSize(20, 20);
             btnStack.constraints().right(this, Constraint.Property.Type.LEFT, 1).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);

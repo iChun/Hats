@@ -21,11 +21,11 @@ import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
 
-public class WindowSetColouriser extends Window<WorkspaceHats>
+public class WindowSetAccessory extends Window<WorkspaceHats>
 {
     private final @Nonnull ElementHatRender<?> parentElement;
 
-    public WindowSetColouriser(WorkspaceHats parent, @Nonnull ElementHatRender<?> parentElement)
+    public WindowSetAccessory(WorkspaceHats parent, @Nonnull ElementHatRender<?> parentElement)
     {
         super(parent);
 
@@ -41,7 +41,7 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
 
         this.parentElement = parentElement;
 
-        setView(new ViewSetColouriser(this));
+        setView(new ViewSetAccessory(this));
     }
 
 
@@ -60,82 +60,14 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
         return parentElement.getMinHeight();
     }
 
-    public static class ViewSetColouriser extends View<WindowSetColouriser>
+    public static class ViewSetAccessory extends View<WindowSetAccessory>
     {
-        public static ResourceLocation TEX_RESET = new ResourceLocation("hats", "textures/icon/reset.png");
-
-        public ElementButtonTextured<?> confirm;
-        public ElementButtonTextured<?> reset;
         public int age;
         public float renderTick = 0F;
 
-        public ViewSetColouriser(@Nonnull WindowSetColouriser parent)
+        public ViewSetAccessory(@Nonnull WindowSetAccessory parent)
         {
-            super(parent, "hats.gui.window.hat.colorizer");
-
-            ElementPadding padding = new ElementPadding(this, parentFragment.parentElement.getMinWidth(), parentFragment.parentElement.getMinHeight());
-            padding.constraints().top(this, Constraint.Property.Type.TOP, 0).right(this, Constraint.Property.Type.RIGHT, 0);
-            elements.add(padding);
-
-            confirm = new ElementButtonTextured<>(this, WindowHatOptions.ViewHatOptions.TEX_COLOURISE, btn -> {
-            }); //TODO finalise and send?
-            confirm.setTooltip(I18n.format("gui.ok"));
-            confirm.setSize(20, 20);
-            confirm.constraints().right(padding, Constraint.Property.Type.LEFT, 3).top(padding, Constraint.Property.Type.TOP, 0);
-            elements.add(confirm);
-
-            reset = new ElementButtonTextured<>(this, TEX_RESET, btn -> {
-                //TODO this
-            });
-            reset.setTooltip(I18n.format("hats.gui.button.reset"));
-            reset.setSize(20, 20);
-            reset.constraints().right(padding, Constraint.Property.Type.LEFT, 3).bottom(padding, Constraint.Property.Type.BOTTOM, 0);
-            elements.add(reset);
-
-            int edgePadding = 3;
-            ElementScrollBar<?> svR = new ElementScrollBar<>(this, ElementScrollBar.Orientation.HORIZONTAL, 0.1F); //100%?
-            svR.constraints().top(padding, Constraint.Property.Type.TOP, 1).right(confirm, Constraint.Property.Type.LEFT, edgePadding).left(this, Constraint.Property.Type.LEFT, edgePadding);
-            svR.setId("colouriserR");
-            svR.setScrollProg(1F); //TODO set this
-            elements.add(svR);
-
-            ElementTextWrapper textR = new ElementTextWrapper(this);
-            textR.setText("R");
-            textR.constraints().bottom(svR, Constraint.Property.Type.BOTTOM, 0).left(svR, Constraint.Property.Type.LEFT, 1);
-            elements.add(textR);
-
-            ElementScrollBar<?> svG = new ElementScrollBar<>(this, ElementScrollBar.Orientation.HORIZONTAL, 0.1F); //100%?
-            svG.constraints().top(svR, Constraint.Property.Type.BOTTOM, 4).right(confirm, Constraint.Property.Type.LEFT, edgePadding).left(this, Constraint.Property.Type.LEFT, edgePadding);
-            svG.setId("colouriserG");
-            svG.setScrollProg(1F); //TODO set this
-            elements.add(svG);
-
-            ElementTextWrapper textG = new ElementTextWrapper(this);
-            textG.setText("G");
-            textG.constraints().bottom(svG, Constraint.Property.Type.BOTTOM, 0).left(svG, Constraint.Property.Type.LEFT, 1);
-            elements.add(textG);
-
-            ElementScrollBar<?> svB = new ElementScrollBar<>(this, ElementScrollBar.Orientation.HORIZONTAL, 0.1F); //100%?
-            svB.constraints().top(svG, Constraint.Property.Type.BOTTOM, 4).right(confirm, Constraint.Property.Type.LEFT, edgePadding).left(this, Constraint.Property.Type.LEFT, edgePadding);
-            svB.setId("colouriserB");
-            svB.setScrollProg(1F); //TODO set this
-            elements.add(svB);
-
-            ElementTextWrapper textB = new ElementTextWrapper(this);
-            textB.setText("B");
-            textB.constraints().bottom(svB, Constraint.Property.Type.BOTTOM, 0).left(svB, Constraint.Property.Type.LEFT, 1);
-            elements.add(textB);
-
-            ElementScrollBar<?> svA = new ElementScrollBar<>(this, ElementScrollBar.Orientation.HORIZONTAL, 0.1F); //100%?
-            svA.constraints().top(svB, Constraint.Property.Type.BOTTOM, 4).right(confirm, Constraint.Property.Type.LEFT, edgePadding).left(this, Constraint.Property.Type.LEFT, edgePadding);
-            svA.setId("colouriserA");
-            svA.setScrollProg(1F); //TODO set this
-            elements.add(svA);
-
-            ElementTextWrapper textA = new ElementTextWrapper(this);
-            textA.setText("A");
-            textA.constraints().bottom(svA, Constraint.Property.Type.BOTTOM, 0).left(svA, Constraint.Property.Type.LEFT, 1);
-            elements.add(textA);
+            super(parent, "hats.gui.window.hat.personaliser");
         }
 
         @Override
@@ -144,6 +76,12 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             super.tick();
 
             age++;
+        }
+
+        @Override
+        public void resize(Minecraft mc, int width, int height)
+        {
+            super.resize(mc, width, height);
         }
 
         @Override
@@ -156,8 +94,62 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             }
 
             int hatsListPadding = 6;
-            float singProg = hatsListPadding * prog;
-            float doubProg = (hatsListPadding * 2) * prog;
+            int singProg = (int)(hatsListPadding * prog);
+            int doubProg = (int)((hatsListPadding * 2) * prog);
+
+            //RENDER the hat border first
+
+            int otherRenderHatsListPadding = 3;
+            int hatViewWidth = parentFragment.parentElement.getWidth();
+            int hatViewX = parentFragment.parentElement.posX;
+            int targetElementX = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.getLeft() + otherRenderHatsListPadding;
+
+            parentFragment.parentElement.setPosX((int)(hatViewX + (targetElementX - parentFragment.parentElement.getLeft()) * prog));
+            parentFragment.parentElement.setWidth((int)(parentFragment.parentElement.width + (parentFragment.parentElement.getMinWidth() - parentFragment.parentElement.width) * prog));
+
+            parentFragment.parentElement.posX -= singProg;
+            parentFragment.parentElement.width += doubProg;
+            parentFragment.parentElement.posY -= singProg;
+            parentFragment.parentElement.height += doubProg;
+
+            if(renderMinecraftStyle())
+            {
+                int width = parentFragment.parentElement.width;
+                int height = parentFragment.parentElement.height;
+
+                RenderSystem.enableAlphaTest();
+                //draw the corners
+                bindTexture(Fragment.VANILLA_TABS);
+
+                //fill space
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft() + 4, parentFragment.parentElement.getTop() + 4, width - 8, height - 8, 0, 4D/256D, 24D/256D, 36D/256D, 60D/256D); //fill space
+
+                //draw borders
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft(), parentFragment.parentElement.getTop() + 4, 4, height - 8, 0, 0D/256D, 4D/256D, 36D/256D, 60D/256D); //left border
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft() + 4, parentFragment.parentElement.getTop(), width - 8, 4, 0, 4D/256D, 24D/256D, 32D/256D, 36D/256D); //top border
+                RenderHelper.draw(stack, parentFragment.parentElement.getRight() - 4, parentFragment.parentElement.getTop() + 4, 4, height - 8, 0, 24D/256D, 28D/256D, 36D/256D, 60D/256D); //right border
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft() + 4, parentFragment.parentElement.getBottom() - 4, width - 8, 4, 0, 4D/256D, 24D/256D, 124D/256D, 128D/256D); //bottom left
+
+                //draw corners
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft(), parentFragment.parentElement.getTop(), 4, 4, 0, 0D/256D, 4D/256D, 32D/256D, 36D/256D); //top left
+                RenderHelper.draw(stack, parentFragment.parentElement.getRight() - 4, parentFragment.parentElement.getTop(), 4, 4, 0, 24D/256D, 28D/256D, 32D/256D, 36D/256D); //top right
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft(), parentFragment.parentElement.getBottom() - 4, 4, 4, 0, 0D/256D, 4D/256D, 124D/256D, 128D/256D); //bottom left
+                RenderHelper.draw(stack, parentFragment.parentElement.getRight() - 4, parentFragment.parentElement.getBottom() - 4, 4, 4, 0, 24D/256D, 28D/256D, 124D/256D, 128D/256D); //bottom left
+            }
+            else
+            {
+                parentFragment.parentElement.fill(stack, getTheme().windowBorder, 0);
+                parentFragment.parentElement.fill(stack, getTheme().windowBackground, 3);
+            }
+
+            parentFragment.parentElement.height -= doubProg;
+            parentFragment.parentElement.posY += singProg;
+            parentFragment.parentElement.width -= doubProg;
+            parentFragment.parentElement.posX += singProg;
+
+            parentFragment.parentElement.setWidth(hatViewWidth);
+            parentFragment.parentElement.setPosX(hatViewX);
+            //end render the hat border first
 
             posX -= singProg;
             width += doubProg;
@@ -201,8 +193,6 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
         public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
         {
             int hatsListPadding = 3;
-            int targetX = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.getLeft() + hatsListPadding;
-            int targetWidth = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.width - hatsListPadding - hatsListPadding;
 
             float prog = 1F;
             if(age <= Hats.configClient.guiAnimationTime)
@@ -210,11 +200,20 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
                 prog = (float)Math.sin(Math.toRadians(MathHelper.clamp(((age + partialTick) / Hats.configClient.guiAnimationTime), 0F, 1F) * 90F));
             }
 
+            int hatViewWidth = parentFragment.parentElement.getWidth();
+            int hatViewX = parentFragment.parentElement.posX;
+            int targetElementX = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.getLeft() + hatsListPadding;
+
+            parentFragment.parentElement.setPosX((int)(hatViewX + (targetElementX - parentFragment.parentElement.getLeft()) * prog));
+            parentFragment.parentElement.setWidth((int)(parentFragment.parentElement.width + (parentFragment.parentElement.getMinWidth() - parentFragment.parentElement.width) * prog));
+
+            //This is in relation of the new parentElementPosition
+            int targetX = parentFragment.parentElement.getRight() + (hatsListPadding * 4);
+            int targetWidth = 70; //50 width + 2x list padding and border (5 x 2) + padding to scroll (4) + scrolll (14) + 2x padding (6)//TODO update this? Calculate number of accessories to fit on screen and if we need a scroll bar or not
+
             parentFragment.posX = (int)(parentFragment.parentElement.getLeft() + (targetX - parentFragment.parentElement.getLeft()) * prog);
             parentFragment.width = (int)(parentFragment.parentElement.width + (targetWidth - parentFragment.parentElement.width) * prog);
             parentFragment.resize(getWorkspace().getMinecraft(), parentFragment.width, parentFragment.height);
-
-            reset.posX = (int)(confirm.posX + (24 * (1F - prog)));
 
             renderTick = partialTick;
             stack.push();
@@ -227,16 +226,10 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
 
             parentFragment.parentElement.parentFragment.setScissor();
 
-            int hatViewWidth = parentFragment.parentElement.getWidth();
-            int hatViewX = parentFragment.parentElement.posX;
-            int targetElementX = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.getRight() - hatsListPadding - parentFragment.parentElement.getMinWidth();
 
             //We're using RenderSystem instead of MatrixStack because of the entity render
             RenderSystem.pushMatrix();
             RenderSystem.translatef(0F, 0F, 25F);
-
-            parentFragment.parentElement.setPosX((int)(hatViewX + (targetElementX - parentFragment.parentElement.getLeft()) * prog));
-            parentFragment.parentElement.setWidth((int)(parentFragment.parentElement.width + (parentFragment.parentElement.getMinWidth() - parentFragment.parentElement.width) * prog));
 
             parentFragment.parentElement.render(stack, mouseX, mouseY, partialTick);
 
@@ -251,7 +244,8 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
         @Override
         public void setScissor()
         {
-            RenderHelper.startGlScissor(getLeft() - 21, getTop() - 6, width + 21 + 6, height + 12);
+            int hatRend = 50 + 12 + 3 + 6; //element + borders + padding + our border
+            RenderHelper.startGlScissor(getLeft() - hatRend, getTop() - 6, width + hatRend + 6, height + 12);
         }
 
         @Override

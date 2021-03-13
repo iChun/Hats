@@ -170,6 +170,19 @@ public class HatsSavedData extends WorldSavedData
             return newStuff;
         }
 
+        public boolean hasFavourite()
+        {
+            boolean hasFav = isFavourite;
+            if(!isFavourite)
+            {
+                for(HatPart hatPart : hatParts)
+                {
+                    hasFav = hasFav | hatPart.hasFavourite();
+                }
+            }
+            return hasFav;
+        }
+
         public boolean add(HatPart part)
         {
             if(!name.isEmpty() && name.equals(part.name)) //we are the same my buddy, we are the same my friend.

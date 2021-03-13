@@ -178,6 +178,6 @@ public class WindowHatsList extends Window<WorkspaceHats>
     @Override
     public int getMinWidth()
     {
-        return 80;
+        return 140;
     }
 }
