@@ -137,60 +137,6 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             int singProg = (int)(hatsListPadding * prog);
             int doubProg = (int)((hatsListPadding * 2) * prog);
 
-            //RENDER the hat border first
-
-            int otherRenderHatsListPadding = 3;
-            int hatViewWidth = parentFragment.parentElement.getWidth();
-            int hatViewX = parentFragment.parentElement.posX;
-            int targetElementX = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.getLeft() + otherRenderHatsListPadding;
-
-            parentFragment.parentElement.setPosX((int)(hatViewX + (targetElementX - parentFragment.parentElement.getLeft()) * prog));
-            parentFragment.parentElement.setWidth((int)(parentFragment.parentElement.width + (parentFragment.parentElement.getMinWidth() - parentFragment.parentElement.width) * prog));
-
-            parentFragment.parentElement.posX -= singProg;
-            parentFragment.parentElement.width += doubProg;
-            parentFragment.parentElement.posY -= singProg;
-            parentFragment.parentElement.height += doubProg;
-
-            if(renderMinecraftStyle())
-            {
-                int width = parentFragment.parentElement.width;
-                int height = parentFragment.parentElement.height;
-
-                RenderSystem.enableAlphaTest();
-                //draw the corners
-                bindTexture(Fragment.VANILLA_TABS);
-
-                //fill space
-                RenderHelper.draw(stack, parentFragment.parentElement.getLeft() + 4, parentFragment.parentElement.getTop() + 4, width - 8, height - 8, 0, 4D/256D, 24D/256D, 36D/256D, 60D/256D); //fill space
-
-                //draw borders
-                RenderHelper.draw(stack, parentFragment.parentElement.getLeft(), parentFragment.parentElement.getTop() + 4, 4, height - 8, 0, 0D/256D, 4D/256D, 36D/256D, 60D/256D); //left border
-                RenderHelper.draw(stack, parentFragment.parentElement.getLeft() + 4, parentFragment.parentElement.getTop(), width - 8, 4, 0, 4D/256D, 24D/256D, 32D/256D, 36D/256D); //top border
-                RenderHelper.draw(stack, parentFragment.parentElement.getRight() - 4, parentFragment.parentElement.getTop() + 4, 4, height - 8, 0, 24D/256D, 28D/256D, 36D/256D, 60D/256D); //right border
-                RenderHelper.draw(stack, parentFragment.parentElement.getLeft() + 4, parentFragment.parentElement.getBottom() - 4, width - 8, 4, 0, 4D/256D, 24D/256D, 124D/256D, 128D/256D); //bottom left
-
-                //draw corners
-                RenderHelper.draw(stack, parentFragment.parentElement.getLeft(), parentFragment.parentElement.getTop(), 4, 4, 0, 0D/256D, 4D/256D, 32D/256D, 36D/256D); //top left
-                RenderHelper.draw(stack, parentFragment.parentElement.getRight() - 4, parentFragment.parentElement.getTop(), 4, 4, 0, 24D/256D, 28D/256D, 32D/256D, 36D/256D); //top right
-                RenderHelper.draw(stack, parentFragment.parentElement.getLeft(), parentFragment.parentElement.getBottom() - 4, 4, 4, 0, 0D/256D, 4D/256D, 124D/256D, 128D/256D); //bottom left
-                RenderHelper.draw(stack, parentFragment.parentElement.getRight() - 4, parentFragment.parentElement.getBottom() - 4, 4, 4, 0, 24D/256D, 28D/256D, 124D/256D, 128D/256D); //bottom left
-            }
-            else
-            {
-                parentFragment.parentElement.fill(stack, getTheme().windowBorder, 0);
-                parentFragment.parentElement.fill(stack, getTheme().windowBackground, 3);
-            }
-
-            parentFragment.parentElement.height -= doubProg;
-            parentFragment.parentElement.posY += singProg;
-            parentFragment.parentElement.width -= doubProg;
-            parentFragment.parentElement.posX += singProg;
-
-            parentFragment.parentElement.setWidth(hatViewWidth);
-            parentFragment.parentElement.setPosX(hatViewX);
-            //end render the hat border first
-
             posX -= singProg;
             width += doubProg;
             posY -= singProg;
@@ -280,11 +226,57 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
 
             parentFragment.parentElement.parentFragment.setScissor();
 
-            //We're using RenderSystem instead of MatrixStack because of the entity render
-            RenderSystem.translatef(0F, 0F, 20F);
-
             parentFragment.parentElement.setLeft((int)(hatViewLeft + (targetElementX - hatViewLeft) * prog));
             parentFragment.parentElement.setTop(hatViewTop);
+
+            //RENDER THE BACKGROUND FIRST
+            int bgPadding = 6;
+            int singProg = (int)(bgPadding * prog);
+            int doubProg = (int)((bgPadding * 2) * prog);
+
+            parentFragment.parentElement.posX -= singProg;
+            parentFragment.parentElement.width += doubProg;
+            parentFragment.parentElement.posY -= singProg;
+            parentFragment.parentElement.height += doubProg;
+
+            if(renderMinecraftStyle())
+            {
+                int width = parentFragment.parentElement.width;
+                int height = parentFragment.parentElement.height;
+
+                RenderSystem.enableAlphaTest();
+                //draw the corners
+                bindTexture(Fragment.VANILLA_TABS);
+
+                //fill space
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft() + 4, parentFragment.parentElement.getTop() + 4, width - 8, height - 8, 0, 4D/256D, 24D/256D, 36D/256D, 60D/256D); //fill space
+
+                //draw borders
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft(), parentFragment.parentElement.getTop() + 4, 4, height - 8, 0, 0D/256D, 4D/256D, 36D/256D, 60D/256D); //left border
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft() + 4, parentFragment.parentElement.getTop(), width - 8, 4, 0, 4D/256D, 24D/256D, 32D/256D, 36D/256D); //top border
+                RenderHelper.draw(stack, parentFragment.parentElement.getRight() - 4, parentFragment.parentElement.getTop() + 4, 4, height - 8, 0, 24D/256D, 28D/256D, 36D/256D, 60D/256D); //right border
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft() + 4, parentFragment.parentElement.getBottom() - 4, width - 8, 4, 0, 4D/256D, 24D/256D, 124D/256D, 128D/256D); //bottom left
+
+                //draw corners
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft(), parentFragment.parentElement.getTop(), 4, 4, 0, 0D/256D, 4D/256D, 32D/256D, 36D/256D); //top left
+                RenderHelper.draw(stack, parentFragment.parentElement.getRight() - 4, parentFragment.parentElement.getTop(), 4, 4, 0, 24D/256D, 28D/256D, 32D/256D, 36D/256D); //top right
+                RenderHelper.draw(stack, parentFragment.parentElement.getLeft(), parentFragment.parentElement.getBottom() - 4, 4, 4, 0, 0D/256D, 4D/256D, 124D/256D, 128D/256D); //bottom left
+                RenderHelper.draw(stack, parentFragment.parentElement.getRight() - 4, parentFragment.parentElement.getBottom() - 4, 4, 4, 0, 24D/256D, 28D/256D, 124D/256D, 128D/256D); //bottom left
+            }
+            else
+            {
+                parentFragment.parentElement.fill(stack, getTheme().windowBorder, 0);
+                parentFragment.parentElement.fill(stack, getTheme().windowBackground, 3);
+            }
+
+            parentFragment.parentElement.height -= doubProg;
+            parentFragment.parentElement.posY += singProg;
+            parentFragment.parentElement.width -= doubProg;
+            parentFragment.parentElement.posX += singProg;
+            //END RENDER THE BACKGROUND
+
+            //We're using RenderSystem instead of MatrixStack because of the entity render
+            RenderSystem.translatef(0F, 0F, 20F);
 
             parentFragment.parentElement.render(stack, mouseX, mouseY, partialTick);
 
