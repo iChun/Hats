@@ -240,9 +240,15 @@ public class HatResourceHandler
     public static ArrayList<HatsSavedData.HatPart> getAllHatPartsWithInventory(ArrayList<HatsSavedData.HatPart> inventory) //TODO sorting, loading all hat parts with user customisation, synching
     {
         ArrayList<HatsSavedData.HatPart> hatParts = getAllHatsAsHatParts(0);
-        for(HatsSavedData.HatPart invPart : inventory)
+        combineLists(hatParts, inventory);
+        return hatParts;
+    }
+
+    public static void combineLists(ArrayList<HatsSavedData.HatPart> primary, ArrayList<HatsSavedData.HatPart> secondary)
+    {
+        for(HatsSavedData.HatPart invPart : secondary)
         {
-            for(HatsSavedData.HatPart hatPart : hatParts)
+            for(HatsSavedData.HatPart hatPart : primary)
             {
                 if(hatPart.add(invPart))
                 {
@@ -250,7 +256,6 @@ public class HatResourceHandler
                 }
             }
         }
-        return hatParts;
     }
 
     private static void repairOldHat(File file, Project project)

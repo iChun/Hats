@@ -237,6 +237,15 @@ public class HatsSavedData extends WorldSavedData
             return false;
         }
 
+        public void hideAll()
+        {
+            isShowing = false;
+            for(HatPart hatPart : hatParts)
+            {
+                hatPart.hideAll();
+            }
+        }
+
         public void read(CompoundNBT tag)
         {
             name = tag.getString("name");
@@ -298,6 +307,36 @@ public class HatsSavedData extends WorldSavedData
             return name.compareTo(o.name);
         }
 
+        public HatPart setModifier(HatPart modifier)
+        {
+            modify(modifier);
+            return this;
+        }
+
+        public boolean modify(HatPart modifier) //returns true if this or any of it's children are the modifier
+        {
+            if(modifier == this)
+            {
+                return true;
+            }
+
+            if(name.equals(modifier.name))
+            {
+                copy(modifier);
+                return true;
+            }
+            else
+            {
+                for(HatPart hatPart : hatParts)
+                {
+                    if(hatPart.modify(modifier))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
 
         public static class CapProvider implements ICapabilitySerializable<CompoundNBT>
         {

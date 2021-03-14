@@ -5,6 +5,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Fragment;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
@@ -81,26 +82,15 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             padding.constraints().top(this, Constraint.Property.Type.TOP, 0).right(this, Constraint.Property.Type.RIGHT, 0);
             elements.add(padding);
 
-            confirm = new ElementButtonTextured<>(this, WindowHatOptions.ViewHatOptions.TEX_COLOURISE, btn -> {
-            }); //TODO finalise and send?
-            confirm.setTooltip(I18n.format("gui.ok"));
-            confirm.setSize(20, 20);
-            confirm.constraints().right(padding, Constraint.Property.Type.LEFT, 3).top(padding, Constraint.Property.Type.TOP, 0);
-            elements.add(confirm);
-
-            reset = new ElementButtonTextured<>(this, TEX_RESET, btn -> {
-                //TODO this
-            });
-            reset.setTooltip(I18n.format("hats.gui.button.reset"));
-            reset.setSize(20, 20);
-            reset.constraints().right(padding, Constraint.Property.Type.LEFT, 3).bottom(padding, Constraint.Property.Type.BOTTOM, 0);
-            elements.add(reset);
-
             int edgePadding = 3;
             ElementScrollBar<?> svR = new ElementScrollBar<>(this, ElementScrollBar.Orientation.HORIZONTAL, 0.1F); //100%?
-            svR.constraints().top(padding, Constraint.Property.Type.TOP, 1).right(confirm, Constraint.Property.Type.LEFT, edgePadding).left(this, Constraint.Property.Type.LEFT, edgePadding);
+            svR.constraints().top(padding, Constraint.Property.Type.TOP, 1).right(padding, Constraint.Property.Type.LEFT, 26).left(this, Constraint.Property.Type.LEFT, edgePadding);
             svR.setId("colouriserR");
-            svR.setScrollProg(1F); //TODO set this
+            svR.setCallback(scrollbar -> {
+                parent.parentElement.hatLevel.colouriser[0] = 1F - scrollbar.scrollProg;
+                parent.parent.notifyChanged(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+                HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+            }).setScrollProg(1F - parent.parentElement.hatLevel.colouriser[0]);
             elements.add(svR);
 
             ElementTextWrapper textR = new ElementTextWrapper(this);
@@ -109,9 +99,13 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             elements.add(textR);
 
             ElementScrollBar<?> svG = new ElementScrollBar<>(this, ElementScrollBar.Orientation.HORIZONTAL, 0.1F); //100%?
-            svG.constraints().top(svR, Constraint.Property.Type.BOTTOM, 4).right(confirm, Constraint.Property.Type.LEFT, edgePadding).left(this, Constraint.Property.Type.LEFT, edgePadding);
+            svG.constraints().top(svR, Constraint.Property.Type.BOTTOM, 4).right(padding, Constraint.Property.Type.LEFT, 26).left(this, Constraint.Property.Type.LEFT, edgePadding);
             svG.setId("colouriserG");
-            svG.setScrollProg(1F); //TODO set this
+            svG.setCallback(scrollbar -> {
+                parent.parentElement.hatLevel.colouriser[1] = 1F - scrollbar.scrollProg;
+                parent.parent.notifyChanged(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+                HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+            }).setScrollProg(1F - parent.parentElement.hatLevel.colouriser[1]);
             elements.add(svG);
 
             ElementTextWrapper textG = new ElementTextWrapper(this);
@@ -120,9 +114,13 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             elements.add(textG);
 
             ElementScrollBar<?> svB = new ElementScrollBar<>(this, ElementScrollBar.Orientation.HORIZONTAL, 0.1F); //100%?
-            svB.constraints().top(svG, Constraint.Property.Type.BOTTOM, 4).right(confirm, Constraint.Property.Type.LEFT, edgePadding).left(this, Constraint.Property.Type.LEFT, edgePadding);
+            svB.constraints().top(svG, Constraint.Property.Type.BOTTOM, 4).right(padding, Constraint.Property.Type.LEFT, 26).left(this, Constraint.Property.Type.LEFT, edgePadding);
             svB.setId("colouriserB");
-            svB.setScrollProg(1F); //TODO set this
+            svB.setCallback(scrollbar -> {
+                parent.parentElement.hatLevel.colouriser[2] = 1F - scrollbar.scrollProg;
+                parent.parent.notifyChanged(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+                HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+            }).setScrollProg(1F - parent.parentElement.hatLevel.colouriser[2]);
             elements.add(svB);
 
             ElementTextWrapper textB = new ElementTextWrapper(this);
@@ -131,15 +129,38 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             elements.add(textB);
 
             ElementScrollBar<?> svA = new ElementScrollBar<>(this, ElementScrollBar.Orientation.HORIZONTAL, 0.1F); //100%?
-            svA.constraints().top(svB, Constraint.Property.Type.BOTTOM, 4).right(confirm, Constraint.Property.Type.LEFT, edgePadding).left(this, Constraint.Property.Type.LEFT, edgePadding);
+            svA.constraints().top(svB, Constraint.Property.Type.BOTTOM, 4).right(padding, Constraint.Property.Type.LEFT, 26).left(this, Constraint.Property.Type.LEFT, edgePadding);
             svA.setId("colouriserA");
-            svA.setScrollProg(1F); //TODO set this
+            svA.setCallback(scrollbar -> {
+                parent.parentElement.hatLevel.colouriser[3] = 1F - scrollbar.scrollProg;
+                parent.parent.notifyChanged(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+                HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+            }).setScrollProg(1F - parent.parentElement.hatLevel.colouriser[3]);
             elements.add(svA);
 
             ElementTextWrapper textA = new ElementTextWrapper(this);
             textA.setText("A");
             textA.constraints().bottom(svA, Constraint.Property.Type.BOTTOM, 0).left(svA, Constraint.Property.Type.LEFT, 1);
             elements.add(textA);
+
+            confirm = new ElementButtonTextured<>(this, WindowHatOptions.ViewHatOptions.TEX_COLOURISE, btn -> {
+                parent.parent.removeWindow(parent);
+            });
+            confirm.setTooltip(I18n.format("gui.ok"));
+            confirm.setSize(20, 20);
+            confirm.constraints().right(padding, Constraint.Property.Type.LEFT, 3).top(padding, Constraint.Property.Type.TOP, 0);
+            elements.add(confirm);
+
+            reset = new ElementButtonTextured<>(this, TEX_RESET, btn -> {
+                svR.setScrollProg(1F);
+                svG.setScrollProg(1F);
+                svB.setScrollProg(1F);
+                svA.setScrollProg(1F);
+            });
+            reset.setTooltip(I18n.format("hats.gui.button.reset"));
+            reset.setSize(20, 20);
+            reset.constraints().right(padding, Constraint.Property.Type.LEFT, 3).bottom(padding, Constraint.Property.Type.BOTTOM, 0);
+            elements.add(reset);
         }
 
         @Override

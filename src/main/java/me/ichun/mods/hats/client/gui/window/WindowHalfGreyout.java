@@ -6,6 +6,7 @@ import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.WindowGreyout;
+import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -20,6 +21,7 @@ public class WindowHalfGreyout extends WindowGreyout<WorkspaceHats>
     public WindowHalfGreyout(WorkspaceHats parent, Window<?> attached)
     {
         super(parent, attached);
+        constraints().left(parent.windowHatsList, Constraint.Property.Type.LEFT, 0);
     }
 
     @Override
@@ -55,9 +57,9 @@ public class WindowHalfGreyout extends WindowGreyout<WorkspaceHats>
         int colorB = 0xd0101010;
 
         float x1 = parent.windowHatsList.getRight() - (int)(parent.windowHatsList.getWidth() / 2F);
-        float x2 = width;
+        float x2 = parent.width;
         float y1 = 0;
-        float y2 = height;
+        float y2 = parent.height;
 
         float f = (float)(colorA >> 24 & 255) / 255.0F * prog;
         float f1 = (float)(colorA >> 16 & 255) / 255.0F;
@@ -76,7 +78,7 @@ public class WindowHalfGreyout extends WindowGreyout<WorkspaceHats>
         x1 = parent.windowHatsList.getLeft() - 20;
         x2 = parent.windowHatsList.getRight() - (int)(parent.windowHatsList.getWidth() / 2F);
         y1 = 0;
-        y2 = height;
+        y2 = parent.height;
 
         f = (float)(colorA >> 24 & 255) / 255.0F * prog;
         f1 = (float)(colorA >> 16 & 255) / 255.0F;

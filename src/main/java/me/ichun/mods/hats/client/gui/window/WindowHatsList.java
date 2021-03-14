@@ -149,7 +149,8 @@ public class WindowHatsList extends Window<WorkspaceHats>
             for(HatsSavedData.HatPart part : hatPartSource) //TODO how to render hats without accessories???
             {
                 //TODO I should probably make a function for this
-                ElementHatRender<?> hat = new ElementHatRender<>(list, part.createCopy(), btn -> {
+                HatsSavedData.HatPart hatPart = part.createCopy();
+                ElementHatRender<?> hat = new ElementHatRender<>(list, hatPart, hatPart, btn -> {
                     ElementHatsScrollView scrollView = (ElementHatsScrollView)btn.parentFragment;
                     if(btn.toggleState) //we're selected
                     {
@@ -161,9 +162,8 @@ public class WindowHatsList extends Window<WorkspaceHats>
                             }
                         }
 
-                        HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, btn.hatDetails);
+                        HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, btn.hatOrigin.setModifier(btn.hatLevel));
                     }
-                }, btn -> {
                 }
                 );
                 hat.setToggled(parentFragment.parent.hatDetails.name.equals(part.name));

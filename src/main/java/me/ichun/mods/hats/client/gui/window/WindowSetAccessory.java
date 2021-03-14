@@ -7,14 +7,16 @@ import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatsScrollView;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Fragment;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementScrollBar;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.SimpleSound;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
@@ -75,39 +77,82 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
 
             int padding = 0;
 
-            ElementScrollBar<?> sv = new ElementScrollBar<>(this, ElementScrollBar.Orientation.VERTICAL, 0.6F);
-            sv.constraints().top(this, Constraint.Property.Type.TOP, padding)
-                    .bottom(this, Constraint.Property.Type.BOTTOM, padding) // 10 + 20 + 10, bottom + button height + padding
-                    .right(this, Constraint.Property.Type.RIGHT, padding);
-            elements.add(sv);
+            int maxHeight = parentFragment.parent.windowHatsList.height - (parentFragment.parent.windowHatsList.borderSize.get() * 2);
+            int idealHeight = (parentFragment.parentElement.hatLevel.hatParts.size() * 73) + 5; //70 + 3 padding each + 2x padding (2 each) //TODO make the scrollbar completely optional so that we can just not have it.
 
-            ElementHatsScrollView list = new ElementHatsScrollView(this).setScrollVertical(sv);
+            ElementScrollBar<?> sv = null;
+            if(idealHeight > maxHeight) //needs a scroll bar
+            {
+                sv = new ElementScrollBar<>(this, ElementScrollBar.Orientation.VERTICAL, 0.6F);
+                sv.constraints().top(this, Constraint.Property.Type.TOP, padding)
+                        .bottom(this, Constraint.Property.Type.BOTTOM, padding) // 10 + 20 + 10, bottom + button height + padding
+                        .right(this, Constraint.Property.Type.RIGHT, padding);
+                elements.add(sv);
+            }
+
+            ElementHatsScrollView list = new ElementHatsScrollView(this);
             list.constraints().top(this, Constraint.Property.Type.TOP, padding + 1)
                     .bottom(this, Constraint.Property.Type.BOTTOM, padding + 1)
                     .left(this, Constraint.Property.Type.LEFT, padding + 1)
-                    .right(sv, Constraint.Property.Type.LEFT, 2 + 1);
+                    .right(this, Constraint.Property.Type.RIGHT, padding + 1);
+            if(sv != null)
+            {
+                list.setScrollVertical(sv);
+                list.constraints().right(sv, Constraint.Property.Type.LEFT, 2 + 1);
+            }
             elements.add(list);
 
-            ElementHatRender<?> hat = new ElementHatRender<>(list, parent.parentElement.hatDetails, btn -> {
-                ElementHatsScrollView scrollView = (ElementHatsScrollView)btn.parentFragment;
-                if(btn.toggleState) //we're selected
-                {
-                    for(Element<?> element : scrollView.elements)
+            for(int i = 0; i < parent.parentElement.hatLevel.hatParts.size(); i++)
+            {
+                HatsSavedData.HatPart level = parent.parentElement.hatLevel.hatParts.get(i).createCopy();
+                boolean isShowing = level.isShowing;
+                level.isShowing = true;
+
+                ElementHatRender<?> hat = new ElementHatRender<ElementHatRender<?>>(list, parent.parentElement.hatOrigin, level, btn -> {
+                    HatsSavedData.HatPart copy = btn.hatLevel.createCopy();
+                    copy.isShowing = btn.toggleState;
+                    parent.parent.notifyChanged(btn.hatOrigin.setModifier(copy));
+                    HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, btn.hatOrigin.setModifier(copy));
+                }
+                ){
+                    @Override
+                    public boolean mouseReleased(double mouseX, double mouseY, int button) //we extended ElementRightClickable but we're not really much of that anymore
                     {
-                        if(element != btn)
+                        //        boolean flag = super.mouseReleased(mouseX, mouseY, button); // unsets dragging;
+                        //copied out mouseReleased so we don't call ElementClickable's
+                        this.setDragging(false);
+                        boolean flag = getListener() != null && getListener().mouseReleased(mouseX, mouseY, button);
+
+                        parentFragment.setListener(null); //we're a one time click, stop focusing on us
+                        if(!disabled && isMouseOver(mouseX, mouseY))
                         {
-                            ((ElementHatRender<?>)element).toggleState = false;
+                            if(button == 0 || button == 1 && !toggleState)
+                            {
+                                trigger();
+                            }
+                            if(button == 1 || isOverHamburger(mouseX, mouseY))
+                            {
+                                if(renderMinecraftStyle())
+                                {
+                                    Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                                }
+
+                                spawnOptionsButtons();
+                            }
                         }
+                        return flag;
                     }
 
-                    HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, btn.hatDetails);
-                }
-            }, btn -> {
+                    @Override
+                    public void onClickRelease()
+                    {
+                        toggleState = !toggleState;
+                    }
+                };
+                hat.setToggled(isShowing);
+                hat.setSize(50, 70);
+                list.addElement(hat);
             }
-            );
-            hat.setToggled(false);
-            hat.setSize(50, 70);
-            list.addElement(hat);
         }
 
         @Override
@@ -196,23 +241,34 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             parentFragment.parentElement.setTop(hatViewTop);
 
             //This is in relation of the new parentElementPosition
-            int maxHeight = parentFragment.parent.windowHatsList.height - (parentFragment.parent.windowHatsList.borderSize.get() * 2);
-            int idealHeight = 70 + 8; //70 + 2x padding //TODO make the scrollbar completely optional so that we can just not have it.
+            int maxHeight = parentFragment.parent.windowHatsList.height - (parentFragment.parent.windowHatsList.borderSize.get() * 4);
+            int idealHeight = (parentFragment.parentElement.hatLevel.hatParts.size() * 73) + 5; //70 + 3 padding each + 2x padding (2 each) //TODO make the scrollbar completely optional so that we can just not have it.
             int targetHeight = Math.min(idealHeight, maxHeight);
 
+            int targetY = parentFragment.getTop();
+            if(targetY + idealHeight > parentFragment.parent.windowHatsList.getBottom() - parentFragment.parent.windowHatsList.borderSize.get() * 2)
+            {
+                targetY -= (targetY + idealHeight) - (parentFragment.parent.windowHatsList.getBottom() - parentFragment.parent.windowHatsList.borderSize.get() * 2);
+
+                if(targetY < parentFragment.parent.windowHatsList.getTop() + parentFragment.parent.windowHatsList.borderSize.get() * 2)
+                {
+                    targetY = parentFragment.parent.windowHatsList.getTop() + parentFragment.parent.windowHatsList.borderSize.get() * 2;
+                }
+            }
             int targetX = parentFragment.parentElement.getRight() + (hatsListPadding * 4);
             int targetWidth = 60 + (idealHeight > maxHeight ? 14 : 0); //50 width + 2x list padding and border (5 x 2) + padding to scroll (4) + scrolll (14) + 2x padding (6)//TODO update this? Calculate number of accessories to fit on screen and if we need a scroll bar or not
 
+            parentFragment.setTop((int)(parentFragment.getTop() + (targetY - parentFragment.getTop()) * prog));
             parentFragment.posX = (int)(parentFragment.parentElement.getLeft() + (targetX - parentFragment.parentElement.getLeft()) * prog);
             parentFragment.width = (int)(parentFragment.parentElement.width + (targetWidth - parentFragment.parentElement.width) * prog);
 
             parentFragment.height = (int)(parentFragment.parentElement.height + (targetHeight - parentFragment.parentElement.height) * prog);
             parentFragment.resize(getWorkspace().getMinecraft(), parentFragment.width, parentFragment.height);
 
-            renderTick = partialTick;
+            renderTick = partialTick; //TODO fix bug of hats clipping when accessory is too low on screen
 
             //We're using RenderSystem instead of MatrixStack because of the entity render
-            RenderSystem.translatef(0F, 0F, 20F);
+            RenderSystem.translatef(0F, 0F, 30F);
             stack.push();
 
             stack.translate(0F, 0F, 10F);

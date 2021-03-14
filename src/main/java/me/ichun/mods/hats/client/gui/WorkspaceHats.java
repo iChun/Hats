@@ -41,6 +41,8 @@ public class WorkspaceHats extends Workspace
     public WindowHatsList windowHatsList;
     public WindowSidebar windowSidebar;
 
+    public ArrayList<HatsSavedData.HatPart> changedHats = new ArrayList<>();
+
     public WorkspaceHats(Screen lastScreen, boolean fallback, @Nonnull LivingEntity hatEntity)
     {
         super(lastScreen, new TranslationTextComponent("hats.gui.selection.title"), Hats.configClient.guiMinecraftStyle);
@@ -122,7 +124,9 @@ public class WorkspaceHats extends Workspace
 
     public ArrayList<HatsSavedData.HatPart> getHatPartSource() //TODO TOOLTIP for hats: name + rarity + accessory count?
     {
-        return usePlayerInventory() ? Hats.eventHandlerClient.hatsInventory.hatParts : HatResourceHandler.HAT_PARTS;
+        ArrayList<HatsSavedData.HatPart> source = new ArrayList<>(usePlayerInventory() ? Hats.eventHandlerClient.hatsInventory.hatParts : HatResourceHandler.HAT_PARTS);
+        HatResourceHandler.combineLists(source, changedHats);
+        return source; //TODO sort in order of have and don't have.
     }
 
     @Override
@@ -222,5 +226,25 @@ public class WorkspaceHats extends Workspace
         HatHandler.assignSpecificHat(hatEntity, hatDetails); //Reset
 
         Hats.eventHandlerClient.closeHatsMenu();
+    }
+
+    public void notifyChanged(@Nonnull HatsSavedData.HatPart part) //TODO combine with the hats source
+    {
+        boolean found = false;
+        for(int i = changedHats.size() - 1; i >= 0; i--)
+        {
+            if(changedHats.get(i).name.equals(part.name))
+            {
+                found = true;
+                changedHats.remove(i);
+                changedHats.add(i, part);
+                break;
+            }
+        }
+
+        if(!found)
+        {
+            changedHats.add(part);
+        }
     }
 }

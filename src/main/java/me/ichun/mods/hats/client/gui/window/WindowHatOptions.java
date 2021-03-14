@@ -110,11 +110,7 @@ public class WindowHatOptions extends Window<WorkspaceHats>
 
             //COLOURISE
             btnStack = new ElementButtonTextured<>(this, TEX_COLOURISE, btn -> {
-                WindowSetColouriser windowSetColouriser = new WindowSetColouriser(parent.parent, parent.parentElement);
-                windowSetColouriser.pos(parent.parentElement.getLeft(), parent.parentElement.getTop());
-                windowSetColouriser.size(parent.parentElement.getWidth(), parent.parentElement.getHeight());
-                parent.parent.addWindowWithGreyout(windowSetColouriser);
-                windowSetColouriser.init();
+                openColouriser(parent.parent, parent.parentElement);
 
                 parent.parent.removeWindow(parent);
             });
@@ -125,29 +121,50 @@ public class WindowHatOptions extends Window<WorkspaceHats>
             buttons.add(btnStack);
             btnStackLast = btnStack;
 
-            //ACCESSORISE
-            btnStack = new ElementButtonTextured<>(this, TEX_PERSONALISE, btn -> {
-                WindowSetAccessory windowSetAccessory = new WindowSetAccessory(parent.parent, parent.parentElement);
-                windowSetAccessory.pos(parent.parentElement.getLeft(), parent.parentElement.getTop());
-                windowSetAccessory.size(parent.parentElement.getWidth(), parent.parentElement.getHeight());
-                parent.parent.addWindowWithGreyout(windowSetAccessory);
-                windowSetAccessory.init();
+            if(!parent.parentElement.hatLevel.hatParts.isEmpty())
+            {
+                //ACCESSORISE
+                btnStack = new ElementButtonTextured<>(this, TEX_PERSONALISE, btn -> {
+                    openPersonalizer(parent.parent, parent.parentElement);
 
-                parent.parent.removeWindow(parent);
-            }); //TODO open a new GUI for accesorise?
-            btnStack.setTooltip(I18n.format("hats.gui.button.personalise"));
-            btnStack.setSize(20, 20);
-            btnStack.constraints().right(this, Constraint.Property.Type.LEFT, 1).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
-            elements.add(btnStack);
-            buttons.add(btnStack);
-            btnStackLast = btnStack;
+                    parent.parent.removeWindow(parent);
+                });
+                btnStack.setTooltip(I18n.format("hats.gui.button.personalise"));
+                btnStack.setSize(20, 20);
+                btnStack.constraints().right(this, Constraint.Property.Type.LEFT, 1).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
+                elements.add(btnStack);
+                buttons.add(btnStack);
+                btnStackLast = btnStack;
+            }
+
 
             //FAVOURITE
-            ElementToggleTextured<?> btnToggle = new ElementToggleTextured<>(this, I18n.format("hats.gui.button.favouriteHat"), TEX_FAVOURITE, btn -> {}); //TODO handle this
+            ElementToggleTextured<?> btnToggle = new ElementToggleTextured<>(this, I18n.format("hats.gui.button.favouriteHat"), TEX_FAVOURITE, btn -> {
+                parent.parentElement.hatLevel.isFavourite = true;
+                parent.parent.notifyChanged(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+            });
             btnToggle.setSize(20, 20);
             btnToggle.constraints().right(this, Constraint.Property.Type.LEFT, 1).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
             elements.add(btnToggle);
             buttons.add(btnToggle);
+        }
+
+        public static void openColouriser(WorkspaceHats parent, ElementHatRender<?> parentElement)
+        {
+            WindowSetColouriser windowSetColouriser = new WindowSetColouriser(parent, parentElement);
+            windowSetColouriser.pos(parentElement.getLeft(), parentElement.getTop());
+            windowSetColouriser.size(parentElement.getWidth(), parentElement.getHeight());
+            parent.addWindowWithGreyout(windowSetColouriser);
+            windowSetColouriser.init();
+        }
+
+        public static void openPersonalizer(WorkspaceHats parent, ElementHatRender<?> parentElement)
+        {
+            WindowSetAccessory windowSetAccessory = new WindowSetAccessory(parent, parentElement);
+            windowSetAccessory.pos(parentElement.getLeft(), parentElement.getTop());
+            windowSetAccessory.size(parentElement.getWidth(), parentElement.getHeight());
+            parent.addWindowWithGreyout(windowSetAccessory);
+            windowSetAccessory.init();
         }
 
         @Override

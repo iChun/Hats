@@ -5,7 +5,6 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.gui.window.WindowHatOptions;
-import me.ichun.mods.hats.client.gui.window.WindowHatsList;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatInfo;
@@ -13,8 +12,9 @@ import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.Theme;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Fragment;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementRightClickable;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementClickable;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Vector3f;
@@ -22,17 +22,19 @@ import net.minecraft.util.math.vector.Vector3f;
 import javax.annotation.Nonnull;
 import java.util.function.Consumer;
 
-public class ElementHatRender<T extends ElementHatRender>  extends ElementRightClickable<T>
+public class ElementHatRender<T extends ElementHatRender>  extends ElementClickable<T>
 {
     public static final String HAMBURGER = "\u2261";//"≡";
 
-    public HatsSavedData.HatPart hatDetails;
+    public HatsSavedData.HatPart hatOrigin;
+    public HatsSavedData.HatPart hatLevel;
     public boolean toggleState;
 
-    public ElementHatRender(@Nonnull Fragment parent, HatsSavedData.HatPart hatDeets, Consumer<T> callback, Consumer<T> rmbCallback)
+    public ElementHatRender(@Nonnull Fragment parent, HatsSavedData.HatPart hatOrigin, HatsSavedData.HatPart hatLevel, Consumer<T> callback)
     {
-        super(parent, callback, rmbCallback);
-        this.hatDetails = hatDeets;
+        super(parent, callback);
+        this.hatOrigin = hatOrigin;
+        this.hatLevel = hatLevel;
     }
 
     public <T extends ElementHatRender<?>> T setToggled(boolean flag)
@@ -44,7 +46,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int button) //we extended ElementRightClickable but we're not really much of that anymore
     {
-//        boolean flag = super.mouseReleased(mouseX, mouseY, button); // unsets dragging;
+        //        boolean flag = super.mouseReleased(mouseX, mouseY, button); // unsets dragging;
         //copied out mouseReleased so we don't call ElementClickable's
         this.setDragging(false);
         boolean flag = getListener() != null && getListener().mouseReleased(mouseX, mouseY, button);
@@ -69,20 +71,31 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
         return isMouseBetween(mouseX, getLeft(), getLeft() + 3 + getFontRenderer().getStringWidth(HAMBURGER) + 2) && isMouseBetween(mouseY, getTop(), getTop() + getFontRenderer().FONT_HEIGHT + 2);
     }
 
-    public void spawnOptionsButtons() //TODO fix buttons spawning above/below the hats list?
+    public void spawnOptionsButtons() //TODO fix buttons spawning above/below the hats list? //TODO Fixx the shortcuts not working
     {
-        //Spawn the window and set focus to it.
-        WindowHatOptions windowHatOptions = new WindowHatOptions((WorkspaceHats)getWorkspace(), this);
-        windowHatOptions.setPosX(getLeft() - 21);
-        windowHatOptions.setPosY(getTop());
-        windowHatOptions.setWidth(getWidth() + 21);
-        windowHatOptions.setHeight(getHeight());
-        if(windowHatOptions.getWorkspace().hasInit())
+        if(Screen.hasControlDown() && !this.hatLevel.hatParts.isEmpty())
         {
-            windowHatOptions.init();
+            WindowHatOptions.ViewHatOptions.openPersonalizer((WorkspaceHats)getWorkspace(), this);
         }
-        windowHatOptions.getWorkspace().addWindow(windowHatOptions);
-        windowHatOptions.getWorkspace().setListener(windowHatOptions);
+        else if(Screen.hasShiftDown())
+        {
+            WindowHatOptions.ViewHatOptions.openColouriser((WorkspaceHats)getWorkspace(), this);
+        }
+        else
+        {
+            //Spawn the window and set focus to it.
+            WindowHatOptions windowHatOptions = new WindowHatOptions((WorkspaceHats)getWorkspace(), this);
+            windowHatOptions.setPosX(getLeft() - 21);
+            windowHatOptions.setPosY(getTop());
+            windowHatOptions.setWidth(getWidth() + 21);
+            windowHatOptions.setHeight(getHeight());
+            if(windowHatOptions.getWorkspace().hasInit())
+            {
+                windowHatOptions.init();
+            }
+            windowHatOptions.getWorkspace().addWindow(windowHatOptions);
+            windowHatOptions.getWorkspace().setListener(windowHatOptions);
+        }
     }
 
     @Override
@@ -95,12 +108,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
     }
 
     @Override
-    public void onRightClickRelease()
-    {
-    }
-
-    @Override
-    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick) //TODO disable hat render if no count.
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
     {
         super.render(stack, mouseX, mouseY, partialTick);
         if(renderMinecraftStyle())
@@ -141,7 +149,10 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
         int top = Math.max(getTop() + 1, parentFragment.getTop());
         int bottom = Math.min(getBottom() - 1, parentFragment.getBottom());
 
-        HatInfo info = HatResourceHandler.getInfoAndSetToPart(hatDetails);
+        HatsSavedData.HatPart partForRender = hatOrigin.createCopy().setModifier(hatLevel);
+        //        HatsSavedData.HatPart partForRender = hatOrigin;
+
+        HatInfo info = HatResourceHandler.getInfoAndSetToPart(partForRender);
         if(bottom - top > 0)
         {
             RenderSystem.enableDepthTest();
@@ -156,7 +167,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
 
             HatsSavedData.HatPart originalHat = HatHandler.getHatPart(livingEnt).createCopy();
 
-            HatHandler.assignSpecificHat(livingEnt, hatDetails);
+            HatHandler.assignSpecificHat(livingEnt, partForRender);
 
             if(Hats.configClient.invisibleEntityInHatSelector)
             {
@@ -185,11 +196,11 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
-        RenderHelper.drawColour(stack, 0, 0, 0, 80, getRight() - 10, getTop() + 1, 9, height - 2, 0);
+        RenderHelper.drawColour(stack, 0, 0, 0, 120, getRight() - 10, getTop() + 1, 9, height - 2, 0);
 
         RenderSystem.disableBlend();
 
-        String hatName = info != null ? info.getDisplayName() : "";
+        String hatName = info != null ? info.getDisplayNameOf(hatLevel.name) : "";
 
         float scale = 0.5F;
         String s = reString(hatName, (int)((height - 6) / scale));
@@ -207,7 +218,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
 
         if(((WorkspaceHats)getWorkspace()).usePlayerInventory())
         {
-            s = "x" + WorkspaceHats.FORMATTER.format(hatDetails.count);
+            s = "x" + WorkspaceHats.FORMATTER.format(hatLevel.count); // we count from the level
 
             stack.push();
             stack.translate(getLeft() + 3, getBottom() - (getFontRenderer().FONT_HEIGHT) * scale - 1, 375F);

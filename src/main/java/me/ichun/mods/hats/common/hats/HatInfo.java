@@ -55,7 +55,24 @@ public class HatInfo
 
     public String getDisplayName()
     {
-        return (contributorUUID != null ? TextFormatting.AQUA : rarity != null ? rarity.getColour() : TextFormatting.WHITE).toString() + name;
+        return (contributorUUID != null ? TextFormatting.AQUA : getRarity().getColour()).toString() + name;
+    }
+
+    public String getDisplayNameOf(String s)
+    {
+        if(name.equals(s))
+        {
+            return getDisplayName();
+        }
+        for(HatInfo accessory : accessories)
+        {
+            String accName = accessory.getDisplayNameOf(s);
+            if(!accName.equals(s)) //actually display name
+            {
+                return accName;
+            }
+        }
+        return s;
     }
 
     public EnumRarity getRarity()
@@ -220,10 +237,12 @@ public class HatInfo
     public HatsSavedData.HatPart getAsHatPart(int count)
     {
         HatsSavedData.HatPart part = new HatsSavedData.HatPart(name);
+        part.isShowing = true;
         part.count = count;
         for(HatInfo accessory : accessories)
         {
             HatsSavedData.HatPart childPart = accessory.getAsHatPart(count);
+            childPart.isShowing = false; //the function sets is as true
             part.hatParts.add(childPart);
         }
         return part;
@@ -332,7 +351,7 @@ public class HatInfo
             }
         }
 
-        hidden = part.count < 0;
+        hidden = part.count < 0 || !part.isShowing;
         for(int i = 0; i < part.colouriser.length; i++)
         {
             colouriser[i] = 1F - part.colouriser[i];
