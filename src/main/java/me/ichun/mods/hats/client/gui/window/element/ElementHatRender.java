@@ -5,6 +5,7 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.gui.window.WindowHatOptions;
+import me.ichun.mods.hats.client.gui.window.WindowHatsList;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatInfo;
@@ -218,7 +219,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementRightC
             stack.pop();
         }
 
-        if(hover) //only if we're hovering
+        if(hover && parentFragment instanceof ElementHatsScrollView) //only if we're hovering
         {
             stack.push();
 

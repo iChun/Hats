@@ -105,7 +105,9 @@ public class WorkspaceHats extends Workspace
             RenderSystem.depthMask(false);
             RenderSystem.disableDepthTest();
         }
+        RenderSystem.pushMatrix();
         super.renderWindows(stack, mouseX, mouseY, partialTick);
+        RenderSystem.popMatrix();
 
         if(invisibleEnt)
         {

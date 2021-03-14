@@ -14,7 +14,6 @@ import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementPadding
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementScrollBar;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTextWrapper;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -38,13 +37,18 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
         disableDrag();
         disableDragResize();
         disableTitle();
+        isNotUnique();
 
         this.parentElement = parentElement;
 
         setView(new ViewSetColouriser(this));
     }
 
-
+    @Override
+    public void setScissor()
+    {
+        currentView.setScissor();
+    }
     @Override
     public void renderBackground(MatrixStack stack){}//No BG
 
@@ -225,25 +229,29 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
 
             stack.pop();
 
+            int hatViewWidth = parentFragment.parentElement.getWidth();
+            int hatViewLeft = parentFragment.parentElement.getLeft();
+            int targetElementX = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.getRight() - hatsListPadding - parentFragment.parentElement.getMinWidth();
+            int hatViewTop = parentFragment.parentElement.getTop();
+
+            Fragment<?> fragment = parentFragment.parentElement.parentFragment;
+            parentFragment.parentElement.parentFragment = this;
+
             parentFragment.parentElement.parentFragment.setScissor();
 
-            int hatViewWidth = parentFragment.parentElement.getWidth();
-            int hatViewX = parentFragment.parentElement.posX;
-            int targetElementX = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.getRight() - hatsListPadding - parentFragment.parentElement.getMinWidth();
-
             //We're using RenderSystem instead of MatrixStack because of the entity render
-            RenderSystem.pushMatrix();
-            RenderSystem.translatef(0F, 0F, 25F);
+            RenderSystem.translatef(0F, 0F, 40F);
 
-            parentFragment.parentElement.setPosX((int)(hatViewX + (targetElementX - parentFragment.parentElement.getLeft()) * prog));
+            parentFragment.parentElement.setLeft((int)(hatViewLeft + (targetElementX - hatViewLeft) * prog));
             parentFragment.parentElement.setWidth((int)(parentFragment.parentElement.width + (parentFragment.parentElement.getMinWidth() - parentFragment.parentElement.width) * prog));
+            parentFragment.parentElement.setTop(hatViewTop);
 
             parentFragment.parentElement.render(stack, mouseX, mouseY, partialTick);
 
+            parentFragment.parentElement.parentFragment = fragment;
+            parentFragment.parentElement.setTop(hatViewTop);
             parentFragment.parentElement.setWidth(hatViewWidth);
-            parentFragment.parentElement.setPosX(hatViewX);
-
-            RenderSystem.popMatrix();
+            parentFragment.parentElement.setLeft(hatViewLeft);
 
             resetScissorToParent();
         }

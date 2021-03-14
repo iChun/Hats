@@ -4,19 +4,17 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
+import me.ichun.mods.hats.client.gui.window.element.ElementHatsScrollView;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Fragment;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementButtonTextured;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementPadding;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementScrollBar;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTextWrapper;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
@@ -38,12 +36,18 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
         disableDrag();
         disableDragResize();
         disableTitle();
+        isNotUnique();
 
         this.parentElement = parentElement;
 
         setView(new ViewSetAccessory(this));
     }
 
+    @Override
+    public void setScissor()
+    {
+        currentView.setScissor();
+    }
 
     @Override
     public void renderBackground(MatrixStack stack){}//No BG
@@ -68,6 +72,42 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
         public ViewSetAccessory(@Nonnull WindowSetAccessory parent)
         {
             super(parent, "hats.gui.window.hat.personaliser");
+
+            int padding = 0;
+
+            ElementScrollBar<?> sv = new ElementScrollBar<>(this, ElementScrollBar.Orientation.VERTICAL, 0.6F);
+            sv.constraints().top(this, Constraint.Property.Type.TOP, padding)
+                    .bottom(this, Constraint.Property.Type.BOTTOM, padding) // 10 + 20 + 10, bottom + button height + padding
+                    .right(this, Constraint.Property.Type.RIGHT, padding);
+            elements.add(sv);
+
+            ElementHatsScrollView list = new ElementHatsScrollView(this).setScrollVertical(sv);
+            list.constraints().top(this, Constraint.Property.Type.TOP, padding + 1)
+                    .bottom(this, Constraint.Property.Type.BOTTOM, padding + 1)
+                    .left(this, Constraint.Property.Type.LEFT, padding + 1)
+                    .right(sv, Constraint.Property.Type.LEFT, 2 + 1);
+            elements.add(list);
+
+            ElementHatRender<?> hat = new ElementHatRender<>(list, parent.parentElement.hatDetails, btn -> {
+                ElementHatsScrollView scrollView = (ElementHatsScrollView)btn.parentFragment;
+                if(btn.toggleState) //we're selected
+                {
+                    for(Element<?> element : scrollView.elements)
+                    {
+                        if(element != btn)
+                        {
+                            ((ElementHatRender<?>)element).toggleState = false;
+                        }
+                    }
+
+                    HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, btn.hatDetails);
+                }
+            }, btn -> {
+            }
+            );
+            hat.setToggled(false);
+            hat.setSize(50, 70);
+            list.addElement(hat);
         }
 
         @Override
@@ -201,42 +241,57 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             }
 
             int hatViewWidth = parentFragment.parentElement.getWidth();
-            int hatViewX = parentFragment.parentElement.posX;
+            int hatViewLeft = parentFragment.parentElement.getLeft();
             int targetElementX = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.getLeft() + hatsListPadding;
+            int hatViewTop = parentFragment.parentElement.getTop();
 
-            parentFragment.parentElement.setPosX((int)(hatViewX + (targetElementX - parentFragment.parentElement.getLeft()) * prog));
+            parentFragment.parentElement.setLeft((int)(hatViewLeft + (targetElementX - hatViewLeft) * prog));
             parentFragment.parentElement.setWidth((int)(parentFragment.parentElement.width + (parentFragment.parentElement.getMinWidth() - parentFragment.parentElement.width) * prog));
+            parentFragment.parentElement.setTop(hatViewTop);
 
             //This is in relation of the new parentElementPosition
+            int maxHeight = parentFragment.parent.windowHatsList.height - (parentFragment.parent.windowHatsList.borderSize.get() * 2);
+            int idealHeight = 70 + 8; //70 + 2x padding //TODO make the scrollbar completely optional so that we can just not have it.
+            int targetHeight = Math.min(idealHeight, maxHeight);
+
             int targetX = parentFragment.parentElement.getRight() + (hatsListPadding * 4);
-            int targetWidth = 70; //50 width + 2x list padding and border (5 x 2) + padding to scroll (4) + scrolll (14) + 2x padding (6)//TODO update this? Calculate number of accessories to fit on screen and if we need a scroll bar or not
+            int targetWidth = 60 + (idealHeight > maxHeight ? 14 : 0); //50 width + 2x list padding and border (5 x 2) + padding to scroll (4) + scrolll (14) + 2x padding (6)//TODO update this? Calculate number of accessories to fit on screen and if we need a scroll bar or not
 
             parentFragment.posX = (int)(parentFragment.parentElement.getLeft() + (targetX - parentFragment.parentElement.getLeft()) * prog);
             parentFragment.width = (int)(parentFragment.parentElement.width + (targetWidth - parentFragment.parentElement.width) * prog);
+
+            parentFragment.height = (int)(parentFragment.parentElement.height + (targetHeight - parentFragment.parentElement.height) * prog);
             parentFragment.resize(getWorkspace().getMinecraft(), parentFragment.width, parentFragment.height);
 
             renderTick = partialTick;
+
+            //We're using RenderSystem instead of MatrixStack because of the entity render
+            RenderSystem.translatef(0F, 0F, 20F);
             stack.push();
 
-            stack.translate(0F, 0F, 375F);
+            stack.translate(0F, 0F, 10F);
 
             super.render(stack, mouseX, mouseY, partialTick);
 
             stack.pop();
 
+            Fragment<?> fragment = parentFragment.parentElement.parentFragment;
+            parentFragment.parentElement.parentFragment = this;
+
             parentFragment.parentElement.parentFragment.setScissor();
 
-
             //We're using RenderSystem instead of MatrixStack because of the entity render
-            RenderSystem.pushMatrix();
-            RenderSystem.translatef(0F, 0F, 25F);
+            RenderSystem.translatef(0F, 0F, 20F);
+
+            parentFragment.parentElement.setLeft((int)(hatViewLeft + (targetElementX - hatViewLeft) * prog));
+            parentFragment.parentElement.setTop(hatViewTop);
 
             parentFragment.parentElement.render(stack, mouseX, mouseY, partialTick);
 
+            parentFragment.parentElement.parentFragment = fragment;
             parentFragment.parentElement.setWidth(hatViewWidth);
-            parentFragment.parentElement.setPosX(hatViewX);
-
-            RenderSystem.popMatrix();
+            parentFragment.parentElement.setLeft(hatViewLeft);
+            parentFragment.parentElement.setTop(hatViewTop);
 
             resetScissorToParent();
         }
