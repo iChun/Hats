@@ -125,7 +125,7 @@ public class ElementHatsScrollView extends ElementFertile
         return (70 + padding) * rowCount + padding; //70 = min hat render height
     }
 
-    public void alignItems() //TODO total item height func
+    public void alignItems()
     {
         //MATCH getTotalItemHeight()
         int padding = 3;

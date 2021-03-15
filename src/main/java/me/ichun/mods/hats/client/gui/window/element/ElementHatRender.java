@@ -30,6 +30,8 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
     public HatsSavedData.HatPart hatLevel;
     public boolean toggleState;
 
+    public boolean hasConflict;
+
     public ElementHatRender(@Nonnull Fragment parent, HatsSavedData.HatPart hatOrigin, HatsSavedData.HatPart hatLevel, Consumer<T> callback)
     {
         super(parent, callback);
@@ -149,7 +151,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         int top = Math.max(getTop() + 1, parentFragment.getTop());
         int bottom = Math.min(getBottom() - 1, parentFragment.getBottom());
 
-        HatsSavedData.HatPart partForRender = hatOrigin.createCopy().setModifier(hatLevel);
+        HatsSavedData.HatPart partForRender = hatOrigin.createCopy().setNoNew().setNoFavourite().setModifier(hatLevel);
         //        HatsSavedData.HatPart partForRender = hatOrigin;
 
         HatInfo info = HatResourceHandler.getInfoAndSetToPart(partForRender);
@@ -202,8 +204,43 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
         String hatName = info != null ? info.getDisplayNameOf(hatLevel.name) : "";
 
+        int topDist = height - 6;
+        if(parentFragment instanceof ElementHatsScrollView)
+        {
+            int renderIconX = getRight() - 9;
+            if(partForRender.hasFavourite())
+            {
+                topDist = height - 14;
+                RenderSystem.enableBlend();
+                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+                if(!hatLevel.isFavourite)
+                {
+                    RenderHelper.colour(0x00ffff);
+                }
+                RenderHelper.drawTexture(stack, WindowHatOptions.ViewHatOptions.TEX_FAVOURITE, renderIconX, getTop() + 2, 7, 7, 0);
+                RenderHelper.colour(0xffffff); //reset the colour
+
+                RenderSystem.disableBlend();
+
+                renderIconX -= 10;
+            }
+            if(partForRender.hasNew())
+            {
+                topDist = height - 14;
+
+                stack.push();
+
+                stack.translate(0F, 0F, 375F);
+
+                getFontRenderer().drawString(stack, "!", renderIconX + 3, getTop() + 2, renderMinecraftStyle() ? 16777120 : Theme.getAsHex(getTheme().font));
+
+                stack.pop();
+            }
+        }
+
         float scale = 0.5F;
-        String s = reString(hatName, (int)((height - 6) / scale));
+        String s = reString(hatName, (int)((topDist) / scale));
 
         stack.push();
         stack.translate(getRight() - 5, getTop() + (height * scale), 0F);
@@ -230,26 +267,48 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
             stack.pop();
         }
 
-        if(hover && parentFragment instanceof ElementHatsScrollView) //only if we're hovering
+
+        if(parentFragment instanceof ElementHatsScrollView)
         {
-            stack.push();
+            if(hover) //only if we're hovering
+            {
+                stack.push();
 
-            stack.translate(0F, 0F, 375F);
+                stack.translate(0F, 0F, 375F);
 
-            boolean isHoveringHamburger = isOverHamburger(mouseX, mouseY);
+                boolean isHoveringHamburger = isOverHamburger(mouseX, mouseY);
 
-            getFontRenderer().drawString(stack, HAMBURGER, getLeft() + 3, getTop() + 2, renderMinecraftStyle() ? isHoveringHamburger ? 16777120 : 14737632 : Theme.getAsHex(isHoveringHamburger ? getTheme().font : getTheme().fontDim));
+                getFontRenderer().drawString(stack, HAMBURGER, getLeft() + 3, getTop() + 2, renderMinecraftStyle() ? isHoveringHamburger ? 16777120 : 14737632 : Theme.getAsHex(isHoveringHamburger ? getTheme().font : getTheme().fontDim));
 
-            stack.pop();
+                stack.pop();
+            }
+            else if(!hatLevel.hatParts.isEmpty()) //TODO remove render if WindowHatOptions is showing for this
+            {
+                stack.push();
+
+                stack.translate(0F, 0F, 375F);
+
+
+                getFontRenderer().drawString(stack, "+", getLeft() + 3, getTop() + 2, renderMinecraftStyle() ? 14737632 : Theme.getAsHex(getTheme().fontDim));
+
+                stack.pop();
+            }
         }
     }
 
     @Override
     public void setScissor()
     {
-        int top = Math.max(getTop() + 1, parentFragment.getTop());
-        int bottom = Math.min(getBottom() - 1, parentFragment.getBottom());
-        RenderHelper.startGlScissor(getLeft() + 1, top, width - 2, bottom - top);
+        if(parentFragment instanceof ElementHatsScrollView)
+        {
+            int top = Math.max(getTop() + 1, parentFragment.getTop());
+            int bottom = Math.min(getBottom() - 1, parentFragment.getBottom());
+            RenderHelper.startGlScissor(getLeft() + 1, top, width - 2, bottom - top);
+        }
+        else
+        {
+            RenderHelper.startGlScissor(getLeft() + 1, getTop() + 1, width - 2, height - 2);
+        }
     }
 
     @Override

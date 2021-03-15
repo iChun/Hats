@@ -45,7 +45,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
     }
 
     @Override
-    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick) //TODO random hat random accessories, random colour too. note in tooltip.
     {
         if(parent.age <= Hats.configClient.guiAnimationTime)
         {
@@ -62,6 +62,22 @@ public class WindowHatsList extends Window<WorkspaceHats>
     }
 
     @Override
+    public void tick()
+    {
+        super.tick();
+
+        if(parent.age == Hats.configClient.guiAnimationTime + 1) //Should fix things when FPS < tickRate
+        {
+            posX = (int)(Math.floor((parent.getWidth() / 2F)) + (Math.ceil((parent.getWidth() / 2F)) + 2) * 0F);
+            if(parent.age == Hats.configClient.guiAnimationTime)
+            {
+                resize(parent.getMinecraft(), parent.width, parent.height);
+            }
+            parent.windowSidebar.constraint.apply();
+        }
+    }
+
+    @Override
     public void setScissor()
     {
         if(parent.age < Hats.configClient.guiAnimationTime)
@@ -72,6 +88,12 @@ public class WindowHatsList extends Window<WorkspaceHats>
         {
             super.setScissor();
         }
+    }
+
+    @Override
+    public ViewHatsList getCurrentView()
+    {
+        return (ViewHatsList)currentView;
     }
 
     public static class ViewHatsList extends View<WindowHatsList>
@@ -146,9 +168,8 @@ public class WindowHatsList extends Window<WorkspaceHats>
             Collections.sort(hatPartSource);
 
             list.elements.clear();
-            for(HatsSavedData.HatPart part : hatPartSource) //TODO how to render hats without accessories???
+            for(HatsSavedData.HatPart part : hatPartSource)
             {
-                //TODO I should probably make a function for this
                 HatsSavedData.HatPart hatPart = part.createCopy();
                 ElementHatRender<?> hat = new ElementHatRender<>(list, hatPart, hatPart, btn -> {
                     ElementHatsScrollView scrollView = (ElementHatsScrollView)btn.parentFragment;
@@ -162,7 +183,13 @@ public class WindowHatsList extends Window<WorkspaceHats>
                             }
                         }
 
-                        HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, btn.hatOrigin.setModifier(btn.hatLevel));
+                        boolean notify = false;
+                        if(btn.hatLevel.isNew)
+                        {
+                            btn.hatLevel.isNew = false;
+                            notify = true;
+                        }
+                        parentFragment.parent.setNewHat(btn.hatOrigin.setModifier(btn.hatLevel), notify);
                     }
                 }
                 );

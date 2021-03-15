@@ -78,7 +78,7 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             int padding = 0;
 
             int maxHeight = parentFragment.parent.windowHatsList.height - (parentFragment.parent.windowHatsList.borderSize.get() * 2);
-            int idealHeight = (parentFragment.parentElement.hatLevel.hatParts.size() * 73) + 5; //70 + 3 padding each + 2x padding (2 each) //TODO make the scrollbar completely optional so that we can just not have it.
+            int idealHeight = (parentFragment.parentElement.hatLevel.hatParts.size() * 73) + 5; //70 + 3 padding each + 2x padding (2 each)
 
             ElementScrollBar<?> sv = null;
             if(idealHeight > maxHeight) //needs a scroll bar
@@ -109,10 +109,14 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                 level.isShowing = true;
 
                 ElementHatRender<?> hat = new ElementHatRender<ElementHatRender<?>>(list, parent.parentElement.hatOrigin, level, btn -> {
+                    if(btn.hatLevel.isNew)
+                    {
+                        btn.hatLevel.isNew = false;
+                    }
+
                     HatsSavedData.HatPart copy = btn.hatLevel.createCopy();
                     copy.isShowing = btn.toggleState;
-                    parent.parent.notifyChanged(btn.hatOrigin.setModifier(copy));
-                    HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, btn.hatOrigin.setModifier(copy));
+                    parent.parent.setNewHat(btn.hatOrigin.setModifier(copy), true);
                 }
                 ){
                     @Override
@@ -242,7 +246,7 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
 
             //This is in relation of the new parentElementPosition
             int maxHeight = parentFragment.parent.windowHatsList.height - (parentFragment.parent.windowHatsList.borderSize.get() * 4);
-            int idealHeight = (parentFragment.parentElement.hatLevel.hatParts.size() * 73) + 5; //70 + 3 padding each + 2x padding (2 each) //TODO make the scrollbar completely optional so that we can just not have it.
+            int idealHeight = (parentFragment.parentElement.hatLevel.hatParts.size() * 73) + 5; //70 + 3 padding each + 2x padding (2 each)
             int targetHeight = Math.min(idealHeight, maxHeight);
 
             int targetY = parentFragment.getTop();
@@ -256,7 +260,7 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                 }
             }
             int targetX = parentFragment.parentElement.getRight() + (hatsListPadding * 4);
-            int targetWidth = 60 + (idealHeight > maxHeight ? 14 : 0); //50 width + 2x list padding and border (5 x 2) + padding to scroll (4) + scrolll (14) + 2x padding (6)//TODO update this? Calculate number of accessories to fit on screen and if we need a scroll bar or not
+            int targetWidth = 60 + (idealHeight > maxHeight ? 14 : 0); //50 width + 2x list padding and border (5 x 2) + padding to scroll (4) + scrolll (14) + 2x padding (6)
 
             parentFragment.setTop((int)(parentFragment.getTop() + (targetY - parentFragment.getTop()) * prog));
             parentFragment.posX = (int)(parentFragment.parentElement.getLeft() + (targetX - parentFragment.parentElement.getLeft()) * prog);
@@ -348,7 +352,7 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
         public void setScissor()
         {
             int hatRend = 50 + 12 + 3 + 6; //element + borders + padding + our border
-            RenderHelper.startGlScissor(getLeft() - hatRend, getTop() - 6, width + hatRend + 6, height + 12);
+            RenderHelper.startGlScissor(getLeft() - hatRend, getTop() - 6 - 70, width + hatRend + 6, height + 12 + 140);
         }
 
         @Override

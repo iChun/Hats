@@ -73,7 +73,7 @@ public class HatHandler //Handles most of the server-related things.
             hats.add(pool);
         }
 
-        Hats.LOGGER.info("Allocated Hat Pools.");
+        Hats.LOGGER.info("Allocated Hat Pools."); //TODO why are we being triggered three times?
     }
 
     public static EnumRarity getRarityForChance(double chance)

@@ -170,6 +170,16 @@ public class HatsSavedData extends WorldSavedData
             return newStuff;
         }
 
+        public HatPart setNoNew()
+        {
+            isNew = false;
+            for(HatPart hatPart : hatParts)
+            {
+                hatPart.setNoNew();
+            }
+            return this;
+        }
+
         public boolean hasFavourite()
         {
             boolean hasFav = isFavourite;
@@ -181,6 +191,16 @@ public class HatsSavedData extends WorldSavedData
                 }
             }
             return hasFav;
+        }
+
+        public HatPart setNoFavourite()
+        {
+            isFavourite = false;
+            for(HatPart hatPart : hatParts)
+            {
+                hatPart.setNoFavourite();
+            }
+            return this;
         }
 
         public boolean add(HatPart part)
@@ -200,6 +220,11 @@ public class HatsSavedData extends WorldSavedData
                             break;
                         }
                     }
+                }
+
+                for(HatPart newPart : partParts)
+                {
+                    newPart.setNew();
                 }
 
                 hatParts.addAll(partParts); //add the accessories that don't match

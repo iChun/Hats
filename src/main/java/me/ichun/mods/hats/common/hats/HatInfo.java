@@ -36,7 +36,7 @@ public class HatInfo
     public UUID contributorUUID;
 
     public String accessoryFor;
-    public String accessoryLayer;
+    public ArrayList<String> accessoryLayer = new ArrayList<>(); //TODO convert this to arraylist
     public String accessoryParent;
 
     @OnlyIn(Dist.CLIENT)
@@ -185,7 +185,7 @@ public class HatInfo
             }
             else if(note.startsWith("hats-accessory-layer:"))
             {
-                accessoryLayer = note.substring("hats-accessory-layer:".length()).trim();
+                accessoryLayer.add(note.substring("hats-accessory-layer:".length()).trim());
             }
             else if(note.startsWith("hats-accessory-parent:"))
             {
@@ -308,9 +308,12 @@ public class HatInfo
             if(HatHandler.RAND.nextDouble() < accChance) //spawn the accessory
             {
                 spawningAccessories.add(accessory);
-                if(accessory.accessoryLayer != null) //look for conflicts for accessories  that already got to spawn
+                if(!accessory.accessoryLayer.isEmpty()) //look for conflicts for accessories  that already got to spawn
                 {
-                    conflicts.computeIfAbsent(accessory.accessoryLayer, k -> new ArrayList<>()).add(accessory);
+                    for(String layer : accessory.accessoryLayer)
+                    {
+                        conflicts.computeIfAbsent(layer, k -> new ArrayList<>()).add(accessory);
+                    }
                 }
             }
         }

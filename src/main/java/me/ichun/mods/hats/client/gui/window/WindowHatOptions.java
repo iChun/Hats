@@ -1,16 +1,15 @@
 package me.ichun.mods.hats.client.gui.window;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
 import me.ichun.mods.hats.common.Hats;
-import me.ichun.mods.ichunutil.client.gui.bns.window.Fragment;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.*;
-import me.ichun.mods.ichunutil.client.render.RenderHelper;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementButtonTextured;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementToggleTextured;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -137,10 +136,9 @@ public class WindowHatOptions extends Window<WorkspaceHats>
                 btnStackLast = btnStack;
             }
 
-
             //FAVOURITE
             ElementToggleTextured<?> btnToggle = new ElementToggleTextured<>(this, I18n.format("hats.gui.button.favouriteHat"), TEX_FAVOURITE, btn -> {
-                parent.parentElement.hatLevel.isFavourite = true;
+                parent.parentElement.hatLevel.isFavourite = !parent.parentElement.hatLevel.isFavourite;
                 parent.parent.notifyChanged(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
             });
             btnToggle.setSize(20, 20);
@@ -173,7 +171,7 @@ public class WindowHatOptions extends Window<WorkspaceHats>
         @Override
         public boolean mouseScrolled(double mouseX, double mouseY, double amount)
         {
-            return super.mouseScrolled(mouseX, mouseY, amount); //TODO allow scroll passthrough
+            return super.mouseScrolled(mouseX, mouseY, amount); //TODO allow scroll (and click) passthrough - maybe lets not obstruct the parent anymore? Just scissor d ifferently.
         }
 
         @Override
@@ -213,6 +211,15 @@ public class WindowHatOptions extends Window<WorkspaceHats>
         {
             super.tick();
             age++;
+
+            int offsetTime = 2;
+            if(age <= buttons.size() * offsetTime + Hats.configClient.guiAnimationTime)
+            {
+                for(Element<?> element : buttons)
+                {
+                    element.posX = 21;
+                }
+            }
         }
     }
 }

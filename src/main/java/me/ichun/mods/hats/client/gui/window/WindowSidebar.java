@@ -1,9 +1,11 @@
 package me.ichun.mods.hats.client.gui.window;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import me.ichun.mods.hats.client.gui.IHatSetter;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
 import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
@@ -16,6 +18,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class WindowSidebar extends Window<WorkspaceHats>
+    implements IHatSetter
 {
     public WindowSidebar(WorkspaceHats parent)
     {
@@ -40,6 +43,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
     public void renderBackground(MatrixStack stack){} //no BG
 
     public static class ViewSidebar extends View<WindowSidebar>
+            implements IHatSetter
     {
         public static ResourceLocation TEX_CANCEL = new ResourceLocation("hats", "textures/icon/cancel.png");
         public static ResourceLocation TEX_RANDOMISE = new ResourceLocation("hats", "textures/icon/randomise.png");
@@ -47,7 +51,9 @@ public class WindowSidebar extends Window<WorkspaceHats>
         public static ResourceLocation TEX_RELOAD = new ResourceLocation("hats", "textures/icon/reload.png");
         public static ResourceLocation TEX_CONFIRM = new ResourceLocation("hats", "textures/icon/confirm.png");
 
-        public ViewSidebar(@Nonnull WindowSidebar parent)
+        public ElementButtonTextured<?> cancelButton;
+
+        public ViewSidebar(@Nonnull WindowSidebar parent) //TODO head analyser for Tabula
         {
             super(parent, "hats.gui.window.sidebar");
 
@@ -57,16 +63,8 @@ public class WindowSidebar extends Window<WorkspaceHats>
             int padding = 2;
 
             //CANCEL button //TODO disable the button when there's no hat
-            btnStack = new ElementButtonTextured<>(this, TEX_CANCEL, btn -> {
-                HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, null); //remove the current hat
-
-                for(Element<?> element : ((WindowHatsList.ViewHatsList)parent.parent.windowHatsList.currentView).list.elements)
-                {
-                    if(element instanceof ElementHatRender)
-                    {
-                        ((ElementHatRender<?>)element).toggleState = false; //Deselect all the hat clicky thingimagigs
-                    }
-                }
+            cancelButton = btnStack = new ElementButtonTextured<>(this, TEX_CANCEL, btn -> {
+                parent.parent.setNewHat(null, false);
             });
             btnStack.setTooltip(I18n.format("hats.gui.button.removeHat"));
             btnStack.setSize(20, 20);
@@ -81,7 +79,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
                 if(element1 instanceof ElementHatRender)
                 {
                     ((ElementHatRender<?>)element1).onClickRelease();
-                    ((ElementHatRender)element1).callback.accept(element1);
+                    ((ElementHatRender)element1).callback.accept(element1); //TODO shift + ctrl randomisation
                 }
             });
             btnStack.setTooltip(I18n.format("hats.gui.button.randomHat"));
@@ -112,6 +110,12 @@ public class WindowSidebar extends Window<WorkspaceHats>
             btnConfirm.setSize(20, 20);
             btnConfirm.constraints().left(this, Constraint.Property.Type.LEFT, 0).bottom(this, Constraint.Property.Type.BOTTOM, 0);
             elements.add(btnConfirm);
+        }
+
+        @Override
+        public void onNewHatSet(HatsSavedData.HatPart newHat)
+        {
+            cancelButton.disabled = newHat == null;
         }
 
         @Override

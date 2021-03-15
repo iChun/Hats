@@ -88,8 +88,7 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             svR.setId("colouriserR");
             svR.setCallback(scrollbar -> {
                 parent.parentElement.hatLevel.colouriser[0] = 1F - scrollbar.scrollProg;
-                parent.parent.notifyChanged(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
-                HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+                parent.parent.setNewHat(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel), true);
             }).setScrollProg(1F - parent.parentElement.hatLevel.colouriser[0]);
             elements.add(svR);
 
@@ -103,8 +102,7 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             svG.setId("colouriserG");
             svG.setCallback(scrollbar -> {
                 parent.parentElement.hatLevel.colouriser[1] = 1F - scrollbar.scrollProg;
-                parent.parent.notifyChanged(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
-                HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+                parent.parent.setNewHat(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel), true);
             }).setScrollProg(1F - parent.parentElement.hatLevel.colouriser[1]);
             elements.add(svG);
 
@@ -118,8 +116,7 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             svB.setId("colouriserB");
             svB.setCallback(scrollbar -> {
                 parent.parentElement.hatLevel.colouriser[2] = 1F - scrollbar.scrollProg;
-                parent.parent.notifyChanged(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
-                HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+                parent.parent.setNewHat(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel), true);
             }).setScrollProg(1F - parent.parentElement.hatLevel.colouriser[2]);
             elements.add(svB);
 
@@ -133,8 +130,7 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             svA.setId("colouriserA");
             svA.setCallback(scrollbar -> {
                 parent.parentElement.hatLevel.colouriser[3] = 1F - scrollbar.scrollProg;
-                parent.parent.notifyChanged(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
-                HatHandler.assignSpecificHat(parentFragment.parent.hatEntity, parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel));
+                parent.parent.setNewHat(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel), true);
             }).setScrollProg(1F - parent.parentElement.hatLevel.colouriser[3]);
             elements.add(svA);
 

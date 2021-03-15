@@ -6,6 +6,7 @@ import me.ichun.mods.hats.client.gui.window.WindowHalfGreyout;
 import me.ichun.mods.hats.client.gui.window.WindowHatsList;
 import me.ichun.mods.hats.client.gui.window.WindowInputReceiver;
 import me.ichun.mods.hats.client.gui.window.WindowSidebar;
+import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
@@ -13,6 +14,7 @@ import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.Workspace;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
@@ -24,10 +26,12 @@ import net.minecraft.util.math.vector.Matrix4f;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class WorkspaceHats extends Workspace
+    implements IHatSetter
 {
     public static final DecimalFormat FORMATTER = new DecimalFormat("#,###,###"); //TODO double check the access transformers, which Heads do we no longer need
 
@@ -43,7 +47,7 @@ public class WorkspaceHats extends Workspace
 
     public ArrayList<HatsSavedData.HatPart> changedHats = new ArrayList<>();
 
-    public WorkspaceHats(Screen lastScreen, boolean fallback, @Nonnull LivingEntity hatEntity)
+    public WorkspaceHats(Screen lastScreen, boolean fallback, @Nonnull LivingEntity hatEntity) //TODO new hat tutorial.
     {
         super(lastScreen, new TranslationTextComponent("hats.gui.selection.title"), Hats.configClient.guiMinecraftStyle);
         windows.add(windowInput = new WindowInputReceiver(this));
@@ -59,8 +63,6 @@ public class WorkspaceHats extends Workspace
     @Override
     protected void init()
     {
-        //TODO ADD the hats list
-
         int padding = 10;
         windowHatsList.constraints().right(this, Constraint.Property.Type.RIGHT, padding + 22).top(this, Constraint.Property.Type.TOP, padding).bottom(this, Constraint.Property.Type.BOTTOM, padding);
         windowHatsList.setWidth((int)Math.floor((getWidth() / 2F)) - (padding + 22));
@@ -71,11 +73,11 @@ public class WorkspaceHats extends Workspace
         windowSidebar.setWidth(20);
         windowSidebar.constraint.apply();
 
-        super.init(); //TODO render the player in fallback mode.
+        super.init();
     }
 
     @Override
-    public void resize(Minecraft mc, int width, int height)
+    public void resize(Minecraft mc, int width, int height) //TODO a better indicators which hats can be accessorized? maybe a + where HAMBURGER is?
     {
         int padding = 10;
         windowHatsList.setWidth((int)Math.floor((width / 2F)) - (padding + 22));
@@ -127,7 +129,7 @@ public class WorkspaceHats extends Workspace
         ArrayList<HatsSavedData.HatPart> source = new ArrayList<>(usePlayerInventory() ? Hats.eventHandlerClient.hatsInventory.hatParts : HatResourceHandler.HAT_PARTS);
         HatResourceHandler.combineLists(source, changedHats);
         return source; //TODO sort in order of have and don't have.
-    }
+    } //TODO should this be cached?? this is really bad performance
 
     @Override
     public boolean canDockWindows()
@@ -142,7 +144,7 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void addWindowWithGreyout(Window<?> window) //TODO window for ALL available hats.
+    public void addWindowWithGreyout(Window<?> window) //TODO window/tab for ALL available hats.
     {
         WindowHalfGreyout greyout = new WindowHalfGreyout(this, window);
         addWindow(greyout);
@@ -208,7 +210,7 @@ public class WorkspaceHats extends Workspace
     public void resetBackground()
     {
         RenderSystem.popMatrix();
-    }
+    } //TODO TOOLTIP! credit authors!! hat pack authors?
 
     @Override
     public void tick()
@@ -219,7 +221,7 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void onClose()
+    public void onClose() //TODO disable hat remove button when no hat.
     {
         super.onClose();
 
@@ -246,5 +248,32 @@ public class WorkspaceHats extends Workspace
         {
             changedHats.add(part);
         }
+    }
+
+    public void setNewHat(@Nullable HatsSavedData.HatPart newHat, boolean notify)
+    {
+        if(newHat == null)
+        {
+            HatHandler.assignSpecificHat(hatEntity, null); //remove the current hat
+
+            for(Element<?> element : windowHatsList.getCurrentView().list.elements)
+            {
+                if(element instanceof ElementHatRender)
+                {
+                    ((ElementHatRender<?>)element).toggleState = false; //Deselect all the hat clicky thingimagigs
+                }
+            }
+        }
+        else
+        {
+            if(notify)
+            {
+                notifyChanged(newHat);
+            }
+
+            HatHandler.assignSpecificHat(hatEntity, newHat); //remove the current hat
+        }
+
+        onNewHatSet(newHat);
     }
 }
