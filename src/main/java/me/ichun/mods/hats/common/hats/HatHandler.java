@@ -1,6 +1,7 @@
 package me.ichun.mods.hats.common.hats;
 
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.packet.PacketEntityHatDetails;
 import me.ichun.mods.hats.common.packet.PacketNewHatPart;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
@@ -11,6 +12,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -266,6 +268,44 @@ public class HatHandler //Handles most of the server-related things.
 
             saveData.markDirty();
         }
+    }
+
+    public static void setPlayerHatCustomisation(ServerPlayerEntity player, ArrayList<HatsSavedData.HatPart> customisedHats, @Nullable HatsSavedData.HatPart hatChange)
+    {
+        if(hatChange != null)
+        {
+            setPlayerHat(player, hatChange);
+        }
+
+        if(!customisedHats.isEmpty())
+        {
+            HatsSavedData.PlayerHatData playerHatData = saveData.playerHats.computeIfAbsent(player.getGameProfile().getId(), k -> new HatsSavedData.PlayerHatData(player.getGameProfile().getId()));
+            for(HatsSavedData.HatPart hatPart : playerHatData.hatParts)
+            {
+                for(int i = customisedHats.size() - 1; i >= 0; i--)
+                {
+                    HatsSavedData.HatPart customisedHat = customisedHats.get(i);
+                    if(hatPart.copyPersonalisation(customisedHat))
+                    {
+                        customisedHats.remove(i);
+                    }
+                }
+            }
+            for(HatsSavedData.HatPart customisedHat : customisedHats) //these are hats we don't own.
+            {
+                customisedHat.setCountTo(0);
+                playerHatData.hatParts.add(customisedHat);
+            }
+            saveData.markDirty();
+        }
+    }
+
+    public static void setPlayerHat(ServerPlayerEntity player, HatsSavedData.HatPart part)
+    {
+        HatHandler.assignSpecificHat(player, part);
+        HashMap<Integer, HatsSavedData.HatPart> deets = new HashMap<>();
+        deets.put(player.getEntityId(), part);
+        Hats.channel.sendTo(new PacketEntityHatDetails(deets), PacketDistributor.TRACKING_ENTITY.with(() -> player));
     }
 
     public static @Nonnull CompoundNBT getPlayerHatsNBT(PlayerEntity player)

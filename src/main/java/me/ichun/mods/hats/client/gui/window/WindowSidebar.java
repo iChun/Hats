@@ -66,15 +66,19 @@ public class WindowSidebar extends Window<WorkspaceHats>
             cancelButton = btnStack = new ElementButtonTextured<>(this, TEX_CANCEL, btn -> {
                 parent.parent.setNewHat(null, false);
             });
+            if(parent.parent.hatDetails.name.isEmpty())
+            {
+                cancelButton.disabled = true;
+            }
             btnStack.setTooltip(I18n.format("hats.gui.button.removeHat"));
-            btnStack.setSize(20, 20); //TODO disable when opening the UI
+            btnStack.setSize(20, 20);
             btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(this, Constraint.Property.Type.TOP, 0);
             elements.add(btnStack);
             btnStackLast = btnStack;
 
             //RANDOMISE
             btnStack = new ElementButtonTextured<>(this, TEX_RANDOMISE, btn -> {
-                List<Element<?>> elements = ((WindowHatsList.ViewHatsList)parent.parent.windowHatsList.currentView).list.elements;
+                List<Element<?>> elements = parent.parent.windowHatsList.getCurrentView().list.elements;
                 Element<?> element1 = elements.get(parentFragment.parent.hatEntity.getRNG().nextInt(elements.size()));
                 if(element1 instanceof ElementHatRender)
                 {
@@ -106,7 +110,10 @@ public class WindowSidebar extends Window<WorkspaceHats>
 
 
             //CONFIRM button
-            ElementButtonTextured<?> btnConfirm = new ElementButtonTextured<>(this, TEX_CONFIRM, btn -> {});
+            ElementButtonTextured<?> btnConfirm = new ElementButtonTextured<>(this, TEX_CONFIRM, btn -> {
+                parent.parent.confirmed = true;
+                parent.parent.closeScreen();
+            });
             btnConfirm.setSize(20, 20);
             btnConfirm.constraints().left(this, Constraint.Property.Type.LEFT, 0).bottom(this, Constraint.Property.Type.BOTTOM, 0);
             elements.add(btnConfirm);

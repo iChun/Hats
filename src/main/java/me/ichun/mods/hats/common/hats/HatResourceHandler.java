@@ -159,15 +159,15 @@ public class HatResourceHandler
                 Hats.LOGGER.warn("Loaded an old Tabula file. Updating to new Tabula & Hats format: {}", file);
             }
 
-//            if(file.getAbsolutePath().contains("mods\\hats\\Top Hat") && !file.getAbsolutePath().contains("Soda Top"))
-//            {
-//                for(Project.Part allPart : project.getAllParts())
-//                {
-//                    allPart.rotPY += 1F;
-//                }
-//                project.save(file);
-//                Hats.LOGGER.info("Resaved: {}", file);
-//            }
+            //            if(file.getAbsolutePath().contains("mods\\hats\\Top Hat") && !file.getAbsolutePath().contains("Soda Top"))
+            //            {
+            //                for(Project.Part allPart : project.getAllParts())
+            //                {
+            //                    allPart.rotPY += 1F;
+            //                }
+            //                project.save(file);
+            //                Hats.LOGGER.info("Resaved: {}", file);
+            //            }
             //            if(file.getName().startsWith("(C) ")) //it's a contributor hat
             //            {
             //                parseMeta(file, project);
@@ -228,9 +228,14 @@ public class HatResourceHandler
         HAT_ACCESSORIES.clear(); //we don't need you anymore
     }
 
-    public static HatInfo getInfoAndSetToPart(HatsSavedData.HatPart part)
+    public static HatInfo getInfo(HatsSavedData.HatPart part)
     {
-        HatInfo hatInfo = HATS.get(part.name);
+        return HATS.get(part.name);
+    }
+
+    public static HatInfo getInfoAndSetToPart(HatsSavedData.HatPart part) //For rendering.
+    {
+        HatInfo hatInfo = getInfo(part);
         if(hatInfo != null)
         {
             hatInfo.matchPart(part);

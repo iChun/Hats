@@ -87,7 +87,8 @@ public class Hats
                 PacketRequestHeadInfos.class,
                 PacketHeadInfos.class,
                 PacketNewHatPart.class,
-                PacketUpdateHats.class
+                PacketUpdateHats.class,
+                PacketHatCustomisation.class
         );
 
 

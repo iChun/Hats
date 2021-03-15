@@ -113,10 +113,10 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
 
             for(int i = 0; i < parent.parentElement.hatLevel.hatParts.size(); i++)
             {
-                HatsSavedData.HatPart level = parent.parentElement.hatLevel.hatParts.get(i).createCopy();
+                HatsSavedData.HatPart level = parent.parentElement.hatLevel.hatParts.get(i);
                 boolean isShowing = level.isShowing;
 
-                HatInfo info = HatResourceHandler.getInfoAndSetToPart(parent.parentElement.hatOrigin.createCopy().setModifier(level));
+                HatInfo info = HatResourceHandler.getInfo(parent.parentElement.hatOrigin);
                 HatInfo accessoryInfo = null;
                 if(info != null)
                 {
@@ -129,7 +129,6 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                         }
                     }
                 }
-                level.isShowing = true;
 
                 final HatInfo accessoryInfoFinal = accessoryInfo;
                 ElementHatRender<?> hat = new ElementHatRender<ElementHatRender<?>>(list, parent.parentElement.hatOrigin, level, btn -> {
@@ -138,9 +137,8 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                         btn.hatLevel.isNew = false;
                     }
 
-                    HatsSavedData.HatPart copy = btn.hatLevel.createCopy();
-                    copy.isShowing = btn.toggleState;
-                    parent.parent.setNewHat(btn.hatOrigin.setModifier(copy), true);
+                    btn.hatLevel.isShowing = btn.toggleState;
+                    parent.parent.setNewHat(btn.hatOrigin.setModifier(btn.hatLevel), true);
 
                     if(accessoryInfoFinal != null && !accessoryInfoFinal.accessoryLayer.isEmpty())
                     {
@@ -156,6 +154,15 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                     }
                 }
                 ){
+                    @Override
+                    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
+                    {
+                        boolean isShowing = hatLevel.isShowing;
+                        hatLevel.isShowing = true;
+                        super.render(stack, mouseX, mouseY, partialTick);
+                        hatLevel.isShowing = isShowing;
+                    }
+
                     @Override
                     public boolean mouseReleased(double mouseX, double mouseY, int button) //we extended ElementRightClickable but we're not really much of that anymore
                     {
@@ -205,7 +212,7 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                 ElementHatRender<?> hat = (ElementHatRender<?>)element;
                 if(!hat.toggleState) //not toggled
                 {
-                    HatInfo info = HatResourceHandler.getInfoAndSetToPart(hat.hatOrigin.createCopy().setModifier(hat.hatLevel));
+                    HatInfo info = HatResourceHandler.getInfo(hat.hatOrigin.createCopy().setModifier(hat.hatLevel));
                     if(info != null)
                     {
                         HatInfo accessoryInfo = info.getInfoFor(hat.hatLevel.name);

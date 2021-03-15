@@ -209,6 +209,8 @@ public class HatsSavedData extends WorldSavedData
             {
                 count += part.count;
 
+                copyPersonalisation(part);
+
                 ArrayList<HatPart> partParts = new ArrayList<>(part.hatParts);
                 for(HatPart hatPart : hatParts) //look for matching accessories
                 {
@@ -234,27 +236,29 @@ public class HatsSavedData extends WorldSavedData
             return false;
         }
 
-        public boolean isIdenticalCustomisation(HatPart part)
+        public void setCountTo(int count)
         {
-            if(name.equals(part.name) && isFavourite == part.isFavourite && isShowing == part.isShowing && Arrays.equals(colouriser, part.colouriser) && hatParts.size() == part.hatParts.size())
+            this.count = count;
+            for(HatPart hatPart : hatParts)
             {
-                //compare the hatParts
+                hatPart.setCountTo(count);
+            }
+        }
+
+        public boolean copyPersonalisation(HatPart part)
+        {
+            if(name.equals(part.name))
+            {
+                isFavourite = part.isFavourite;
+                isNew = part.isNew;
+                isShowing = part.isShowing;
+                colouriser = part.colouriser.clone();
+
                 for(HatPart hatPart : hatParts)
                 {
-                    boolean foundTwin = false;
-
                     for(HatPart hatPart1 : part.hatParts)
                     {
-                        if(hatPart.isIdenticalCustomisation(hatPart1)) //compares as well
-                        {
-                            foundTwin = true;
-                            break;
-                        }
-                    }
-
-                    if(!foundTwin)
-                    {
-                        return false;
+                        hatPart.copyPersonalisation(hatPart1);
                     }
                 }
                 return true;

@@ -10,6 +10,7 @@ import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.packet.PacketHatCustomisation;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.Workspace;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
@@ -46,6 +47,8 @@ public class WorkspaceHats extends Workspace
     public WindowSidebar windowSidebar;
 
     public ArrayList<HatsSavedData.HatPart> changedHats = new ArrayList<>();
+
+    public boolean confirmed = false;
 
     public WorkspaceHats(Screen lastScreen, boolean fallback, @Nonnull LivingEntity hatEntity) //TODO new hat tutorial.
     {
@@ -126,7 +129,16 @@ public class WorkspaceHats extends Workspace
 
     public ArrayList<HatsSavedData.HatPart> getHatPartSource()
     {
-        ArrayList<HatsSavedData.HatPart> source = new ArrayList<>(usePlayerInventory() ? Hats.eventHandlerClient.hatsInventory.hatParts : HatResourceHandler.HAT_PARTS);
+        ArrayList<HatsSavedData.HatPart> source = new ArrayList<>();
+        if(usePlayerInventory())
+        {
+            source.addAll(Hats.eventHandlerClient.hatsInventory.hatParts);
+        }
+        else
+        {
+            source.addAll(HatResourceHandler.HAT_PARTS);
+            HatResourceHandler.combineLists(source, Hats.eventHandlerClient.hatsInventory.hatParts); //combine all the hats with our personalisation
+        }
         HatResourceHandler.combineLists(source, changedHats);
         return source; //TODO sort in order of have and don't have.
     } //TODO should this be cached?? this is really bad performance
@@ -225,7 +237,37 @@ public class WorkspaceHats extends Workspace
     {
         super.onClose();
 
-        HatHandler.assignSpecificHat(hatEntity, hatDetails); //Reset
+        if(!confirmed)
+        {
+            HatHandler.assignSpecificHat(hatEntity, hatDetails); //Reset
+        }
+
+        //Send to the server our customisations, and our new hat if we hit confirmed
+        if(!changedHats.isEmpty() || confirmed)
+        {
+            Hats.channel.sendToServer(new PacketHatCustomisation(changedHats, confirmed, confirmed ? HatHandler.getHatPart(hatEntity) : new HatsSavedData.HatPart()));
+
+            for(HatsSavedData.HatPart hatPart : Hats.eventHandlerClient.hatsInventory.hatParts)
+            {
+                for(int i = changedHats.size() - 1; i >= 0; i--)
+                {
+                    HatsSavedData.HatPart changedHat = changedHats.get(i);
+                    if(hatPart.copyPersonalisation(changedHat))
+                    {
+                        changedHats.remove(i);
+                    }
+                }
+            }
+            for(HatsSavedData.HatPart customisedHat : changedHats) //these are hats we don't own.
+            {
+                HatsSavedData.HatPart copy = customisedHat.createCopy();
+                copy.setCountTo(0);
+                Hats.eventHandlerClient.hatsInventory.hatParts.add(copy);
+            }
+
+            changedHats.clear();
+            confirmed = false;
+        }
 
         Hats.eventHandlerClient.closeHatsMenu();
     }

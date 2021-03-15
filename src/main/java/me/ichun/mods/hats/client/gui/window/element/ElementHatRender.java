@@ -154,9 +154,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         int bottom = Math.min(getBottom() - 1, parentFragment.getBottom());
 
         HatsSavedData.HatPart partForRender = hatOrigin.createCopy().setNoNew().setNoFavourite().setModifier(hatLevel);
-        //        HatsSavedData.HatPart partForRender = hatOrigin;
 
-        HatInfo info = HatResourceHandler.getInfoAndSetToPart(partForRender);
         if(bottom - top > 0)
         {
             int oriRenderCount = Hats.eventHandlerClient.renderCount;
@@ -214,6 +212,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
         RenderSystem.disableBlend();
 
+        HatInfo info = HatResourceHandler.getInfo(partForRender);
         String hatName = info != null ? info.getDisplayNameFor(hatLevel.name) : "";
 
         int topDist = height - 6;
@@ -312,7 +311,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
     public String tooltip(double mouseX, double mouseY)
     {
         HatsSavedData.HatPart partForRender = hatOrigin.createCopy().setNoNew().setNoFavourite().setModifier(hatLevel);
-        HatInfo info = HatResourceHandler.getInfoAndSetToPart(partForRender);
+        HatInfo info = HatResourceHandler.getInfo(partForRender);
         if(info != null)
         {
             HatInfo accessoryInfo = info.getInfoFor(hatLevel.name);
