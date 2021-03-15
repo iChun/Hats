@@ -62,12 +62,12 @@ public class WindowSidebar extends Window<WorkspaceHats>
 
             int padding = 2;
 
-            //CANCEL button //TODO disable the button when there's no hat
+            //CANCEL button
             cancelButton = btnStack = new ElementButtonTextured<>(this, TEX_CANCEL, btn -> {
                 parent.parent.setNewHat(null, false);
             });
             btnStack.setTooltip(I18n.format("hats.gui.button.removeHat"));
-            btnStack.setSize(20, 20);
+            btnStack.setSize(20, 20); //TODO disable when opening the UI
             btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(this, Constraint.Property.Type.TOP, 0);
             elements.add(btnStack);
             btnStackLast = btnStack;

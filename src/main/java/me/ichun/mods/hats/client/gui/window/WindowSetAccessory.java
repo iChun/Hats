@@ -6,12 +6,15 @@ import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatsScrollView;
 import me.ichun.mods.hats.common.Hats;
-import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.hats.HatInfo;
+import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Fragment;
+import me.ichun.mods.ichunutil.client.gui.bns.window.IWindows;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementScrollBar;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -20,6 +23,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
+import java.util.HashSet;
 
 public class WindowSetAccessory extends Window<WorkspaceHats>
 {
@@ -71,6 +75,11 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
         public int age;
         public float renderTick = 0F;
 
+        public Window<?> windowDummy;
+
+        public ElementHatsScrollView list;
+        public HashSet<String> conflicts = new HashSet<>();
+
         public ViewSetAccessory(@Nonnull WindowSetAccessory parent)
         {
             super(parent, "hats.gui.window.hat.personaliser");
@@ -90,7 +99,7 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                 elements.add(sv);
             }
 
-            ElementHatsScrollView list = new ElementHatsScrollView(this);
+            list = new ElementHatsScrollView(this);
             list.constraints().top(this, Constraint.Property.Type.TOP, padding + 1)
                     .bottom(this, Constraint.Property.Type.BOTTOM, padding + 1)
                     .left(this, Constraint.Property.Type.LEFT, padding + 1)
@@ -106,8 +115,23 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             {
                 HatsSavedData.HatPart level = parent.parentElement.hatLevel.hatParts.get(i).createCopy();
                 boolean isShowing = level.isShowing;
+
+                HatInfo info = HatResourceHandler.getInfoAndSetToPart(parent.parentElement.hatOrigin.createCopy().setModifier(level));
+                HatInfo accessoryInfo = null;
+                if(info != null)
+                {
+                    accessoryInfo = info.getInfoFor(level.name);
+                    if(accessoryInfo != null)
+                    {
+                        if(isShowing)
+                        {
+                            conflicts.addAll(accessoryInfo.accessoryLayer);
+                        }
+                    }
+                }
                 level.isShowing = true;
 
+                final HatInfo accessoryInfoFinal = accessoryInfo;
                 ElementHatRender<?> hat = new ElementHatRender<ElementHatRender<?>>(list, parent.parentElement.hatOrigin, level, btn -> {
                     if(btn.hatLevel.isNew)
                     {
@@ -117,6 +141,19 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                     HatsSavedData.HatPart copy = btn.hatLevel.createCopy();
                     copy.isShowing = btn.toggleState;
                     parent.parent.setNewHat(btn.hatOrigin.setModifier(copy), true);
+
+                    if(accessoryInfoFinal != null && !accessoryInfoFinal.accessoryLayer.isEmpty())
+                    {
+                        if(btn.toggleState)
+                        {
+                            conflicts.addAll(accessoryInfoFinal.accessoryLayer);
+                        }
+                        else
+                        {
+                            conflicts.removeAll(accessoryInfoFinal.accessoryLayer);
+                        }
+                        updateConflicts();
+                    }
                 }
                 ){
                     @Override
@@ -128,7 +165,7 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                         boolean flag = getListener() != null && getListener().mouseReleased(mouseX, mouseY, button);
 
                         parentFragment.setListener(null); //we're a one time click, stop focusing on us
-                        if(!disabled && isMouseOver(mouseX, mouseY))
+                        if(!(disabled || hasConflict) && isMouseOver(mouseX, mouseY))
                         {
                             if(button == 0 || button == 1 && !toggleState)
                             {
@@ -156,6 +193,77 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                 hat.setToggled(isShowing);
                 hat.setSize(50, 70);
                 list.addElement(hat);
+            }
+
+            updateConflicts();
+        }
+
+        public void updateConflicts()
+        {
+            for(Element<?> element : list.elements)
+            {
+                ElementHatRender<?> hat = (ElementHatRender<?>)element;
+                if(!hat.toggleState) //not toggled
+                {
+                    HatInfo info = HatResourceHandler.getInfoAndSetToPart(hat.hatOrigin.createCopy().setModifier(hat.hatLevel));
+                    if(info != null)
+                    {
+                        HatInfo accessoryInfo = info.getInfoFor(hat.hatLevel.name);
+                        if(accessoryInfo != null)
+                        {
+                            boolean hasConflict = false;
+                            for(String s : accessoryInfo.accessoryLayer)
+                            {
+                                if(conflicts.contains(s))
+                                {
+                                    hasConflict = true;
+                                    break;
+                                }
+                            }
+                            hat.hasConflict = hasConflict;
+                        }
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void init()
+        {
+            super.init();
+
+            if(windowDummy == null)
+            {
+                windowDummy = new Window<IWindows>(parentFragment.parent)
+                {
+                    @Override
+                    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick) //just be invisible and block things
+                    {
+                    }
+                };
+
+                windowDummy.disableBringToFront();
+                windowDummy.disableDocking();
+                windowDummy.disableDockStacking();
+                windowDummy.disableUndocking();
+                windowDummy.disableDrag();
+                windowDummy.disableDragResize();
+                windowDummy.disableTitle();
+                windowDummy.isNotUnique();
+
+                parentFragment.parent.addWindow(windowDummy);
+                windowDummy.init();
+            }
+        }
+
+        @Override
+        public void onClose()
+        {
+            super.onClose();
+
+            if(windowDummy != null)
+            {
+                parentFragment.parent.removeWindow(windowDummy);
             }
         }
 
@@ -237,7 +345,7 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
 
             int hatViewWidth = parentFragment.parentElement.getWidth();
             int hatViewLeft = parentFragment.parentElement.getLeft();
-            int targetElementX = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.getLeft() + hatsListPadding;
+            int targetElementX = parentFragment.parent.windowHatsList.getCurrentView().list.getLeft() + hatsListPadding;
             int hatViewTop = parentFragment.parentElement.getTop();
 
             parentFragment.parentElement.setLeft((int)(hatViewLeft + (targetElementX - hatViewLeft) * prog));
@@ -269,7 +377,7 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             parentFragment.height = (int)(parentFragment.parentElement.height + (targetHeight - parentFragment.parentElement.height) * prog);
             parentFragment.resize(getWorkspace().getMinecraft(), parentFragment.width, parentFragment.height);
 
-            renderTick = partialTick; //TODO fix bug of hats clipping when accessory is too low on screen
+            renderTick = partialTick;
 
             //We're using RenderSystem instead of MatrixStack because of the entity render
             RenderSystem.translatef(0F, 0F, 30F);
@@ -298,6 +406,9 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             parentFragment.parentElement.width += doubProg;
             parentFragment.parentElement.posY -= singProg;
             parentFragment.parentElement.height += doubProg;
+
+            windowDummy.pos(parentFragment.parentElement.getLeft(), parentFragment.parentElement.getTop());
+            windowDummy.size(parentFragment.parentElement.getWidth(), parentFragment.parentElement.getHeight());
 
             if(renderMinecraftStyle())
             {

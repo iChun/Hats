@@ -10,6 +10,7 @@ import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementButtonTextured;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementToggleTextured;
+import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import net.minecraft.client.gui.IGuiEventListener;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -52,7 +53,7 @@ public class WindowHatOptions extends Window<WorkspaceHats>
     @Override
     public int getMinWidth()
     {
-        return parentElement.getWidth() + 21; //button +1 padding?
+        return 21; //button +1 padding?
     }
 
     @Override
@@ -67,9 +68,9 @@ public class WindowHatOptions extends Window<WorkspaceHats>
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double amount)
+    public void setScissor()
     {
-        return super.mouseScrolled(mouseX, mouseY, amount);
+        currentView.setScissor();
     }
 
     @Override
@@ -169,12 +170,6 @@ public class WindowHatOptions extends Window<WorkspaceHats>
         public void renderBackground(MatrixStack stack){}
 
         @Override
-        public boolean mouseScrolled(double mouseX, double mouseY, double amount)
-        {
-            return super.mouseScrolled(mouseX, mouseY, amount); //TODO allow scroll (and click) passthrough - maybe lets not obstruct the parent anymore? Just scissor d ifferently.
-        }
-
-        @Override
         public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
         {
             int offsetTime = 2;
@@ -220,6 +215,12 @@ public class WindowHatOptions extends Window<WorkspaceHats>
                     element.posX = 21;
                 }
             }
+        }
+
+        @Override
+        public void setScissor()
+        {
+            RenderHelper.startGlScissor(getLeft(), getTop(), width + parentFragment.parentElement.getWidth(), height);
         }
     }
 }

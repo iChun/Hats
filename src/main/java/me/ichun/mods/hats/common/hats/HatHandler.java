@@ -145,6 +145,7 @@ public class HatHandler //Handles most of the server-related things.
         HatInfo hatInfo = pool.getRandomHat();
         hatPart.name = hatInfo.name;
         hatPart.count = 1;
+        hatPart.isShowing = true;
 
         hatInfo.assignAccessoriesToPart(hatPart, ent);
     }
@@ -175,6 +176,7 @@ public class HatHandler //Handles most of the server-related things.
 
     private static void addNamesOfLackingParts(ArrayList<String> names, @Nullable HatsSavedData.HatPart source, @Nonnull HatsSavedData.HatPart target)
     {
+        //ONLY USE THIS FOR WHEN WE ADD A NEW HAT!! WE MARK AS NEW!
         //We do it for this level's children first
         ArrayList<String> parts = new ArrayList<>();
         for(HatsSavedData.HatPart hatPart : target.hatParts)

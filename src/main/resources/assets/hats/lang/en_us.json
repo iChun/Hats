@@ -34,5 +34,9 @@
 
   "hats.gui.button.reset": "Reset",
 
+  "hats.gui.tooltip.author": "Made by: %s",
+  "hats.gui.tooltip.rarity": "Rarity: %s",
+  "hats.gui.tooltip.worth": "Worth %s <CURRENCY>",
+
   "hats.plugin.tabula.button": "Open Hat"
 }

@@ -77,7 +77,7 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void resize(Minecraft mc, int width, int height) //TODO a better indicators which hats can be accessorized? maybe a + where HAMBURGER is?
+    public void resize(Minecraft mc, int width, int height)
     {
         int padding = 10;
         windowHatsList.setWidth((int)Math.floor((width / 2F)) - (padding + 22));
@@ -86,7 +86,7 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void renderWindows(MatrixStack stack, int mouseX, int mouseY, float partialTick) //TODO ! on a hat when new hat/accesory unlocked??
+    public void renderWindows(MatrixStack stack, int mouseX, int mouseY, float partialTick)
     {
         boolean invisibleEnt = hatEntity.isInvisible();
         if(invisibleEnt)
@@ -124,7 +124,7 @@ public class WorkspaceHats extends Workspace
         return !(Minecraft.getInstance().player.isCreative() && !Hats.configServer.enableCreativeModeHadHunting);
     }
 
-    public ArrayList<HatsSavedData.HatPart> getHatPartSource() //TODO TOOLTIP for hats: name + rarity + accessory count?
+    public ArrayList<HatsSavedData.HatPart> getHatPartSource()
     {
         ArrayList<HatsSavedData.HatPart> source = new ArrayList<>(usePlayerInventory() ? Hats.eventHandlerClient.hatsInventory.hatParts : HatResourceHandler.HAT_PARTS);
         HatResourceHandler.combineLists(source, changedHats);

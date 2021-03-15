@@ -7,11 +7,9 @@ import me.ichun.mods.ichunutil.common.config.ConfigBase;
 import me.ichun.mods.ichunutil.common.config.annotations.CategoryDivider;
 import me.ichun.mods.ichunutil.common.config.annotations.Prop;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
-import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.loading.FMLEnvironment;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -51,6 +49,7 @@ public class ConfigServer extends ConfigBase
     @Prop(min = 0)
     public double accessoryCostMultiplier = 1.5D;
 
+    @Prop(min = 0)
     public double salesCostMultiplier = 10D;
 
     public double bossHatChanceBonus = 0.1D;
@@ -163,8 +162,7 @@ public class ConfigServer extends ConfigBase
         {
             try
             {
-                Integer.parseInt((String)o);
-                return true;
+                return Integer.parseInt((String)o) >= 0;
             }
             catch(NumberFormatException e)
             {

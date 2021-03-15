@@ -29,8 +29,10 @@ public class HatInfo
     public final ArrayList<String> hideParent = new ArrayList<>();
 
     private EnumRarity rarity; //Config synching should set this for the client
+    private int worth = -1;
 
     public String forcedPool;
+    public int forcedWorth = -1;
     public EnumRarity forcedRarity;
 
     public UUID contributorUUID;
@@ -58,23 +60,6 @@ public class HatInfo
         return (contributorUUID != null ? TextFormatting.AQUA : getRarity().getColour()).toString() + name;
     }
 
-    public String getDisplayNameOf(String s)
-    {
-        if(name.equals(s))
-        {
-            return getDisplayName();
-        }
-        for(HatInfo accessory : accessories)
-        {
-            String accName = accessory.getDisplayNameOf(s);
-            if(!accName.equals(s)) //actually display name
-            {
-                return accName;
-            }
-        }
-        return s;
-    }
-
     public EnumRarity getRarity()
     {
         if(rarity == null)
@@ -99,6 +84,20 @@ public class HatInfo
         this.rarity = rarity;
     }
 
+    public int getWorth()
+    {
+        if(worth < 0)
+        {
+            int value = Hats.configServer.coinByRarity.get(getRarity());
+            if(accessoryFor != null)
+            {
+                value = (int)Math.ceil(Hats.configServer.accessoryCostMultiplier * value);
+            }
+            worth = value;
+        }
+        return worth;
+    }
+
     @OnlyIn(Dist.CLIENT)
     public ModelHat getModel()
     {
@@ -117,7 +116,7 @@ public class HatInfo
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void render(MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, int packedOverlayIn)
+    public void render(MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, int packedOverlayIn, boolean cull)
     {
         if(!hidden)
         {
@@ -143,11 +142,11 @@ public class HatInfo
                 }
             }
 
-            getModel().render(stack, bufferIn.getBuffer(RenderType.getEntityTranslucentCull(project.getNativeImageResourceLocation())), packedLightIn, packedOverlayIn, colouriser[0], colouriser[1], colouriser[2], colouriser[3]);
+            getModel().render(stack, bufferIn.getBuffer(cull ? RenderType.getEntityTranslucentCull(project.getNativeImageResourceLocation()) : RenderType.getEntityTranslucent(project.getNativeImageResourceLocation())), packedLightIn, packedOverlayIn, colouriser[0], colouriser[1], colouriser[2], colouriser[3]);
 
             for(HatInfo accessory : accessories)
             {
-                accessory.render(stack, bufferIn, packedLightIn, packedOverlayIn);
+                accessory.render(stack, bufferIn, packedLightIn, packedOverlayIn, cull);
             }
         }
     }
@@ -170,6 +169,17 @@ public class HatInfo
             else if(note.startsWith("hats-pool:"))
             {
                 forcedPool = note.substring("hats-pool:".length()).trim();
+            }
+            else if(note.startsWith("hats-worth:"))
+            {
+                try
+                {
+                    forcedWorth = Integer.parseInt(note.substring("hats-worth:".length()).trim());
+                }
+                catch(NumberFormatException e)
+                {
+                    Hats.LOGGER.error("Error parsing forced worth of hat: \"{}\" from project: {}", note, this.project.saveFile);
+                }
             }
             else if(note.startsWith("hats-contributor-uuid:"))
             {
@@ -208,6 +218,11 @@ public class HatInfo
         accessories.addAll(newAccessories.stream().filter(info -> info.accessoryParent == null || info.accessoryParent.equals(name)).collect(Collectors.toList()));
         newAccessories.removeAll(accessories);
 
+        if(forcedWorth >= 0)
+        {
+            worth = forcedWorth;
+        }
+
         for(HatInfo accessory : accessories)
         {
             accessory.accessorise(newAccessories);
@@ -216,15 +231,21 @@ public class HatInfo
 
     public String getDisplayNameFor(String accessoryName)
     {
+        HatInfo info = getInfoFor(accessoryName);
+        return info != null ? info.getDisplayName() : null;
+    }
+
+    public HatInfo getInfoFor(String accessoryName)
+    {
         if(accessoryName.equals(name))
         {
-            return getDisplayName();
+            return this;
         }
         else
         {
             for(HatInfo accessory : accessories)
             {
-                String s = accessory.getDisplayNameFor(accessoryName);
+                HatInfo s = accessory.getInfoFor(accessoryName);
                 if(s != null)
                 {
                     return s;
@@ -232,6 +253,26 @@ public class HatInfo
             }
         }
         return null;
+    }
+
+    public int getWorthFor(String accessoryName, int bonus)
+    {
+        if(accessoryName.equals(name))
+        {
+            return getWorth() + bonus;
+        }
+        else
+        {
+            for(HatInfo accessory : accessories)
+            {
+                int s = accessory.getWorthFor(accessoryName, getWorth() + bonus);
+                if(s > 0)
+                {
+                    return s;
+                }
+            }
+        }
+        return -1;
     }
 
     public HatsSavedData.HatPart getAsHatPart(int count)
@@ -246,25 +287,6 @@ public class HatInfo
             part.hatParts.add(childPart);
         }
         return part;
-    }
-
-    public void setAccessoriesState(ArrayList<HatsSavedData.HatPart> enabled)
-    {
-        for(HatInfo accessory : accessories)
-        {
-            boolean show = false;
-
-            for(HatsSavedData.HatPart enabledAccessory : enabled)
-            {
-                if(accessory.name.equals(enabledAccessory.name) && enabledAccessory.count > 0)
-                {
-                    show = true;
-                    break;
-                }
-            }
-
-            accessory.hidden = show;
-        }
     }
 
     @Override
@@ -299,7 +321,7 @@ public class HatInfo
         {
             double accChance = Hats.configServer.rarityIndividual.get(accessory.getRarity().ordinal()); //calling getRarity sets the accessory's rarity.
 
-            HatHandler.RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID() + getFullName()).hashCode()) * 53579997854L); //Chat contributed random
+            HatHandler.RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID() + accessory.getFullName()).hashCode()) * 53579997854L); //Chat contributed random
             if(!ent.canChangeDimension()) //TODO Old isNonBoss(). Needs a new config or maybe set it in the JSON
             {
                 accChance += Hats.configServer.bossRarityBonus;
@@ -334,6 +356,7 @@ public class HatInfo
         for(HatInfo accessory : spawningAccessories)
         {
             HatsSavedData.HatPart accToSpawn = new HatsSavedData.HatPart(accessory.name);
+            accToSpawn.isShowing = true;
             hatPart.hatParts.add(accToSpawn);
 
             accessory.assignAccessoriesToPart(accToSpawn, ent);

@@ -192,7 +192,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
             HatInfo hatInfo = HatResourceHandler.getInfoAndSetToPart(hatDetails);
             if(hatInfo != null) //TODO conflicts layers? if accessories are shared
             {
-                hatInfo.render(stack, bufferIn, packedLightIn, packedOverlayIn);
+                hatInfo.render(stack, bufferIn, packedLightIn, packedOverlayIn, true);
 
                 Hats.eventHandlerClient.renderCount++;
 

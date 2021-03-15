@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class WindowHatsList extends Window<WorkspaceHats>
 {
-    public WindowHatsList(WorkspaceHats parent) //TODO reduce renderCount by 1 to make sure we render the hat.
+    public WindowHatsList(WorkspaceHats parent)
     {
         super(parent);
 

@@ -16,10 +16,12 @@ import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementClickab
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.math.vector.Vector3f;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.function.Consumer;
 
 public class ElementHatRender<T extends ElementHatRender>  extends ElementClickable<T>
@@ -54,7 +56,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         boolean flag = getListener() != null && getListener().mouseReleased(mouseX, mouseY, button);
 
         parentFragment.setListener(null); //we're a one time click, stop focusing on us
-        if(!disabled && isMouseOver(mouseX, mouseY))
+        if(!(disabled || hasConflict) && isMouseOver(mouseX, mouseY))
         {
             if(button == 0 || button == 1)
             {
@@ -70,10 +72,10 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
     public boolean isOverHamburger(double mouseX, double mouseY)
     {
-        return isMouseBetween(mouseX, getLeft(), getLeft() + 3 + getFontRenderer().getStringWidth(HAMBURGER) + 2) && isMouseBetween(mouseY, getTop(), getTop() + getFontRenderer().FONT_HEIGHT + 2);
+        return isMouseBetween(mouseX, getLeft(), getLeft() + 3 + getFontRenderer().getStringWidth(HAMBURGER) + 2) && isMouseBetween(mouseY, getTop(), getTop() + getFontRenderer().FONT_HEIGHT + 2) && !(disabled || hasConflict);
     }
 
-    public void spawnOptionsButtons() //TODO fix buttons spawning above/below the hats list? //TODO Fixx the shortcuts not working
+    public void spawnOptionsButtons()
     {
         if(Screen.hasControlDown() && !this.hatLevel.hatParts.isEmpty())
         {
@@ -89,7 +91,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
             WindowHatOptions windowHatOptions = new WindowHatOptions((WorkspaceHats)getWorkspace(), this);
             windowHatOptions.setPosX(getLeft() - 21);
             windowHatOptions.setPosY(getTop());
-            windowHatOptions.setWidth(getWidth() + 21);
+            windowHatOptions.setWidth(21);
             windowHatOptions.setHeight(getHeight());
             if(windowHatOptions.getWorkspace().hasInit())
             {
@@ -115,13 +117,13 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         super.render(stack, mouseX, mouseY, partialTick);
         if(renderMinecraftStyle())
         {
-            renderMinecraftStyleButton(stack, getLeft(), getTop(), width, height, disabled || parentFragment.isDragging() && parentFragment.getListener() == this || toggleState ? ButtonState.CLICK : hover ? ButtonState.HOVER : ButtonState.IDLE);
+            renderMinecraftStyleButton(stack, getLeft(), getTop(), width, height, (disabled || hasConflict) || parentFragment.isDragging() && parentFragment.getListener() == this || toggleState ? ButtonState.CLICK : hover ? ButtonState.HOVER : ButtonState.IDLE);
         }
         else
         {
             fill(stack, getTheme().elementButtonBorder, 0);
             int[] colour;
-            if(disabled)
+            if((disabled || hasConflict))
             {
                 colour = getTheme().elementButtonBackgroundInactive;
             }
@@ -157,6 +159,9 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         HatInfo info = HatResourceHandler.getInfoAndSetToPart(partForRender);
         if(bottom - top > 0)
         {
+            int oriRenderCount = Hats.eventHandlerClient.renderCount;
+            Hats.eventHandlerClient.renderCount = -1;
+
             RenderSystem.enableDepthTest();
             RenderSystem.depthMask(true);
 
@@ -193,16 +198,23 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
             RenderSystem.depthMask(false);
             RenderSystem.disableDepthTest();
+
+            Hats.eventHandlerClient.renderCount = oriRenderCount;
         }
 
         RenderSystem.enableBlend();
         RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
+        if(hasConflict)
+        {
+            RenderHelper.drawColour(stack, 255, 0, 0, 30, getLeft() + 1, getTop() + 1, width - 2, height - 2, 0);
+        }
+
         RenderHelper.drawColour(stack, 0, 0, 0, 120, getRight() - 10, getTop() + 1, 9, height - 2, 0);
 
         RenderSystem.disableBlend();
 
-        String hatName = info != null ? info.getDisplayNameOf(hatLevel.name) : "";
+        String hatName = info != null ? info.getDisplayNameFor(hatLevel.name) : "";
 
         int topDist = height - 6;
         if(parentFragment instanceof ElementHatsScrollView)
@@ -268,7 +280,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         }
 
 
-        if(parentFragment instanceof ElementHatsScrollView)
+        if(parentFragment instanceof ElementHatsScrollView && !(disabled || hasConflict))
         {
             if(hover) //only if we're hovering
             {
@@ -282,18 +294,44 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
                 stack.pop();
             }
-            else if(!hatLevel.hatParts.isEmpty()) //TODO remove render if WindowHatOptions is showing for this
+            else if(!hatLevel.hatParts.isEmpty())
             {
                 stack.push();
 
                 stack.translate(0F, 0F, 375F);
-
 
                 getFontRenderer().drawString(stack, "+", getLeft() + 3, getTop() + 2, renderMinecraftStyle() ? 14737632 : Theme.getAsHex(getTheme().fontDim));
 
                 stack.pop();
             }
         }
+    }
+
+    @Nullable
+    @Override
+    public String tooltip(double mouseX, double mouseY)
+    {
+        HatsSavedData.HatPart partForRender = hatOrigin.createCopy().setNoNew().setNoFavourite().setModifier(hatLevel);
+        HatInfo info = HatResourceHandler.getInfoAndSetToPart(partForRender);
+        if(info != null)
+        {
+            HatInfo accessoryInfo = info.getInfoFor(hatLevel.name);
+            if(accessoryInfo != null)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.append(accessoryInfo.getDisplayName()).append("\n");
+                if(!accessoryInfo.project.author.isEmpty())
+                {
+                    sb.append(I18n.format("hats.gui.tooltip.author", accessoryInfo.project.author)).append("\n");
+                }
+                sb.append(I18n.format("hats.gui.tooltip.rarity", accessoryInfo.getRarity().getColour().toString() + accessoryInfo.getRarity().toString())).append("\n").append("\n");
+                sb.append(I18n.format("hats.gui.tooltip.worth", info.getWorthFor(accessoryInfo.name, 0)));
+
+                return sb.toString();
+            }
+        }
+
+        return super.tooltip(mouseX, mouseY);
     }
 
     @Override
