@@ -29,7 +29,7 @@ public class ConfigServer extends ConfigBase
     public List<String> disabledMobs = new ArrayList<>();
 
     @Prop(validator = "numbersOnly")
-    public List<String> rarityWeight = new ArrayList<String>(){{
+    public List<String> rarityWeight = new ArrayList<String>(){{ //TODO disable the rarity if the weight is -1?? or something?
         add("21"); //Common - White
         add("13"); //Uncommon - Green
         add("8"); //Rare - Blue

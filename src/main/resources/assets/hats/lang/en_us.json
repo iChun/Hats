@@ -38,5 +38,10 @@
   "hats.gui.tooltip.rarity": "Rarity: %s",
   "hats.gui.tooltip.worth": "Worth %s <CURRENCY>",
 
-  "hats.plugin.tabula.button": "Open Hat"
+  "hats.plugin.tabula.button": "Open Hat",
+
+  "item.hats.hat_launcher": "Hat Launcher",
+
+  "subtitles.hats.hat_launcher.firing": "Hat launcher firing",
+  "subtitles.hats.hat_launcher.hit": "Hat forcibly forcing itself on an entity's head"
 }

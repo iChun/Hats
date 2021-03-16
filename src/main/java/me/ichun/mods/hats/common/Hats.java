@@ -4,32 +4,38 @@ import me.ichun.mods.hats.client.config.ConfigClient;
 import me.ichun.mods.hats.client.core.EventHandlerClient;
 import me.ichun.mods.hats.client.entity.EntityDummy;
 import me.ichun.mods.hats.client.module.tabula.HatsTabulaPlugin;
+import me.ichun.mods.hats.client.render.ItemRenderHatLauncher;
 import me.ichun.mods.hats.common.config.ConfigCommon;
 import me.ichun.mods.hats.common.config.ConfigServer;
 import me.ichun.mods.hats.common.core.EventHandlerServer;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.packet.*;
 import me.ichun.mods.hats.common.thread.ThreadReadHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
+import me.ichun.mods.ichunutil.client.item.ItemEffectHandler;
 import me.ichun.mods.ichunutil.client.key.KeyBind;
+import me.ichun.mods.ichunutil.client.model.item.ItemModelRenderer;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.network.PacketChannel;
+import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.client.settings.KeyConflictContext;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ExtensionPoint;
-import net.minecraftforge.fml.InterModComms;
-import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -37,6 +43,8 @@ import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
@@ -74,6 +82,9 @@ public class Hats
 
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        Items.REGISTRY.register(bus);
+        Sounds.REGISTRY.register(bus);
+
         bus.addListener(this::onCommonSetup);
         bus.addListener(this::finishLoading);
 
@@ -91,7 +102,6 @@ public class Hats
                 PacketHatCustomisation.class
         );
 
-
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             configClient = new ConfigClient().init();
 
@@ -101,6 +111,9 @@ public class Hats
 
             bus.addListener(this::onClientSetup);
             bus.addListener(this::enqueueIMC);
+            bus.addListener(this::onModelBake);
+
+            ItemEffectHandler.init();
 
             ModLoadingContext.get().registerExtensionPoint(ExtensionPoint.CONFIGGUIFACTORY, () -> me.ichun.mods.ichunutil.client.core.EventHandlerClient::getConfigGui);
         });
@@ -165,5 +178,26 @@ public class Hats
         {
             eventHandlerClient.addLayers(); //Let's add the layers
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void onModelBake(ModelBakeEvent event)
+    {
+        event.getModelRegistry().put(new ModelResourceLocation("hats:hat_launcher", "inventory"), new ItemModelRenderer(ItemRenderHatLauncher.INSTANCE));
+    }
+
+    public static class Items
+    {
+        private static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
+
+        public static final RegistryObject<ItemHatLauncher> HAT_LAUNCHER = REGISTRY.register("hat_launcher", () -> new ItemHatLauncher(new Item.Properties().group(ItemGroup.TOOLS)));
+    }
+
+    public static class Sounds
+    {
+        private static final DeferredRegister<SoundEvent> REGISTRY = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, MOD_ID); //.setRegistryName(new ResourceLocation("torched", "rpt") ??
+
+        public static final RegistryObject<SoundEvent> POOF = REGISTRY.register("poof", () -> new SoundEvent(new ResourceLocation("hats", "poof")));
+        public static final RegistryObject<SoundEvent> TUBE = REGISTRY.register("tube", () -> new SoundEvent(new ResourceLocation("hats", "tube")));
     }
 }

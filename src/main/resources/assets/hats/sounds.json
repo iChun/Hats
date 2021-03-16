@@ -1,0 +1,16 @@
+{
+  "tube": {
+    "category": "player",
+    "sounds": [
+      "hats:tube"
+    ],
+    "subtitle": "subtitles.hats.hat_launcher.firing"
+  },
+  "poof": {
+    "category": "player",
+    "sounds": [
+      "hats:poof"
+    ],
+    "subtitle": "subtitles.hats.hat_launcher.hit"
+  }
+}
