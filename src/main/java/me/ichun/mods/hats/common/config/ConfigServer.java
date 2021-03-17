@@ -80,7 +80,7 @@ public class ConfigServer extends ConfigBase
     @Override
     public synchronized void onConfigLoaded() //synchronised cause a client and server share it.
     {
-        if(EffectiveSide.get().isClient() && (ServerLifecycleHooks.getCurrentServer() != null && !ServerLifecycleHooks.getCurrentServer().isSinglePlayer())) //we're on single player, let's not reload the pool.
+        if(EffectiveSide.get().isClient() && (ServerLifecycleHooks.getCurrentServer() != null && ServerLifecycleHooks.getCurrentServer().isSinglePlayer())) //we're on single player, let's not reload the pool.
         {
             return;
         }

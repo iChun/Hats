@@ -152,6 +152,33 @@ public class HatsSavedData extends WorldSavedData
             return part;
         }
 
+        public HatPart createRandom(Random random)
+        {
+            HatPart part = new HatPart();
+            part.copy(this);
+
+            randomize(random);
+
+            return part;
+        }
+
+        public void randomize(Random random)
+        {
+            this.count = 1;
+            for(int i = hatParts.size() - 1; i >= 0; i--)
+            {
+                if(random.nextBoolean()) //you LOST the coin toss
+                {
+                    hatParts.remove(i);
+                }
+            }
+
+            for(HatPart hatPart : hatParts)
+            {
+                hatPart.randomize(random);
+            }
+        }
+
         public boolean isAHat()
         {
             return !name.isEmpty() && count >= 0;
@@ -230,6 +257,32 @@ public class HatsSavedData extends WorldSavedData
                 }
 
                 hatParts.addAll(partParts); //add the accessories that don't match
+
+                return true;
+            }
+            return false;
+        }
+
+        public boolean minusByOne(HatPart part)
+        {
+            if(!name.isEmpty() && name.equals(part.name)) //we are the same my buddy, we are the same my friend.
+            {
+                count -= 1;
+
+                copyPersonalisation(part);
+
+                ArrayList<HatPart> partParts = new ArrayList<>(part.hatParts);
+                for(HatPart hatPart : hatParts) //look for matching accessories
+                {
+                    for(int i = partParts.size() - 1; i >= 0; i--)
+                    {
+                        if(hatPart.minusByOne(partParts.get(i)) && hatPart.count <= 0) //if it matches
+                        {
+                            partParts.remove(i);
+                            break;
+                        }
+                    }
+                }
 
                 return true;
             }

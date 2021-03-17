@@ -10,6 +10,7 @@ import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.PacketDistributor;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class HatHandler //Handles most of the server-related things.
 {
@@ -270,6 +272,36 @@ public class HatHandler //Handles most of the server-related things.
         }
     }
 
+    public static ArrayList<HatsSavedData.HatPart> getHatSource(PlayerEntity player)
+    {
+        ArrayList<HatsSavedData.HatPart> source = new ArrayList<>();
+        if(HatHandler.useInventory(player))
+        {
+            source.addAll(getPlayerInventory(player));
+        }
+        else
+        {
+            for(HatsSavedData.HatPart hatPart : HatResourceHandler.HAT_PARTS)
+            {
+                source.add(hatPart.createCopy());
+            }
+            HatResourceHandler.combineLists(source, getPlayerInventory(player)); //combine all the hats with our personalisation
+        }
+        return source;
+    }
+
+    public static ArrayList<HatsSavedData.HatPart> getPlayerInventory(PlayerEntity player)
+    {
+        if(player.world.isRemote)
+        {
+            return Hats.eventHandlerClient.hatsInventory.hatParts;
+        }
+        else
+        {
+            return saveData.playerHats.computeIfAbsent(player.getGameProfile().getId(), k -> new HatsSavedData.PlayerHatData(player.getGameProfile().getId())).hatParts;
+        }
+    }
+
     public static void setPlayerHatCustomisation(ServerPlayerEntity player, ArrayList<HatsSavedData.HatPart> customisedHats, @Nullable HatsSavedData.HatPart hatChange)
     {
         if(hatChange != null)
@@ -342,5 +374,58 @@ public class HatHandler //Handles most of the server-related things.
         }
 
         return playerHatData.write(new CompoundNBT());
+    }
+
+    public static boolean useInventory(@Nonnull PlayerEntity player)
+    {
+        return !(player.isCreative() && !Hats.configServer.enableCreativeModeHadHunting);
+    }
+
+
+    // ItemStack based functions
+
+    public static HatsSavedData.HatPart getHatPart(ItemStack is) //Please check that it's ItemHatLauncher first
+    {
+        return is.getCapability(HatsSavedData.HatPart.CAPABILITY_INSTANCE).orElseThrow(() -> new IllegalArgumentException("Item " + is.toString() + " has no hat capabilities"));
+    }
+
+    public static HatsSavedData.HatPart getRandomHat(PlayerEntity player)
+    {
+        HatsSavedData.HatPart part = null;
+
+        ArrayList<HatsSavedData.HatPart> source = getHatSource(player);
+        if(!source.isEmpty())
+        {
+            if(HatHandler.useInventory(player))
+            {
+                source = source.stream().filter(hatPart -> hatPart.count > 0).collect(Collectors.toCollection(ArrayList::new)); //remove the hats that have no count
+
+                HatsSavedData.HatPart currentlyWearing = HatHandler.getHatPart(player);
+
+                int tries = 0;
+                while(tries++ < 10) // 10 should be enough
+                {
+                    HatsSavedData.HatPart oriHatPart = source.get(player.getRNG().nextInt(source.size()));
+                    HatsSavedData.HatPart copyHatPart = oriHatPart.createCopy();
+                    copyHatPart.minusByOne(currentlyWearing);
+
+                    if(copyHatPart.count > 0) //this is a valid random hat
+                    {
+                        HatsSavedData.HatPart partToReturn = copyHatPart.createRandom(player.getRNG());
+                        oriHatPart.minusByOne(partToReturn);
+
+                        part = partToReturn;
+
+                        saveData.markDirty();
+                        break;
+                    }
+                }
+            }
+            else //DO NOT USE INVENTORY!!
+            {
+                part = source.get(player.getRNG().nextInt(source.size())).createRandom(player.getRNG()); //This creates a copy of
+            }
+        }
+        return part;
     }
 }

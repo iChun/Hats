@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 @OnlyIn(Dist.CLIENT)
-public class HatsTabulaPlugin extends TabulaPlugin
+public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
 {
     @Override
     public ElementButtonTextured<?> onPopulateToolbar(@Nonnull TabulaWorkspace workspace, @Nonnull View<?> toolbarView, @Nonnull ElementButtonTextured<?> lastToolbarButton, @Nullable Project currentProject)

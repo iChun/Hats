@@ -383,4 +383,80 @@ public class HatInfo
             colouriser[i] = 1F - part.colouriser[i];
         }
     }
+
+    public float[] getDimensions() //gets y min + y-max + width
+    {
+        if(hidden)
+        {
+            return new float[] { 0F, 0F, 0F };
+        }
+
+        float x1 = 10000;
+        float x2 = -10000;
+        float z1 = 10000;
+        float z2 = -10000;
+
+        float y1 = 10000;
+        float y2 = -10000;
+
+
+        for(Project.Part part : project.getAllParts())
+        {
+            for(Project.Part.Box box : part.boxes)
+            {
+                if(part.rotPX + box.posX < x1) //lowest point
+                {
+                    x1 = part.rotPX + box.posX;
+                }
+                if(part.rotPX + box.posX + box.dimX > x2) //highest point
+                {
+                    x2 = part.rotPX + box.posX + box.dimX;
+                }
+                if(part.rotPZ + box.posZ < z1) //lowest point
+                {
+                    z1 = part.rotPZ + box.posZ;
+                }
+                if(part.rotPZ + box.posZ + box.dimZ > z2) //highest point
+                {
+                    z2 = part.rotPZ + box.posZ + box.dimZ;
+                }
+
+                if(part.rotPY + box.posY < y1) //lowest point
+                {
+                    y1 = part.rotPY + box.posY;
+                }
+                if(part.rotPY + box.posY + box.dimY > y2) //highest point
+                {
+                    y2 = part.rotPY + box.posY + box.dimY;
+                }
+            }
+        }
+
+        float[] dims = new float[] { x1, x2, y1, y2, z1, z2 };
+
+        for(HatInfo accessory : accessories)
+        {
+            float[] accDims = accessory.getDimensions();
+
+            for(int i = 0; i < accDims.length; i++)
+            {
+                if(i % 2 == 0)
+                {
+                    if(accDims[i] < dims[i])
+                    {
+                        dims[i] = accDims[i];
+                    }
+                }
+                else
+                {
+                    if(accDims[i] > dims[i])
+                    {
+                        dims[i] = accDims[i];
+                    }
+                }
+            }
+        }
+
+        return dims;
+    }
 }

@@ -122,23 +122,14 @@ public class WorkspaceHats extends Workspace
         }
     }
 
-    public boolean usePlayerInventory()
+    public boolean usePlayerInventory() //TODO test that the isNew "!" shows up
     {
-        return !(Minecraft.getInstance().player.isCreative() && !Hats.configServer.enableCreativeModeHadHunting);
+        return HatHandler.useInventory(Minecraft.getInstance().player);
     }
 
-    public ArrayList<HatsSavedData.HatPart> getHatPartSource()
+    public ArrayList<HatsSavedData.HatPart> getHatPartSource() //Also used in the Hat render
     {
-        ArrayList<HatsSavedData.HatPart> source = new ArrayList<>();
-        if(usePlayerInventory())
-        {
-            source.addAll(Hats.eventHandlerClient.hatsInventory.hatParts);
-        }
-        else
-        {
-            source.addAll(HatResourceHandler.HAT_PARTS);
-            HatResourceHandler.combineLists(source, Hats.eventHandlerClient.hatsInventory.hatParts); //combine all the hats with our personalisation
-        }
+        ArrayList<HatsSavedData.HatPart> source = HatHandler.getHatSource(Minecraft.getInstance().player);
         HatResourceHandler.combineLists(source, changedHats);
         return source; //TODO sort in order of have and don't have.
     } //TODO should this be cached?? this is really bad performance

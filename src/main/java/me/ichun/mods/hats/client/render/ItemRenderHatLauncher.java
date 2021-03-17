@@ -2,9 +2,16 @@ package me.ichun.mods.hats.client.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import me.ichun.mods.hats.client.model.ModelHatLauncher;
+import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.hats.HatInfo;
+import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.packet.PacketHatLauncherInfo;
+import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.model.item.IModel;
 import me.ichun.mods.ichunutil.client.model.item.ItemModelRenderer;
 import me.ichun.mods.ichunutil.common.iChunUtil;
+import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
@@ -16,8 +23,14 @@ import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
+import org.apache.commons.lang3.RandomStringUtils;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 @SuppressWarnings("deprecation")
 public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
@@ -36,6 +49,7 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
     );
     public static final ItemStack MAGMA_BLOCK = new ItemStack(Blocks.MAGMA_BLOCK);
     public static final ItemRenderHatLauncher INSTANCE = new ItemRenderHatLauncher();
+    public static final Random RAND = new Random();
 
     //Stuff to do in relation to getting the current perspective and the current player holding it
     private ItemCameraTransforms.TransformType currentPerspective;
@@ -86,6 +100,65 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
             launcherModel.barrel.translateRotate(stack);
             (leftHand ? launcherModel.headL : launcherModel.headR).render(stack, bufferIn.getBuffer(RenderType.getEntityCutout(lastPlayer.getLocationSkin())), combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
             stack.pop();
+
+            HatsSavedData.HatPart part = HatHandler.getHatPart(is);
+            if(part.isNew)
+            {
+                int count  = -1;
+                if(lastPlayer.getHeldItem(Hand.MAIN_HAND) == is)
+                {
+                    count = 0;
+                }
+                else if(lastPlayer.getHeldItem(Hand.OFF_HAND) == is)
+                {
+                    count = 1;
+                }
+                if(count >= 0)
+                {
+                    part.isNew = false; //mark requested
+                    part.count = count; //set which hand we're asking for
+                    part.isShowing = false; //set not showing to prevent render (just in case?)
+                    Hats.channel.sendToServer(new PacketHatLauncherInfo(lastPlayer.getEntityId(), part.write(new CompoundNBT())));
+                }
+            }
+            else if(!part.name.isEmpty() && !(lastPlayer != mc.player && part.name.equals(":random")) && part.isShowing && part.count > 0)
+            {
+                if(lastPlayer == mc.player && part.name.equals(":random"))
+                {
+                    ArrayList<HatsSavedData.HatPart> source = HatHandler.getHatSource(mc.player);
+
+                    RAND.setSeed((1342L + iChunUtil.eventHandlerClient.ticks) / 5);
+
+                    if(source.size() > 0)
+                    {
+                        part = source.get(RAND.nextInt(source.size()));
+                    }
+                    else
+                    {
+                        part = null;
+                    }
+                }
+
+                if(part != null)
+                {
+                    HatInfo hatInfo = HatResourceHandler.getInfoAndSetToPart(part);
+                    if(hatInfo != null)
+                    {
+                        stack.push();
+                        stack.translate(0F, 0F, -0.0625F);
+                        stack.scale(0.1876F, 0.1876F, 0.1876F);
+
+                        stack.rotate(Vector3f.ZP.rotation(leftHand ? -0.7853981633974483F : 0.7853981633974483F));
+
+                        stack.translate(0F, -1.1875F, 0F);
+
+                        stack.rotate(Vector3f.YP.rotationDegrees(180F));
+
+                        hatInfo.render(stack, bufferIn, combinedLightIn, combinedOverlayIn, true);
+                        stack.pop();
+                    }
+                }
+            }
         }
 
         //reset these vars. they should be set per render.

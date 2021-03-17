@@ -2,6 +2,7 @@ package me.ichun.mods.hats.common.core;
 
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.packet.PacketPing;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
@@ -9,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
@@ -23,12 +25,22 @@ import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
 public class EventHandlerServer
 {
     @SubscribeEvent
-    public void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event)
+    public void onAttachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event)
     {
         Entity entity = event.getObject();
         if(entity instanceof LivingEntity)
         {
             event.addCapability(HatsSavedData.HatPart.CAPABILITY_IDENTIFIER, new HatsSavedData.HatPart.CapProvider(new HatsSavedData.HatPart()));
+        }
+    }
+
+    @SubscribeEvent
+    public void onAttachCapabilitiesItem(AttachCapabilitiesEvent<ItemStack> event)
+    {
+        ItemStack is = event.getObject();
+        if(is.getItem() instanceof ItemHatLauncher)
+        {
+            event.addCapability(HatsSavedData.HatPart.CAPABILITY_IDENTIFIER, new HatsSavedData.HatPart.CapProvider(new HatsSavedData.HatPart(":random").setNew()));
         }
     }
 

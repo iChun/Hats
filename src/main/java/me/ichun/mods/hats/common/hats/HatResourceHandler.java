@@ -233,7 +233,7 @@ public class HatResourceHandler
         return HATS.get(part.name);
     }
 
-    public static HatInfo getInfoAndSetToPart(HatsSavedData.HatPart part) //For rendering.
+    public static HatInfo getInfoAndSetToPart(HatsSavedData.HatPart part) //For rendering and hat entity calculation
     {
         HatInfo hatInfo = getInfo(part);
         if(hatInfo != null)

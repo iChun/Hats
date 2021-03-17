@@ -5,9 +5,11 @@ import me.ichun.mods.hats.client.core.EventHandlerClient;
 import me.ichun.mods.hats.client.entity.EntityDummy;
 import me.ichun.mods.hats.client.module.tabula.HatsTabulaPlugin;
 import me.ichun.mods.hats.client.render.ItemRenderHatLauncher;
+import me.ichun.mods.hats.client.render.RenderHatEntity;
 import me.ichun.mods.hats.common.config.ConfigCommon;
 import me.ichun.mods.hats.common.config.ConfigServer;
 import me.ichun.mods.hats.common.core.EventHandlerServer;
+import me.ichun.mods.hats.common.entity.EntityHat;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.packet.*;
@@ -21,6 +23,8 @@ import me.ichun.mods.ichunutil.common.network.PacketChannel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.entity.EntityClassification;
+import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.nbt.INBT;
@@ -36,6 +40,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.*;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -82,6 +87,7 @@ public class Hats
 
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        EntityTypes.REGISTRY.register(bus);
         Items.REGISTRY.register(bus);
         Sounds.REGISTRY.register(bus);
 
@@ -99,7 +105,9 @@ public class Hats
                 PacketHeadInfos.class,
                 PacketNewHatPart.class,
                 PacketUpdateHats.class,
-                PacketHatCustomisation.class
+                PacketHatCustomisation.class,
+                PacketHatLauncherInfo.class,
+                PacketEntityHatEntityDetails.class
         );
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
@@ -107,11 +115,11 @@ public class Hats
 
             EntityDummy.init(bus); //we use this for the client-based entity for GUI rendering
 
-            MinecraftForge.EVENT_BUS.register(eventHandlerClient = new EventHandlerClient());
-
             bus.addListener(this::onClientSetup);
             bus.addListener(this::enqueueIMC);
             bus.addListener(this::onModelBake);
+
+            MinecraftForge.EVENT_BUS.register(eventHandlerClient = new EventHandlerClient());
 
             ItemEffectHandler.init();
 
@@ -145,6 +153,8 @@ public class Hats
     private void onClientSetup(FMLClientSetupEvent event)
     {
         new KeyBind(new KeyBinding("hats.key.hatsMenu", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM.getOrMakeInput(GLFW.GLFW_KEY_H), "key.categories.ui"), keyBind -> eventHandlerClient.openHatsMenu(), null);
+
+        RenderingRegistry.registerEntityRenderingHandler(EntityTypes.HAT.get(), new RenderHatEntity.RenderFactory());
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -183,14 +193,29 @@ public class Hats
     @OnlyIn(Dist.CLIENT)
     private void onModelBake(ModelBakeEvent event)
     {
+        System.out.println("WHAT THE SHIT");
         event.getModelRegistry().put(new ModelResourceLocation("hats:hat_launcher", "inventory"), new ItemModelRenderer(ItemRenderHatLauncher.INSTANCE));
     }
+
+    public static class EntityTypes
+    {
+        private static final DeferredRegister<EntityType<?>> REGISTRY = DeferredRegister.create(ForgeRegistries.ENTITIES, MOD_ID);
+
+        public static final RegistryObject<EntityType<EntityHat>> HAT = REGISTRY.register("hat", () -> EntityType.Builder.create(EntityHat::new, EntityClassification.MISC)
+                .size(0.1F, 0.1F)
+                .setTrackingRange(64)
+                .setUpdateInterval(20)
+                .setShouldReceiveVelocityUpdates(true)
+                .build("an entity from " + MOD_NAME + ". Ignore this.")
+        );
+    }
+
 
     public static class Items
     {
         private static final DeferredRegister<Item> REGISTRY = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
 
-        public static final RegistryObject<ItemHatLauncher> HAT_LAUNCHER = REGISTRY.register("hat_launcher", () -> new ItemHatLauncher(new Item.Properties().group(ItemGroup.TOOLS)));
+        public static final RegistryObject<ItemHatLauncher> HAT_LAUNCHER = REGISTRY.register("hat_launcher", () -> new ItemHatLauncher(new Item.Properties().maxStackSize(1).group(ItemGroup.TOOLS)));
     }
 
     public static class Sounds

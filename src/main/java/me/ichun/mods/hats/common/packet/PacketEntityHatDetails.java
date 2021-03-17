@@ -14,7 +14,7 @@ import net.minecraftforge.fml.network.NetworkEvent;
 
 import java.util.HashMap;
 
-public class PacketEntityHatDetails extends AbstractPacket
+public class PacketEntityHatDetails extends AbstractPacket //Hat per entity, not actual hat entity details.
 {
     public HashMap<Integer, HatsSavedData.HatPart> entIdToHat;
 

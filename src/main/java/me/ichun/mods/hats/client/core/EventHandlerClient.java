@@ -5,11 +5,13 @@ import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.layer.LayerHat;
 import me.ichun.mods.hats.client.model.ModelRendererDragonHook;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.packet.PacketRequestEntityHatDetails;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.tracker.ClientEntityTracker;
 import me.ichun.mods.ichunutil.client.tracker.entity.EntityTracker;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
+import me.ichun.mods.ichunutil.common.item.DualHandedItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.IngameMenuScreen;
 import net.minecraft.client.renderer.entity.EnderDragonRenderer;
@@ -19,6 +21,9 @@ import net.minecraft.client.renderer.entity.PlayerRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.Pose;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
@@ -246,7 +251,7 @@ public class EventHandlerClient
                 openedHatsInventory = true;
                 openMenuAnimation = 0;
 
-                lastHideGui = mc.gameSettings.hideGUI;
+                lastHideGui = mc.gameSettings.hideGUI; //TODO can we just cancel the draw UI event???
                 mc.gameSettings.hideGUI = true;
 
                 originalPitch = mc.renderViewEntity.rotationPitch;
@@ -337,5 +342,22 @@ public class EventHandlerClient
                 dragonRenderer.model.head.addChild(new ModelRendererDragonHook(dragonRenderer.model));
             }
         });
+    }
+
+    public void nudgeHand(PlayerEntity player)
+    {
+        Minecraft mc = Minecraft.getInstance();
+        if(player == mc.player)
+        {
+            ItemStack is = DualHandedItem.getUsableDualHandedItem(player);
+            if(is.getItem() instanceof ItemHatLauncher)
+            {
+                mc.player.renderArmPitch -= 200F;
+                if(!mc.gameSettings.getPointOfView().func_243192_a())
+                {
+                    mc.player.swing(mc.player.getPrimaryHand() == DualHandedItem.getHandSide(mc.player, is) ? Hand.MAIN_HAND : Hand.OFF_HAND, true);
+                }
+            }
+        }
     }
 }
