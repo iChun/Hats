@@ -12,5 +12,12 @@
       "hats:poof"
     ],
     "subtitle": "subtitles.hats.hat_launcher.hit"
+  },
+  "bonk": {
+    "category": "neutral",
+    "sounds": [
+      "hats:bonk"
+    ],
+    "subtitle": "subtitles.hats.hat.bonk"
   }
 }

@@ -30,6 +30,9 @@ public class ConfigClient extends ConfigBase
 
     public boolean invisibleEntityInHatSelector = false;
 
+    @Prop(min = 1)
+    public int hatLauncherRandomHatSpeed = 5;
+
     public ConfigClient()
     {
         super(ModLoadingContext.get().getActiveContainer().getModId() + "-client.toml");

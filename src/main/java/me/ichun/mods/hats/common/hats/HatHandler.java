@@ -378,7 +378,7 @@ public class HatHandler //Handles most of the server-related things.
 
     public static boolean useInventory(@Nonnull PlayerEntity player)
     {
-        return !(player.isCreative() && !Hats.configServer.enableCreativeModeHadHunting);
+        return !(player.isCreative() && !Hats.configServer.enableCreativeModeHatHunting);
     }
 
 

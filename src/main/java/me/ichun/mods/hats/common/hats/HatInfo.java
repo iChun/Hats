@@ -38,7 +38,7 @@ public class HatInfo
     public UUID contributorUUID;
 
     public String accessoryFor;
-    public ArrayList<String> accessoryLayer = new ArrayList<>(); //TODO convert this to arraylist
+    public ArrayList<String> accessoryLayer = new ArrayList<>();
     public String accessoryParent;
 
     @OnlyIn(Dist.CLIENT)
@@ -388,7 +388,7 @@ public class HatInfo
     {
         if(hidden)
         {
-            return new float[] { 0F, 0F, 0F };
+            return new float[] { 0F, 0F, 0F, 0F, 0F, 0F };
         }
 
         float x1 = 10000;

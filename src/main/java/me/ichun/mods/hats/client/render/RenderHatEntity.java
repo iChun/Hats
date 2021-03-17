@@ -37,6 +37,11 @@ public class RenderHatEntity extends EntityRenderer<EntityHat>
             return;
         }
 
+        if(hat.age < 1)
+        {
+            return;
+        }
+
         HatInfo hatInfo = HatResourceHandler.getInfoAndSetToPart(hat.hatPart);
         if(hatInfo != null)
         {
@@ -44,7 +49,7 @@ public class RenderHatEntity extends EntityRenderer<EntityHat>
             stack.translate(-hat.getWidth() / 2F, 0, -hat.getWidth() / 2F);
 
             stack.translate(((hat.hatDims[1] - hat.hatDims[0]) / 32F), 0F, ((hat.hatDims[5] - hat.hatDims[4]) / 32F)); //y2
-            float scale = 0.2F + MathHelper.clamp((hat.age + partialTicks) / 10F, 0.0F, 0.8F);
+            float scale = 0.2F + MathHelper.clamp((hat.age - 2 + partialTicks) / 10F, 0.0F, 0.8F);
             stack.scale(-scale, -scale, scale); //flip the models so it renders upright
 
             float halfHatHeight = ((hat.hatDims[3] - hat.hatDims[2]) / 16F) / 2F;

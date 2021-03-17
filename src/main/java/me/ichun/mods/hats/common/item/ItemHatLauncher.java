@@ -7,6 +7,8 @@ import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.item.DualHandedItem;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -17,6 +19,8 @@ import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -83,22 +87,50 @@ public class ItemHatLauncher extends Item
                 }
             }
 
-            if(!world.isRemote)
-            {
-                //                EntityHelper.playSound(player, Hats.Sounds.POOF.get(), SoundCategory.PLAYERS, 1.0F, 1F + (player.getRNG().nextFloat() * 2F - 1F) * 0.15F);
-            }
-
-
             if(part != null && part.count > 0)
             {
-                //TODO shoot out the hat
                 //TODO update the user inventory
                 //TODO handle the client
                 if(!world.isRemote)
                 {
                     EntityHelper.playSound(player, Hats.Sounds.TUBE.get(), SoundCategory.PLAYERS, 1.0F, 0.9F + (player.getRNG().nextFloat() * 2F - 1F) * 0.075F);
                     EntityHat hat = new EntityHat(Hats.EntityTypes.HAT.get(), player.world).setHatPart(part).setLastInteracted(player);
-                    hat.setLocationAndAngles(player.getPosX(), player.getPosY() + player.getEyeHeight() - ((hat.hatDims[1] - hat.hatDims[0]) / 16F) / 2F, + player.getPosZ(), player.rotationYaw, player.rotationPitch);
+
+                    double pX = player.getPosX();
+                    double pZ = player.getPosZ();
+                    Vector3d rot = EntityHelper.getVectorForRotation(0F, player.rotationYaw + 90);
+                    switch(DualHandedItem.getHandSide(player, DualHandedItem.getUsableDualHandedItem(player)))
+                    {
+                        case RIGHT:
+                        {
+                            pX += rot.x * 0.25F;
+                            pZ += rot.z * 0.25F;
+                            break;
+                        }
+                        case LEFT:
+                        {
+                            pX -= rot.x * 0.25F;
+                            pZ -= rot.z * 0.25F;
+                            break;
+                        }
+                    }
+
+                    hat.setLocationAndAngles(pX, player.getPosY() + player.getEyeHeight() - ((hat.hatDims[1] - hat.hatDims[0]) / 16F) / 1.8F, pZ, player.rotationYaw, player.rotationPitch);
+
+                    int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, is);
+                    if(k > 0)
+                    {
+                        hat.setKnockbackStrength(k);
+                    }
+
+                    hat.setThrowableHeading((-MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)),
+                            (-MathHelper.sin(player.rotationPitch / 180.0F * (float)Math.PI)),
+                            (MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI))
+                            , 0.5F, 0.4F);
+
+
+                    //TODO power = further distance
+                    //TODO fire!
                     player.world.addEntity(hat);
                 }
                 else

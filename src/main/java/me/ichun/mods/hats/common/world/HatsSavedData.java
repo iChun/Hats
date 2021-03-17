@@ -165,6 +165,8 @@ public class HatsSavedData extends WorldSavedData
         public void randomize(Random random)
         {
             this.count = 1;
+            this.isShowing = true;
+
             for(int i = hatParts.size() - 1; i >= 0; i--)
             {
                 if(random.nextBoolean()) //you LOST the coin toss

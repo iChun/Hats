@@ -107,7 +107,8 @@ public class Hats
                 PacketUpdateHats.class,
                 PacketHatCustomisation.class,
                 PacketHatLauncherInfo.class,
-                PacketEntityHatEntityDetails.class
+                PacketEntityHatEntityDetails.class,
+                PacketRehatify.class
         );
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
@@ -193,7 +194,6 @@ public class Hats
     @OnlyIn(Dist.CLIENT)
     private void onModelBake(ModelBakeEvent event)
     {
-        System.out.println("WHAT THE SHIT");
         event.getModelRegistry().put(new ModelResourceLocation("hats:hat_launcher", "inventory"), new ItemModelRenderer(ItemRenderHatLauncher.INSTANCE));
     }
 
@@ -224,5 +224,6 @@ public class Hats
 
         public static final RegistryObject<SoundEvent> POOF = REGISTRY.register("poof", () -> new SoundEvent(new ResourceLocation("hats", "poof")));
         public static final RegistryObject<SoundEvent> TUBE = REGISTRY.register("tube", () -> new SoundEvent(new ResourceLocation("hats", "tube")));
+        public static final RegistryObject<SoundEvent> BONK = REGISTRY.register("bonk", () -> new SoundEvent(new ResourceLocation("hats", "bonk")));
     }
 }

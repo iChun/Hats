@@ -68,7 +68,6 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
         setToOrigin(stack);
 
         Minecraft mc = Minecraft.getInstance();
-        boolean isFirstPerson = ItemModelRenderer.isFirstPerson(currentPerspective) && lastPlayer == mc.player;
 
         boolean leftHand = ItemModelRenderer.isLeftHand(currentPerspective);
         launcherModel.gasL.showModel = launcherModel.headL.showModel = leftHand;
@@ -127,7 +126,7 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
                 {
                     ArrayList<HatsSavedData.HatPart> source = HatHandler.getHatSource(mc.player);
 
-                    RAND.setSeed((1342L + iChunUtil.eventHandlerClient.ticks) / 5);
+                    RAND.setSeed((1342L + iChunUtil.eventHandlerClient.ticks) / Hats.configClient.hatLauncherRandomHatSpeed);
 
                     if(source.size() > 0)
                     {

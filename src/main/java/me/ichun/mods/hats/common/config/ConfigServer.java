@@ -46,24 +46,31 @@ public class ConfigServer extends ConfigBase
         add("110"); //Legendary - Gold
     }};
 
+    public double bossHatChanceBonus = 0.1D;
+
+    public double bossRarityBonus = 0.2D; //TODO new hat toast config
+
+    //TODO reorganise the configs
+    @CategoryDivider(name = "others")
+    public boolean userSubmissionsRequireApproval = true; //TODO this config
+
     @Prop(min = 0)
     public double accessoryCostMultiplier = 1.5D;
 
     @Prop(min = 0)
     public double salesCostMultiplier = 10D;
 
-    public double bossHatChanceBonus = 0.1D;
-
-    public double bossRarityBonus = 0.2D; //TODO new hat toast config
-
-
-    @CategoryDivider(name = "others")
-    public boolean userSubmissionsRequireApproval = true; //TODO this config
-
     @Prop(min = 0, max = 2)
     public int enabledGuiStyle = 2; //0 = disabled, 1 = simple, 2 = fancy
 
-    public boolean enableCreativeModeHadHunting = false;
+    public boolean enableCreativeModeHatHunting = false;
+
+    @Prop(min = 0)
+    public int hatEntityLifespan = 6000;
+
+    public boolean hatLauncherReplacesPlayerHat = true;
+
+    public boolean hatLauncherDoesNotRemoveHatFromInventory = true;
 
     //======================================================//
 
@@ -118,6 +125,14 @@ public class ConfigServer extends ConfigBase
         for(Integer weight : weights)
         {
             total += weight;
+        }
+
+        if(total == 0)
+        {
+            Hats.LOGGER.warn("We can't have 0 weight! Forcing 1 weight to COMMON");
+            weights.remove(0);
+            weights.add(0, 1);
+            total = 1;
         }
 
         double stack = 0;

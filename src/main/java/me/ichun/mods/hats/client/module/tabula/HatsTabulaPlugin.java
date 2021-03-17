@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.TreeSet;
 
 @OnlyIn(Dist.CLIENT)
@@ -57,6 +58,9 @@ public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
 
         public static class ViewOpenProject extends View<WindowOpenProject>
         {
+            public TreeSet<File> files = new TreeSet<>(Ordering.natural());
+            public ElementList<?> list;
+
             public ViewOpenProject(@Nonnull WindowOpenProject parent)
             {
                 super(parent, "window.open.title");
@@ -68,26 +72,16 @@ public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
                 );
                 elements.add(sv);
 
-                ElementList<?> list = new ElementList<>(this).setScrollVertical(sv);
+                list = new ElementList<>(this).setScrollVertical(sv);
                 list.setConstraint(new Constraint(list).bottom(this, Constraint.Property.Type.BOTTOM, 40)
                         .left(this, Constraint.Property.Type.LEFT, 0).right(sv, Constraint.Property.Type.LEFT, 0)
                         .top(this, Constraint.Property.Type.TOP, 0));
                 elements.add(list);
 
-                TreeSet<File> files = new TreeSet<>(Ordering.natural());
                 ArrayList<File> allFiles = new ArrayList<>();
                 scourForHats(allFiles, HatResourceHandler.getHatsDir().toFile());
 
                 files.addAll(allFiles);
-                for(File file : files)
-                {
-                    list.addItem(file).setDefaultAppearance().setDoubleClickHandler(item -> {
-                        if(item.selected)
-                        {
-                            loadFile(item.getObject(), ((ElementNumberInput)getById("inputOpacity")).getInt() / 100F);
-                        }
-                    });
-                }
 
                 ElementButtonTextured<?> openDir = new ElementButtonTextured<>(this, new ResourceLocation("tabula", "textures/icon/info.png"), btn -> {
                     Util.getOSType().openFile(HatResourceHandler.getHatsDir().toFile());
@@ -124,6 +118,36 @@ public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
                 button1.setSize(60, 20);
                 button1.setConstraint(new Constraint(button1).right(button, Constraint.Property.Type.LEFT, 10));
                 elements.add(button1);
+
+                ElementTextField textField = new ElementTextField(this);
+                textField.setId("search");
+                textField.setResponder(s -> {
+                    this.list.items.clear();
+                    this.populateList(s);
+                }).setHeight(14);
+                textField.setConstraint(new Constraint(textField).left(input, Constraint.Property.Type.RIGHT, 10).right(button1, Constraint.Property.Type.LEFT, 10).bottom(button1, Constraint.Property.Type.BOTTOM, 3));
+                elements.add(textField);
+
+                populateList("");
+            }
+
+            public void populateList(String query)
+            {
+                for(File file : files)
+                {
+                    if(query.isEmpty() || file.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT)))
+                    {
+                        list.addItem(file).setDefaultAppearance().setDoubleClickHandler(item -> {
+                            if(item.selected)
+                            {
+                                loadFile(item.getObject(), ((ElementNumberInput)getById("inputOpacity")).getInt() / 100F);
+                            }
+                        });
+                    }
+                }
+
+                list.init();
+                list.init();
             }
 
             public void loadFile(File file, float ghostOpacity)
@@ -154,6 +178,11 @@ public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
                         if(in != null)
                         {
                             ghost = ImportList.IMPORTER_TABULA.createProject(in);
+                            if(ghost != null)
+                            {
+                                ghost.projVersion = ImportList.IMPORTER_TABULA.getProjectVersion();
+                                ghost.load();
+                            }
                         }
                     }
                     parentFragment.tabulaWorkspace.openProject(project, ghost, ghost == null ? 0 : ghostOpacity);

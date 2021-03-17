@@ -64,8 +64,13 @@ public class PacketEntityHatEntityDetails extends AbstractPacket //Hat per entit
         Entity ent = Minecraft.getInstance().world.getEntityByID(entId);
         if(ent instanceof EntityHat)
         {
-            ((EntityHat)ent).hatPart.read(partInfo);
-            ((EntityHat)ent).calculateNewHatSize();
+            EntityHat hat = (EntityHat)ent;
+            hat.hatPart.read(partInfo);
+            hat.calculateNewHatSize();
+
+            hat.rotFactorX += (hat.world.rand.nextFloat() * 2F - 1F) * 45F;
+            hat.rotFactorY += (hat.world.rand.nextFloat() * 2F - 1F) * 45F;
+
         }
     }
 }
