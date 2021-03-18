@@ -4,16 +4,22 @@ import me.ichun.mods.hats.client.render.ItemRenderHatLauncher;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.entity.EntityHat;
 import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.packet.PacketEntityHatEntityDetails;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.item.DualHandedItem;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.ActionResultType;
 import net.minecraft.util.Hand;
@@ -25,8 +31,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.fml.network.PacketDistributor;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -89,8 +97,6 @@ public class ItemHatLauncher extends Item
 
             if(part != null && part.count > 0)
             {
-                //TODO update the user inventory
-                //TODO handle the client
                 if(!world.isRemote)
                 {
                     EntityHelper.playSound(player, Hats.Sounds.TUBE.get(), SoundCategory.PLAYERS, 1.0F, 0.9F + (player.getRNG().nextFloat() * 2F - 1F) * 0.075F);
@@ -123,15 +129,33 @@ public class ItemHatLauncher extends Item
                         hat.setKnockbackStrength(k);
                     }
 
+                    float momentum = 0.5F;
+
+                    int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, is);
+                    if (j > 0) {
+                        momentum += (double) j * 0.2F;
+                    }
+
+                    if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, is) > 0) {
+                        hat.setFire(100);
+                    }
+
                     hat.setThrowableHeading((-MathHelper.sin(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI)),
                             (-MathHelper.sin(player.rotationPitch / 180.0F * (float)Math.PI)),
                             (MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI))
-                            , 0.5F, 0.4F);
+                            , momentum, 0.4F);
 
 
                     //TODO power = further distance
                     //TODO fire!
                     player.world.addEntity(hat);
+
+                    Hats.channel.sendTo(new PacketEntityHatEntityDetails(hat.getEntityId(), hat.hatPart.write(new CompoundNBT())), PacketDistributor.TRACKING_ENTITY.with(() -> hat));
+
+                    if(HatHandler.useInventory(player))
+                    {
+                        HatHandler.removeOneFromInventory((ServerPlayerEntity)player, part);
+                    }
                 }
                 else
                 {
@@ -144,6 +168,39 @@ public class ItemHatLauncher extends Item
             }
         }
         return new ActionResult(ActionResultType.PASS, player.getHeldItem(hand));
+    }
+
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment)
+    {
+        return enchantment == Enchantments.POWER || enchantment == Enchantments.PUNCH || enchantment == Enchantments.FLAME;
+    }
+
+    @Override
+    public boolean isEnchantable(ItemStack stack)
+    {
+        return true;
+    }
+
+    @Override
+    public int getItemEnchantability()
+    {
+        return 22; //Stolen from gold ItemTier
+    }
+
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book)
+    {
+        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(book);
+        for(Enchantment enchantment : enchantments.keySet())
+        {
+            if(!canApplyAtEnchantingTable(stack, enchantment))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override

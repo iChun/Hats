@@ -37,7 +37,7 @@ public class RenderHatEntity extends EntityRenderer<EntityHat>
             return;
         }
 
-        if(hat.age < 1)
+        if(hat.age < 1 || Hats.eventHandlerClient.renderCount >= Hats.configClient.maxHatRenders)
         {
             return;
         }
@@ -50,6 +50,10 @@ public class RenderHatEntity extends EntityRenderer<EntityHat>
 
             stack.translate(((hat.hatDims[1] - hat.hatDims[0]) / 32F), 0F, ((hat.hatDims[5] - hat.hatDims[4]) / 32F)); //y2
             float scale = 0.2F + MathHelper.clamp((hat.age - 2 + partialTicks) / 10F, 0.0F, 0.8F);
+            if(hat.age >= Hats.configServer.hatEntityLifespan - 20) //shrinkage
+            {
+                scale = 1F - MathHelper.clamp((hat.age - (Hats.configServer.hatEntityLifespan - 20) + partialTicks) / 20, 0.0F, 1F);
+            }
             stack.scale(-scale, -scale, scale); //flip the models so it renders upright
 
             float halfHatHeight = ((hat.hatDims[3] - hat.hatDims[2]) / 16F) / 2F;
@@ -62,6 +66,8 @@ public class RenderHatEntity extends EntityRenderer<EntityHat>
 
             hatInfo.render(stack, bufferIn, packedLightIn, OverlayTexture.NO_OVERLAY, true);
             stack.pop();
+
+            Hats.eventHandlerClient.renderCount++;
         }
 
         super.render(hat, entityYaw, partialTicks, stack, bufferIn, packedLightIn);

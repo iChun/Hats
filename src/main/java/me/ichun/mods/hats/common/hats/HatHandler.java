@@ -389,7 +389,7 @@ public class HatHandler //Handles most of the server-related things.
         return is.getCapability(HatsSavedData.HatPart.CAPABILITY_INSTANCE).orElseThrow(() -> new IllegalArgumentException("Item " + is.toString() + " has no hat capabilities"));
     }
 
-    public static HatsSavedData.HatPart getRandomHat(PlayerEntity player)
+    public static HatsSavedData.HatPart getRandomHat(PlayerEntity player) //WE CONSUME THE HAT. Be mindful of use
     {
         HatsSavedData.HatPart part = null;
 
@@ -427,5 +427,20 @@ public class HatHandler //Handles most of the server-related things.
             }
         }
         return part;
+    }
+
+    public static void removeOneFromInventory(ServerPlayerEntity player, HatsSavedData.HatPart part)
+    {
+        ArrayList<HatsSavedData.HatPart> playerInventory = getPlayerInventory(player);
+        for(HatsSavedData.HatPart hatPart : playerInventory)
+        {
+            if(hatPart.minusByOne(part))
+            {
+                Hats.channel.sendTo(new PacketUpdateHats(hatPart.write(new CompoundNBT()), false), player);
+
+                saveData.markDirty();
+                break;
+            }
+        }
     }
 }

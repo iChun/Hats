@@ -70,7 +70,6 @@ public class PacketEntityHatEntityDetails extends AbstractPacket //Hat per entit
 
             hat.rotFactorX += (hat.world.rand.nextFloat() * 2F - 1F) * 45F;
             hat.rotFactorY += (hat.world.rand.nextFloat() * 2F - 1F) * 45F;
-
         }
     }
 }

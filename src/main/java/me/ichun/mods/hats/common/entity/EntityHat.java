@@ -11,6 +11,7 @@ import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import net.minecraft.entity.*;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.IPacket;
@@ -44,6 +45,7 @@ public class EntityHat extends Entity
 
     public int knockback = 0;
     public boolean wasCollided = false;
+    public boolean isRogue = false;
 
     public float lastRotX;
     public float lastRotY;
@@ -190,17 +192,35 @@ public class EntityHat extends Entity
                 EntityRayTraceResult entResult = ProjectileHelper.rayTraceEntities(this.world, this, posEye, posEye.add(getMotion()), this.getBoundingBox().expand(this.getMotion()).grow(1.0D), this::canPutOnHat);
                 if(entResult != null)
                 {
-                    collidedEnt = (LivingEntity)entResult.getEntity(); //TODO knockback bonk
+                    collidedEnt = (LivingEntity)entResult.getEntity();
                 }
             }
 
             //we found one!
-            if(collidedEnt != null) //TODO the player-related configs.
+            if(collidedEnt != null) //TODO enchantments fire & knockback
             {
+                if(isBurning())
+                {
+                    collidedEnt.setFire(100);
+                }
+
+                if(knockback > 0)
+                {
+                    Vector3d vector3d = this.getMotion().mul(1.0D, 0.0D, 1.0D).normalize().scale((double)knockback * 0.6D);
+                    if (vector3d.lengthSquared() > 0.0D) {
+                        collidedEnt.addVelocity(vector3d.x, knockback * 0.2D, vector3d.z);
+
+                        knockback = 0;
+
+                        ((ServerChunkProvider)getEntityWorld().getChunkProvider()).sendToAllTracking(collidedEnt, new SEntityVelocityPacket(collidedEnt));
+                    }
+                }
+
                 LivingEntity collidedEntFinal = collidedEnt;
-                HatsSavedData.HatPart hatPart = HatHandler.getHatPart(collidedEnt);
+                HatsSavedData.HatPart hatPart = HatHandler.getHatPart(collidedEnt); // get the hat the player is currently wearing
                 HatsSavedData.HatPart oriHat = hatPart.createCopy();
 
+                //set the hat the entity is currently wearing
                 hatPart.copy(this.hatPart);
                 HashMap<Integer, HatsSavedData.HatPart> entIdToHat = new HashMap<>();
                 entIdToHat.put(collidedEnt.getEntityId(), hatPart);
@@ -209,9 +229,30 @@ public class EntityHat extends Entity
 
                 Hats.channel.sendTo(new PacketEntityHatDetails(entIdToHat), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> collidedEntFinal));
 
+                if(collidedEnt instanceof ServerPlayerEntity)
+                {
+                    ServerPlayerEntity player = (ServerPlayerEntity)collidedEnt;
+                    if(HatHandler.useInventory(player))
+                    {
+                        //Add the new hat to our inventory
+                        HatHandler.addHat(player, this.hatPart);
+
+                        //Remove old hat from inventory
+                        if(Hats.configServer.hatLauncherDoesNotRemoveHatFromInventory)
+                        {
+                            oriHat = new HatsSavedData.HatPart(); //prevents from taking over the ori hat
+                        }
+                        else
+                        {
+                            HatHandler.removeOneFromInventory(player, oriHat); //remove one hat from the inventory and update inventory
+                        }
+                    }
+                }
+
                 if(!oriHat.name.isEmpty() && oriHat.count > 0)
                 {
                     setLastInteracted(collidedEnt);
+                    isRogue = true;
 
                     this.hatPart.copy(oriHat);
                     Hats.channel.sendTo(new PacketEntityHatEntityDetails(this.getEntityId(), this.hatPart.write(new CompoundNBT())), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> this));
@@ -236,6 +277,7 @@ public class EntityHat extends Entity
             if(!world.isRemote)
             {
                 EntityHelper.playSound(this, Hats.Sounds.BONK.get(), SoundCategory.AMBIENT, 0.5F, 0.85F + (rand.nextFloat() * 2F - 1F) * 0.075F);
+                isRogue = false;
             }
             else
             {
@@ -266,7 +308,10 @@ public class EntityHat extends Entity
 
     private boolean canPutOnHat(Entity e)
     {
-        return e instanceof LivingEntity && HatHandler.canWearHat((LivingEntity)e) && !(e.getUniqueID().equals(lastInteractedEntity) && !leftEntity) && !(e instanceof PlayerEntity && !Hats.configServer.hatLauncherReplacesPlayerHat);
+        return e instanceof LivingEntity
+                && HatHandler.canWearHat((LivingEntity)e) //can wear hat?
+                && !(e.getUniqueID().equals(lastInteractedEntity) && !leftEntity) //is it the origin entity
+                && !(e instanceof PlayerEntity && !Hats.configServer.hatLauncherReplacesPlayerHat); //can we hit players
     }
 
     private void applyFloatMotion() {

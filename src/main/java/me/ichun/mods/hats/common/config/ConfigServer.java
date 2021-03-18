@@ -24,12 +24,12 @@ public class ConfigServer extends ConfigBase
     public String randSeed = ""; //An empty string denotes a seed that is not set yet.
 
     @Prop(min = 0.0D, max = 1.0D)
-    public double hatChance = 0.1D; //10% chance
+    public double hatChance = 0.1D; //10% chance//TODO entity override spawn rate
 
     public List<String> disabledMobs = new ArrayList<>();
 
     @Prop(validator = "numbersOnly")
-    public List<String> rarityWeight = new ArrayList<String>(){{ //TODO disable the rarity if the weight is -1?? or something?
+    public List<String> rarityWeight = new ArrayList<String>(){{ //TODO GUI fallback fails in the END dimension?
         add("21"); //Common - White
         add("13"); //Uncommon - Green
         add("8"); //Rare - Blue
@@ -77,7 +77,7 @@ public class ConfigServer extends ConfigBase
     public transient ArrayList<Double> rarityMeasure = new ArrayList<>();
     public transient ArrayList<Double> rarityIndividual = new ArrayList<>();
 
-    public transient EnumMap<EnumRarity, Integer> coinByRarity = new EnumMap<>(EnumRarity.class);
+    public transient EnumMap<EnumRarity, Integer> tokensByRarity = new EnumMap<>(EnumRarity.class);
 
     public ConfigServer()
     {
@@ -145,7 +145,7 @@ public class ConfigServer extends ConfigBase
         //Done calculating rarities
 
         //Calculate coin costs
-        coinByRarity.clear();
+        tokensByRarity.clear();
         if(rarityCost.size() != totalRarities)
         {
             Hats.LOGGER.warn("We don't have (exactly) " + totalRarities + " different rarity costs! Any shortage will be replaced with 0");
@@ -164,7 +164,7 @@ public class ConfigServer extends ConfigBase
 
         for(int i = 0; i < rarities.length; i++)
         {
-            coinByRarity.put(rarities[i], costs.get(i));
+            tokensByRarity.put(rarities[i], costs.get(i));
         }
         //Done calculating coin costs.
 

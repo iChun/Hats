@@ -88,7 +88,7 @@ public class HatInfo
     {
         if(worth < 0)
         {
-            int value = Hats.configServer.coinByRarity.get(getRarity());
+            int value = Hats.configServer.tokensByRarity.get(getRarity());
             if(accessoryFor != null)
             {
                 value = (int)Math.ceil(Hats.configServer.accessoryCostMultiplier * value);
