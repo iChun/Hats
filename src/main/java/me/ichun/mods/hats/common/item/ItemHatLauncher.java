@@ -1,5 +1,6 @@
 package me.ichun.mods.hats.common.item;
 
+import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.render.ItemRenderHatLauncher;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.entity.EntityHat;
@@ -8,22 +9,18 @@ import me.ichun.mods.hats.common.packet.PacketEntityHatEntityDetails;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.item.DualHandedItem;
+import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.item.EnchantedBookItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.ListNBT;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.ActionResultType;
-import net.minecraft.util.Hand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
@@ -33,6 +30,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.PacketDistributor;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -90,8 +88,12 @@ public class ItemHatLauncher extends Item
                     }
                     else
                     {
-                        part = HatHandler.getRandomHat(player); //TODO test this
+                        part = HatHandler.getRandomHat(player);
                     }
+                }
+                else if(!HatHandler.playerHasHat(player, part))
+                {
+                    part = null;
                 }
             }
 
@@ -100,7 +102,7 @@ public class ItemHatLauncher extends Item
                 if(!world.isRemote)
                 {
                     EntityHelper.playSound(player, Hats.Sounds.TUBE.get(), SoundCategory.PLAYERS, 1.0F, 0.9F + (player.getRNG().nextFloat() * 2F - 1F) * 0.075F);
-                    EntityHat hat = new EntityHat(Hats.EntityTypes.HAT.get(), player.world).setHatPart(part).setLastInteracted(player);
+                    EntityHat hat = new EntityHat(Hats.EntityTypes.HAT.get(), player.world).setHatPart(part.createCopy()).setLastInteracted(player);
 
                     double pX = player.getPosX();
                     double pZ = player.getPosZ();
@@ -133,7 +135,7 @@ public class ItemHatLauncher extends Item
 
                     int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, is);
                     if (j > 0) {
-                        momentum += (double) j * 0.2F;
+                        momentum += (double) j * 0.25F;
                     }
 
                     if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, is) > 0) {
@@ -145,9 +147,6 @@ public class ItemHatLauncher extends Item
                             (MathHelper.cos(player.rotationYaw / 180.0F * (float)Math.PI) * MathHelper.cos(player.rotationPitch / 180.0F * (float)Math.PI))
                             , momentum, 0.4F);
 
-
-                    //TODO power = further distance
-                    //TODO fire!
                     player.world.addEntity(hat);
 
                     Hats.channel.sendTo(new PacketEntityHatEntityDetails(hat.getEntityId(), hat.hatPart.write(new CompoundNBT())), PacketDistributor.TRACKING_ENTITY.with(() -> hat));
@@ -164,10 +163,27 @@ public class ItemHatLauncher extends Item
             }
             else
             {
-                //TODO open the UI if we still have hats.
+                if(!world.isRemote)
+                {
+                    EntityHelper.playSound(player, SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.6F, 0.9F + (player.getRNG().nextFloat() * 2F - 1F) * 0.075F);
+                }
+                else
+                {
+                    openHatsGui(player, is);
+                }
             }
         }
         return new ActionResult(ActionResultType.PASS, player.getHeldItem(hand));
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    private void openHatsGui(@Nonnull PlayerEntity player, @Nonnull ItemStack is)
+    {
+        Minecraft mc = Minecraft.getInstance();
+        if(mc.player == player)
+        {
+            mc.displayGuiScreen(new WorkspaceHats(mc.currentScreen, true, player, is));
+        }
     }
 
     @Override

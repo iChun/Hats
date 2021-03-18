@@ -291,6 +291,36 @@ public class HatsSavedData extends WorldSavedData
             return false;
         }
 
+        public boolean hasFullPart(HatPart part)
+        {
+            if(!name.isEmpty() && name.equals(part.name))
+            {
+                boolean flag = true;
+
+                for(HatPart hatPart : part.hatParts)
+                {
+                    boolean has = false;
+                    for(HatPart hatPart1 : hatParts)
+                    {
+                        if(hatPart1.hasFullPart(hatPart))
+                        {
+                            has = true;
+                            break;
+                        }
+                    }
+
+                    if(!has)
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+
+                return flag;
+            }
+            return false;
+        }
+
         public void setCountTo(int count)
         {
             this.count = count;

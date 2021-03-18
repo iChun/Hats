@@ -1,6 +1,7 @@
 package me.ichun.mods.hats.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.window.WindowHalfGreyout;
 import me.ichun.mods.hats.client.gui.window.WindowHatsList;
@@ -11,19 +12,27 @@ import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.hats.common.packet.PacketHatCustomisation;
+import me.ichun.mods.hats.common.packet.PacketHatLauncherCustomisation;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.Workspace;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
+import me.ichun.mods.ichunutil.common.iChunUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Matrix4f;
+import net.minecraft.util.math.vector.Vector3f;
 import net.minecraft.util.text.TranslationTextComponent;
 
 import javax.annotation.Nonnull;
@@ -32,13 +41,14 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class WorkspaceHats extends Workspace
-    implements IHatSetter
+        implements IHatSetter
 {
     public static final DecimalFormat FORMATTER = new DecimalFormat("#,###,###"); //TODO double check the access transformers, which Heads do we no longer need
 
     public final boolean fallback;
     public final @Nonnull LivingEntity hatEntity;
     public final HatsSavedData.HatPart hatDetails;
+    public final ItemStack hatLauncher;
 
     public int age;
 
@@ -50,14 +60,23 @@ public class WorkspaceHats extends Workspace
 
     public boolean confirmed = false;
 
-    public WorkspaceHats(Screen lastScreen, boolean fallback, @Nonnull LivingEntity hatEntity) //TODO new hat tutorial.
+    public WorkspaceHats(Screen lastScreen, boolean fallback, @Nonnull LivingEntity hatEntity, @Nullable ItemStack hatLauncher) //TODO new hat tutorial.
     {
         super(lastScreen, new TranslationTextComponent("hats.gui.selection.title"), Hats.configClient.guiMinecraftStyle);
         windows.add(windowInput = new WindowInputReceiver(this));
 
-        this.fallback = fallback || hatEntity != Minecraft.getInstance().player;
+        this.fallback = fallback || hatEntity != Minecraft.getInstance().player || hatLauncher != null;
         this.hatEntity = hatEntity;
-        this.hatDetails = HatHandler.getHatPart(hatEntity).createCopy();
+        this.hatLauncher = hatLauncher;
+
+        if(hatLauncher != null)
+        {
+            this.hatDetails = HatHandler.getHatPart(hatLauncher).createCopy();
+        }
+        else
+        {
+            this.hatDetails = HatHandler.getHatPart(hatEntity).createCopy();
+        }
 
         addWindow(windowHatsList = new WindowHatsList(this));
         addWindow(windowSidebar = new WindowSidebar(this));
@@ -91,6 +110,8 @@ public class WorkspaceHats extends Workspace
     @Override
     public void renderWindows(MatrixStack stack, int mouseX, int mouseY, float partialTick)
     {
+        RenderHelper.setupGuiFlatDiffuseLighting();
+
         boolean invisibleEnt = hatEntity.isInvisible();
         if(invisibleEnt)
         {
@@ -102,11 +123,34 @@ public class WorkspaceHats extends Workspace
             RenderSystem.depthMask(true);
 
             RenderSystem.pushMatrix();
-            RenderSystem.translatef(0F, 0F, 200F);
+
             float zoom = (windowInput.camDist * 40);
             int x = (int)((windowHatsList.getLeft() / 2F) - windowInput.x * 40);
             int y = (int)((getHeight() / 4 * 3F + windowInput.y * 40) + (hatEntity.getHeight() / 2) * 50F - zoom);
-            InventoryScreen.drawEntityOnScreen(x, y, Math.max(80 - (int)(hatEntity.getWidth() * 20 + zoom), 10), x - mouseX, (getHeight() / 2F) - mouseY, hatEntity);
+            if(hatLauncher != null)
+            {
+                stack.push();
+
+                y = (int)((getHeight() / 2F + windowInput.y * 40) - zoom);
+
+                stack.translate(x, y, 0F);
+
+                float scale = -160F;
+                stack.translate(0F, 0F, 200F);
+                stack.scale(scale, scale, scale);
+                stack.rotate(Vector3f.YP.rotationDegrees((iChunUtil.eventHandlerClient.ticks + partialTick) * 0.5F));
+
+                IRenderTypeBuffer.Impl bufferSource = minecraft.getRenderTypeBuffers().getBufferSource();
+                minecraft.getItemRenderer().renderItem(hatLauncher, ItemCameraTransforms.TransformType.GUI, 0xF000F0, OverlayTexture.NO_OVERLAY, stack, bufferSource);
+
+                bufferSource.finish();
+                stack.pop();
+            }
+            else
+            {
+                RenderSystem.translatef(0F, 0F, 200F);
+                InventoryScreen.drawEntityOnScreen(x, y, Math.max(80 - (int)(hatEntity.getWidth() * 20 + zoom), 10), x - mouseX, (getHeight() / 2F) - mouseY, hatEntity);
+            }
             RenderSystem.popMatrix();
 
             RenderSystem.depthMask(false);
@@ -224,20 +268,36 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void onClose() //TODO disable hat remove button when no hat.
+    public void onClose()
     {
         super.onClose();
 
         if(!confirmed)
         {
-            HatHandler.assignSpecificHat(hatEntity, hatDetails); //Reset
+            //Reset the item's part
+            if(hatLauncher != null)
+            {
+                HatHandler.setHatPart(hatLauncher, hatDetails);
+            }
+            else
+            {
+                HatHandler.assignSpecificHat(hatEntity, hatDetails); //Reset
+            }
         }
 
         //Send to the server our customisations, and our new hat if we hit confirmed
         if(!changedHats.isEmpty() || confirmed)
         {
-            Hats.channel.sendToServer(new PacketHatCustomisation(changedHats, confirmed, confirmed ? HatHandler.getHatPart(hatEntity) : new HatsSavedData.HatPart()));
+            if(hatLauncher != null)
+            {
+                Hats.channel.sendToServer(new PacketHatLauncherCustomisation(HatHandler.getHatPart(hatLauncher)));
 
+            }
+            //Send the details of what we changed to the server. Server end only copies the customisation, not the count as well.
+            //Don't send the new hat that we selected to the server if we're editing the item.
+            Hats.channel.sendToServer(new PacketHatCustomisation(changedHats, confirmed, confirmed && hatLauncher == null ? HatHandler.getHatPart(hatEntity) : new HatsSavedData.HatPart()));
+
+            //Update our inventory with what has been changed
             for(HatsSavedData.HatPart hatPart : Hats.eventHandlerClient.hatsInventory.hatParts)
             {
                 for(int i = changedHats.size() - 1; i >= 0; i--)
@@ -249,6 +309,8 @@ public class WorkspaceHats extends Workspace
                     }
                 }
             }
+
+            //If we somehow modified hats we don't own
             for(HatsSavedData.HatPart customisedHat : changedHats) //these are hats we don't own.
             {
                 HatsSavedData.HatPart copy = customisedHat.createCopy();
@@ -263,7 +325,7 @@ public class WorkspaceHats extends Workspace
         Hats.eventHandlerClient.closeHatsMenu();
     }
 
-    public void notifyChanged(@Nonnull HatsSavedData.HatPart part) //TODO combine with the hats source
+    public void notifyChanged(@Nonnull HatsSavedData.HatPart part)
     {
         boolean found = false;
         for(int i = changedHats.size() - 1; i >= 0; i--)
@@ -287,7 +349,14 @@ public class WorkspaceHats extends Workspace
     {
         if(newHat == null)
         {
-            HatHandler.assignSpecificHat(hatEntity, null); //remove the current hat
+            if(hatLauncher != null)
+            {
+                HatHandler.setHatPart(hatLauncher, new HatsSavedData.HatPart());
+            }
+            else
+            {
+                HatHandler.assignSpecificHat(hatEntity, null); //remove the current hat
+            }
 
             for(Element<?> element : windowHatsList.getCurrentView().list.elements)
             {
@@ -304,7 +373,14 @@ public class WorkspaceHats extends Workspace
                 notifyChanged(newHat);
             }
 
-            HatHandler.assignSpecificHat(hatEntity, newHat); //remove the current hat
+            if(hatLauncher != null)
+            {
+                HatHandler.setHatPart(hatLauncher, newHat);
+            }
+            else
+            {
+                HatHandler.assignSpecificHat(hatEntity, newHat); //remove the current hat
+            }
         }
 
         onNewHatSet(newHat);

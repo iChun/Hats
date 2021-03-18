@@ -92,22 +92,26 @@ public class WindowSidebar extends Window<WorkspaceHats>
             elements.add(btnStack);
             btnStackLast = btnStack;
 
-            //SORTING OPTIONS
-            btnStack = new ElementButtonTextured<>(this, TEX_CATEGORIES, btn -> {});
-            btnStack.setTooltip(I18n.format("hats.gui.button.sortingOptions"));
-            btnStack.setSize(20, 20);
-            btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
-            elements.add(btnStack);
-            btnStackLast = btnStack;
+            if(parent.parent.hatLauncher == null)
+            {
+                //SORTING OPTIONS
+                btnStack = new ElementButtonTextured<>(this, TEX_CATEGORIES, btn -> {
+                });
+                btnStack.setTooltip(I18n.format("hats.gui.button.sortingOptions"));
+                btnStack.setSize(20, 20);
+                btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
+                elements.add(btnStack);
+                btnStackLast = btnStack;
 
-            //RELOAD
-            btnStack = new ElementButtonTextured<>(this, TEX_RELOAD, btn -> {});
-            btnStack.setTooltip(I18n.format("hats.gui.button.hatResourceManagement"));
-            btnStack.setSize(20, 20);
-            btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
-            elements.add(btnStack);
-            btnStackLast = btnStack;
-
+                //RELOAD
+                btnStack = new ElementButtonTextured<>(this, TEX_RELOAD, btn -> {
+                });
+                btnStack.setTooltip(I18n.format("hats.gui.button.hatResourceManagement"));
+                btnStack.setSize(20, 20);
+                btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
+                elements.add(btnStack);
+                btnStackLast = btnStack;
+            }
 
             //CONFIRM button
             ElementButtonTextured<?> btnConfirm = new ElementButtonTextured<>(this, TEX_CONFIRM, btn -> {

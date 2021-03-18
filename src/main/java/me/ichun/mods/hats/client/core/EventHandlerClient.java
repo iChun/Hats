@@ -209,7 +209,7 @@ public class EventHandlerClient
                     || Hats.configServer.enabledGuiStyle == 1
                     || !(mc.player.getPose() == Pose.STANDING || mc.player.getPose() == Pose.CROUCHING)
                     || mc.player != mc.renderViewEntity
-                    || mc.player.getBrightness() <= 0.15F
+                    || mc.player.getBrightness() <= 0.15F //TODO does this cause issues in the END dimension??
                     || mc.player.isInvisible()
                     ;
             if(!fallback)
@@ -242,7 +242,7 @@ public class EventHandlerClient
                 fallback = !camPoint.getType().equals(RayTraceResult.Type.MISS);
             }
 
-            mc.displayGuiScreen(new WorkspaceHats(mc.currentScreen, fallback, mc.player));
+            mc.displayGuiScreen(new WorkspaceHats(mc.currentScreen, fallback, mc.player, null));
 
             if(!fallback)
             {

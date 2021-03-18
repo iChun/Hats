@@ -18,6 +18,9 @@ import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Vector3f;
 
 import javax.annotation.Nonnull;
@@ -174,18 +177,21 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
             HatHandler.assignSpecificHat(livingEnt, partForRender);
 
-            if(Hats.configClient.invisibleEntityInHatSelector)
+            ItemStack helm = livingEnt.getItemStackFromSlot(EquipmentSlotType.HEAD);
+            if(Hats.configClient.invisibleEntityInHatSelector || ((WorkspaceHats)getWorkspace()).hatLauncher != null)
             {
                 Hats.eventHandlerClient.forceRenderWhenInvisible = true;
                 livingEnt.setInvisible(true);
+                ((PlayerEntity)livingEnt).inventory.armorInventory.set(EquipmentSlotType.HEAD.getIndex(), ItemStack.EMPTY);
             }
 
             InventoryScreen.drawEntityOnScreen(getLeft() + (getWidth() / 2), (int)(getBottom() + livingEnt.getEyeHeight() * 32F), Math.max(50 - (int)(livingEnt.getWidth() * 10), 10), 20, -10, livingEnt);
 
-            if(Hats.configClient.invisibleEntityInHatSelector)
+            if(Hats.configClient.invisibleEntityInHatSelector || ((WorkspaceHats)getWorkspace()).hatLauncher != null)
             {
                 Hats.eventHandlerClient.forceRenderWhenInvisible = false;
                 livingEnt.setInvisible(false);
+                ((PlayerEntity)livingEnt).inventory.armorInventory.set(EquipmentSlotType.HEAD.getIndex(), helm);
             }
 
             HatHandler.assignSpecificHat(livingEnt, originalHat);

@@ -93,6 +93,11 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
 
         launcherModel.render(stack, bufferIn.getBuffer(RenderType.getEntityTranslucentCull(TEXTURE)), combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 
+        if(is.hasEffect())
+        {
+            launcherModel.render(stack, bufferIn.getBuffer(RenderType.getGlint()), combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
+        }
+
         if(lastPlayer != null) //only render the hat and the head when it's a player holding it
         {
             stack.push();

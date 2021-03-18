@@ -123,24 +123,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
             //TODO in sort menu - show all hats?
             //TODO show unowned hats at the bottom?
             //TODO sync with server regarding hats list.
-
-//
-//            ArrayList<String> test = new ArrayList<>();
-//            test.add("ABC");
-//            test.add("asdas");
-//            test.add("djdjdj");
-//            ElementDropdownContextMenu<?> sortButton = new ElementDropdownContextMenu<>(this, "Sort by...", test, ((menu, item) -> {
-//                if(item.selected)
-//                {
-//                    ElementDropdownContextMenu<?> contextMenu = (ElementDropdownContextMenu<?>)menu;
-//                    contextMenu.text = item.getObject().toString().trim();
-//
-////                    changeProfile(contextMenu.text);
-//                }
-//            }));
-//            sortButton.setSize(70, 16);
-//            sortButton.setConstraint(new Constraint(sortButton).right(this, Constraint.Property.Type.RIGHT, padding).bottom(this, Constraint.Property.Type.BOTTOM, padding).width(this, Constraint.Property.Type.WIDTH, 40));
-//            elements.add(sortButton);
+            //TODO hide contributor hats filter
 
             ElementScrollBar<?> sv = new ElementScrollBar<>(this, ElementScrollBar.Orientation.VERTICAL, 0.6F);
             sv.constraints().top(this, Constraint.Property.Type.TOP, padding)
@@ -158,7 +141,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
             updateSearch("");
         }
 
-        public void updateSearch(String query) //TODO hide contributor hats filter
+        public void updateSearch(String query)
         {
             List<HatsSavedData.HatPart> hatPartSource = ((WorkspaceHats)getWorkspace()).getHatPartSource();
             if(!query.isEmpty())
@@ -171,6 +154,11 @@ public class WindowHatsList extends Window<WorkspaceHats>
             for(HatsSavedData.HatPart part : hatPartSource)
             {
                 HatsSavedData.HatPart hatPart = part.createCopy();
+                if(parentFragment.parent.hatLauncher != null && parentFragment.parent.usePlayerInventory())
+                {
+                    //Remove our worn hat from the count
+                    hatPart.minusByOne(HatHandler.getHatPart(parentFragment.parent.hatEntity));
+                }
                 ElementHatRender<?> hat = new ElementHatRender<>(list, hatPart, hatPart, btn -> {
                     ElementHatsScrollView scrollView = (ElementHatsScrollView)btn.parentFragment;
                     if(btn.toggleState) //we're selected
@@ -193,7 +181,8 @@ public class WindowHatsList extends Window<WorkspaceHats>
                     }
                 }
                 );
-                hat.setToggled(parentFragment.parent.hatDetails.name.equals(part.name));
+                HatsSavedData.HatPart parentPart = parentFragment.parent.hatLauncher != null ? HatHandler.getHatPart(parentFragment.parent.hatLauncher) : HatHandler.getHatPart(parentFragment.parent.hatEntity);
+                hat.setToggled(parentPart.name.equals(part.name));
                 hat.setSize(50, 70);
                 list.addElement(hat);
             }

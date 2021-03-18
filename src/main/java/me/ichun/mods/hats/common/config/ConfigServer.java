@@ -24,7 +24,7 @@ public class ConfigServer extends ConfigBase
     public String randSeed = ""; //An empty string denotes a seed that is not set yet.
 
     @Prop(min = 0.0D, max = 1.0D)
-    public double hatChance = 0.1D; //10% chance//TODO entity override spawn rate
+    public double hatChance = 0.2D; //20% chance//TODO entity override spawn rate
 
     public List<String> disabledMobs = new ArrayList<>();
 

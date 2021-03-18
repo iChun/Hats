@@ -222,8 +222,8 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
         public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
         {
             int hatsListPadding = 3;
-            int targetX = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.getLeft() + hatsListPadding;
-            int targetWidth = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.width - hatsListPadding - hatsListPadding;
+            int targetX = parentFragment.parent.windowHatsList.getCurrentView().list.getLeft() + hatsListPadding;
+            int targetWidth = parentFragment.parent.windowHatsList.getCurrentView().list.width - hatsListPadding - hatsListPadding;
 
             float prog = 1F;
             if(age <= Hats.configClient.guiAnimationTime)
@@ -248,7 +248,7 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
 
             int hatViewWidth = parentFragment.parentElement.getWidth();
             int hatViewLeft = parentFragment.parentElement.getLeft();
-            int targetElementX = ((WindowHatsList.ViewHatsList)parentFragment.parent.windowHatsList.getCurrentView()).list.getRight() - hatsListPadding - parentFragment.parentElement.getMinWidth();
+            int targetElementX = parentFragment.parent.windowHatsList.getCurrentView().list.getRight() - hatsListPadding - parentFragment.parentElement.getMinWidth();
             int hatViewTop = parentFragment.parentElement.getTop();
 
             Fragment<?> fragment = parentFragment.parentElement.parentFragment;

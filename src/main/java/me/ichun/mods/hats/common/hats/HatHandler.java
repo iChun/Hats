@@ -1,12 +1,15 @@
 package me.ichun.mods.hats.common.hats;
 
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.packet.PacketEntityHatDetails;
+import me.ichun.mods.hats.common.packet.PacketHatLauncherInfo;
 import me.ichun.mods.hats.common.packet.PacketNewHatPart;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
+import me.ichun.mods.ichunutil.common.item.DualHandedItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -389,6 +392,11 @@ public class HatHandler //Handles most of the server-related things.
         return is.getCapability(HatsSavedData.HatPart.CAPABILITY_INSTANCE).orElseThrow(() -> new IllegalArgumentException("Item " + is.toString() + " has no hat capabilities"));
     }
 
+    public static void setHatPart(ItemStack is, @Nonnull HatsSavedData.HatPart part)
+    {
+        getHatPart(is).copy(part);
+    }
+
     public static HatsSavedData.HatPart getRandomHat(PlayerEntity player) //WE CONSUME THE HAT. Be mindful of use
     {
         HatsSavedData.HatPart part = null;
@@ -442,5 +450,35 @@ public class HatHandler //Handles most of the server-related things.
                 break;
             }
         }
+    }
+
+    public static void setHatLauncherCustomisation(ServerPlayerEntity player, HatsSavedData.HatPart newHat)
+    {
+        ItemStack is = DualHandedItem.getUsableDualHandedItem(player);
+        if(is.getItem() instanceof ItemHatLauncher)
+        {
+            setHatPart(is, newHat);
+            HatsSavedData.HatPart part = newHat.createCopy();
+            part.count = player.getPrimaryHand() == DualHandedItem.getHandSide(player, is) ? 0 : 1;
+            Hats.channel.sendTo(new PacketHatLauncherInfo(player.getEntityId(), part.write(new CompoundNBT())), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
+        }
+    }
+
+    public static boolean playerHasHat(PlayerEntity player, HatsSavedData.HatPart part)
+    {
+        if(useInventory(player))
+        {
+            ArrayList<HatsSavedData.HatPart> playerInventory = getPlayerInventory(player);
+            for(HatsSavedData.HatPart hatPart : playerInventory)
+            {
+                if(hatPart.hasFullPart(part))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+        return true;
     }
 }
