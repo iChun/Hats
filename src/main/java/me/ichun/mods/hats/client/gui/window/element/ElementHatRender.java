@@ -242,7 +242,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
                 renderIconX -= 10;
             }
-            if(partForRender.hasNew())
+            if(partForRender.hasNew()) //TODO test this
             {
                 topDist = height - 14;
 
@@ -327,7 +327,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
                 sb.append(accessoryInfo.getDisplayName()).append("\n");
                 if(!accessoryInfo.project.author.isEmpty())
                 {
-                    sb.append(I18n.format("hats.gui.tooltip.author", accessoryInfo.project.author)).append("\n");
+                    sb.append(I18n.format("hats.gui.tooltip.author", accessoryInfo.project.author)).append("\n"); //TODO update the hat authors (and hat packs)
                 }
                 sb.append(I18n.format("hats.gui.tooltip.rarity", accessoryInfo.getRarity().getColour().toString() + accessoryInfo.getRarity().toString())).append("\n").append("\n");
                 sb.append(I18n.format("hats.gui.tooltip.worth", info.getWorthFor(accessoryInfo.name, 0)));

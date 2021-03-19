@@ -128,8 +128,13 @@ public class EntityHat extends Entity
     {
         super.tick();
 
+        if(removed) //Caps are invalidated, we're gonna crash!
+        {
+            return;
+        }
+
         age++;
-        if(age > Hats.configServer.hatEntityLifespan)
+        if(age > Hats.configServer.hatEntityLifespan && !world.isRemote)
         {
             setDead();
             return;

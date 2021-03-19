@@ -159,15 +159,15 @@ public class HatResourceHandler
                 Hats.LOGGER.warn("Loaded an old Tabula file. Updating to new Tabula & Hats format: {}", file);
             }
 
-            //            if(file.getAbsolutePath().contains("mods\\hats\\Top Hat") && !file.getAbsolutePath().contains("Soda Top"))
-            //            {
-            //                for(Project.Part allPart : project.getAllParts())
-            //                {
-            //                    allPart.rotPY += 1F;
-            //                }
-            //                project.save(file);
-            //                Hats.LOGGER.info("Resaved: {}", file);
-            //            }
+//                        if(file.getName().equals("One Man Army.tbl"))
+//                        {
+//                            for(Project.Part allPart : project.getAllParts())
+//                            {
+//                                allPart.rotPY += 1F;
+//                            }
+//                            project.save(file);
+//                            Hats.LOGGER.info("Resaved: {}", file);
+//                        }
             //            if(file.getName().startsWith("(C) ")) //it's a contributor hat
             //            {
             //                parseMeta(file, project);

@@ -56,7 +56,7 @@ public class WorkspaceHats extends Workspace
     public WindowHatsList windowHatsList;
     public WindowSidebar windowSidebar;
 
-    public ArrayList<HatsSavedData.HatPart> changedHats = new ArrayList<>();
+    public ArrayList<HatsSavedData.HatPart> changedHats = new ArrayList<>(); //TODO Update hat when you have your own hat replaced and you are in the GUI
 
     public boolean confirmed = false;
 
@@ -257,7 +257,7 @@ public class WorkspaceHats extends Workspace
     public void resetBackground()
     {
         RenderSystem.popMatrix();
-    } //TODO TOOLTIP! credit authors!! hat pack authors?
+    }
 
     @Override
     public void tick()

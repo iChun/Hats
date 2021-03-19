@@ -1,6 +1,7 @@
 package me.ichun.mods.hats.client.module.tabula;
 
 import com.google.common.collect.Ordering;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.ichunutil.client.gui.bns.Workspace;
@@ -12,6 +13,8 @@ import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.*;
 import me.ichun.mods.ichunutil.common.module.tabula.TabulaPlugin;
 import me.ichun.mods.ichunutil.common.module.tabula.formats.ImportList;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Util;
@@ -104,17 +107,32 @@ public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
                 button.setConstraint(new Constraint(button).bottom(this, Constraint.Property.Type.BOTTOM, 10).right(this, Constraint.Property.Type.RIGHT, 10));
                 elements.add(button);
 
-                ElementButton<?> button1 = new ElementButton<>(this, I18n.format("gui.ok"), btn ->
+                ElementButton button1 = new ElementButton(this, I18n.format("gui.ok"), btn ->
                 {
                     for(ElementList.Item<?> item : list.items)
                     {
                         if(item.selected)
                         {
-                            loadFile((File)item.getObject(), ((ElementNumberInput)getById("inputOpacity")).getInt() / 100F);
+                            loadFile(Screen.hasShiftDown() ? null : (File)item.getObject(), ((ElementNumberInput)getById("inputOpacity")).getInt() / 100F);
                             return;
                         }
                     }
-                });
+                })
+                {
+                    @Override
+                    public void renderText(MatrixStack stack)
+                    {
+                        if(Screen.hasShiftDown())
+                        {
+                            text = I18n.format("hats.plugin.tabula.button.new");
+                        }
+                        else
+                        {
+                            text = I18n.format("gui.ok");
+                        }
+                        super.renderText(stack);
+                    }
+                };
                 button1.setSize(60, 20);
                 button1.setConstraint(new Constraint(button1).right(button, Constraint.Property.Type.LEFT, 10));
                 elements.add(button1);
@@ -154,7 +172,19 @@ public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
             {
                 parentFragment.parent.removeWindow(parentFragment);
 
-                Project project = ImportList.createProjectFromFile(file);
+                Project project;
+                if(file != null)
+                {
+                    project = ImportList.createProjectFromFile(file);
+                }
+                else
+                {
+                    project = new Project();
+                    project.name = "New Hat";
+                    project.author = Minecraft.getInstance().getSession().getUsername();
+                    project.markDirty();
+                }
+
                 if(project == null)
                 {
                     WindowPopup.popup(parentFragment.parent, 0.4D, 140, null, I18n.format("window.open.failed"));

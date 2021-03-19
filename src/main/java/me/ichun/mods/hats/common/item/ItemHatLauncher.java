@@ -73,7 +73,7 @@ public class ItemHatLauncher extends Item
 
             if(!player.isSneaking()) //sneaking forces open the UI
             {
-                part = HatHandler.getHatPart(is);
+                part = HatHandler.getHatPart(is).createCopy();
 
                 if(part.name.equals(":random"))
                 {
@@ -97,12 +97,12 @@ public class ItemHatLauncher extends Item
                 }
             }
 
-            if(part != null && part.count > 0)
+            if(part != null && part.count > 0) //TODO if the inventory runs out reset the item.
             {
                 if(!world.isRemote)
                 {
                     EntityHelper.playSound(player, Hats.Sounds.TUBE.get(), SoundCategory.PLAYERS, 1.0F, 0.9F + (player.getRNG().nextFloat() * 2F - 1F) * 0.075F);
-                    EntityHat hat = new EntityHat(Hats.EntityTypes.HAT.get(), player.world).setHatPart(part.createCopy()).setLastInteracted(player);
+                    EntityHat hat = new EntityHat(Hats.EntityTypes.HAT.get(), player.world).setHatPart(part).setLastInteracted(player);
 
                     double pX = player.getPosX();
                     double pZ = player.getPosZ();
@@ -123,7 +123,7 @@ public class ItemHatLauncher extends Item
                         }
                     }
 
-                    hat.setLocationAndAngles(pX, player.getPosY() + player.getEyeHeight() - ((hat.hatDims[1] - hat.hatDims[0]) / 16F) / 1.8F, pZ, player.rotationYaw, player.rotationPitch);
+                    hat.setLocationAndAngles(pX, player.getPosY() + player.getEyeHeight() - ((hat.hatDims[1] - hat.hatDims[0]) / 32F) / 1.8F, pZ, player.rotationYaw, player.rotationPitch);
 
                     int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, is);
                     if(k > 0)

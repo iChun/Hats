@@ -52,6 +52,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
         public static ResourceLocation TEX_CONFIRM = new ResourceLocation("hats", "textures/icon/confirm.png");
 
         public ElementButtonTextured<?> cancelButton;
+        public ElementButtonTextured<?> randomButton;
 
         public ViewSidebar(@Nonnull WindowSidebar parent) //TODO head analyser for Tabula
         {
@@ -77,13 +78,28 @@ public class WindowSidebar extends Window<WorkspaceHats>
             btnStackLast = btnStack;
 
             //RANDOMISE
-            btnStack = new ElementButtonTextured<>(this, TEX_RANDOMISE, btn -> {
-                List<Element<?>> elements = parent.parent.windowHatsList.getCurrentView().list.elements;
-                Element<?> element1 = elements.get(parentFragment.parent.hatEntity.getRNG().nextInt(elements.size()));
-                if(element1 instanceof ElementHatRender)
+            randomButton = btnStack = new ElementButtonTextured<>(this, TEX_RANDOMISE, btn -> {
+                if(parent.parent.hatLauncher != null)
                 {
-                    ((ElementHatRender<?>)element1).onClickRelease();
-                    ((ElementHatRender)element1).callback.accept(element1); //TODO shift + ctrl randomisation
+                    for(Element<?> element : parent.parent.windowHatsList.getCurrentView().list.elements)
+                    {
+                        if(element instanceof ElementHatRender)
+                        {
+                            ((ElementHatRender<?>)element).toggleState = false;
+                        }
+                    }
+                    btn.disabled = true;
+                    HatHandler.setHatPart(parent.parent.hatLauncher, new HatsSavedData.HatPart(":random"));
+                }
+                else
+                {
+                    List<Element<?>> elements = parent.parent.windowHatsList.getCurrentView().list.elements;
+                    Element<?> element1 = elements.get(parentFragment.parent.hatEntity.getRNG().nextInt(elements.size()));
+                    if(element1 instanceof ElementHatRender)
+                    {
+                        ((ElementHatRender<?>)element1).onClickRelease();
+                        ((ElementHatRender)element1).callback.accept(element1); //TODO shift + ctrl randomisation
+                    }
                 }
             });
             btnStack.setTooltip(I18n.format("hats.gui.button.randomHat"));
@@ -127,6 +143,10 @@ public class WindowSidebar extends Window<WorkspaceHats>
         public void onNewHatSet(HatsSavedData.HatPart newHat)
         {
             cancelButton.disabled = newHat == null;
+            if(parentFragment.parent.hatLauncher != null)
+            {
+                randomButton.disabled = newHat == null;
+            }
         }
 
         @Override

@@ -56,6 +56,7 @@ public class HatsSavedData extends WorldSavedData
     public static class PlayerHatData
     {
         public UUID owner;
+        public int tokenCount;
         public ArrayList<HatPart> hatParts = new ArrayList<>();
 
         public PlayerHatData(){}
@@ -70,6 +71,9 @@ public class HatsSavedData extends WorldSavedData
             hatParts.clear();
 
             owner = tag.getUniqueId("owner");
+
+            tokenCount = tag.getInt("tokenCount");
+
             int count = tag.getInt("partCount");
 
             for(int i = 0; i < count; i++)
@@ -88,6 +92,9 @@ public class HatsSavedData extends WorldSavedData
         public CompoundNBT write(CompoundNBT tag)
         {
             tag.putUniqueId("owner", owner);
+
+            tag.putInt("tokenCount", tokenCount);
+
             tag.putInt("partCount", hatParts.size());
 
             for(int i = 0; i < hatParts.size(); i++)

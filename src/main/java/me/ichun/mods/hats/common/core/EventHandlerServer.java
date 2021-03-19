@@ -1,6 +1,7 @@
 package me.ichun.mods.hats.common.core;
 
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.command.CommandHats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.packet.PacketPing;
@@ -15,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -91,6 +93,12 @@ public class EventHandlerServer
         {
             HatHandler.setSaveData(((ServerWorld)event.getWorld()).getSavedData().getOrCreate(HatsSavedData::new, HatsSavedData.ID));
         }
+    }
+
+    @SubscribeEvent
+    public void onRegisterCommands(RegisterCommandsEvent event)
+    {
+        CommandHats.register(event.getDispatcher());
     }
 
     @SubscribeEvent

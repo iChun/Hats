@@ -24,7 +24,7 @@ public class ConfigServer extends ConfigBase
     public String randSeed = ""; //An empty string denotes a seed that is not set yet.
 
     @Prop(min = 0.0D, max = 1.0D)
-    public double hatChance = 0.2D; //20% chance//TODO entity override spawn rate
+    public double hatChance = 0.1D; //10% chance//TODO entity override spawn rate
 
     public List<String> disabledMobs = new ArrayList<>();
 
@@ -38,7 +38,7 @@ public class ConfigServer extends ConfigBase
     }};
 
     @Prop(validator = "numbersOnly")
-    public List<String> rarityCost = new ArrayList<String>(){{
+    public List<String> rarityCost = new ArrayList<String>(){{ //TODO double check the spawn rate
         add("10"); //Common - White
         add("20"); //Uncommon - Green
         add("40"); //Rare - Blue
@@ -46,16 +46,18 @@ public class ConfigServer extends ConfigBase
         add("110"); //Legendary - Gold
     }};
 
+    @Prop(min = 0.0D, max = 1.0D)
     public double bossHatChanceBonus = 0.1D;
 
+    @Prop(min = 0.0D, max = 1.0D)
     public double bossRarityBonus = 0.2D; //TODO new hat toast config
 
     //TODO reorganise the configs
     @CategoryDivider(name = "others")
-    public boolean userSubmissionsRequireApproval = true; //TODO this config
+    public boolean userSubmissionsRequireApproval = true; //TODO this config - update localisation
 
     @Prop(min = 0)
-    public double accessoryCostMultiplier = 1.5D;
+    public double accessoryCostMultiplier = 1.5D; //TODO easter egg rainbow hats
 
     @Prop(min = 0)
     public double salesCostMultiplier = 10D;
