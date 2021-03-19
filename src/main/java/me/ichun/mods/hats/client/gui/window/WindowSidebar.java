@@ -88,8 +88,8 @@ public class WindowSidebar extends Window<WorkspaceHats>
                             ((ElementHatRender<?>)element).toggleState = false;
                         }
                     }
+                    parent.parent.setNewHat(new HatsSavedData.HatPart(":random"), false);
                     btn.disabled = true;
-                    HatHandler.setHatPart(parent.parent.hatLauncher, new HatsSavedData.HatPart(":random"));
                 }
                 else
                 {
@@ -102,6 +102,10 @@ public class WindowSidebar extends Window<WorkspaceHats>
                     }
                 }
             });
+            if(parent.parent.hatLauncher != null && parent.parent.hatDetails.name.equals(":random"))
+            {
+                randomButton.disabled = true;
+            }
             btnStack.setTooltip(I18n.format("hats.gui.button.randomHat"));
             btnStack.setSize(20, 20);
             btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
@@ -145,7 +149,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
             cancelButton.disabled = newHat == null;
             if(parentFragment.parent.hatLauncher != null)
             {
-                randomButton.disabled = newHat == null;
+                randomButton.disabled = false;
             }
         }
 

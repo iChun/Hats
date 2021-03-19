@@ -26,6 +26,8 @@ public class ConfigClient extends ConfigBase
     @Prop(min = 1)
     public int guiAnimationTime = 10;
 
+    public boolean forceRenderToasts = true;
+
     public boolean forceGuiFallback = false;
 
     public boolean invisibleEntityInHatSelector = false;

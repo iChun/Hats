@@ -103,7 +103,7 @@ public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
                 {
                     getWorkspace().removeWindow(parent);
                 });
-                button.setSize(60, 20);
+                button.setSize(60, 20).setTooltip(I18n.format("hats.plugin.tabula.button.ok.tooltip"));
                 button.setConstraint(new Constraint(button).bottom(this, Constraint.Property.Type.BOTTOM, 10).right(this, Constraint.Property.Type.RIGHT, 10));
                 elements.add(button);
 
@@ -113,9 +113,13 @@ public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
                     {
                         if(item.selected)
                         {
-                            loadFile(Screen.hasShiftDown() ? null : (File)item.getObject(), ((ElementNumberInput)getById("inputOpacity")).getInt() / 100F);
+                            loadFile((File)item.getObject(), ((ElementNumberInput)getById("inputOpacity")).getInt() / 100F, Screen.hasShiftDown());
                             return;
                         }
+                    }
+                    if(Screen.hasShiftDown())
+                    {
+                        loadFile(null, ((ElementNumberInput)getById("inputOpacity")).getInt() / 100F, false);
                     }
                 })
                 {
@@ -158,7 +162,7 @@ public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
                         list.addItem(file).setDefaultAppearance().setDoubleClickHandler(item -> {
                             if(item.selected)
                             {
-                                loadFile(item.getObject(), ((ElementNumberInput)getById("inputOpacity")).getInt() / 100F);
+                                loadFile(item.getObject(), ((ElementNumberInput)getById("inputOpacity")).getInt() / 100F, Screen.hasShiftDown());
                             }
                         });
                     }
@@ -168,7 +172,7 @@ public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
                 list.init();
             }
 
-            public void loadFile(File file, float ghostOpacity)
+            public void loadFile(File file, float ghostOpacity, boolean loadAsGhost)
             {
                 parentFragment.parent.removeWindow(parentFragment);
 
@@ -202,7 +206,16 @@ public class HatsTabulaPlugin extends TabulaPlugin //TODO ghost hat project
                     }
 
                     Project ghost = null;
-                    if(ghostOpacity > 0F)
+                    if(loadAsGhost)
+                    {
+                        ghost = project;
+
+                        project = new Project();
+                        project.name = "New Hat";
+                        project.author = Minecraft.getInstance().getSession().getUsername();
+                        project.markDirty();
+                    }
+                    else if(ghostOpacity > 0F)
                     {
                         InputStream in = Hats.class.getResourceAsStream("/HatTemplate.tbl");
                         if(in != null)

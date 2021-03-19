@@ -5,6 +5,8 @@ import me.ichun.mods.hats.client.model.ModelHat;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
+import me.ichun.mods.ichunutil.common.head.HeadHandler;
+import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -322,7 +324,8 @@ public class HatInfo
             double accChance = Hats.configServer.rarityIndividual.get(accessory.getRarity().ordinal()); //calling getRarity sets the accessory's rarity.
 
             HatHandler.RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID() + accessory.getFullName()).hashCode()) * 53579997854L); //Chat contributed random
-            if(!ent.canChangeDimension()) //TODO Old isNonBoss(). Needs a new config or maybe set it in the JSON
+            HeadInfo<?> info = HeadHandler.getHelper(ent.getClass());
+            if(info != null && info.isBoss)
             {
                 accChance += Hats.configServer.bossRarityBonus;
             }

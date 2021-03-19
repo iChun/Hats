@@ -95,9 +95,11 @@ public class WindowHalfGreyout extends WindowGreyout<WorkspaceHats>
 
         tessellator.draw();
         RenderSystem.shadeModel(7424);
-        RenderSystem.disableBlend();
         RenderSystem.enableAlphaTest();
         RenderSystem.enableTexture();
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
     }
 
     @Override

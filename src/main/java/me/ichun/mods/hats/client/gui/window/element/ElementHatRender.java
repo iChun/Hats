@@ -207,16 +207,14 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         }
 
         RenderSystem.enableBlend();
-        RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        RenderSystem.defaultBlendFunc();
 
         if(hasConflict)
         {
             RenderHelper.drawColour(stack, 255, 0, 0, 30, getLeft() + 1, getTop() + 1, width - 2, height - 2, 0);
         }
 
-        RenderHelper.drawColour(stack, 0, 0, 0, 120, getRight() - 10, getTop() + 1, 9, height - 2, 0);
-
-        RenderSystem.disableBlend();
+        RenderHelper.drawColour(stack, 0, 0, 0, 150, getRight() - 10, getTop() + 1, 9, height - 2, 0);
 
         HatInfo info = HatResourceHandler.getInfo(partForRender);
         String hatName = info != null ? info.getDisplayNameFor(hatLevel.name) : "";
@@ -228,8 +226,6 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
             if(partForRender.hasFavourite())
             {
                 topDist = height - 14;
-                RenderSystem.enableBlend();
-                RenderSystem.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
                 if(!hatLevel.isFavourite)
                 {
@@ -237,8 +233,6 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
                 }
                 RenderHelper.drawTexture(stack, WindowHatOptions.ViewHatOptions.TEX_FAVOURITE, renderIconX, getTop() + 2, 7, 7, 0);
                 RenderHelper.colour(0xffffff); //reset the colour
-
-                RenderSystem.disableBlend();
 
                 renderIconX -= 10;
             }

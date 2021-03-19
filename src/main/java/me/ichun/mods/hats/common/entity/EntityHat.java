@@ -230,7 +230,10 @@ public class EntityHat extends Entity
                 HashMap<Integer, HatsSavedData.HatPart> entIdToHat = new HashMap<>();
                 entIdToHat.put(collidedEnt.getEntityId(), hatPart);
 
-                Hats.channel.sendTo(new PacketRehatify(collidedEnt.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> collidedEntFinal));
+                if(!(hatPart.name.isEmpty() && oriHat.name.isEmpty()))
+                {
+                    Hats.channel.sendTo(new PacketRehatify(collidedEnt.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> collidedEntFinal));
+                }
 
                 Hats.channel.sendTo(new PacketEntityHatDetails(entIdToHat), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> collidedEntFinal));
 
@@ -277,7 +280,7 @@ public class EntityHat extends Entity
         //Move entity
         this.move(MoverType.SELF, getMotion());
 
-        if(!wasCollided && (collidedHorizontally || collidedVertically))
+        if(!wasCollided && (collidedHorizontally || collidedVertically) && !(hatPart.name.isEmpty()))
         {
             if(!world.isRemote)
             {

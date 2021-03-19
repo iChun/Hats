@@ -5,7 +5,9 @@ import me.ichun.mods.hats.client.render.ItemRenderHatLauncher;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.entity.EntityHat;
 import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.packet.PacketEntityHatDetails;
 import me.ichun.mods.hats.common.packet.PacketEntityHatEntityDetails;
+import me.ichun.mods.hats.common.packet.PacketRehatify;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.item.DualHandedItem;
@@ -14,6 +16,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.Item;
@@ -22,7 +25,9 @@ import net.minecraft.item.UseAction;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.EntityRayTraceResult;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
@@ -32,6 +37,7 @@ import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -57,7 +63,7 @@ public class ItemHatLauncher extends Item
     }
 
     @Override
-    public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity) //TODO enchantability, knockback + power + fire??
+    public boolean onLeftClickEntity(ItemStack stack, PlayerEntity player, Entity entity)
     {
         return false;
     }
@@ -97,7 +103,7 @@ public class ItemHatLauncher extends Item
                 }
             }
 
-            if(part != null && part.count > 0) //TODO if the inventory runs out reset the item.
+            if(part != null && !part.name.isEmpty() && part.count > 0) //TODO if the inventory runs swap to next item
             {
                 if(!world.isRemote)
                 {
@@ -163,13 +169,56 @@ public class ItemHatLauncher extends Item
             }
             else
             {
-                if(!world.isRemote)
+                boolean flag = false;
+                RayTraceResult entityLook = EntityHelper.getEntityLook(player, 4D);
+                if(entityLook.getType() == RayTraceResult.Type.ENTITY)
                 {
-                    EntityHelper.playSound(player, SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.6F, 0.9F + (player.getRNG().nextFloat() * 2F - 1F) * 0.075F);
+                    EntityRayTraceResult entityRayTraceResult = (EntityRayTraceResult)entityLook;
+                    Entity entity = entityRayTraceResult.getEntity();
+                    if(entity instanceof LivingEntity)
+                    {
+                        LivingEntity target = (LivingEntity)entity;
+                        HatsSavedData.HatPart entPart = HatHandler.getHatPart(target);
+                        if(!entPart.name.isEmpty())
+                        {
+                            if(!player.world.isRemote)
+                            {
+                                EntityHelper.playSound(player, Hats.Sounds.TUBE.get(), SoundCategory.PLAYERS, 1.0F, 0.9F + (player.getRNG().nextFloat() * 2F - 1F) * 0.075F);
+                                EntityHat hat = new EntityHat(Hats.EntityTypes.HAT.get(), player.world).setHatPart(entPart.createCopy()).setLastInteracted(target);
+
+                                hat.setLocationAndAngles(target.getPosX(), target.getPosY() + target.getEyeHeight() - ((hat.hatDims[1] - hat.hatDims[0]) / 32F) / 1.8F, target.getPosZ(), target.rotationYaw, target.rotationPitch);
+
+                                hat.setMotion(new Vector3d(target.getRNG().nextGaussian() * 0.2F, 0.2F + target.getRNG().nextFloat() * 0.2F, target.getRNG().nextGaussian() * 0.2F));
+
+                                player.world.addEntity(hat);
+
+                                entPart.copy(new HatsSavedData.HatPart());
+
+                                HashMap<Integer, HatsSavedData.HatPart> entIdToHat = new HashMap<>();
+                                entIdToHat.put(target.getEntityId(), entPart);
+                                Hats.channel.sendTo(new PacketEntityHatDetails(entIdToHat), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> target));
+
+                                Hats.channel.sendTo(new PacketRehatify(target.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> target));
+
+                                Hats.channel.sendTo(new PacketEntityHatEntityDetails(hat.getEntityId(), hat.hatPart.write(new CompoundNBT())), PacketDistributor.TRACKING_ENTITY.with(() -> hat));
+                            }
+
+                            player.swing(hand, true);
+                            flag = true;
+                        }
+                    }
                 }
-                else
+
+                if(!flag)
                 {
-                    openHatsGui(player, is);
+                    if(!world.isRemote)
+                    {
+                        EntityHelper.playSound(player, SoundEvents.UI_BUTTON_CLICK, SoundCategory.PLAYERS, 0.6F, 0.9F + (player.getRNG().nextFloat() * 2F - 1F) * 0.075F);
+                    }
+                    else
+                    {
+                        openHatsGui(player, is);
+                    }
                 }
             }
         }

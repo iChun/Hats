@@ -110,6 +110,9 @@ public class WorkspaceHats extends Workspace
     @Override
     public void renderWindows(MatrixStack stack, int mouseX, int mouseY, float partialTick)
     {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
         RenderHelper.setupGuiFlatDiffuseLighting();
 
         boolean invisibleEnt = hatEntity.isInvisible();
@@ -156,6 +159,9 @@ public class WorkspaceHats extends Workspace
             RenderSystem.depthMask(false);
             RenderSystem.disableDepthTest();
         }
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+
         RenderSystem.pushMatrix();
         super.renderWindows(stack, mouseX, mouseY, partialTick);
         RenderSystem.popMatrix();
@@ -245,18 +251,33 @@ public class WorkspaceHats extends Workspace
 
             tessellator.draw();
             RenderSystem.shadeModel(7424);
-            RenderSystem.disableBlend();
             RenderSystem.enableAlphaTest();
             RenderSystem.enableTexture();
         }
 
         RenderSystem.pushMatrix();
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
     }
 
     @Override
     public void resetBackground()
     {
         RenderSystem.popMatrix();
+    }
+
+    @Override
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
+    {
+        super.render(stack, mouseX, mouseY, partialTick);
+
+        if(!fallback && Hats.configClient.forceRenderToasts && minecraft.gameSettings.hideGUI)
+        {
+            minecraft.gameSettings.hideGUI = false;
+            minecraft.getToastGui().func_238541_a_(new MatrixStack());
+            minecraft.gameSettings.hideGUI = true;
+        }
     }
 
     @Override
@@ -268,7 +289,7 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void onClose()
+    public void onClose() //TODO update/refresh our hat cache if our hat changes whilst we're in menu
     {
         super.onClose();
 

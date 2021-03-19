@@ -205,6 +205,11 @@ public class EventHandlerClient
         Minecraft mc = Minecraft.getInstance();
         if(mc.world != null && mc.player != null)
         {
+            if(!mc.player.isAlive() || mc.player.isSleeping())
+            {
+                return; // do not open.
+            }
+
             boolean fallback = Hats.configClient.forceGuiFallback
                     || Hats.configServer.enabledGuiStyle == 1
                     || !(mc.player.getPose() == Pose.STANDING || mc.player.getPose() == Pose.CROUCHING)

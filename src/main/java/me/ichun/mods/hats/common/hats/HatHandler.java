@@ -99,7 +99,8 @@ public class HatHandler //Handles most of the server-related things.
     public static double getHatChance(LivingEntity ent)
     {
         double chance = Hats.configServer.hatChance;
-        if(!ent.canChangeDimension()) //Old isNonBoss()
+        HeadInfo<?> info = HeadHandler.getHelper(ent.getClass());
+        if(info != null && info.isBoss)
         {
             chance += Hats.configServer.bossHatChanceBonus;
         }
@@ -140,7 +141,8 @@ public class HatHandler //Handles most of the server-related things.
         RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID().toString()).hashCode()) * 425480085L); //Chat contributed random
 
         double chance = RAND.nextDouble();
-        if(!ent.canChangeDimension()) //Old isNonBoss()
+        HeadInfo<?> info = HeadHandler.getHelper(ent.getClass());
+        if(info != null && info.isBoss)
         {
             chance += Hats.configServer.bossRarityBonus;
         }

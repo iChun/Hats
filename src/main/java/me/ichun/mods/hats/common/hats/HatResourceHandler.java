@@ -115,9 +115,11 @@ public class HatResourceHandler
 
         accessoriseHatInfos();
 
+        int hatCount = HATS.size();
+
         HAT_PARTS = getAllHatsAsHatParts(1);
 
-        Hats.LOGGER.info("Loaded {} files. {} are accessories.", count, accessoryCount);
+        Hats.LOGGER.info("Loaded {} files. {} hats, {} accessories.", count, hatCount, accessoryCount);
     }
 
     private static int scourForHats(File dir)
@@ -159,7 +161,17 @@ public class HatResourceHandler
                 Hats.LOGGER.warn("Loaded an old Tabula file. Updating to new Tabula & Hats format: {}", file);
             }
 
-//                        if(file.getName().equals("One Man Army.tbl"))
+//            if(file.getAbsolutePath().contains("mods\\hats\\Miner Hat") || file.getName().equals("Hotdog Hotdog.tbl") || file.getName().equals("Sombrero.tbl") || file.getName().equals("Straw Hat.tbl"))
+//            {
+//                for(Project.Part allPart : project.getAllParts())
+//                {
+//                    allPart.rotPY += 1F;
+//                }
+//                project.save(file);
+//                Hats.LOGGER.info("Resaved: {}", file);
+//            }
+
+//                                    if(file.getName().equals("Ushanka.tbl"))
 //                        {
 //                            for(Project.Part allPart : project.getAllParts())
 //                            {
