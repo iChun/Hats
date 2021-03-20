@@ -307,7 +307,7 @@ public class WorkspaceHats extends Workspace
         }
 
         //Send to the server our customisations, and our new hat if we hit confirmed
-        if(!changedHats.isEmpty() || confirmed)
+        if(!changedHats.isEmpty() || confirmed) //TODO recalculate scroll dist when resized
         {
             if(hatLauncher != null)
             {

@@ -86,6 +86,9 @@
   "hats.gui.button.personalise": "Accessorize",
   "hats.gui.button.favouriteHat": "Favorite",
 
+  "hats.gui.button.rgb": "RGB Modifiers",
+  "hats.gui.button.hsb": "HSB Modifiers",
+
   "hats.gui.button.reset": "Reset",
 
   "hats.gui.tooltip.author": "Made by: %s",

@@ -8,10 +8,12 @@ import me.ichun.mods.ichunutil.client.render.NativeImageTexture;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
+import me.ichun.mods.ichunutil.common.iChunUtil;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
@@ -19,6 +21,9 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
@@ -159,7 +164,11 @@ public class HatInfo
             }
 
             //TODO projects without a texture??
-            getModel().render(stack, bufferIn.getBuffer(cull ? RenderType.getEntityTranslucentCull(getTextureResourceLocation()) : RenderType.getEntityTranslucent(getTextureResourceLocation())), packedLightIn, packedOverlayIn, colouriser[0], colouriser[1], colouriser[2], colouriser[3]);
+            ResourceLocation textureResourceLocation = getTextureResourceLocation();
+            if(textureResourceLocation != null)
+            {
+                getModel().render(stack, bufferIn.getBuffer(cull ? RenderType.getEntityTranslucentCull(textureResourceLocation) : RenderType.getEntityTranslucent(textureResourceLocation)), packedLightIn, packedOverlayIn, colouriser[0], colouriser[1], colouriser[2], colouriser[3]);
+            }
 
             for(HatInfo accessory : accessories)
             {
@@ -171,7 +180,48 @@ public class HatInfo
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getTextureResourceLocation()
     {
-        return project.getNativeImageResourceLocation();
+        //Don't tell anyone how much memory I'm eating and I won't tell anyone I'm a bad boy
+        String key = hsbiser[0] + "H" + hsbiser[1] + "S" + hsbiser[2] + "B";
+        NativeImageTexture nit = hsbToImage.computeIfAbsent(key, k -> {
+            byte[] textureBytes = project.getTextureBytes();
+
+            try(NativeImage image = NativeImage.read(new ByteArrayInputStream(textureBytes)))
+            {
+                if(!(hsbiser[0] == 1F && hsbiser[1] == 1F && hsbiser[2] == 1F))
+                {
+                    for(int x = 0; x < image.getWidth(); x++)
+                    {
+                        for(int y = 0; y < image.getHeight(); y++)
+                        {
+                            int clr = image.getPixelRGBA(x, y); //Actually ARGB
+                            if((clr >> 24 & 0xff) > 0) //not invisible
+                            {
+                                float[] hsb = Color.RGBtoHSB(clr >> 16 & 0xff, clr >> 8 & 0xff, clr & 0xff, null);
+                                hsb[0] += (1F - hsbiser[0]);
+                                for(int i = 1; i < hsbiser.length; i++)
+                                {
+                                    hsb[i] *= hsbiser[i];
+                                }
+                                image.setPixelRGBA(x, y, ((clr >> 24 & 0xff) << 24) | (Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]) & 0xffffff));
+                            }
+                        }
+                    }
+                }
+
+                NativeImageTexture nativeImage = new NativeImageTexture(image);
+
+                Minecraft.getInstance().getTextureManager().loadTexture(nativeImage.getResourceLocation(), nativeImage);
+
+                return nativeImage;
+            }
+            catch(IOException e)
+            {
+                iChunUtil.LOGGER.error("Failed to read NativeImage for project: " + name);
+                e.printStackTrace();
+            }
+            return null;
+        });
+        return nit != null ? nit.getResourceLocation() : null;
     }
 
     private void findMeta()
