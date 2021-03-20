@@ -3,7 +3,6 @@ package me.ichun.mods.hats.common.hats;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.packet.PacketEntityHatDetails;
-import me.ichun.mods.hats.common.packet.PacketHatLauncherInfo;
 import me.ichun.mods.hats.common.packet.PacketNewHatPart;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
@@ -235,6 +234,11 @@ public class HatHandler //Handles most of the server-related things.
         HatInfo info = HatResourceHandler.HATS.get(hatToAdd.name);
         if(info != null) //it's a valid hat
         {
+            //hide all the children bow show itself
+            hatToAdd.hideAll();
+            hatToAdd.isShowing = true;
+
+
             boolean foundBase = false; //if stays false, this is a new hat.
 
             //We're looking if this hat has been unlocked before.
@@ -279,6 +283,7 @@ public class HatHandler //Handles most of the server-related things.
 
             if(!foundBase || !accessoryNames.isEmpty()) //there's something new
             {
+                inventoryHat.setNew(); //copying the personalisation may have reset it.
                 Hats.channel.sendTo(new PacketNewHatPart(!foundBase, hatToAdd, names), player);
             }
 
@@ -408,9 +413,10 @@ public class HatHandler //Handles most of the server-related things.
     public static void setHatPart(ItemStack is, @Nonnull HatsSavedData.HatPart part)
     {
         getHatPart(is).copy(part);
+        is.getOrCreateTag().put(ItemHatLauncher.STACK_HAT_PART_TAG, part.write(new CompoundNBT()));
     }
 
-    public static HatsSavedData.HatPart getRandomHat(PlayerEntity player) //WE CONSUME THE HAT. Be mindful of use
+    public static @Nullable HatsSavedData.HatPart getRandomHat(PlayerEntity player) //WE CONSUME THE HAT. Be mindful of use
     {
         HatsSavedData.HatPart part = null;
 
@@ -423,22 +429,25 @@ public class HatHandler //Handles most of the server-related things.
 
                 HatsSavedData.HatPart currentlyWearing = HatHandler.getHatPart(player);
 
-                int tries = 0;
-                while(tries++ < 10) // 10 should be enough
+                if(!source.isEmpty())
                 {
-                    HatsSavedData.HatPart oriHatPart = source.get(player.getRNG().nextInt(source.size()));
-                    HatsSavedData.HatPart copyHatPart = oriHatPart.createCopy();
-                    copyHatPart.minusByOne(currentlyWearing);
-
-                    if(copyHatPart.count > 0) //this is a valid random hat
+                    int tries = 0;
+                    while(tries++ < 10) // 10 should be enough
                     {
-                        HatsSavedData.HatPart partToReturn = copyHatPart.createRandom(player.getRNG());
-                        oriHatPart.minusByOne(partToReturn);
+                        HatsSavedData.HatPart oriHatPart = source.get(player.getRNG().nextInt(source.size()));
+                        HatsSavedData.HatPart copyHatPart = oriHatPart.createCopy();
+                        copyHatPart.minusByOne(currentlyWearing);
 
-                        part = partToReturn;
+                        if(copyHatPart.count > 0) //this is a valid random hat
+                        {
+                            HatsSavedData.HatPart partToReturn = copyHatPart.createRandom(player.getRNG());
+                            oriHatPart.minusByOne(partToReturn);
 
-                        saveData.markDirty();
-                        break;
+                            part = partToReturn;
+
+                            saveData.markDirty();
+                            break;
+                        }
                     }
                 }
             }
@@ -470,10 +479,11 @@ public class HatHandler //Handles most of the server-related things.
         ItemStack is = DualHandedItem.getUsableDualHandedItem(player);
         if(is.getItem() instanceof ItemHatLauncher)
         {
-            setHatPart(is, newHat);
             HatsSavedData.HatPart part = newHat.createCopy();
-            part.count = player.getPrimaryHand() == DualHandedItem.getHandSide(player, is) ? 0 : 1;
-            Hats.channel.sendTo(new PacketHatLauncherInfo(player.getEntityId(), part.write(new CompoundNBT())), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> player));
+            part.removeHiddenChildren();
+            part.setCountTo(1);
+            setHatPart(is, part);
+            player.inventory.markDirty();
         }
     }
 

@@ -202,7 +202,7 @@ public class EntityHat extends Entity
             }
 
             //we found one!
-            if(collidedEnt != null) //TODO enchantments fire & knockback
+            if(collidedEnt != null)
             {
                 if(isBurning())
                 {

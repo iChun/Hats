@@ -47,6 +47,8 @@ import java.util.stream.Collectors;
 public class ItemHatLauncher extends Item
         implements DualHandedItem
 {
+    public static final String STACK_HAT_PART_TAG = "hats_hatPart";
+
     public ItemHatLauncher(Properties properties)
     {
         super(DistExecutor.unsafeRunForDist(() -> () -> attachISTER(properties), () -> () -> properties));
@@ -105,7 +107,7 @@ public class ItemHatLauncher extends Item
                 }
             }
 
-            if(part != null && !part.name.isEmpty() && part.count > 0) //TODO if the inventory runs swap to next item
+            if(part != null && !part.name.isEmpty() && part.count > 0) //TODO if the inventory runs out swap to next item
             {
                 if(!world.isRemote)
                 {
@@ -181,9 +183,9 @@ public class ItemHatLauncher extends Item
                     {
                         LivingEntity target = (LivingEntity)entity;
                         HatsSavedData.HatPart entPart = HatHandler.getHatPart(target);
-                        if(!entPart.name.isEmpty())
+                        if(!entPart.name.isEmpty() && !(target instanceof PlayerEntity && !Hats.configServer.hatLauncherReplacesPlayerHat))
                         {
-                            if(!player.world.isRemote) //TODO respect the player hat launcher configs!
+                            if(!player.world.isRemote)
                             {
                                 EntityHelper.playSound(player, Hats.Sounds.TUBE.get(), SoundCategory.PLAYERS, 1.0F, 0.9F + (player.getRNG().nextFloat() * 2F - 1F) * 0.075F);
                                 EntityHat hat = new EntityHat(Hats.EntityTypes.HAT.get(), player.world).setHatPart(entPart.createCopy()).setLastInteracted(target);
@@ -274,11 +276,14 @@ public class ItemHatLauncher extends Item
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt)
     {
-        HatsSavedData.HatPart.CapProvider capProvider = new HatsSavedData.HatPart.CapProvider(new HatsSavedData.HatPart(":random").setNew());
+        HatsSavedData.HatPart defPart = new HatsSavedData.HatPart(":random");
+        HatsSavedData.HatPart.CapProvider capProvider = new HatsSavedData.HatPart.CapProvider(defPart);
         if(nbt != null)
         {
             capProvider.deserializeNBT(nbt);
         }
+        defPart.isShowing = true;
+        stack.getOrCreateTag().put(STACK_HAT_PART_TAG, defPart.write(new CompoundNBT()));
         return capProvider;
     }
 

@@ -150,6 +150,12 @@ public class HatResourceHandler
         }
         else
         {
+            if(project.getTextureBytes() == null)
+            {
+                Hats.LOGGER.warn("Tabula file has no texture, rejecting: {}", file);
+                return false;
+            }
+
             if(project.tampered)
             {
                 Hats.LOGGER.warn("This hat file was tampered (which will be loaded anyway): {}", file);

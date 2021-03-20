@@ -6,12 +6,11 @@ import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
-import me.ichun.mods.hats.common.packet.PacketHatLauncherInfo;
+import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.model.item.IModel;
 import me.ichun.mods.ichunutil.client.model.item.ItemModelRenderer;
 import me.ichun.mods.ichunutil.common.iChunUtil;
-import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
@@ -23,11 +22,8 @@ import net.minecraft.client.renderer.tileentity.ItemStackTileEntityRenderer;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.Hand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -105,27 +101,10 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
             (leftHand ? launcherModel.headL : launcherModel.headR).render(stack, bufferIn.getBuffer(RenderType.getEntityCutout(lastPlayer.getLocationSkin())), combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
             stack.pop();
 
-            HatsSavedData.HatPart part = HatHandler.getHatPart(is); //TODO this line is crashing cause no capabilities
-            if(part.isNew)
-            {
-                int count  = -1;
-                if(lastPlayer.getHeldItem(Hand.MAIN_HAND) == is) //TODO maybe escape = confirm??
-                {
-                    count = 0;
-                }
-                else if(lastPlayer.getHeldItem(Hand.OFF_HAND) == is) //TODO desync when respawning
-                {
-                    count = 1;
-                }
-                if(count >= 0)
-                {
-                    part.isNew = false; //mark requested
-                    part.count = count; //set which hand we're asking for
-                    part.isShowing = false; //set not showing to prevent render (just in case?)
-                    Hats.channel.sendToServer(new PacketHatLauncherInfo(lastPlayer.getEntityId(), part.write(new CompoundNBT())));
-                }
-            }
-            else if(!part.name.isEmpty() && !(lastPlayer != mc.player && part.name.equals(":random")) && part.isShowing && part.count > 0)
+            HatsSavedData.HatPart part = HatHandler.getHatPart(is);
+            part.read(is.getOrCreateTag().getCompound(ItemHatLauncher.STACK_HAT_PART_TAG));
+
+            if(!part.name.isEmpty() && !(lastPlayer != mc.player && part.name.equals(":random")) && part.isShowing && part.count > 0)
             {
                 if(lastPlayer == mc.player && part.name.equals(":random"))
                 {

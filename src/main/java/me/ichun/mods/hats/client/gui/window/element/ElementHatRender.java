@@ -14,10 +14,12 @@ import me.ichun.mods.ichunutil.client.gui.bns.Theme;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Fragment;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementClickable;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.inventory.InventoryScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Pose;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.EquipmentSlotType;
 import net.minecraft.item.ItemStack;
@@ -42,6 +44,11 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         super(parent, callback);
         this.hatOrigin = hatOrigin;
         this.hatLevel = hatLevel;
+
+        if(((WorkspaceHats)parent.getWorkspace()).usePlayerInventory() && this.hatLevel.count <= 0)
+        {
+            this.disabled = true;
+        }
     }
 
     public <T extends ElementHatRender<?>> T setToggled(boolean flag)
@@ -177,12 +184,23 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
             HatHandler.assignSpecificHat(livingEnt, partForRender);
 
+            boolean isCrouching = false;
             ItemStack helm = livingEnt.getItemStackFromSlot(EquipmentSlotType.HEAD);
+            ItemStack chest = livingEnt.getItemStackFromSlot(EquipmentSlotType.CHEST);
             if(Hats.configClient.invisibleEntityInHatSelector || ((WorkspaceHats)getWorkspace()).hatLauncher != null)
             {
                 Hats.eventHandlerClient.forceRenderWhenInvisible = true;
                 livingEnt.setInvisible(true);
-                ((PlayerEntity)livingEnt).inventory.armorInventory.set(EquipmentSlotType.HEAD.getIndex(), ItemStack.EMPTY);
+                if(((WorkspaceHats)getWorkspace()).hatLauncher != null)
+                {
+                    ((PlayerEntity)livingEnt).inventory.armorInventory.set(EquipmentSlotType.HEAD.getIndex(), ItemStack.EMPTY);
+                    ((PlayerEntity)livingEnt).inventory.armorInventory.set(EquipmentSlotType.CHEST.getIndex(), ItemStack.EMPTY);
+                }
+                if(livingEnt instanceof ClientPlayerEntity)
+                {
+                    isCrouching = ((ClientPlayerEntity)livingEnt).isCrouching;
+                    ((ClientPlayerEntity)livingEnt).isCrouching = false;
+                }
             }
 
             InventoryScreen.drawEntityOnScreen(getLeft() + (getWidth() / 2), (int)(getBottom() + livingEnt.getEyeHeight() * 32F), Math.max(50 - (int)(livingEnt.getWidth() * 10), 10), 20, -10, livingEnt);
@@ -191,7 +209,15 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
             {
                 Hats.eventHandlerClient.forceRenderWhenInvisible = false;
                 livingEnt.setInvisible(false);
-                ((PlayerEntity)livingEnt).inventory.armorInventory.set(EquipmentSlotType.HEAD.getIndex(), helm);
+                if(((WorkspaceHats)getWorkspace()).hatLauncher != null)
+                {
+                    ((PlayerEntity)livingEnt).inventory.armorInventory.set(EquipmentSlotType.HEAD.getIndex(), helm);
+                    ((PlayerEntity)livingEnt).inventory.armorInventory.set(EquipmentSlotType.CHEST.getIndex(), chest);
+                }
+                if(livingEnt instanceof ClientPlayerEntity)
+                {
+                    ((ClientPlayerEntity)livingEnt).isCrouching = isCrouching;
+                }
             }
 
             HatHandler.assignSpecificHat(livingEnt, originalHat);
@@ -212,6 +238,11 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         if(hasConflict)
         {
             RenderHelper.drawColour(stack, 255, 0, 0, 30, getLeft() + 1, getTop() + 1, width - 2, height - 2, 0);
+        }
+
+        if(((WorkspaceHats)getWorkspace()).usePlayerInventory() && hatLevel.count <= 0)
+        {
+            RenderHelper.drawColour(stack, 0, 0, 0, 120, getLeft() + 1, getTop() + 1, width - 2, height - 2, 0); //greyout
         }
 
         RenderHelper.drawColour(stack, 0, 0, 0, 150, getRight() - 10, getTop() + 1, 9, height - 2, 0);
@@ -273,7 +304,12 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
             stack.scale(scale, scale, scale);
 
             //draw the text
-            getFontRenderer().drawString(stack, s, 0, 0, renderMinecraftStyle() ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim));
+            int clr = renderMinecraftStyle() ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim);
+            if(hatLevel.count <= 0)
+            {
+                clr = 0xaa0000;
+            }
+            getFontRenderer().drawString(stack, s, 0, 0, clr);
 
             stack.pop();
         }

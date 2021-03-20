@@ -161,7 +161,7 @@ public class EventHandlerClient
                 double upOff = (0.25D + guiY);
 
                 Vector3d sideVec = EntityHelper.getVectorForRotation(oriRend.rotationPitch, yawFromPlayer - 90);
-                double sideOff = (0.8D + guiX) * (mc.getMainWindow().getWidth() / (float)mc.getMainWindow().getHeight()) / (16F/9F);
+                double sideOff = ((((1.4D + guiDist) * progPowHalf) * 0.57D) + guiX) * (mc.getMainWindow().getWidth() / (float)mc.getMainWindow().getHeight()) / (16F/9F);
 
                 double offX = (sideOff * sideVec.getX() * progSq);
                 double offY = (upOff * progSin) + (sideOff * sideVec.getY() * progSq);

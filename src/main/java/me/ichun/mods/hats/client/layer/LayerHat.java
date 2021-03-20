@@ -184,7 +184,6 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 float armorScale = helper.getHeadArmorScale(living, stack, partialTicks, i);
                 if(armorScale != 1F)
                 {
-                    armorScale *= 1.015F;
                     stack.scale(armorScale, armorScale, armorScale);
                 }
             }

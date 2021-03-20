@@ -106,7 +106,6 @@ public class Hats
                 PacketNewHatPart.class,
                 PacketUpdateHats.class,
                 PacketHatCustomisation.class,
-                PacketHatLauncherInfo.class,
                 PacketEntityHatEntityDetails.class,
                 PacketRehatify.class,
                 PacketHatLauncherCustomisation.class

@@ -141,7 +141,7 @@ public class WorkspaceHats extends Workspace
                 float scale = -160F;
                 stack.translate(0F, 0F, 200F);
                 stack.scale(scale, scale, scale);
-                stack.rotate(Vector3f.YP.rotationDegrees((iChunUtil.eventHandlerClient.ticks + partialTick) * 0.5F));
+                stack.rotate(Vector3f.YP.rotationDegrees((iChunUtil.eventHandlerClient.ticks + partialTick + (windowInput.driftYaw * 2)) * 0.5F));
 
                 IRenderTypeBuffer.Impl bufferSource = minecraft.getRenderTypeBuffers().getBufferSource();
                 minecraft.getItemRenderer().renderItem(hatLauncher, ItemCameraTransforms.TransformType.GUI, 0xF000F0, OverlayTexture.NO_OVERLAY, stack, bufferSource);

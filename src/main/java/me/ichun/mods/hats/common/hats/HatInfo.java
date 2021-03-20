@@ -4,13 +4,16 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import me.ichun.mods.hats.client.model.ModelHat;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
+import me.ichun.mods.ichunutil.client.render.NativeImageTexture;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -47,6 +50,11 @@ public class HatInfo
     public ModelHat model;
 
     public float[] colouriser = new float[] { 1F, 1F, 1F, 1F }; //hatpart is invert of this
+    public float[] hsbiser = new float[] { 1F, 1F, 1F }; //hatpart is invert of this
+
+    @OnlyIn(Dist.CLIENT)
+    public HashMap<String, NativeImageTexture> hsbToImage = new HashMap<>();
+
     public boolean hidden = false; //true to disable rendering
 
     public HatInfo(@Nonnull String name, @Nonnull Project project) //TODO head top/eye analyser for HeadInfo
@@ -111,10 +119,16 @@ public class HatInfo
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void destroy()
+    public void destroy() //TODO remember to call this when we reload all our hats.
     {
         //Don't need to destroy the model
         project.destroy();
+
+        for(NativeImageTexture value : hsbToImage.values())
+        {
+            Minecraft.getInstance().getTextureManager().deleteTexture(value.getResourceLocation());
+        }
+        hsbToImage.clear();
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -144,13 +158,20 @@ public class HatInfo
                 }
             }
 
-            getModel().render(stack, bufferIn.getBuffer(cull ? RenderType.getEntityTranslucentCull(project.getNativeImageResourceLocation()) : RenderType.getEntityTranslucent(project.getNativeImageResourceLocation())), packedLightIn, packedOverlayIn, colouriser[0], colouriser[1], colouriser[2], colouriser[3]);
+            //TODO projects without a texture??
+            getModel().render(stack, bufferIn.getBuffer(cull ? RenderType.getEntityTranslucentCull(getTextureResourceLocation()) : RenderType.getEntityTranslucent(getTextureResourceLocation())), packedLightIn, packedOverlayIn, colouriser[0], colouriser[1], colouriser[2], colouriser[3]);
 
             for(HatInfo accessory : accessories)
             {
                 accessory.render(stack, bufferIn, packedLightIn, packedOverlayIn, cull);
             }
         }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public ResourceLocation getTextureResourceLocation()
+    {
+        return project.getNativeImageResourceLocation();
     }
 
     private void findMeta()
@@ -384,6 +405,10 @@ public class HatInfo
         for(int i = 0; i < part.colouriser.length; i++)
         {
             colouriser[i] = 1F - part.colouriser[i];
+        }
+        for(int i = 0; i < part.hsbiser.length; i++)
+        {
+            hsbiser[i] = 1F - part.hsbiser[i];
         }
     }
 

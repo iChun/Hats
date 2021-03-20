@@ -121,6 +121,7 @@ public class HatsSavedData extends WorldSavedData
         public boolean isNew;
         public boolean isShowing;
         public float[] colouriser = new float[] { 0F, 0F, 0F, 0F }; //0 0 0 0 = no change to colours. goes up to 1 1 1 1 for black & invisible
+        public float[] hsbiser = new float[] { 0F, 0F, 0F }; //0 0 0 0 = no change to colours. goes up to 1 1 1 1 for black & invisible
         public ArrayList<HatPart> hatParts = new ArrayList<>(); //yay infinite recursion
 
         public HatPart(){}
@@ -143,7 +144,9 @@ public class HatsSavedData extends WorldSavedData
             count = part.count;
             isFavourite = part.isFavourite;
             isShowing = part.isShowing;
+            isNew = part.isNew;
             colouriser = part.colouriser.clone();
+            hsbiser = part.hsbiser.clone();
 
             hatParts.clear();
             for(HatPart hatPart : part.hatParts)
@@ -245,6 +248,11 @@ public class HatsSavedData extends WorldSavedData
             {
                 count += part.count;
 
+                if(count > 999999999)
+                {
+                    count = 999999999; //blame jackylam5
+                }
+
                 copyPersonalisation(part);
 
                 ArrayList<HatPart> partParts = new ArrayList<>(part.hatParts);
@@ -300,7 +308,7 @@ public class HatsSavedData extends WorldSavedData
 
         public boolean hasFullPart(HatPart part)
         {
-            if(!name.isEmpty() && name.equals(part.name))
+            if(!name.isEmpty() && name.equals(part.name) && count >= part.count)
             {
                 boolean flag = true;
 
@@ -345,6 +353,7 @@ public class HatsSavedData extends WorldSavedData
                 isNew = part.isNew;
                 isShowing = part.isShowing;
                 colouriser = part.colouriser.clone();
+                hsbiser = part.hsbiser.clone();
 
                 for(HatPart hatPart : hatParts)
                 {
@@ -378,6 +387,7 @@ public class HatsSavedData extends WorldSavedData
             isShowing = tag.getBoolean("isShowing");
 
             colouriser = new float[] { tag.getFloat("clrR"), tag.getFloat("clrG"), tag.getFloat("clrB"), tag.getFloat("clrA") };
+            hsbiser = new float[] { tag.getFloat("hsbH"), tag.getFloat("hsbS"), tag.getFloat("hsbB") };
 
             int count = tag.getInt("partCount");
 
@@ -409,6 +419,10 @@ public class HatsSavedData extends WorldSavedData
             tag.putFloat("clrG", colouriser[1]);
             tag.putFloat("clrB", colouriser[2]);
             tag.putFloat("clrA", colouriser[3]);
+
+            tag.putFloat("hsbH", hsbiser[0]);
+            tag.putFloat("hsbS", hsbiser[1]);
+            tag.putFloat("hsbB", hsbiser[2]);
 
             tag.putInt("partCount", hatParts.size());
 
@@ -457,6 +471,15 @@ public class HatsSavedData extends WorldSavedData
                 }
             }
             return false;
+        }
+
+        public void removeHiddenChildren()
+        {
+            hatParts.removeIf(part -> !part.isShowing);
+            for(HatPart hatPart : hatParts)
+            {
+                hatPart.removeHiddenChildren();
+            }
         }
 
         public static class CapProvider implements ICapabilitySerializable<CompoundNBT>
