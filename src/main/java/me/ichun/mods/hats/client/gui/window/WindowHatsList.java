@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class WindowHatsList extends Window<WorkspaceHats>
 {
-    public WindowHatsList(WorkspaceHats parent) //TODO force blend on the whole GUI so that weird texture packs don't bug out
+    public WindowHatsList(WorkspaceHats parent)
     {
         super(parent); //TODO allow option for default MC texture pack rather than the player texture pack.
 

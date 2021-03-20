@@ -7,6 +7,8 @@ import me.ichun.mods.ichunutil.common.config.ConfigBase;
 import me.ichun.mods.ichunutil.common.config.annotations.CategoryDivider;
 import me.ichun.mods.ichunutil.common.config.annotations.Prop;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.ResourceLocationException;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.fml.config.ModConfig;
@@ -16,6 +18,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
 
 public class ConfigServer extends ConfigBase
@@ -25,6 +28,9 @@ public class ConfigServer extends ConfigBase
 
     @Prop(min = 0.0D, max = 1.0D)
     public double hatChance = 0.1D; //10% chance//TODO entity override spawn rate
+
+    @Prop(validator = "overrideChance")
+    public List<String> entityOverrideChance = new ArrayList<>();
 
     public List<String> disabledMobs = new ArrayList<>();
 
@@ -76,6 +82,8 @@ public class ConfigServer extends ConfigBase
 
     //======================================================//
 
+    public transient HashMap<ResourceLocation, Integer> entityOverrideChanceParsed = new HashMap<>();
+
     public transient ArrayList<Double> rarityMeasure = new ArrayList<>();
     public transient ArrayList<Double> rarityIndividual = new ArrayList<>();
 
@@ -100,6 +108,8 @@ public class ConfigServer extends ConfigBase
 
             save();
         }
+
+        parseOverrideChance();
 
         EnumRarity[] rarities = EnumRarity.values();
         int totalRarities = rarities.length;
@@ -187,6 +197,36 @@ public class ConfigServer extends ConfigBase
             }
         }
         return false;
+    }
+
+    public boolean overrideChance(Object o)
+    {
+        if(o instanceof String)
+        {
+            String[] split = ((String)o).split(",");
+            if(split.length == 2)
+            {
+                try
+                {
+                    new ResourceLocation(split[0]);
+                    int chance = Integer.parseInt(split[1]);
+                    return chance >= 0 && chance <= 100;
+                }
+                catch(ResourceLocationException | NumberFormatException ignored){}
+            }
+        }
+        return false;
+    }
+
+    public void parseOverrideChance()
+    {
+        entityOverrideChanceParsed.clear();
+
+        for(String s : entityOverrideChance)
+        {
+            String[] split = s.split(",");
+            entityOverrideChanceParsed.put(new ResourceLocation(split[0]), Integer.parseInt(split[1]));
+        }
     }
 
     @Nonnull

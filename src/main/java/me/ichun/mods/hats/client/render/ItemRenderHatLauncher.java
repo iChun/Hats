@@ -105,15 +105,15 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
             (leftHand ? launcherModel.headL : launcherModel.headR).render(stack, bufferIn.getBuffer(RenderType.getEntityCutout(lastPlayer.getLocationSkin())), combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
             stack.pop();
 
-            HatsSavedData.HatPart part = HatHandler.getHatPart(is);
+            HatsSavedData.HatPart part = HatHandler.getHatPart(is); //TODO this line is crashing cause no capabilities
             if(part.isNew)
             {
                 int count  = -1;
-                if(lastPlayer.getHeldItem(Hand.MAIN_HAND) == is)
+                if(lastPlayer.getHeldItem(Hand.MAIN_HAND) == is) //TODO maybe escape = confirm??
                 {
                     count = 0;
                 }
-                else if(lastPlayer.getHeldItem(Hand.OFF_HAND) == is)
+                else if(lastPlayer.getHeldItem(Hand.OFF_HAND) == is) //TODO desync when respawning
                 {
                     count = 1;
                 }

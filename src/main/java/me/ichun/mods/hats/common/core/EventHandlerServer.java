@@ -37,16 +37,6 @@ public class EventHandlerServer
     }
 
     @SubscribeEvent
-    public void onAttachCapabilitiesItem(AttachCapabilitiesEvent<ItemStack> event)
-    {
-        ItemStack is = event.getObject();
-        if(is.getItem() instanceof ItemHatLauncher)
-        {
-            event.addCapability(HatsSavedData.HatPart.CAPABILITY_IDENTIFIER, new HatsSavedData.HatPart.CapProvider(new HatsSavedData.HatPart(":random").setNew()));
-        }
-    }
-
-    @SubscribeEvent
     public void onEntityJoinedWorld(EntityJoinWorldEvent event)
     {
         if(!event.getWorld().isRemote && event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof PlayerEntity)) //don't allocate player hats.

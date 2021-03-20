@@ -32,10 +32,12 @@ import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -97,7 +99,7 @@ public class ItemHatLauncher extends Item
                         part = HatHandler.getRandomHat(player);
                     }
                 }
-                else if(!HatHandler.playerHasHat(player, part))
+                else if(!HatHandler.playerHasHat(player, part)) //TODO Hat inventory isn't updating properly when you fire in survival. Darko got 1 hat, fired it with launcher, picked it up, hat inventory showed -1 count
                 {
                     part = null;
                 }
@@ -181,7 +183,7 @@ public class ItemHatLauncher extends Item
                         HatsSavedData.HatPart entPart = HatHandler.getHatPart(target);
                         if(!entPart.name.isEmpty())
                         {
-                            if(!player.world.isRemote)
+                            if(!player.world.isRemote) //TODO respect the player hat launcher configs!
                             {
                                 EntityHelper.playSound(player, Hats.Sounds.TUBE.get(), SoundCategory.PLAYERS, 1.0F, 0.9F + (player.getRNG().nextFloat() * 2F - 1F) * 0.075F);
                                 EntityHat hat = new EntityHat(Hats.EntityTypes.HAT.get(), player.world).setHatPart(entPart.createCopy()).setLastInteracted(target);
@@ -266,6 +268,18 @@ public class ItemHatLauncher extends Item
         }
 
         return true;
+    }
+
+    @Nullable
+    @Override
+    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundNBT nbt)
+    {
+        HatsSavedData.HatPart.CapProvider capProvider = new HatsSavedData.HatPart.CapProvider(new HatsSavedData.HatPart(":random").setNew());
+        if(nbt != null)
+        {
+            capProvider.deserializeNBT(nbt);
+        }
+        return capProvider;
     }
 
     @Override

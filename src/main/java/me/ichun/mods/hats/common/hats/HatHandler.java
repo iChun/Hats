@@ -80,7 +80,13 @@ public class HatHandler //Handles most of the server-related things.
             hats.add(pool);
         }
 
-        Hats.LOGGER.info("Allocated Hat Pools."); //TODO why are we being triggered three times?
+        //fill the pool if they're absent
+        for(EnumRarity value : EnumRarity.values())
+        {
+            HAT_POOLS.computeIfAbsent(value, k -> new ArrayList<>());
+        }
+
+        Hats.LOGGER.info("Allocated Hat Pools.");
     }
 
     public static EnumRarity getRarityForChance(double chance)
@@ -98,6 +104,11 @@ public class HatHandler //Handles most of the server-related things.
 
     public static double getHatChance(LivingEntity ent)
     {
+        if(Hats.configServer.entityOverrideChanceParsed.containsKey(ent.getType().getRegistryName()))
+        {
+            return Hats.configServer.entityOverrideChanceParsed.get(ent.getType().getRegistryName()) / 100F;
+        }
+
         double chance = Hats.configServer.hatChance;
         HeadInfo<?> info = HeadHandler.getHelper(ent.getClass());
         if(info != null && info.isBoss)
@@ -219,7 +230,7 @@ public class HatHandler //Handles most of the server-related things.
         }
     }
 
-    public static void addHat(ServerPlayerEntity player, HatsSavedData.HatPart hatToAdd)
+    public static void addHat(ServerPlayerEntity player, HatsSavedData.HatPart hatToAdd) //TODO killing a mob with accessory doesn't default to unconfigured
     {
         HatInfo info = HatResourceHandler.HATS.get(hatToAdd.name);
         if(info != null) //it's a valid hat

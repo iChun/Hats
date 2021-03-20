@@ -23,6 +23,8 @@
 
   "config.hats.prop.randSeed.name": "Random Seed for Hat Randomisation",
   "config.hats.prop.randSeed.desc": "Random Seed used for Hat Randomisation, rarity, spawn chance, etc. Leave blank for random generated seed.",
+  "config.hats.prop.entityOverrideChance.name": "Entity Chance Override",
+  "config.hats.prop.entityOverrideChance.desc": "Entity chance override. Each entry should be a resource location and a chance, separated by a comma. EG: \"minecraft:pig,100\" will make all minecraft pigs have a 100 percent chance of having a hat.",
   "config.hats.prop.disabledMobs.name": "Disabled Mobs",
   "config.hats.prop.disabledMobs.desc": "Resource Location to disable hats on certain mobs. EG: minecraft:pig",
   "config.hats.prop.rarityWeight.name": "Rarity Weight",

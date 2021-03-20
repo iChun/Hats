@@ -256,7 +256,7 @@ public class EventHandlerClient
                 openedHatsInventory = true;
                 openMenuAnimation = 0;
 
-                lastHideGui = mc.gameSettings.hideGUI; //TODO can we just cancel the draw UI event???
+                lastHideGui = mc.gameSettings.hideGUI;
                 mc.gameSettings.hideGUI = true;
 
                 originalPitch = mc.renderViewEntity.rotationPitch;

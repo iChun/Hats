@@ -94,15 +94,18 @@ public class WindowSidebar extends Window<WorkspaceHats>
                 else
                 {
                     List<Element<?>> elements = parent.parent.windowHatsList.getCurrentView().list.elements;
-                    Element<?> element1 = elements.get(parentFragment.parent.hatEntity.getRNG().nextInt(elements.size()));
-                    if(element1 instanceof ElementHatRender)
+                    if(!elements.isEmpty())
                     {
-                        ((ElementHatRender<?>)element1).onClickRelease();
-                        ((ElementHatRender)element1).callback.accept(element1); //TODO shift + ctrl randomisation
+                        Element<?> element1 = elements.get(parentFragment.parent.hatEntity.getRNG().nextInt(elements.size()));
+                        if(element1 instanceof ElementHatRender)
+                        {
+                            ((ElementHatRender<?>)element1).onClickRelease();
+                            ((ElementHatRender)element1).callback.accept(element1); //TODO shift + ctrl randomisation
+                        }
                     }
                 }
             });
-            if(parent.parent.hatLauncher != null && parent.parent.hatDetails.name.equals(":random"))
+            if(parent.parent.hatLauncher != null && parent.parent.hatDetails.name.equals(":random") || parent.parent.windowHatsList.getCurrentView().list.elements.isEmpty())
             {
                 randomButton.disabled = true;
             }
