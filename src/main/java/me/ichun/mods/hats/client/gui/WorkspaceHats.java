@@ -180,7 +180,7 @@ public class WorkspaceHats extends Workspace
     {
         ArrayList<HatsSavedData.HatPart> source = HatHandler.getHatSource(Minecraft.getInstance().player);
         HatResourceHandler.combineLists(source, changedHats);
-        return source; //TODO sort in order of have and don't have.
+        return source;
     } //TODO should this be cached?? this is really bad performance
 
     @Override

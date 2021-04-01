@@ -45,7 +45,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
     }
 
     @Override
-    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick) //TODO random hat random accessories, random colour too. note in tooltip.
+    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
     {
         if(parent.age <= Hats.configClient.guiAnimationTime)
         {
@@ -119,11 +119,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
             textField.setConstraint(new Constraint(textField).left(searchIcon, Constraint.Property.Type.RIGHT, 2).bottom(searchIcon, Constraint.Property.Type.BOTTOM, 1).top(searchIcon, Constraint.Property.Type.TOP, 1).width(this, Constraint.Property.Type.WIDTH, 40));
             elements.add(textField);
 
-            //TODO sort menu - alphabetical / rarity / count
-            //TODO in sort menu - show all hats?
-            //TODO show unowned hats at the bottom?
             //TODO sync with server regarding hats list.
-            //TODO hide contributor hats filter
 
             ElementScrollBar<?> sv = new ElementScrollBar<>(this, ElementScrollBar.Orientation.VERTICAL, 0.6F);
             sv.constraints().top(this, Constraint.Property.Type.TOP, padding)

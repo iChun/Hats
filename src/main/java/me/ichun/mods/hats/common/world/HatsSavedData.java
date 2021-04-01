@@ -121,7 +121,7 @@ public class HatsSavedData extends WorldSavedData
         public boolean isNew;
         public boolean isShowing;
         public float[] colouriser = new float[] { 0F, 0F, 0F, 0F }; //0 0 0 0 = no change to colours. goes up to 1 1 1 1 for black & invisible
-        public float[] hsbiser = new float[] { 0F, 0F, 0F }; //0 0 0 0 = no change to colours. goes up to 1 1 1 1 for black & invisible
+        public float[] hsbiser = new float[] { 0F, 0F, 0F }; //0 0 0 = no change to colours. goes up to 1 1 1 HSB
         public ArrayList<HatPart> hatParts = new ArrayList<>(); //yay infinite recursion
 
         public HatPart(){}

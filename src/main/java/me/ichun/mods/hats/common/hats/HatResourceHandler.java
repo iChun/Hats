@@ -269,13 +269,6 @@ public class HatResourceHandler
         return hatParts;
     }
 
-    public static ArrayList<HatsSavedData.HatPart> getAllHatPartsWithInventory(ArrayList<HatsSavedData.HatPart> inventory)
-    {
-        ArrayList<HatsSavedData.HatPart> hatParts = getAllHatsAsHatParts(0);
-        combineLists(hatParts, inventory);
-        return hatParts;
-    }
-
     public static void combineLists(ArrayList<HatsSavedData.HatPart> primary, ArrayList<HatsSavedData.HatPart> secondary)
     {
         for(HatsSavedData.HatPart invPart : secondary)

@@ -80,7 +80,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
     public static boolean renderHat(HeadInfo helper, LivingRenderer<?, ?> renderer, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks, HatsSavedData.HatPart hatDetails)
     {
-        int headCount = helper.getHeadCount(living);
+        int headCount = helper.getHeadCount(living); //TODO unlock more hats if the mob has more heads
 
         boolean flag = false;
 

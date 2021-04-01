@@ -100,7 +100,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
                         if(element1 instanceof ElementHatRender)
                         {
                             ((ElementHatRender<?>)element1).onClickRelease();
-                            ((ElementHatRender)element1).callback.accept(element1); //TODO shift + ctrl randomisation
+                            ((ElementHatRender)element1).callback.accept(element1); //TODO shift + ctrl randomisation | random hat random accessories, random colour too. note in tooltip.
                         }
                     }
                 }

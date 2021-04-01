@@ -302,11 +302,14 @@ public class HatHandler //Handles most of the server-related things.
         }
         else
         {
+            //we're not using the inventory, get ALL the hats
             for(HatsSavedData.HatPart hatPart : HatResourceHandler.HAT_PARTS)
             {
                 source.add(hatPart.createCopy());
             }
-            HatResourceHandler.combineLists(source, getPlayerInventory(player)); //combine all the hats with our personalisation
+
+            //combine all the hats with our personalisation
+            HatResourceHandler.combineLists(source, getPlayerInventory(player));
         }
         return source;
     }
