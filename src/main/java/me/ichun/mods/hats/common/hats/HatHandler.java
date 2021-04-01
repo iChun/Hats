@@ -151,7 +151,7 @@ public class HatHandler //Handles most of the server-related things.
         RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID().toString()).hashCode()) * 425480085L); //Chat contributed random
 
         double chance = RAND.nextDouble();
-        HeadInfo<?> info = HeadHandler.getHelper(ent.getClass());
+        HeadInfo info = HeadHandler.getHelper(ent.getClass());
         if(info != null && info.isBoss)
         {
             chance += Hats.configServer.bossRarityBonus;
@@ -163,7 +163,7 @@ public class HatHandler //Handles most of the server-related things.
 
         HatInfo hatInfo = pool.getRandomHat();
         hatPart.name = hatInfo.name;
-        hatPart.count = 1;
+        hatPart.count = info != null ? info.getHeadCount(ent) : 1;
         hatPart.isShowing = true;
 
         hatInfo.assignAccessoriesToPart(hatPart, ent);

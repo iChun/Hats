@@ -4,7 +4,6 @@ import com.mojang.blaze3d.matrix.MatrixStack;
 import me.ichun.mods.hats.client.gui.IHatSetter;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
-import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
@@ -18,7 +17,7 @@ import javax.annotation.Nonnull;
 import java.util.List;
 
 public class WindowSidebar extends Window<WorkspaceHats>
-    implements IHatSetter
+        implements IHatSetter
 {
     public WindowSidebar(WorkspaceHats parent)
     {
@@ -135,15 +134,6 @@ public class WindowSidebar extends Window<WorkspaceHats>
                 elements.add(btnStack);
                 btnStackLast = btnStack;
             }
-
-            //CONFIRM button
-            ElementButtonTextured<?> btnConfirm = new ElementButtonTextured<>(this, TEX_CONFIRM, btn -> {
-                parent.parent.confirmed = true;
-                parent.parent.closeScreen();
-            });
-            btnConfirm.setSize(20, 20);
-            btnConfirm.constraints().left(this, Constraint.Property.Type.LEFT, 0).bottom(this, Constraint.Property.Type.BOTTOM, 0);
-            elements.add(btnConfirm);
         }
 
         @Override
