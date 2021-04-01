@@ -38,6 +38,7 @@ public class ElementHatsScrollView extends ElementFertile
 
         if(hasInit)
         {
+            scrollToSelectedElement();
             alignItems();
             updateScrollBarSizes();
         }
@@ -49,6 +50,7 @@ public class ElementHatsScrollView extends ElementFertile
     {
         super.init();
         hasInit = true;
+        scrollToSelectedElement();
         alignItems();
         updateScrollBarSizes();
     }
@@ -57,8 +59,10 @@ public class ElementHatsScrollView extends ElementFertile
     public void resize(Minecraft mc, int width, int height)
     {
         super.resize(mc, width, height);//code is here twice to fix resizing when init
+        scrollToSelectedElement();
         alignItems();
         super.resize(mc, width, height);
+        scrollToSelectedElement();
         alignItems();
         updateScrollBarSizes();
     }
@@ -123,6 +127,35 @@ public class ElementHatsScrollView extends ElementFertile
         }
         int rowCount = (int)Math.ceil(elements.size() / (float)maxPerRow);
         return (70 + padding) * rowCount + padding; //70 = min hat render height
+    }
+
+    public void scrollToSelectedElement()
+    {
+        if(scrollVert != null)
+        {
+            //MATCH getTotalItemHeight()
+            int padding = 3;
+            int useableWidth = getWidth() - padding;
+            int maxPerRow = (int)Math.floor(useableWidth / 50F); //this max hat renders we can have a row. 50 = min hat render width
+            if(maxPerRow > elements.size())
+            {
+                maxPerRow = elements.size();
+            }
+            int rowCount = (int)Math.ceil(elements.size() / (float)maxPerRow);
+            int totalItemHeight = (70 + padding) * rowCount + padding; //70 = min hat render height
+
+            for(int i = 0; i < elements.size(); i++)
+            {
+                ElementHatRender<?> hatRender = ((ElementHatRender<?>)elements.get(i));
+                if(hatRender.toggleState)
+                {
+                    int thisRow = (int)Math.floor(i / (float)maxPerRow);
+
+                    scrollVert.setScrollProg(((70 + padding) * thisRow) / (float)Math.max(0.1, totalItemHeight - height));
+                    break;
+                }
+            }
+        }
     }
 
     public void alignItems()
