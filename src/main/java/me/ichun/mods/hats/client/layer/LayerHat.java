@@ -80,11 +80,11 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
     public static boolean renderHat(HeadInfo helper, LivingRenderer<?, ?> renderer, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks, HatsSavedData.HatPart hatDetails)
     {
-        int headCount = helper.getHeadCount(living); //TODO test tabula rendering outside overworld
+        int headCount = helper.getHeadCount(living);
 
-        boolean flag = false; //TODO find out from the server about our headinfos.
+        boolean flag = false;
 
-        for(int i = 0; i < headCount; i++) //TODO figure out why changing dimension fucks up the render
+        for(int i = 0; i < headCount; i++)
         {
             if(living.isInvisible() && helper.affectedByInvisibility(living, -1, i) && !Hats.eventHandlerClient.forceRenderWhenInvisible)
             {
@@ -121,9 +121,9 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 if(living instanceof TropicalFishEntity
                         || living instanceof PufferfishEntity
                 ) //interventions.
-                {
                     ModelRenderer head = helper.headModel[0];
 
+                {
                     if(!head.cubeList.isEmpty())
                     {
                         ModelRenderer.ModelBox box = head.cubeList.get(0);

@@ -98,10 +98,10 @@ public class ItemHatLauncher extends Item
                     }
                     else
                     {
-                        part = HatHandler.getRandomHat(player);
+                        part = HatHandler.getRandomHat(player); //TODO PUNCH ENTITY DROPS HAT
                     }
                 }
-                else if(!HatHandler.playerHasHat(player, part)) //TODO Hat inventory isn't updating properly when you fire in survival. Darko got 1 hat, fired it with launcher, picked it up, hat inventory showed -1 count
+                else if(!HatHandler.playerHasHat(player, part))
                 {
                     part = null;
                 }
@@ -188,13 +188,13 @@ public class ItemHatLauncher extends Item
                             if(!player.world.isRemote)
                             {
                                 EntityHelper.playSound(player, Hats.Sounds.TUBE.get(), SoundCategory.PLAYERS, 1.0F, 0.9F + (player.getRNG().nextFloat() * 2F - 1F) * 0.075F);
-                                EntityHat hat = new EntityHat(Hats.EntityTypes.HAT.get(), player.world).setHatPart(entPart.createCopy()).setLastInteracted(target);
+                                EntityHat hat = new EntityHat(Hats.EntityTypes.HAT.get(), target.world).setHatPart(entPart.createCopy()).setLastInteracted(target);
 
                                 hat.setLocationAndAngles(target.getPosX(), target.getPosY() + target.getEyeHeight() - ((hat.hatDims[1] - hat.hatDims[0]) / 32F) / 1.8F, target.getPosZ(), target.rotationYaw, target.rotationPitch);
 
                                 hat.setMotion(new Vector3d(target.getRNG().nextGaussian() * 0.2F, 0.2F + target.getRNG().nextFloat() * 0.2F, target.getRNG().nextGaussian() * 0.2F));
 
-                                player.world.addEntity(hat);
+                                target.world.addEntity(hat);
 
                                 entPart.copy(new HatsSavedData.HatPart());
 
@@ -227,6 +227,39 @@ public class ItemHatLauncher extends Item
             }
         }
         return new ActionResult(ActionResultType.PASS, player.getHeldItem(hand));
+    }
+
+    @Override
+    public boolean hitEntity(ItemStack stack, LivingEntity target, LivingEntity attacker)
+    {
+        HatsSavedData.HatPart entPart = HatHandler.getHatPart(target);
+        if(!entPart.name.isEmpty() && !(target instanceof PlayerEntity && !Hats.configServer.hatLauncherReplacesPlayerHat))
+        {
+            if(!attacker.world.isRemote)
+            {
+                EntityHelper.playSound(attacker, Hats.Sounds.TUBE.get(), SoundCategory.PLAYERS, 1.0F, 0.9F + (attacker.getRNG().nextFloat() * 2F - 1F) * 0.075F);
+                EntityHat hat = new EntityHat(Hats.EntityTypes.HAT.get(), target.world).setHatPart(entPart.createCopy()).setLastInteracted(target);
+
+                hat.setLocationAndAngles(target.getPosX(), target.getPosY() + target.getEyeHeight() - ((hat.hatDims[1] - hat.hatDims[0]) / 32F) / 1.8F, target.getPosZ(), target.rotationYaw, target.rotationPitch);
+
+                hat.setMotion(new Vector3d(target.getRNG().nextGaussian() * 0.2F, 0.2F + target.getRNG().nextFloat() * 0.2F, target.getRNG().nextGaussian() * 0.2F));
+
+                target.world.addEntity(hat);
+
+                entPart.copy(new HatsSavedData.HatPart());
+
+                HashMap<Integer, HatsSavedData.HatPart> entIdToHat = new HashMap<>();
+                entIdToHat.put(target.getEntityId(), entPart);
+                Hats.channel.sendTo(new PacketEntityHatDetails(entIdToHat), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> target));
+
+                Hats.channel.sendTo(new PacketRehatify(target.getEntityId()), PacketDistributor.TRACKING_ENTITY_AND_SELF.with(() -> target));
+
+                Hats.channel.sendTo(new PacketEntityHatEntityDetails(hat.getEntityId(), hat.hatPart.write(new CompoundNBT())), PacketDistributor.TRACKING_ENTITY.with(() -> hat));
+            }
+
+            return true;
+        }
+        return false;
     }
 
     @OnlyIn(Dist.CLIENT)

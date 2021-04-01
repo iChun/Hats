@@ -229,12 +229,12 @@ public class HatHandler //Handles most of the server-related things.
         }
     }
 
-    public static void addHat(ServerPlayerEntity player, HatsSavedData.HatPart hatToAdd) //TODO killing a mob with accessory doesn't default to unconfigured
+    public static void addHat(ServerPlayerEntity player, HatsSavedData.HatPart hatToAdd)
     {
         HatInfo info = HatResourceHandler.HATS.get(hatToAdd.name);
         if(info != null) //it's a valid hat
         {
-            //hide all the children bow show itself
+            //hide all the children but show itself
             hatToAdd.hideAll();
             hatToAdd.isShowing = true;
 

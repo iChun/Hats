@@ -59,7 +59,8 @@ public class PacketHeadInfos extends AbstractPacket
 
                         File file = new File(HeadHandler.getHeadsDir().resolve("FromServer").toFile(), className);
                         file.mkdirs();
-                        FileUtils.writeStringToFile(file, json, StandardCharsets.UTF_8); //Save it, we will load it up next time.
+                        File file2 = new File(file, className);
+                        FileUtils.writeStringToFile(file2, json, StandardCharsets.UTF_8); //Save it, we will load it up next time.
 
                         Hats.LOGGER.info("Received HeadInfo from server for class: {}", info.forClass);
                     }

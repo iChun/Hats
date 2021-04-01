@@ -19,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -58,7 +59,7 @@ public class HatInfo
     public float[] hsbiser = new float[] { 1F, 1F, 1F }; //hatpart is invert of this
 
     @OnlyIn(Dist.CLIENT)
-    public HashMap<String, NativeImageTexture> hsbToImage = new HashMap<>();
+    public HashMap<String, NativeImageTexture> hsbToImage;
 
     public boolean hidden = false; //true to disable rendering
 
@@ -66,6 +67,11 @@ public class HatInfo
     {
         this.name = name;
         this.project = project;
+
+        if(FMLEnvironment.dist.isClient())
+        {
+            hsbToImage = new HashMap<>();
+        }
 
         findMeta();
     }
@@ -163,7 +169,6 @@ public class HatInfo
                 }
             }
 
-            //TODO projects without a texture??
             ResourceLocation textureResourceLocation = getTextureResourceLocation();
             if(textureResourceLocation != null)
             {
@@ -180,48 +185,53 @@ public class HatInfo
     @OnlyIn(Dist.CLIENT)
     public ResourceLocation getTextureResourceLocation()
     {
-        //Don't tell anyone how much memory I'm eating and I won't tell anyone I'm a bad boy
-        String key = hsbiser[0] + "H" + hsbiser[1] + "S" + hsbiser[2] + "B";
-        NativeImageTexture nit = hsbToImage.computeIfAbsent(key, k -> {
-            byte[] textureBytes = project.getTextureBytes();
+        byte[] textureBytes = project.getTextureBytes();
 
-            try(NativeImage image = NativeImage.read(new ByteArrayInputStream(textureBytes)))
-            {
-                if(!(hsbiser[0] == 1F && hsbiser[1] == 1F && hsbiser[2] == 1F))
+        if(textureBytes != null)
+        {
+            //Don't tell anyone how much memory I'm eating and I won't tell anyone I'm a bad boy
+            String key = hsbiser[0] + "H" + hsbiser[1] + "S" + hsbiser[2] + "B";
+            NativeImageTexture nit = hsbToImage.computeIfAbsent(key, k -> {
+
+                try(NativeImage image = NativeImage.read(new ByteArrayInputStream(textureBytes)))
                 {
-                    for(int x = 0; x < image.getWidth(); x++)
+                    if(!(hsbiser[0] == 1F && hsbiser[1] == 1F && hsbiser[2] == 1F))
                     {
-                        for(int y = 0; y < image.getHeight(); y++)
+                        for(int x = 0; x < image.getWidth(); x++)
                         {
-                            int clr = image.getPixelRGBA(x, y); //Actually ARGB
-                            if((clr >> 24 & 0xff) > 0) //not invisible
+                            for(int y = 0; y < image.getHeight(); y++)
                             {
-                                float[] hsb = Color.RGBtoHSB(clr >> 16 & 0xff, clr >> 8 & 0xff, clr & 0xff, null);
-                                hsb[0] += (1F - hsbiser[0]);
-                                for(int i = 1; i < hsbiser.length; i++)
+                                int clr = image.getPixelRGBA(x, y); //Actually ARGB
+                                if((clr >> 24 & 0xff) > 0) //not invisible
                                 {
-                                    hsb[i] *= hsbiser[i];
+                                    float[] hsb = Color.RGBtoHSB(clr >> 16 & 0xff, clr >> 8 & 0xff, clr & 0xff, null);
+                                    hsb[0] += (1F - hsbiser[0]);
+                                    for(int i = 1; i < hsbiser.length; i++)
+                                    {
+                                        hsb[i] *= hsbiser[i];
+                                    }
+                                    image.setPixelRGBA(x, y, ((clr >> 24 & 0xff) << 24) | (Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]) & 0xffffff));
                                 }
-                                image.setPixelRGBA(x, y, ((clr >> 24 & 0xff) << 24) | (Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]) & 0xffffff));
                             }
                         }
                     }
+
+                    NativeImageTexture nativeImage = new NativeImageTexture(image);
+
+                    Minecraft.getInstance().getTextureManager().loadTexture(nativeImage.getResourceLocation(), nativeImage);
+
+                    return nativeImage;
                 }
-
-                NativeImageTexture nativeImage = new NativeImageTexture(image);
-
-                Minecraft.getInstance().getTextureManager().loadTexture(nativeImage.getResourceLocation(), nativeImage);
-
-                return nativeImage;
-            }
-            catch(IOException e)
-            {
-                iChunUtil.LOGGER.error("Failed to read NativeImage for project: " + name);
-                e.printStackTrace();
-            }
-            return null;
-        });
-        return nit != null ? nit.getResourceLocation() : null;
+                catch(IOException e)
+                {
+                    iChunUtil.LOGGER.error("Failed to read NativeImage for project: " + name);
+                    e.printStackTrace();
+                }
+                return null;
+            });
+            return nit != null ? nit.getResourceLocation() : null;
+        }
+        return null;
     }
 
     private void findMeta()

@@ -43,7 +43,7 @@ import java.util.ArrayList;
 public class WorkspaceHats extends Workspace
         implements IHatSetter
 {
-    public static final DecimalFormat FORMATTER = new DecimalFormat("#,###,###"); //TODO double check the access transformers, which Heads do we no longer need
+    public static final DecimalFormat FORMATTER = new DecimalFormat("#,###,###");
 
     public final boolean fallback;
     public final @Nonnull LivingEntity hatEntity;
@@ -172,7 +172,7 @@ public class WorkspaceHats extends Workspace
         }
     }
 
-    public boolean usePlayerInventory() //TODO test that the isNew "!" shows up
+    public boolean usePlayerInventory()
     {
         return HatHandler.useInventory(Minecraft.getInstance().player);
     }
@@ -309,7 +309,7 @@ public class WorkspaceHats extends Workspace
         //Send to the server our customisations, and our new hat if we hit confirmed
         if(!changedHats.isEmpty() || confirmed) //TODO recalculate scroll dist when resized
         {
-            if(hatLauncher != null)
+            if(hatLauncher != null) //TODO the server needs to check if we have this hat or not!
             {
                 Hats.channel.sendToServer(new PacketHatLauncherCustomisation(HatHandler.getHatPart(hatLauncher)));
 

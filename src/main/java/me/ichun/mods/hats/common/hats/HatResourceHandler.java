@@ -102,7 +102,7 @@ public class HatResourceHandler
         return hatsDir;
     }
 
-    public static synchronized void loadAllHats() //TODO hat accessory clash layer
+    public static synchronized void loadAllHats()
     {
         HATS.clear();
         HAT_ACCESSORIES.clear();
@@ -269,7 +269,7 @@ public class HatResourceHandler
         return hatParts;
     }
 
-    public static ArrayList<HatsSavedData.HatPart> getAllHatPartsWithInventory(ArrayList<HatsSavedData.HatPart> inventory) //TODO sorting, loading all hat parts with user customisation, synching
+    public static ArrayList<HatsSavedData.HatPart> getAllHatPartsWithInventory(ArrayList<HatsSavedData.HatPart> inventory)
     {
         ArrayList<HatsSavedData.HatPart> hatParts = getAllHatsAsHatParts(0);
         combineLists(hatParts, inventory);

@@ -27,7 +27,7 @@ public class ConfigServer extends ConfigBase
     public String randSeed = ""; //An empty string denotes a seed that is not set yet.
 
     @Prop(min = 0.0D, max = 1.0D)
-    public double hatChance = 0.1D; //10% chance//TODO entity override spawn rate
+    public double hatChance = 0.1D; //10% chance
 
     @Prop(validator = "overrideChance")
     public List<String> entityOverrideChance = new ArrayList<>();
@@ -44,7 +44,7 @@ public class ConfigServer extends ConfigBase
     }};
 
     @Prop(validator = "numbersOnly")
-    public List<String> rarityCost = new ArrayList<String>(){{ //TODO double check the spawn rate
+    public List<String> rarityCost = new ArrayList<String>(){{
         add("10"); //Common - White
         add("20"); //Uncommon - Green
         add("40"); //Rare - Blue

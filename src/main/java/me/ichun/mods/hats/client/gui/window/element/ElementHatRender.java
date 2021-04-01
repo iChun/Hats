@@ -267,7 +267,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
                 renderIconX -= 10;
             }
-            if(partForRender.hasNew()) //TODO test this
+            if(partForRender.hasNew())
             {
                 topDist = height - 14;
 

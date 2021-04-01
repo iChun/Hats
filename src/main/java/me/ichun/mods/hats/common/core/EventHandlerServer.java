@@ -12,6 +12,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.util.FakePlayer;
@@ -74,6 +75,12 @@ public class EventHandlerServer
     {
         Hats.channel.sendTo(new PacketPing(), (ServerPlayerEntity)event.getPlayer()); //TODO disable this and the client will think the server doesn't have the mod.
         Hats.channel.sendTo(new PacketUpdateHats(HatHandler.getPlayerHatsNBT(event.getPlayer()), true), (ServerPlayerEntity)event.getPlayer());
+    }
+
+    @SubscribeEvent
+    public void onPlayerClone(PlayerEvent.Clone event)
+    {
+        HatHandler.getHatPart(event.getPlayer()).read(HatHandler.getHatPart(event.getOriginal()).write(new CompoundNBT()));
     }
 
     @SubscribeEvent
