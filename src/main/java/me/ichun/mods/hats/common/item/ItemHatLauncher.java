@@ -98,16 +98,16 @@ public class ItemHatLauncher extends Item
                     }
                     else
                     {
-                        part = HatHandler.getRandomHat(player); //TODO PUNCH ENTITY DROPS HAT
+                        part = HatHandler.getRandomHat(player);
                     }
                 }
-                else if(!HatHandler.playerHasHat(player, part))
+                else if(!HatHandler.playerHasHat(player, part, true))
                 {
                     part = null;
                 }
             }
 
-            if(part != null && !part.name.isEmpty() && part.count > 0) //TODO if the inventory runs out swap to next item
+            if(part != null && !part.name.isEmpty() && part.count > 0) //TODO if the inventory runs out swap to next item/random item
             {
                 if(!world.isRemote)
                 {
@@ -313,7 +313,7 @@ public class ItemHatLauncher extends Item
         HatsSavedData.HatPart.CapProvider capProvider = new HatsSavedData.HatPart.CapProvider(defPart);
         if(nbt != null)
         {
-            capProvider.deserializeNBT(nbt);
+            capProvider.deserializeNBT(nbt.getCompound("Parent"));
         }
         defPart.isShowing = true;
         stack.getOrCreateTag().put(STACK_HAT_PART_TAG, defPart.write(new CompoundNBT()));

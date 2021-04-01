@@ -323,6 +323,20 @@ public class HatHandler //Handles most of the server-related things.
         }
     }
 
+    public static ArrayList<HatsSavedData.HatPart> getPlayerInventoryCopy(PlayerEntity player)
+    {
+        ArrayList<HatsSavedData.HatPart> copy = new ArrayList<>();
+
+        ArrayList<HatsSavedData.HatPart> playerInventory = getPlayerInventory(player);
+
+        for(HatsSavedData.HatPart hatPart : playerInventory)
+        {
+            copy.add(hatPart.createCopy());
+        }
+
+        return copy;
+    }
+
     public static void setPlayerHatCustomisation(ServerPlayerEntity player, ArrayList<HatsSavedData.HatPart> customisedHats, @Nullable HatsSavedData.HatPart hatChange)
     {
         if(hatChange != null)
@@ -346,7 +360,7 @@ public class HatHandler //Handles most of the server-related things.
             }
             for(HatsSavedData.HatPart customisedHat : customisedHats) //these are hats we don't own.
             {
-                customisedHat.setCountTo(0);
+                customisedHat.setCountOfAllTo(0);
                 playerHatData.hatParts.add(customisedHat);
             }
             saveData.markDirty();
@@ -481,19 +495,27 @@ public class HatHandler //Handles most of the server-related things.
         {
             HatsSavedData.HatPart part = newHat.createCopy();
             part.removeHiddenChildren();
-            part.setCountTo(1);
+            part.setCountOfAllTo(1);
             setHatPart(is, part);
             player.inventory.markDirty();
         }
     }
 
-    public static boolean playerHasHat(PlayerEntity player, HatsSavedData.HatPart part)
+    public static boolean playerHasHat(PlayerEntity player, HatsSavedData.HatPart part, boolean minusWearing)
     {
         if(useInventory(player))
         {
-            ArrayList<HatsSavedData.HatPart> playerInventory = getPlayerInventory(player);
+            ArrayList<HatsSavedData.HatPart> playerInventory = getPlayerInventoryCopy(player);
+
+            HatsSavedData.HatPart entityPart = HatHandler.getHatPart(player);
+
             for(HatsSavedData.HatPart hatPart : playerInventory)
             {
+                if(minusWearing)
+                {
+                    hatPart.minusByOne(entityPart);
+                }
+
                 if(hatPart.hasFullPart(part))
                 {
                     return true;

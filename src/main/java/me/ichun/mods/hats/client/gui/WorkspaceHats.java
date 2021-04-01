@@ -1,7 +1,6 @@
 package me.ichun.mods.hats.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.window.WindowHalfGreyout;
 import me.ichun.mods.hats.client.gui.window.WindowHatsList;
@@ -335,7 +334,7 @@ public class WorkspaceHats extends Workspace
             for(HatsSavedData.HatPart customisedHat : changedHats) //these are hats we don't own.
             {
                 HatsSavedData.HatPart copy = customisedHat.createCopy();
-                copy.setCountTo(0);
+                copy.setCountOfAllTo(0);
                 Hats.eventHandlerClient.hatsInventory.hatParts.add(copy);
             }
 

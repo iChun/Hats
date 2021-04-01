@@ -336,12 +336,12 @@ public class HatsSavedData extends WorldSavedData
             return false;
         }
 
-        public void setCountTo(int count)
+        public void setCountOfAllTo(int count)
         {
             this.count = count;
             for(HatPart hatPart : hatParts)
             {
-                hatPart.setCountTo(count);
+                hatPart.setCountOfAllTo(count);
             }
         }
 

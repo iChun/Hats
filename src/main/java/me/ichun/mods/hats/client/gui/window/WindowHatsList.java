@@ -151,13 +151,15 @@ public class WindowHatsList extends Window<WorkspaceHats>
             Collections.sort(hatPartSource);
 
             list.elements.clear();
+
+            HatsSavedData.HatPart entityPart = HatHandler.getHatPart(parentFragment.parent.hatEntity);
             for(HatsSavedData.HatPart part : hatPartSource)
             {
                 HatsSavedData.HatPart hatPart = part.createCopy();
                 if(parentFragment.parent.hatLauncher != null && parentFragment.parent.usePlayerInventory())
                 {
                     //Remove our worn hat from the count
-                    hatPart.minusByOne(HatHandler.getHatPart(parentFragment.parent.hatEntity));
+                    hatPart.minusByOne(entityPart);
                 }
                 ElementHatRender<?> hat = new ElementHatRender<>(list, hatPart, hatPart, btn -> {
                     ElementHatsScrollView scrollView = (ElementHatsScrollView)btn.parentFragment;
