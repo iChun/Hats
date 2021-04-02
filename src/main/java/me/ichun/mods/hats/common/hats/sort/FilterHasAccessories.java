@@ -5,13 +5,13 @@ import me.ichun.mods.hats.common.world.HatsSavedData;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class FilterUndiscovered extends HatSorter
+public class FilterHasAccessories extends HatSorter
 {
     @Override
     @Nonnull
     public String type()
     {
-        return "filterUndiscovered";
+        return "filterHasAccessories";
     }
 
     @Override
@@ -23,19 +23,19 @@ public class FilterUndiscovered extends HatSorter
     @Override
     public void sort(ArrayList hats)
     {
-        ArrayList<HatsSavedData.HatPart> discovered = new ArrayList<>();
-        ArrayList<HatsSavedData.HatPart> undiscovered = new ArrayList<>();
+        ArrayList<HatsSavedData.HatPart> hasAccessories = new ArrayList<>();
+        ArrayList<HatsSavedData.HatPart> noAccessories = new ArrayList<>();
 
         for(Object o : hats)
         {
             HatsSavedData.HatPart hat = (HatsSavedData.HatPart)o;
-            if(hat.count == 0 && hat.hsbiser[2] == 1F) //this is how we mark undiscovered hats.... with 0 brightness (so they appear black)
+            if(hat.hatParts.isEmpty())
             {
-                undiscovered.add(hat);
+                noAccessories.add(hat);
             }
             else
             {
-                discovered.add(hat);
+                hasAccessories.add(hat);
             }
         }
 
@@ -43,11 +43,11 @@ public class FilterUndiscovered extends HatSorter
 
         if(isInverse)
         {
-            hats.addAll(undiscovered);
+            hats.addAll(noAccessories);
         }
         else
         {
-            hats.addAll(discovered);
+            hats.addAll(hasAccessories);
         }
     }
 }

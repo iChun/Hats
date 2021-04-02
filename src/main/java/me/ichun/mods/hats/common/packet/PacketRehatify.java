@@ -1,13 +1,11 @@
 package me.ichun.mods.hats.common.packet;
 
 import me.ichun.mods.hats.common.Hats;
-import me.ichun.mods.hats.common.entity.EntityHat;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.network.AbstractPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.particles.ParticleTypes;
 import net.minecraftforge.api.distmarker.Dist;

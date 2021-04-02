@@ -1,7 +1,6 @@
 package me.ichun.mods.hats.common.command;
 
 import com.mojang.brigadier.CommandDispatcher;
-import com.mojang.brigadier.context.CommandContext;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.entity.EntityHat;
 import me.ichun.mods.hats.common.hats.HatHandler;
@@ -16,7 +15,8 @@ import net.minecraft.command.arguments.NBTCompoundTagArgument;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.text.*;
+import net.minecraft.util.text.StringTextComponent;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 

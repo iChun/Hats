@@ -78,7 +78,8 @@
   "hats.gui.window.hatsList.title": "Your Hats",
 
   "hats.gui.button.removeHat": "Remove Hat",
-  "hats.gui.button.randomHat": "Random Hat",
+  "hats.gui.button.randomHat": "Random Hat\n +SHIFT: Random Hue",
+  "hats.gui.button.randomHatLauncher": "Random Hat",
   "hats.gui.button.sortingOptions": "Sorting Options",
   "hats.gui.button.hatResourceManagement": "Hat Resource Management",
 
@@ -88,6 +89,7 @@
 
   "hats.gui.button.rgb": "RGB Modifiers",
   "hats.gui.button.hsb": "HSB Modifiers",
+  "hats.gui.button.glint": "Glint",
 
   "hats.gui.button.reset": "Reset",
 

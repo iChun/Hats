@@ -193,8 +193,7 @@ public class WorkspaceHats extends Workspace
         return (this.getListener() != null && this.isDragging()) && this.getListener().mouseDragged(mouseX, mouseY, button, distX, distY);
     }
 
-    @Override
-    public void addWindowWithGreyout(Window<?> window) //TODO window/tab for ALL available hats.
+    public void addWindowWithHalfGreyout(Window<?> window) //TODO window/tab for ALL available hats.
     {
         WindowHalfGreyout greyout = new WindowHalfGreyout(this, window);
         addWindow(greyout);
@@ -291,7 +290,6 @@ public class WorkspaceHats extends Workspace
         super.onClose();
 
         //Send to the server our customisations, and our new hat if we hit confirmed
-        //TODO recalculate scroll dist when resized
         if(hatLauncher != null) //TODO the server needs to check if we have this hat or not!
         {
             Hats.channel.sendToServer(new PacketHatLauncherCustomisation(HatHandler.getHatPart(hatLauncher)));

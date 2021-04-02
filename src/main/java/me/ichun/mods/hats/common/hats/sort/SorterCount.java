@@ -1,6 +1,5 @@
 package me.ichun.mods.hats.common.hats.sort;
 
-import com.google.common.collect.Ordering;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 
 import javax.annotation.Nonnull;

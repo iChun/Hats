@@ -153,7 +153,7 @@ public class WindowHatOptions extends Window<WorkspaceHats>
             WindowSetColouriser windowSetColouriser = new WindowSetColouriser(parent, parentElement);
             windowSetColouriser.pos(parentElement.getLeft(), parentElement.getTop());
             windowSetColouriser.size(parentElement.getWidth(), parentElement.getHeight());
-            parent.addWindowWithGreyout(windowSetColouriser);
+            parent.addWindowWithHalfGreyout(windowSetColouriser);
             windowSetColouriser.init();
         }
 
@@ -162,7 +162,7 @@ public class WindowHatOptions extends Window<WorkspaceHats>
             WindowSetAccessory windowSetAccessory = new WindowSetAccessory(parent, parentElement);
             windowSetAccessory.pos(parentElement.getLeft(), parentElement.getTop());
             windowSetAccessory.size(parentElement.getWidth(), parentElement.getHeight());
-            parent.addWindowWithGreyout(windowSetAccessory);
+            parent.addWindowWithHalfGreyout(windowSetAccessory);
             windowSetAccessory.init();
         }
 

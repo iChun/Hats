@@ -8,6 +8,7 @@ public class SortHandler
     public static HashMap<String, Class<? extends HatSorter>> SORTERS = new HashMap<String, Class<? extends HatSorter>>() {{
         put("filterContributor", FilterContributor.class);
         put("filterHas", FilterHas.class);
+        put("filterHasAccessories", FilterHasAccessories.class);
         put("filterUndiscovered", FilterUndiscovered.class);
 
         put("sorterAlphabetical", SorterAlphabetical.class); //This is the only sorter that doesn't create a new category to sort.

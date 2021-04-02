@@ -122,6 +122,7 @@ public class HatsSavedData extends WorldSavedData
         public boolean isShowing;
         public float[] colouriser = new float[] { 0F, 0F, 0F, 0F }; //0 0 0 0 = no change to colours. goes up to 1 1 1 1 for black & invisible
         public float[] hsbiser = new float[] { 0F, 0F, 0F }; //0 0 0 = no change to colours. goes up to 1 1 1 HSB
+        public boolean enchanted = false;
         public ArrayList<HatPart> hatParts = new ArrayList<>(); //yay infinite recursion
 
         public HatPart(){}
@@ -147,6 +148,7 @@ public class HatsSavedData extends WorldSavedData
             isNew = part.isNew;
             colouriser = part.colouriser.clone();
             hsbiser = part.hsbiser.clone();
+            enchanted = part.enchanted;
 
             hatParts.clear();
             for(HatPart hatPart : part.hatParts)
@@ -354,6 +356,7 @@ public class HatsSavedData extends WorldSavedData
                 isShowing = part.isShowing;
                 colouriser = part.colouriser.clone();
                 hsbiser = part.hsbiser.clone();
+                enchanted = part.enchanted;
 
                 for(HatPart hatPart : hatParts)
                 {
@@ -388,6 +391,7 @@ public class HatsSavedData extends WorldSavedData
 
             colouriser = new float[] { tag.getFloat("clrR"), tag.getFloat("clrG"), tag.getFloat("clrB"), tag.getFloat("clrA") };
             hsbiser = new float[] { tag.getFloat("hsbH"), tag.getFloat("hsbS"), tag.getFloat("hsbB") };
+            enchanted = tag.getBoolean("enchanted");
 
             int count = tag.getInt("partCount");
 
@@ -423,6 +427,8 @@ public class HatsSavedData extends WorldSavedData
             tag.putFloat("hsbH", hsbiser[0]);
             tag.putFloat("hsbS", hsbiser[1]);
             tag.putFloat("hsbB", hsbiser[2]);
+
+            tag.putBoolean("enchanted", enchanted);
 
             tag.putInt("partCount", hatParts.size());
 

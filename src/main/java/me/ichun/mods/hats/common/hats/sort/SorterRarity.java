@@ -7,6 +7,7 @@ import me.ichun.mods.hats.common.world.HatsSavedData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 
 public class SorterRarity extends HatSorter
@@ -32,19 +33,10 @@ public class SorterRarity extends HatSorter
         hats.clear();
 
         EnumRarity[] rarities = EnumRarity.values();
-        if(isInverse)
+        for(EnumRarity rarity : rarities)
         {
-            for(int i = rarities.length - 1; i >= 0; i--)
-            {
-                hats.add(hatsByRarity.get(rarities[i]));
-            }
+            hats.add(hatsByRarity.get(rarity));
         }
-        else
-        {
-            for(int i = 0; i < rarities.length; i++)
-            {
-                hats.add(hatsByRarity.get(rarities[i]));
-            }
-        }
+        Collections.reverse(hats);
     }
 }

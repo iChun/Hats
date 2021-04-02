@@ -12,6 +12,7 @@ import me.ichun.mods.ichunutil.common.iChunUtil;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.texture.NativeImage;
 import net.minecraft.entity.LivingEntity;
@@ -57,6 +58,7 @@ public class HatInfo
 
     public float[] colouriser = new float[] { 1F, 1F, 1F, 1F }; //hatpart is invert of this
     public float[] hsbiser = new float[] { 1F, 1F, 1F }; //hatpart is invert of this
+    public boolean enchanted = false;
 
     @OnlyIn(Dist.CLIENT)
     public HashMap<String, NativeImageTexture> hsbToImage;
@@ -172,7 +174,8 @@ public class HatInfo
             ResourceLocation textureResourceLocation = getTextureResourceLocation();
             if(textureResourceLocation != null)
             {
-                getModel().render(stack, bufferIn.getBuffer(cull ? RenderType.getEntityTranslucentCull(textureResourceLocation) : RenderType.getEntityTranslucent(textureResourceLocation)), packedLightIn, packedOverlayIn, colouriser[0], colouriser[1], colouriser[2], colouriser[3]);
+                RenderType renderType = cull ? RenderType.getEntityTranslucentCull(textureResourceLocation) : RenderType.getEntityTranslucent(textureResourceLocation);
+                getModel().render(stack, ItemRenderer.getEntityGlintVertexBuilder(bufferIn, renderType, false, enchanted), packedLightIn, packedOverlayIn, colouriser[0], colouriser[1], colouriser[2], colouriser[3]);
             }
 
             for(HatInfo accessory : accessories)
@@ -470,6 +473,7 @@ public class HatInfo
         {
             hsbiser[i] = 1F - part.hsbiser[i];
         }
+        enchanted = part.enchanted;
     }
 
     public float[] getDimensions() //gets y min + y-max + width

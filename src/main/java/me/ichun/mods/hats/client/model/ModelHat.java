@@ -3,7 +3,6 @@ package me.ichun.mods.hats.client.model;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.vertex.IVertexBuilder;
 import me.ichun.mods.hats.common.hats.HatInfo;
-import me.ichun.mods.ichunutil.client.model.tabula.ModelTabula;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.Model;

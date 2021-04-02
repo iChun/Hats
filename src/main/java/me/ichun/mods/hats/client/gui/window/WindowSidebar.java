@@ -10,6 +10,7 @@ import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementButtonTextured;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
@@ -98,8 +99,16 @@ public class WindowSidebar extends Window<WorkspaceHats>
                         Element<?> element1 = elements.get(parentFragment.parent.hatEntity.getRNG().nextInt(elements.size()));
                         if(element1 instanceof ElementHatRender)
                         {
-                            ((ElementHatRender<?>)element1).onClickRelease();
-                            ((ElementHatRender)element1).callback.accept(element1); //TODO shift + ctrl randomisation | random hat random accessories, random colour too. note in tooltip.
+                            ElementHatRender hatRender = (ElementHatRender)element1;
+                            hatRender.onClickRelease();
+                            if(Screen.hasShiftDown())
+                            {
+                                hatRender.hatLevel.hsbiser[0] = parentFragment.parent.hatEntity.getRNG().nextFloat();
+                                hatRender.hatLevel.isNew = true; //workaround to force set notify
+                            }
+                            hatRender.callback.accept(hatRender);
+
+                            parent.parent.windowHatsList.resize(parent.parent.getMinecraft(), parent.parent.windowHatsList.getWidth(), parent.parent.windowHatsList.getHeight()); // to rearrange the scroll bar
                         }
                     }
                 }
@@ -108,7 +117,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
             {
                 randomButton.disabled = true;
             }
-            btnStack.setTooltip(I18n.format("hats.gui.button.randomHat"));
+            btnStack.setTooltip(parent.parent.hatLauncher != null ? I18n.format("hats.gui.button.randomHatLauncher") : I18n.format("hats.gui.button.randomHat"));
             btnStack.setSize(20, 20);
             btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
             elements.add(btnStack);

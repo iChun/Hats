@@ -7,8 +7,6 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;
 
-import java.util.ArrayList;
-
 public class PacketHatLauncherCustomisation extends AbstractPacket
 {
     public HatsSavedData.HatPart newHat;

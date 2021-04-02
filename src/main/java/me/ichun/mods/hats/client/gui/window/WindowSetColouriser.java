@@ -9,10 +9,7 @@ import me.ichun.mods.ichunutil.client.gui.bns.window.Fragment;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementButtonTextured;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementPadding;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementScrollBar;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTextWrapper;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.*;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.resources.I18n;
@@ -76,9 +73,11 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
         public ElementScrollBar<?> svR;
         public ElementScrollBar<?> svG;
         public ElementScrollBar<?> svB;
+        public ElementScrollBar<?> svA;
         public ElementTextWrapper textR;
         public ElementTextWrapper textG;
         public ElementTextWrapper textB;
+        public ElementTextWrapper textA;
 
         public ElementScrollBar<?> svH;
         public ElementScrollBar<?> svS;
@@ -86,6 +85,7 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
         public ElementTextWrapper textH;
         public ElementTextWrapper textS;
         public ElementTextWrapper textV;
+        public ElementToggle togEnchanted;
 
         public boolean showRGB;
         public int age;
@@ -94,8 +94,6 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
         public ViewSetColouriser(@Nonnull WindowSetColouriser parent)
         {
             super(parent, "hats.gui.window.hat.colorizer");
-
-            int edgePadding = 3;
 
             padding = new ElementPadding(this, parentFragment.parentElement.getMinWidth(), parentFragment.parentElement.getMinHeight());
             padding.constraints().top(this, Constraint.Property.Type.TOP, 0).right(this, Constraint.Property.Type.RIGHT, 0);
@@ -137,6 +135,17 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             textB.setText("B");
             elements.add(textB);
 
+            svA = new ElementScrollBar<>(this, ElementScrollBar.Orientation.HORIZONTAL, 0.1F); //100%?
+            svA.setId("colouriserA");
+            svA.setCallback(scrollbar -> {
+                parent.parentElement.hatLevel.colouriser[3] = 1F - scrollbar.scrollProg;
+                parent.parent.setNewHat(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel), true);
+            }).setScrollProg(1F - parent.parentElement.hatLevel.colouriser[3]);
+            elements.add(svA);
+
+            textA = new ElementTextWrapper(this);
+            textA.setText("A");
+            elements.add(textA);
 
             svH = new ElementScrollBar<>(this, ElementScrollBar.Orientation.HORIZONTAL, 0.1F); //100%?
             svH.setId("hsbiserH");
@@ -174,19 +183,13 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             textV.setText("B"); //this is not a typo, yes it's a B
             elements.add(textV);
 
-            ElementScrollBar<?> svA = new ElementScrollBar<>(this, ElementScrollBar.Orientation.HORIZONTAL, 0.1F); //100%?
-            svA.constraints().bottom(padding, Constraint.Property.Type.BOTTOM, 1).right(padding, Constraint.Property.Type.LEFT, 26).left(this, Constraint.Property.Type.LEFT, edgePadding);
-            svA.setId("colouriserA");
-            svA.setCallback(scrollbar -> {
-                parent.parentElement.hatLevel.colouriser[3] = 1F - scrollbar.scrollProg;
+            togEnchanted = new ElementToggle<>(this, "hats.gui.button.glint", btn -> {
+                parent.parentElement.hatLevel.enchanted = btn.toggleState;
                 parent.parent.setNewHat(parent.parentElement.hatOrigin.setModifier(parent.parentElement.hatLevel), true);
-            }).setScrollProg(1F - parent.parentElement.hatLevel.colouriser[3]);
-            elements.add(svA);
-
-            ElementTextWrapper textA = new ElementTextWrapper(this);
-            textA.setText("A");
-            textA.constraints().bottom(svA, Constraint.Property.Type.BOTTOM, 0).left(svA, Constraint.Property.Type.LEFT, 1);
-            elements.add(textA);
+            });
+            togEnchanted.setToggled(parent.parentElement.hatLevel.enchanted);
+            togEnchanted.setId("toggleEnchant");
+            elements.add(togEnchanted);
 
             toggleHSBtoRGB = new ElementButtonTextured<>(this, WindowHatOptions.ViewHatOptions.TEX_COLOURISE, btn -> {
                 showRGB = !showRGB;
@@ -220,6 +223,8 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
                         svH.setScrollProg(1F);
                         svS.setScrollProg(1F);
                         svV.setScrollProg(1F);
+                        togEnchanted.setToggled(false);
+                        togEnchanted.callback.accept(togEnchanted);
                     }
                 }
                 else
@@ -232,6 +237,8 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
                     svH.setScrollProg(1F);
                     svS.setScrollProg(1F);
                     svV.setScrollProg(1F);
+                    togEnchanted.setToggled(false);
+                    togEnchanted.callback.accept(togEnchanted);
                 }
             });
             reset.setTooltip(I18n.format("hats.gui.button.reset"));
@@ -253,6 +260,8 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
                 textG.constraints().bottom(svG, Constraint.Property.Type.BOTTOM, 0).left(svG, Constraint.Property.Type.LEFT, 1);
                 svB.constraints().top(svG, Constraint.Property.Type.BOTTOM, 4).right(padding, Constraint.Property.Type.LEFT, 26).left(this, Constraint.Property.Type.LEFT, edgePadding);
                 textB.constraints().bottom(svB, Constraint.Property.Type.BOTTOM, 0).left(svB, Constraint.Property.Type.LEFT, 1);
+                svA.constraints().top(svB, Constraint.Property.Type.BOTTOM, 4).right(padding, Constraint.Property.Type.LEFT, 26).left(this, Constraint.Property.Type.LEFT, edgePadding);
+                textA.constraints().bottom(svA, Constraint.Property.Type.BOTTOM, 0).left(svA, Constraint.Property.Type.LEFT, 1);
 
                 //Put these guys off screen
                 svH.constraints().top(this, Constraint.Property.Type.TOP, 8000);
@@ -261,6 +270,7 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
                 textS.constraints().bottom(this, Constraint.Property.Type.TOP, 8000);
                 svV.constraints().top(this, Constraint.Property.Type.TOP, 8000);
                 textV.constraints().bottom(this, Constraint.Property.Type.TOP, 8000);
+                togEnchanted.constraints().top(this, Constraint.Property.Type.TOP, 8000);
             }
             else
             {
@@ -270,6 +280,7 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
                 textS.constraints().bottom(svS, Constraint.Property.Type.BOTTOM, 0).left(svS, Constraint.Property.Type.LEFT, 1);
                 svV.constraints().top(svS, Constraint.Property.Type.BOTTOM, 4).right(padding, Constraint.Property.Type.LEFT, 26).left(this, Constraint.Property.Type.LEFT, edgePadding);
                 textV.constraints().bottom(svV, Constraint.Property.Type.BOTTOM, 0).left(svV, Constraint.Property.Type.LEFT, 1);
+                togEnchanted.constraints().top(svV, Constraint.Property.Type.BOTTOM, 4).right(padding, Constraint.Property.Type.LEFT, 26).left(this, Constraint.Property.Type.LEFT, edgePadding);
 
                 //Put these guys off screen
                 svR.constraints().top(this, Constraint.Property.Type.TOP, 8000);
@@ -278,6 +289,8 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
                 textG.constraints().bottom(this, Constraint.Property.Type.TOP, 8000);
                 svB.constraints().top(this, Constraint.Property.Type.TOP, 8000);
                 textB.constraints().bottom(this, Constraint.Property.Type.TOP, 8000);
+                svA.constraints().top(this, Constraint.Property.Type.TOP, 8000);
+                textA.constraints().bottom(this, Constraint.Property.Type.TOP, 8000);
             }
 
             this.resize(getWorkspace().getMinecraft(), this.width, this.height);

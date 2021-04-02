@@ -15,6 +15,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.AbstractClientPlayerEntity;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
+import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.model.ItemTransformVec3f;
@@ -87,12 +88,7 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
 
         stack.pop();
 
-        launcherModel.render(stack, bufferIn.getBuffer(RenderType.getEntityTranslucentCull(TEXTURE)), combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
-
-        if(is.hasEffect())
-        {
-            launcherModel.render(stack, bufferIn.getBuffer(RenderType.getGlint()), combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
-        }
+        launcherModel.render(stack, ItemRenderer.getEntityGlintVertexBuilder(bufferIn, RenderType.getEntityTranslucentCull(TEXTURE), false, is.hasEffect()), combinedLightIn, combinedOverlayIn, 1F, 1F, 1F, 1F);
 
         if(lastPlayer != null) //only render the hat and the head when it's a player holding it
         {
