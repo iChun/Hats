@@ -1,6 +1,9 @@
 package me.ichun.mods.hats.client.config;
 
+import com.google.common.base.Splitter;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.hats.sort.HatSorter;
+import me.ichun.mods.hats.common.hats.sort.SortHandler;
 import me.ichun.mods.ichunutil.common.config.ConfigBase;
 import me.ichun.mods.ichunutil.common.config.annotations.CategoryDivider;
 import me.ichun.mods.ichunutil.common.config.annotations.Prop;
@@ -8,6 +11,8 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ConfigClient extends ConfigBase
 {
@@ -35,9 +40,50 @@ public class ConfigClient extends ConfigBase
     @Prop(min = 1)
     public int hatLauncherRandomHatSpeed = 5;
 
+    public List<String> filterSorterConfig = new ArrayList<String>(){{
+        add("filterUndiscovered");
+        add("sorterRarity:inverse");
+        add("sorterAlphabetical");
+    }};
+
+    //======================================================//
+
+    public transient final static Splitter ON_COLON = Splitter.on(":").trimResults().omitEmptyStrings();
+
+    public transient ArrayList<HatSorter> filterSorters = new ArrayList<>();
+
     public ConfigClient()
     {
         super(ModLoadingContext.get().getActiveContainer().getModId() + "-client.toml");
+    }
+
+    @Override
+    public void onConfigLoaded()
+    {
+        filterSorters.clear();
+
+        for(String s : filterSorterConfig)
+        {
+            List<String> split = ON_COLON.splitToList(s);
+            if(!split.isEmpty() && SortHandler.SORTERS.containsKey(split.get(0)))
+            {
+                try
+                {
+                    HatSorter sorter = SortHandler.SORTERS.get(split.get(0)).newInstance();
+                    if(split.size() >= 2)
+                    {
+                        sorter.isInverse = split.get(1).equals("inverse");
+                    }
+
+                    filterSorters.add(sorter);
+                }
+                catch(InstantiationException | IllegalAccessException e)
+                {
+                    Hats.LOGGER.error("Error creating known sorter type: {}", split.get(0));
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     @Nonnull

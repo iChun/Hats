@@ -110,13 +110,13 @@ public class WindowHatsList extends Window<WorkspaceHats>
 
             ElementTexture searchIcon = new ElementTexture(this, TEX_SEARCH);
             searchIcon.setSize(16, 16);
-            searchIcon.setConstraint(new Constraint(searchIcon).left(this, Constraint.Property.Type.LEFT, padding).bottom(this, Constraint.Property.Type.BOTTOM, padding));
+            searchIcon.constraints().left(this, Constraint.Property.Type.LEFT, padding).bottom(this, Constraint.Property.Type.BOTTOM, padding);
             elements.add(searchIcon);
 
             ElementTextField textField = new ElementTextField(this);
             textField.setId("search");
             textField.setResponder(this::updateSearch).setSize(70, 12);
-            textField.setConstraint(new Constraint(textField).left(searchIcon, Constraint.Property.Type.RIGHT, 2).bottom(searchIcon, Constraint.Property.Type.BOTTOM, 1).top(searchIcon, Constraint.Property.Type.TOP, 1).width(this, Constraint.Property.Type.WIDTH, 40));
+            textField.constraints().left(searchIcon, Constraint.Property.Type.RIGHT, 2).bottom(searchIcon, Constraint.Property.Type.BOTTOM, 1).top(searchIcon, Constraint.Property.Type.TOP, 1).width(this, Constraint.Property.Type.WIDTH, 40);
             elements.add(textField);
 
             //TODO sync with server regarding hats list.

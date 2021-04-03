@@ -6,6 +6,7 @@ import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
+import me.ichun.mods.ichunutil.client.gui.bns.window.WindowPopup;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
@@ -67,7 +68,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
             cancelButton = btnStack = new ElementButtonTextured<>(this, TEX_CANCEL, btn -> {
                 parent.parent.setNewHat(null, false);
             });
-            if(parent.parent.hatDetails.name.isEmpty())
+            if(parent.parent.hatDetails.name.isEmpty()) //TODO when the client doesn't have the hat data yet the button gets disabled.
             {
                 cancelButton.disabled = true;
             }
@@ -127,6 +128,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
             {
                 //SORTING OPTIONS
                 btnStack = new ElementButtonTextured<>(this, TEX_CATEGORIES, btn -> {
+                    parent.parent.openWindowInCenter(new WindowHatSorter(parent.parent), 0.7D, 0.7D, true);
                 });
                 btnStack.setTooltip(I18n.format("hats.gui.button.sortingOptions"));
                 btnStack.setSize(20, 20);

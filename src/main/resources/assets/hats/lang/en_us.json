@@ -77,6 +77,14 @@
 
   "hats.gui.window.hatsList.title": "Your Hats",
 
+  "hats.gui.window.sorter.title": "Hat Filters And Sorters",
+  "hats.gui.window.sorter.filters": "Filters",
+  "hats.gui.window.sorter.sorters": "Sorters",
+  "hats.gui.window.sorter.enabled": "Enabled",
+  "hats.gui.window.sorter.enabledInverse": "Enabled - Inverse",
+  "hats.gui.window.sorter.disabled": "Disabled",
+  "hats.gui.window.sorter.dragTip": "You can drag the sorters around",
+
   "hats.gui.button.removeHat": "Remove Hat",
   "hats.gui.button.randomHat": "Random Hat\n +SHIFT: Random Hue",
   "hats.gui.button.randomHatLauncher": "Random Hat",
