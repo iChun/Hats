@@ -1,8 +1,8 @@
 package me.ichun.mods.hats.common.hats.sort;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class SorterAlphabetical extends HatSorter
 {
@@ -14,7 +14,7 @@ public class SorterAlphabetical extends HatSorter
     }
 
     @Override
-    public void sort(ArrayList hats)
+    public void sort(List hats)
     {
         Collections.sort(hats);
         if(isInverse)

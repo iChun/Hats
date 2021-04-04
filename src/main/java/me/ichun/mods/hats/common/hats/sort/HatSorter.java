@@ -3,7 +3,7 @@ package me.ichun.mods.hats.common.hats.sort;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
+import java.util.List;
 
 public abstract class HatSorter
 {
@@ -14,15 +14,18 @@ public abstract class HatSorter
 
     public boolean isFilter() { return false; }
 
-    public final void sortRecursive(ArrayList<?> hats)
+    public final void sortRecursive(List<?> hats)
     {
         if(!hats.isEmpty())
         {
             Object o = hats.get(0);
 
-            if(o instanceof ArrayList)
+            if(o instanceof List)
             {
-                sortRecursive((ArrayList<?>)o);
+                for(Object hat : hats)
+                {
+                    sortRecursive((List<?>)hat);
+                }
             }
             else if(o instanceof HatsSavedData.HatPart)
             {
@@ -31,5 +34,5 @@ public abstract class HatSorter
         }
     }
 
-    public abstract void sort(ArrayList hats);
+    public abstract void sort(List hats);
 }

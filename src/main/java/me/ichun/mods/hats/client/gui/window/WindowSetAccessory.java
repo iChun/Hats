@@ -8,6 +8,7 @@ import me.ichun.mods.hats.client.gui.window.element.ElementHatsScrollView;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.hats.sort.SortHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Fragment;
 import me.ichun.mods.ichunutil.client.gui.bns.window.IWindows;
@@ -23,6 +24,7 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class WindowSetAccessory extends Window<WorkspaceHats>
@@ -74,6 +76,7 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
     {
         public int age;
         public float renderTick = 0F;
+        public float lastProg = 0F;
 
         public Window<?> windowDummy;
 
@@ -111,9 +114,11 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             }
             elements.add(list);
 
-            for(int i = 0; i < parent.parentElement.hatLevel.hatParts.size(); i++)
+            ArrayList<HatsSavedData.HatPart> hatParts = new ArrayList<>(parent.parentElement.hatLevel.hatParts);
+            SortHandler.sort(Hats.configClient.filterSorters, hatParts, true);
+            for(int i = 0; i < hatParts.size(); i++)
             {
-                HatsSavedData.HatPart level = parent.parentElement.hatLevel.hatParts.get(i);
+                HatsSavedData.HatPart level = hatParts.get(i);
                 boolean isShowing = level.isShowing;
 
                 HatInfo info = HatResourceHandler.getInfo(parent.parentElement.hatOrigin);
@@ -283,12 +288,6 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
         }
 
         @Override
-        public void resize(Minecraft mc, int width, int height)
-        {
-            super.resize(mc, width, height);
-        }
-
-        @Override
         public void renderBackground(MatrixStack stack)
         {
             float prog = 1F;
@@ -377,12 +376,15 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             int targetX = parentFragment.parentElement.getRight() + (hatsListPadding * 4);
             int targetWidth = 60 + (idealHeight > maxHeight ? 14 : 0); //50 width + 2x list padding and border (5 x 2) + padding to scroll (4) + scrolll (14) + 2x padding (6)
 
-            parentFragment.setTop((int)(parentFragment.getTop() + (targetY - parentFragment.getTop()) * prog));
-            parentFragment.posX = (int)(parentFragment.parentElement.getLeft() + (targetX - parentFragment.parentElement.getLeft()) * prog);
-            parentFragment.width = (int)(parentFragment.parentElement.width + (targetWidth - parentFragment.parentElement.width) * prog);
+            if(lastProg < 1F)
+            {
+                parentFragment.setTop((int)(parentFragment.getTop() + (targetY - parentFragment.getTop()) * prog));
+                parentFragment.posX = (int)(parentFragment.parentElement.getLeft() + (targetX - parentFragment.parentElement.getLeft()) * prog);
+                parentFragment.width = (int)(parentFragment.parentElement.width + (targetWidth - parentFragment.parentElement.width) * prog);
 
-            parentFragment.height = (int)(parentFragment.parentElement.height + (targetHeight - parentFragment.parentElement.height) * prog);
-            parentFragment.resize(getWorkspace().getMinecraft(), parentFragment.width, parentFragment.height);
+                parentFragment.height = (int)(parentFragment.parentElement.height + (targetHeight - parentFragment.parentElement.height) * prog);
+                parentFragment.resize(getWorkspace().getMinecraft(), parentFragment.width, parentFragment.height);
+            }
 
             renderTick = partialTick;
 
@@ -464,6 +466,8 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             parentFragment.parentElement.setTop(hatViewTop);
 
             resetScissorToParent();
+
+            lastProg = prog;
         }
 
         @Override

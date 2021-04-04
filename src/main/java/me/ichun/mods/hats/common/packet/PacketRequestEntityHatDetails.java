@@ -51,7 +51,7 @@ public class PacketRequestEntityHatDetails extends AbstractPacket
             for(int entId : entIds)
             {
                 Entity ent = context.getSender().getServerWorld().getEntityByID(entId);
-                if(ent instanceof LivingEntity)
+                if(ent instanceof LivingEntity && ent.isAlive())
                 {
                     HatsSavedData.HatPart hatPart = HatHandler.getHatPart((LivingEntity)ent);
                     if(hatPart.isAHat())

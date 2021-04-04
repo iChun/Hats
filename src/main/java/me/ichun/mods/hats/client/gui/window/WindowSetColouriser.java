@@ -90,6 +90,7 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
         public boolean showRGB;
         public int age;
         public float renderTick = 0F;
+        public float lastProg = 0F;
 
         public ViewSetColouriser(@Nonnull WindowSetColouriser parent)
         {
@@ -368,9 +369,12 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
                 prog = (float)Math.sin(Math.toRadians(MathHelper.clamp(((age + partialTick) / Hats.configClient.guiAnimationTime), 0F, 1F) * 90F));
             }
 
-            parentFragment.posX = (int)(parentFragment.parentElement.getLeft() + (targetX - parentFragment.parentElement.getLeft()) * prog);
-            parentFragment.width = (int)(parentFragment.parentElement.width + (targetWidth - parentFragment.parentElement.width) * prog);
-            parentFragment.resize(getWorkspace().getMinecraft(), parentFragment.width, parentFragment.height);
+            if(lastProg < 1F)
+            {
+                parentFragment.posX = (int)(parentFragment.parentElement.getLeft() + (targetX - parentFragment.parentElement.getLeft()) * prog);
+                parentFragment.width = (int)(parentFragment.parentElement.width + (targetWidth - parentFragment.parentElement.width) * prog);
+                parentFragment.resize(getWorkspace().getMinecraft(), parentFragment.width, parentFragment.height);
+            }
 
             reset.posX = (int)(toggleHSBtoRGB.posX + (24 * (1F - prog)));
 
@@ -408,6 +412,8 @@ public class WindowSetColouriser extends Window<WorkspaceHats>
             parentFragment.parentElement.setLeft(hatViewLeft);
 
             resetScissorToParent();
+
+            lastProg = prog;
         }
 
         @Override

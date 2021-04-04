@@ -3,10 +3,7 @@ package me.ichun.mods.hats.common.hats.sort;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.TreeMap;
+import java.util.*;
 
 public class SorterCount extends HatSorter
 {
@@ -18,7 +15,7 @@ public class SorterCount extends HatSorter
     }
 
     @Override
-    public void sort(ArrayList hats)
+    public void sort(List hats)
     {
         TreeMap<Integer, ArrayList<HatsSavedData.HatPart>> hatsByCount = new TreeMap<>(Comparator.naturalOrder());
 

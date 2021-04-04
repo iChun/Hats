@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.List;
 
 public class SorterRarity extends HatSorter
 {
@@ -20,14 +21,22 @@ public class SorterRarity extends HatSorter
     }
 
     @Override
-    public void sort(ArrayList hats)
+    public void sort(List hats)
     {
+        ArrayList unsorted = new ArrayList();
         EnumMap<EnumRarity, ArrayList<HatsSavedData.HatPart>> hatsByRarity = new EnumMap<>(EnumRarity.class);
         for(Object o : hats)
         {
             HatsSavedData.HatPart hat = (HatsSavedData.HatPart)o;
             HatInfo info = HatResourceHandler.getInfo(hat);
-            hatsByRarity.computeIfAbsent(info.getRarity(), k -> new ArrayList<>()).add(hat);
+            if(info != null)
+            {
+                hatsByRarity.computeIfAbsent(info.getRarity(), k -> new ArrayList<>()).add(hat);
+            }
+            else //Most likely an accessory
+            {
+                unsorted.add(hat);
+            }
         }
 
         hats.clear();
@@ -35,8 +44,15 @@ public class SorterRarity extends HatSorter
         EnumRarity[] rarities = EnumRarity.values();
         for(EnumRarity rarity : rarities)
         {
-            hats.add(hatsByRarity.get(rarity));
+            if(hatsByRarity.containsKey(rarity))
+            {
+                hats.add(hatsByRarity.get(rarity));
+            }
         }
-        Collections.reverse(hats);
+        if(isInverse)
+        {
+            Collections.reverse(hats);
+        }
+        hats.add(unsorted);
     }
 }

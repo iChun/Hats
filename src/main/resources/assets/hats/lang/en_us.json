@@ -17,6 +17,8 @@
   "config.hats.prop.invisibleEntityInHatSelector.desc": "Lagging? This might help give you back some frames.",
   "config.hats.prop.hatLauncherRandomHatSpeed.name": "Hat Launcher - Random Hat Cycle Speed",
   "config.hats.prop.hatLauncherRandomHatSpeed.desc": "On a \"Random Hat\" option for the Hat Launcher, a new hat shows every X ticks. Increase this to slow down the cycle.",
+  "config.hats.prop.filterSorterConfig.name": "Hat Sorter Config",
+  "config.hats.prop.filterSorterConfig.desc": "The config for the Hat Sorter. Please don't edit this by hand, do it through the Hats UI.",
 
   "config.hats.prop.attemptToFixOldHats.name": "Attempt To Fix Old Hats",
   "config.hats.prop.attemptToFixOldHats.desc": "(Not currently used, defaults to on currently) Should we attempt to fix hats made in the older versions of Tabula?",
@@ -101,8 +103,18 @@
 
   "hats.gui.button.reset": "Reset",
 
+  "hats.gui.sorter.filterContributor.name": "Contributors",
+  "hats.gui.sorter.filterHas.name": "None In Inventory",
+  "hats.gui.sorter.filterHasAccessories.name": "No Accessories",
+  "hats.gui.sorter.filterUndiscovered.name": "Not Unlocked",
+  "hats.gui.sorter.sorterAlphabetical.name": "Alphabetically",
+  "hats.gui.sorter.sorterCount.name": "By Count",
+  "hats.gui.sorter.sorterDiscovered.name": "By Unlocked",
+  "hats.gui.sorter.sorterRarity.name": "By Rarity",
+
   "hats.gui.tooltip.author": "Made by: %s",
   "hats.gui.tooltip.rarity": "Rarity: %s",
+  "hats.gui.tooltip.notUnlocked": "Not Unlocked",
   "hats.gui.tooltip.worth": "Worth %s Humorously Acronymed Token(s)",
 
   "hats.plugin.tabula.button": "Open Hat",

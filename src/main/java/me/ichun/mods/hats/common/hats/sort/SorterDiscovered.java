@@ -4,6 +4,7 @@ import me.ichun.mods.hats.common.world.HatsSavedData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.List;
 
 public class SorterDiscovered extends HatSorter
 {
@@ -15,7 +16,7 @@ public class SorterDiscovered extends HatSorter
     }
 
     @Override
-    public void sort(ArrayList hats)
+    public void sort(List hats)
     {
         ArrayList<HatsSavedData.HatPart> discovered = new ArrayList<>();
         ArrayList<HatsSavedData.HatPart> undiscovered = new ArrayList<>();

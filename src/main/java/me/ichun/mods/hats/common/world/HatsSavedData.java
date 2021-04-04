@@ -338,6 +338,25 @@ public class HatsSavedData extends WorldSavedData
             return false;
         }
 
+        public boolean has(@Nonnull String partName) //this better already be lower case
+        {
+            if(name.toLowerCase(Locale.ROOT).contains(partName))
+            {
+                return true;
+            }
+            else
+            {
+                for(HatPart accessory : hatParts)
+                {
+                    if(accessory.has(partName))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public void setCountOfAllTo(int count)
         {
             this.count = count;

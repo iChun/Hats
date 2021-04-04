@@ -298,7 +298,13 @@ public class HatHandler //Handles most of the server-related things.
         ArrayList<HatsSavedData.HatPart> source = new ArrayList<>();
         if(HatHandler.useInventory(player))
         {
-            source.addAll(getPlayerInventory(player));
+            //Mark all the hats as a 0 count and 0 brightness
+            ArrayList<HatsSavedData.HatPart> allHats = HatResourceHandler.getAllHatsAsHatParts(0);
+            for(HatsSavedData.HatPart hat : allHats)
+            {
+                hat.hsbiser[2] = 1F;
+                source.add(hat); //not necessary to create a copy, getting all hats as parts already creates a copy.
+            }
         }
         else
         {
@@ -307,10 +313,9 @@ public class HatHandler //Handles most of the server-related things.
             {
                 source.add(hatPart.createCopy());
             }
-
-            //combine all the hats with our personalisation
-            HatResourceHandler.combineLists(source, getPlayerInventory(player));
         }
+        //combine all the hats with our personalisation
+        HatResourceHandler.combineLists(source, getPlayerInventory(player));
         return source;
     }
 

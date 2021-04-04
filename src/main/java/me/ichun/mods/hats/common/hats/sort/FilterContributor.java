@@ -6,6 +6,7 @@ import me.ichun.mods.hats.common.world.HatsSavedData;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
+import java.util.List;
 
 public class FilterContributor extends HatSorter
 {
@@ -23,7 +24,7 @@ public class FilterContributor extends HatSorter
     }
 
     @Override
-    public void sort(ArrayList hats)
+    public void sort(List hats)
     {
         ArrayList<HatsSavedData.HatPart> contrib = new ArrayList<>();
         ArrayList<HatsSavedData.HatPart> nonContrib = new ArrayList<>();
@@ -42,6 +43,10 @@ public class FilterContributor extends HatSorter
                 {
                     nonContrib.add(hat);
                 }
+            }
+            else //is an accessory most likely
+            {
+                nonContrib.add(hat);
             }
         }
 

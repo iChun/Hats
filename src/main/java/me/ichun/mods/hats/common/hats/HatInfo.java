@@ -387,12 +387,12 @@ public class HatInfo
         if(accessoryFor != null)
         {
             sb.append(accessoryFor);
-            sb.append("_");
+            sb.append(":");
         }
         if(accessoryParent != null)
         {
             sb.append(accessoryParent);
-            sb.append("_");
+            sb.append("|");
         }
         sb.append(name);
 

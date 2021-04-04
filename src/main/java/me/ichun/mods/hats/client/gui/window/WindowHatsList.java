@@ -6,6 +6,7 @@ import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatsScrollView;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.hats.sort.SortHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
@@ -19,7 +20,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -140,11 +140,11 @@ public class WindowHatsList extends Window<WorkspaceHats>
         public void updateSearch(String query)
         {
             List<HatsSavedData.HatPart> hatPartSource = ((WorkspaceHats)getWorkspace()).getHatPartSource();
-            if(!query.isEmpty())
+            SortHandler.sort(Hats.configClient.filterSorters, hatPartSource, query.isEmpty());
+            if(!query.isEmpty()) //we're searching for something.
             {
-                hatPartSource = hatPartSource.stream().filter(hatPart -> hatPart.name.toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))).collect(Collectors.toList());
+                hatPartSource = hatPartSource.stream().filter(hatPart -> hatPart.has(query.toLowerCase(Locale.ROOT))).collect(Collectors.toList());
             }
-            Collections.sort(hatPartSource);
 
             list.elements.clear();
 
