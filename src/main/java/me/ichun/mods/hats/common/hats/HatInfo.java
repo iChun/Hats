@@ -49,6 +49,8 @@ public class HatInfo
 
     public UUID contributorUUID;
 
+    public String description;
+
     public String accessoryFor;
     public ArrayList<String> accessoryLayer = new ArrayList<>();
     public String accessoryParent;
@@ -290,6 +292,10 @@ public class HatInfo
             else if(note.startsWith("hats-accessory-hide-parent-part:"))
             {
                 hideParent.add(note.substring("hats-accessory-hide-parent-part:".length()).trim());
+            }
+            else if(note.startsWith("hats-description:"))
+            {
+                description = note.substring("hats-description:".length()).trim();
             }
             else if(note.startsWith("hat"))
             {

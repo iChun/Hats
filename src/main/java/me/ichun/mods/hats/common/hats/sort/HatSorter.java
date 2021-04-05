@@ -34,5 +34,5 @@ public abstract class HatSorter
         }
     }
 
-    public abstract void sort(List hats);
+    public abstract void sort(List hats); //presumed all elements in the list are HatPart
 }

@@ -363,6 +363,10 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
                     sb.append(I18n.format("hats.gui.tooltip.notUnlocked")).append("\n");
                 }
                 sb.append("\n");
+                if(accessoryInfo.description != null)
+                {
+                    sb.append(accessoryInfo.description).append("\n").append("\n");
+                }
                 sb.append(I18n.format("hats.gui.tooltip.worth", info.getWorthFor(accessoryInfo.name, 0)));
 
                 return sb.toString();
