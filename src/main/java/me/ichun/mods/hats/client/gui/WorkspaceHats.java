@@ -15,6 +15,7 @@ import me.ichun.mods.hats.common.packet.PacketHatLauncherCustomisation;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.Workspace;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
+import me.ichun.mods.ichunutil.client.gui.bns.window.WindowPopup;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
 import me.ichun.mods.ichunutil.common.iChunUtil;
@@ -38,6 +39,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.function.Consumer;
 
 public class WorkspaceHats extends Workspace
         implements IHatSetter
@@ -179,7 +181,7 @@ public class WorkspaceHats extends Workspace
         ArrayList<HatsSavedData.HatPart> source = HatHandler.getHatSource(Minecraft.getInstance().player);
         HatResourceHandler.combineLists(source, changedHats);
         return source;
-    } //TODO should this be cached?? this is really bad performance
+    }
 
     @Override
     public boolean canDockWindows()
@@ -382,6 +384,22 @@ public class WorkspaceHats extends Workspace
         }
 
         onNewHatSet(newHat);
+    }
+
+    public void popup(double widthRatio, double heightRatio, Consumer<Workspace> callback, String...text)
+    {
+        openWindowInCenter(new WindowPopup(this, "window.popup.title", callback, text) {
+            @Override
+            public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
+            {
+                stack.push();
+                stack.translate(0F, 0F, 375F); //silly ElementHatRender
+
+                super.render(stack, mouseX, mouseY, partialTick);
+
+                stack.pop();
+            }
+        }, widthRatio, heightRatio, true);
     }
 
     public void refreshHats()

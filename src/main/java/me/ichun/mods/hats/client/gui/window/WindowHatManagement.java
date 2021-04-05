@@ -2,14 +2,16 @@ package me.ichun.mods.hats.client.gui.window;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
+import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.packet.PacketHatsList;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
-import me.ichun.mods.ichunutil.client.gui.bns.window.WindowPopup;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementButton;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import javax.annotation.Nonnull;
 
@@ -50,19 +52,23 @@ public class WindowHatManagement extends Window<WorkspaceHats>
                 HatHandler.allocateHatPools();
                 parent.parent.refreshHats();
 
-                WindowPopup.popup(parent.parent, 0.6D, 0.6D, w -> {}, I18n.format("hats.gui.window.management.reloadedAllHats"));
+                parent.parent.popup(0.6D, 0.6D, w -> {}, I18n.format("hats.gui.window.management.reloadedAllHats"));
             });
             btnReload.setSize(80, 20);
             btnReload.constraints().width(this, Constraint.Property.Type.WIDTH, 60).top(this, Constraint.Property.Type.TOP, padding);
             elements.add(btnReload);
 
-            //TODO not necessary on single player.
-            ElementButton<?> btnSync = new ElementButton<>(this, "hats.gui.window.management.synchroniseWithServer", btn -> {
-                //TODO remember to reset the toast when sync complete.
-            });
-            btnSync.setSize(80, 20);
-            btnSync.constraints().width(this, Constraint.Property.Type.WIDTH, 60).top(btnReload, Constraint.Property.Type.BOTTOM, padding);
-            elements.add(btnSync);
+            if(Hats.eventHandlerClient.serverHasMod && !(ServerLifecycleHooks.getCurrentServer() != null && ServerLifecycleHooks.getCurrentServer().isSinglePlayer())) //server has the mod and we're not in single player
+            {
+                ElementButton<?> btnSync = new ElementButton<>(this, "hats.gui.window.management.synchroniseWithServer", btn -> {
+                    parent.parent.popup(0.6D, 0.6D, w -> {}, I18n.format("hats.gui.window.management.sync.waiting"));
+
+                    Hats.channel.sendToServer(new PacketHatsList(HatResourceHandler.compileHatNames(), false));
+                });
+                btnSync.setSize(80, 20);
+                btnSync.constraints().width(this, Constraint.Property.Type.WIDTH, 60).top(btnReload, Constraint.Property.Type.BOTTOM, padding);
+                elements.add(btnSync);
+            }
         }
 
         @Override

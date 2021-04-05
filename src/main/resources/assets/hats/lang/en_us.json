@@ -42,8 +42,8 @@
   "config.hats.prop.bossHatChanceBonus.desc": "The bonus spawn chance of a boss to spawn a hat, in addition to the hatChance config.",
   "config.hats.prop.bossRarityBonus.name": "Boss Hat Rarity Bonus",
   "config.hats.prop.bossRarityBonus.desc": "The bonus to the rarity of hats spawned on bosses. EG: setting this to 1 (max) will force Bosses to only spawn with Legendary hats, should the weight be allocated correctly.",
-  "config.hats.prop.userSubmissionsRequireApproval.name": "User Hat Submissions Require Op Approval",
-  "config.hats.prop.userSubmissionsRequireApproval.desc": "(Not currently used, no such functionality yet) Do Ops need to approve Hat submissions by users?",
+  "config.hats.prop.allowFileTransfer.name": "Allow File Transfer",
+  "config.hats.prop.allowFileTransfer.desc": "Allow sending of hat files between clients and servers?",
   "config.hats.prop.accessoryCostMultiplier.name": "Accessory Value Multiplier",
   "config.hats.prop.accessoryCostMultiplier.desc": "Accessories have their own rarity. This multiplies their value by their rarity set in rarityCost",
   "config.hats.prop.salesCostMultiplier.name": "Sales Cost Multiplier",
@@ -76,6 +76,8 @@
   "hats.toast.sync.title": "Error Rendering Hat",
   "hats.toast.sync.subtitle": "Consider Syncing with Server in Hat Resource Management",
 
+  "hats.toast.sync.receivedHat": "Received Hat From Server",
+
   "hats.gui.selection.title": "Hats Menu",
 
   "hats.gui.window.hatsList": "Hats List",
@@ -101,6 +103,12 @@
   "hats.gui.window.management.reloadAllHats": "Reload All Hats",
   "hats.gui.window.management.reloadedAllHats": "Reloaded All Hats.",
   "hats.gui.window.management.synchroniseWithServer": "Synchronise With Server",
+  "hats.gui.window.management.sync.waiting": "Waiting for server to respond...",
+  "hats.gui.window.management.sync.noDifferences": "All good! Hat names match on both sides",
+  "hats.gui.window.management.sync.issue": "Sync issue!",
+  "hats.gui.window.management.sync.clientMissing": "We are missing:",
+  "hats.gui.window.management.sync.serverMissing": "Server is missing:",
+  "hats.gui.window.management.sync.syncReq": "Do we want to sync?",
 
   "hats.gui.button.removeHat": "Remove Hat",
   "hats.gui.button.randomHat": "Random Hat\n +SHIFT: Random Hue",

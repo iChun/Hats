@@ -26,10 +26,7 @@ import javax.annotation.Nonnull;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class HatInfo
@@ -409,6 +406,16 @@ public class HatInfo
         sb.append(name);
 
         return sb.toString();
+    }
+
+    public void addFullNames(HashSet<String> names)
+    {
+        names.add(getFullName());
+
+        for(HatInfo accessory : accessories)
+        {
+            accessory.addFullNames(names);
+        }
     }
 
     public void assignAccessoriesToPart(HatsSavedData.HatPart hatPart, LivingEntity ent)

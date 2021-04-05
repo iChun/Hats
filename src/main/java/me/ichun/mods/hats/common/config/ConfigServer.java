@@ -60,7 +60,7 @@ public class ConfigServer extends ConfigBase
 
     //TODO reorganise the configs
     @CategoryDivider(name = "others")
-    public boolean userSubmissionsRequireApproval = true; //TODO this config - update localisation
+    public boolean allowFileTransfer = true;
 
     @Prop(min = 0)
     public double accessoryCostMultiplier = 1.5D; //TODO easter egg rainbow hats

@@ -12,8 +12,6 @@ public class ConfigCommon extends ConfigBase
     @CategoryDivider(name = "general")
     public boolean attemptToFixOldHats = true; //TODO not used. Update localisation
 
-    //TODO allow file transfer
-
     public ConfigCommon()
     {
         super(ModLoadingContext.get().getActiveContainer().getModId() + "-common.toml");

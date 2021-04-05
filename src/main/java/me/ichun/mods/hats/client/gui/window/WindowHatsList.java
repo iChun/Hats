@@ -117,8 +117,6 @@ public class WindowHatsList extends Window<WorkspaceHats>
             textField.constraints().left(searchIcon, Constraint.Property.Type.RIGHT, 2).bottom(searchIcon, Constraint.Property.Type.BOTTOM, 1).top(searchIcon, Constraint.Property.Type.TOP, 1).width(this, Constraint.Property.Type.WIDTH, 40);
             elements.add(textField);
 
-            //TODO sync with server regarding hats list.
-
             ElementScrollBar<?> sv = new ElementScrollBar<>(this, ElementScrollBar.Orientation.VERTICAL, 0.6F);
             sv.constraints().top(this, Constraint.Property.Type.TOP, padding)
                     .bottom(searchIcon, Constraint.Property.Type.TOP, padding) // 10 + 20 + 10, bottom + button height + padding

@@ -1,5 +1,6 @@
 package me.ichun.mods.hats.common.hats;
 
+import com.google.common.base.Splitter;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.ichun.mods.hats.common.Hats;
@@ -19,6 +20,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -182,25 +185,25 @@ public class HatResourceHandler
                 Hats.LOGGER.warn("Loaded an old Tabula file. Updating to new Tabula & Hats format: {}", file);
             }
 
-//            if(file.getAbsolutePath().contains("mods\\hats\\Miner Hat") || file.getName().equals("Hotdog Hotdog.tbl") || file.getName().equals("Sombrero.tbl") || file.getName().equals("Straw Hat.tbl"))
-//            {
-//                for(Project.Part allPart : project.getAllParts())
-//                {
-//                    allPart.rotPY += 1F;
-//                }
-//                project.save(file);
-//                Hats.LOGGER.info("Resaved: {}", file);
-//            }
+            //            if(file.getAbsolutePath().contains("mods\\hats\\Miner Hat") || file.getName().equals("Hotdog Hotdog.tbl") || file.getName().equals("Sombrero.tbl") || file.getName().equals("Straw Hat.tbl"))
+            //            {
+            //                for(Project.Part allPart : project.getAllParts())
+            //                {
+            //                    allPart.rotPY += 1F;
+            //                }
+            //                project.save(file);
+            //                Hats.LOGGER.info("Resaved: {}", file);
+            //            }
 
-//                                    if(file.getName().equals("Ushanka.tbl"))
-//                        {
-//                            for(Project.Part allPart : project.getAllParts())
-//                            {
-//                                allPart.rotPY += 1F;
-//                            }
-//                            project.save(file);
-//                            Hats.LOGGER.info("Resaved: {}", file);
-//                        }
+            //                                    if(file.getName().equals("Ushanka.tbl"))
+            //                        {
+            //                            for(Project.Part allPart : project.getAllParts())
+            //                            {
+            //                                allPart.rotPY += 1F;
+            //                            }
+            //                            project.save(file);
+            //                            Hats.LOGGER.info("Resaved: {}", file);
+            //                        }
             //            if(file.getName().startsWith("(C) ")) //it's a contributor hat
             //            {
             //                parseMeta(file, project);
@@ -296,6 +299,38 @@ public class HatResourceHandler
                 }
             }
         }
+    }
+
+    public static HashSet<String> compileHatNames()
+    {
+        HashSet<String> names = new HashSet<>();
+        HATS.forEach((s, info) -> info.addFullNames(names));
+        return names;
+    }
+
+    public static HatInfo getInfoFromFullName(String name)
+    {
+        Splitter ON_COLON = Splitter.on(":").trimResults().omitEmptyStrings();
+        Splitter ON_PIPE = Splitter.on("|").trimResults().omitEmptyStrings();
+
+        List<String> names = ON_COLON.splitToList(name);
+        if(names.size() == 1) //is a base hat
+        {
+            return HATS.get(names.get(0));
+        }
+        else if(names.size() == 2)
+        {
+            HatInfo parentInfo = HATS.get(names.get(0));
+            if(parentInfo != null)
+            {
+                List<String> accNames = ON_PIPE.splitToList(names.get(1));
+                if(!accNames.isEmpty())
+                {
+                    return parentInfo.getInfoFor(accNames.get(accNames.size() - 1));
+                }
+            }
+        }
+        return null;
     }
 
     private static void repairOldHat(File file, Project project)

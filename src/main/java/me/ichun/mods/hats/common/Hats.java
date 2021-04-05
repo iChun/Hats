@@ -108,7 +108,10 @@ public class Hats
                 PacketHatCustomisation.class,
                 PacketEntityHatEntityDetails.class,
                 PacketRehatify.class,
-                PacketHatLauncherCustomisation.class
+                PacketHatLauncherCustomisation.class,
+                PacketHatsList.class,
+                PacketHatsListResponse.class,
+                PacketHatFragment.class
         );
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
