@@ -68,7 +68,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
             cancelButton = btnStack = new ElementButtonTextured<>(this, TEX_CANCEL, btn -> {
                 parent.parent.setNewHat(null, false);
             });
-            if(parent.parent.hatDetails.name.isEmpty()) //TODO when the client doesn't have the hat data yet the button gets disabled.
+            if(parent.parent.hatDetails.name.isEmpty())
             {
                 cancelButton.disabled = true;
             }
@@ -148,6 +148,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
 
                 //RELOAD
                 btnStack = new ElementButtonTextured<>(this, TEX_RELOAD, btn -> {
+                    parent.parent.openWindowInCenter(new WindowHatManagement(parent.parent), 0.7D, 0.7D, true);
                 });
                 btnStack.setTooltip(I18n.format("hats.gui.button.hatResourceManagement"));
                 btnStack.setSize(20, 20);

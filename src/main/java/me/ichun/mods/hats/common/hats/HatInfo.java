@@ -71,6 +71,7 @@ public class HatInfo
     {
         this.name = name;
         this.project = project;
+        this.project.name = name;
 
         if(FMLEnvironment.dist.isClient())
         {
@@ -134,7 +135,7 @@ public class HatInfo
     }
 
     @OnlyIn(Dist.CLIENT)
-    public void destroy() //TODO remember to call this when we reload all our hats.
+    public void destroy()
     {
         //Don't need to destroy the model
         project.destroy();
@@ -144,6 +145,11 @@ public class HatInfo
             Minecraft.getInstance().getTextureManager().deleteTexture(value.getResourceLocation());
         }
         hsbToImage.clear();
+
+        for(HatInfo accessory : accessories)
+        {
+            accessory.destroy();
+        }
     }
 
     @OnlyIn(Dist.CLIENT)

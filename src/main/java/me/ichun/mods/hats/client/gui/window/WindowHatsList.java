@@ -98,6 +98,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
         public static ResourceLocation TEX_SEARCH = new ResourceLocation("hats", "textures/icon/search.png");
 
         public ElementHatsScrollView list;
+        public ElementTextField textField;
 
         public ViewHatsList(@Nonnull WindowHatsList parent)
         {
@@ -110,7 +111,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
             searchIcon.constraints().left(this, Constraint.Property.Type.LEFT, padding).bottom(this, Constraint.Property.Type.BOTTOM, padding);
             elements.add(searchIcon);
 
-            ElementTextField textField = new ElementTextField(this);
+            textField = new ElementTextField(this);
             textField.setId("search");
             textField.setResponder(this::updateSearch).setSize(70, 12);
             textField.constraints().left(searchIcon, Constraint.Property.Type.RIGHT, 2).bottom(searchIcon, Constraint.Property.Type.BOTTOM, 1).top(searchIcon, Constraint.Property.Type.TOP, 1).width(this, Constraint.Property.Type.WIDTH, 40);

@@ -197,9 +197,9 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
                 flag = true;
             }
-            else
+            else if(Hats.eventHandlerClient.serverHasMod)
             {
-                //TODO we have to ask the server for the Hat.
+                Hats.eventHandlerClient.showSyncToast();
             }
 
             stack.pop();

@@ -20,7 +20,6 @@ import net.minecraft.util.math.MathHelper;
 import javax.annotation.Nonnull;
 import java.text.DecimalFormat;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class WindowAllHats extends Window<WorkspaceHats>
@@ -132,7 +131,7 @@ public class WindowAllHats extends Window<WorkspaceHats>
 
             float prog = MathHelper.clamp(found / (float)list.elements.size(), 0F, 1F);
 
-            ElementProgressBar progressBar = new ElementProgressBar(this);//TODO test B&S Theme
+            ElementProgressBar progressBar = new ElementProgressBar(this);
             progressBar.constraints().bottom(button, Constraint.Property.Type.BOTTOM, 2).top(button, Constraint.Property.Type.TOP, 2).left(this, Constraint.Property.Type.LEFT, padding).right(button, Constraint.Property.Type.LEFT, padding);
             progressBar.setProgress(prog);
             elements.add(progressBar);

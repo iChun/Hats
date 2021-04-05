@@ -29,7 +29,7 @@ public class HatHandler //Handles most of the server-related things.
 
     private static HatsSavedData saveData;
 
-    public static synchronized void allocateHatPools() //Server and client shares the same pools //TODO loading method when receiving a hat from the server.
+    public static synchronized void allocateHatPools() //Server and client shares the same pools
     {
         HAT_POOLS.clear();
 

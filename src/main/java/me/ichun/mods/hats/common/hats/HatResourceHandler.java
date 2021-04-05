@@ -122,6 +122,21 @@ public class HatResourceHandler
         Hats.LOGGER.info("Loaded {} files. {} hats, {} accessories.", count, hatCount, accessoryCount);
     }
 
+    public static synchronized boolean loadSingularHat(File file)
+    {
+        if(file.getName().endsWith(".tbl") && readHat(file))
+        {
+            accessoriseHatInfos();
+
+            HAT_PARTS = getAllHatsAsHatParts(1);
+
+            Hats.LOGGER.info("Loaded hat: {}", file);
+
+            return true;
+        }
+        return false;
+    }
+
     private static int scourForHats(File dir)
     {
         int count = 0;

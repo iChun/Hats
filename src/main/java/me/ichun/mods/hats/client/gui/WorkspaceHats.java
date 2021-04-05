@@ -55,7 +55,7 @@ public class WorkspaceHats extends Workspace
     public WindowHatsList windowHatsList;
     public WindowSidebar windowSidebar;
 
-    public ArrayList<HatsSavedData.HatPart> changedHats = new ArrayList<>(); //TODO Update hat when you have your own hat replaced and you are in the GUI
+    public ArrayList<HatsSavedData.HatPart> changedHats = new ArrayList<>();
 
     public WorkspaceHats(Screen lastScreen, boolean fallback, @Nonnull LivingEntity hatEntity, @Nullable ItemStack hatLauncher) //TODO new hat tutorial.
     {
@@ -193,7 +193,7 @@ public class WorkspaceHats extends Workspace
         return (this.getListener() != null && this.isDragging()) && this.getListener().mouseDragged(mouseX, mouseY, button, distX, distY);
     }
 
-    public void addWindowWithHalfGreyout(Window<?> window) //TODO window/tab for ALL available hats.
+    public void addWindowWithHalfGreyout(Window<?> window)
     {
         WindowHalfGreyout greyout = new WindowHalfGreyout(this, window);
         addWindow(greyout);
@@ -203,7 +203,7 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void renderBackground(MatrixStack stack) //TODO test B&S theme.
+    public void renderBackground(MatrixStack stack)
     {
         if(fallback)
         {
@@ -285,12 +285,12 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
-    public void onClose() //TODO update/refresh our hat cache if our hat changes whilst we're in menu
+    public void onClose()
     {
         super.onClose();
 
         //Send to the server our customisations, and our new hat if we hit confirmed
-        if(hatLauncher != null) //TODO the server needs to check if we have this hat or not!
+        if(hatLauncher != null)
         {
             Hats.channel.sendToServer(new PacketHatLauncherCustomisation(HatHandler.getHatPart(hatLauncher)));
 
@@ -321,8 +321,6 @@ public class WorkspaceHats extends Workspace
         }
 
         changedHats.clear();
-
-        Hats.eventHandlerClient.closeHatsMenu();
     }
 
     public void notifyChanged(@Nonnull HatsSavedData.HatPart part)
@@ -384,5 +382,14 @@ public class WorkspaceHats extends Workspace
         }
 
         onNewHatSet(newHat);
+    }
+
+    public void refreshHats()
+    {
+        onNewHatSet(hatLauncher != null ? HatHandler.getHatPart(hatLauncher) : HatHandler.getHatPart(hatEntity));
+
+        windowHatsList.getCurrentView().updateSearch(windowHatsList.getCurrentView().textField.getText());
+
+        resize(getMinecraft(), width, height);
     }
 }

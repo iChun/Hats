@@ -1,5 +1,6 @@
 package me.ichun.mods.hats.common.packet;
 
+import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.network.AbstractPacket;
@@ -67,6 +68,11 @@ public class PacketEntityHatDetails extends AbstractPacket //Hat per entity, not
                 if(ent instanceof LivingEntity)
                 {
                     HatHandler.assignSpecificHat((LivingEntity)ent, hatDetails);
+
+                    if(ent == Minecraft.getInstance().player && Minecraft.getInstance().currentScreen instanceof WorkspaceHats)
+                    {
+                        ((WorkspaceHats)Minecraft.getInstance().currentScreen).refreshHats();
+                    }
                 }
             });
         }

@@ -1,4 +1,9 @@
 {
+  "config.hats.cat.hatRandomisation.name": "Hat Randomisation",
+  "config.hats.cat.hatRandomisation.desc": "Options for the randomisation of hats.",
+  "config.hats.cat.others.name": "Other Options",
+  "config.hats.cat.others.desc": "Options that don't really fit anywhere else.",
+
   "config.hats.prop.maxHatRenders.name": "Max Hat Renders",
   "config.hats.prop.maxHatRenders.desc": "Maximum number of hats to render in one frame.",
   "config.hats.prop.hatChance.name": "Hat Spawn Chance",
@@ -68,6 +73,9 @@
   "hats.toast.unlock.hat": "Hat",
   "hats.toast.unlock.accessory": "Accessory",
 
+  "hats.toast.sync.title": "Error Rendering Hat",
+  "hats.toast.sync.subtitle": "Consider Syncing with Server in Hat Resource Management",
+
   "hats.gui.selection.title": "Hats Menu",
 
   "hats.gui.window.hatsList": "Hats List",
@@ -88,6 +96,11 @@
   "hats.gui.window.sorter.enabledInverse": "Enabled - Inverse",
   "hats.gui.window.sorter.disabled": "Disabled",
   "hats.gui.window.sorter.dragTip": "You can drag the sorters around",
+
+  "hats.gui.window.management.title": "Hat Management",
+  "hats.gui.window.management.reloadAllHats": "Reload All Hats",
+  "hats.gui.window.management.reloadedAllHats": "Reloaded All Hats.",
+  "hats.gui.window.management.synchroniseWithServer": "Synchronise With Server",
 
   "hats.gui.button.removeHat": "Remove Hat",
   "hats.gui.button.randomHat": "Random Hat\n +SHIFT: Random Hue",

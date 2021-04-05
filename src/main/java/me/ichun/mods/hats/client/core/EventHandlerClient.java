@@ -4,6 +4,7 @@ import me.ichun.mods.hats.client.entity.EntityDummy;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.layer.LayerHat;
 import me.ichun.mods.hats.client.model.ModelRendererDragonHook;
+import me.ichun.mods.hats.client.toast.Toast;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.packet.PacketRequestEntityHatDetails;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -52,6 +54,8 @@ public class EventHandlerClient
     public float originalPitch;
     public float guiX, guiY, guiYaw, guiPitch, guiDist;
     public boolean forceRenderWhenInvisible;
+
+    private boolean shownSyncToast;
 
     @SubscribeEvent
     public void onClientConnection(ClientPlayerNetworkEvent.LoggedInEvent event)
@@ -271,12 +275,6 @@ public class EventHandlerClient
         }
     }
 
-    public void closeHatsMenu() //TODO do we need this?
-    {
-        //restore things
-        Minecraft mc = Minecraft.getInstance();
-    }
-
     public void requestHatDetails(LivingEntity ent)
     {
         if(serverHasMod)
@@ -364,5 +362,20 @@ public class EventHandlerClient
                 }
             }
         }
+    }
+
+    public void showSyncToast()
+    {
+        if(!shownSyncToast)
+        {
+            shownSyncToast = true;
+
+            Minecraft.getInstance().getToastGui().add(new Toast(new TranslationTextComponent("hats.toast.sync.title"), new TranslationTextComponent("hats.toast.sync.subtitle"), 2));
+        }
+    }
+
+    public void resetSyncToast()
+    {
+        shownSyncToast = false;
     }
 }
