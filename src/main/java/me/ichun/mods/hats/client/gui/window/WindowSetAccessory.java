@@ -89,8 +89,8 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
 
             int padding = 0;
 
-            int maxHeight = parentFragment.parent.windowHatsList.height - (parentFragment.parent.windowHatsList.borderSize.get() * 2);
-            int idealHeight = (parentFragment.parentElement.hatLevel.hatParts.size() * 73) + 5; //70 + 3 padding each + 2x padding (2 each)
+            int maxHeight = parentFragment.parent.windowHatsList.height - (parentFragment.parent.windowHatsList.borderSize.get() * 2) - 12;
+            int idealHeight = (parentFragment.parentElement.hatLevel.hatParts.size() * 73) + 3; //(70 + 3 padding each) + end padding
 
             ElementScrollBar<?> sv = null;
             if(idealHeight > maxHeight) //needs a scroll bar

@@ -5,7 +5,6 @@ import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.sort.HatSorter;
 import me.ichun.mods.hats.common.hats.sort.SortHandler;
-import me.ichun.mods.ichunutil.client.gui.bns.Workspace;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
@@ -15,10 +14,10 @@ import net.minecraft.client.resources.I18n;
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
 
-public class WindowHatSorter extends Window<Workspace>
+public class WindowHatSorter extends Window<WorkspaceHats>
 {
     //title will be localised, text won't.
-    public WindowHatSorter(Workspace parent)
+    public WindowHatSorter(WorkspaceHats parent)
     {
         super(parent);
 

@@ -26,8 +26,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("deprecation")
 public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
@@ -104,7 +105,7 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
             {
                 if(lastPlayer == mc.player && part.name.equals(":random"))
                 {
-                    ArrayList<HatsSavedData.HatPart> source = HatHandler.getHatSource(mc.player);
+                    List<HatsSavedData.HatPart> source = HatHandler.getHatSource(mc.player).stream().filter(hatPart -> !(hatPart.count <= 0)).collect(Collectors.toList());
 
                     RAND.setSeed((1342L + iChunUtil.eventHandlerClient.ticks) / Hats.configClient.hatLauncherRandomHatSpeed);
 

@@ -69,10 +69,7 @@ public class WindowHatsList extends Window<WorkspaceHats>
         if(parent.age == Hats.configClient.guiAnimationTime + 1) //Should fix things when FPS < tickRate
         {
             posX = (int)(Math.floor((parent.getWidth() / 2F)) + (Math.ceil((parent.getWidth() / 2F)) + 2) * 0F);
-            if(parent.age == Hats.configClient.guiAnimationTime)
-            {
-                resize(parent.getMinecraft(), parent.width, parent.height);
-            }
+            resize(parent.getMinecraft(), parent.width, parent.height);
             parent.windowSidebar.constraint.apply();
         }
     }

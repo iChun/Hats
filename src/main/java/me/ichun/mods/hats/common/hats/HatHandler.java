@@ -302,7 +302,7 @@ public class HatHandler //Handles most of the server-related things.
             ArrayList<HatsSavedData.HatPart> allHats = HatResourceHandler.getAllHatsAsHatParts(0);
             for(HatsSavedData.HatPart hat : allHats)
             {
-                hat.hsbiser[2] = 1F;
+                hat.setBrightnessZero();
                 source.add(hat); //not necessary to create a copy, getting all hats as parts already creates a copy.
             }
         }

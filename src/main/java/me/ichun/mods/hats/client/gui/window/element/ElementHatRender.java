@@ -36,17 +36,25 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
     public boolean toggleState;
 
     public boolean hasConflict;
+    public boolean isViewAllHats;
 
-    public ElementHatRender(@Nonnull Fragment parent, HatsSavedData.HatPart hatOrigin, HatsSavedData.HatPart hatLevel, Consumer<T> callback)
+    public ElementHatRender(@Nonnull Fragment parent, HatsSavedData.HatPart hatOrigin, HatsSavedData.HatPart hatLevel, Consumer<T> callback, boolean isViewAllHats)
     {
         super(parent, callback);
         this.hatOrigin = hatOrigin;
         this.hatLevel = hatLevel;
+        this.isViewAllHats = isViewAllHats;
 
-        if(((WorkspaceHats)parent.getWorkspace()).usePlayerInventory() && this.hatLevel.count <= 0)
+        if(((WorkspaceHats)parent.getWorkspace()).usePlayerInventory() && this.hatLevel.count <= 0 && !isViewAllHats)
         {
             this.disabled = true;
         }
+
+    }
+
+    public ElementHatRender(@Nonnull Fragment parent, HatsSavedData.HatPart hatOrigin, HatsSavedData.HatPart hatLevel, Consumer<T> callback)
+    {
+        this(parent, hatOrigin, hatLevel, callback, false);
     }
 
     public <T extends ElementHatRender<?>> T setToggled(boolean flag)
@@ -238,7 +246,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
             RenderHelper.drawColour(stack, 255, 0, 0, 30, getLeft() + 1, getTop() + 1, width - 2, height - 2, 0);
         }
 
-        if(((WorkspaceHats)getWorkspace()).usePlayerInventory() && hatLevel.count <= 0)
+        if(!isViewAllHats && ((WorkspaceHats)getWorkspace()).usePlayerInventory() && hatLevel.count <= 0 || isViewAllHats && hatLevel.count <= 0 && hatLevel.hsbiser[2] == 1F)
         {
             RenderHelper.drawColour(stack, 0, 0, 0, 120, getLeft() + 1, getTop() + 1, width - 2, height - 2, 0); //greyout
         }
@@ -249,7 +257,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         String hatName = info != null ? info.getDisplayNameFor(hatLevel.name) : "";
 
         int topDist = height - 6;
-        if(parentFragment instanceof ElementHatsScrollView)
+        if(parentFragment instanceof ElementHatsScrollView && !isViewAllHats)
         {
             int renderIconX = getRight() - 9;
             if(partForRender.hasFavourite())
@@ -293,49 +301,51 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
         stack.pop();
 
-        if(((WorkspaceHats)getWorkspace()).usePlayerInventory())
+        if(!isViewAllHats)
         {
-            s = "x" + WorkspaceHats.FORMATTER.format(hatLevel.count); // we count from the level
-
-            stack.push();
-            stack.translate(getLeft() + 3, getBottom() - (getFontRenderer().FONT_HEIGHT) * scale - 1, 375F);
-            stack.scale(scale, scale, scale);
-
-            //draw the text
-            int clr = renderMinecraftStyle() ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim);
-            if(hatLevel.count <= 0)
+            if(((WorkspaceHats)getWorkspace()).usePlayerInventory())
             {
-                clr = 0xaa0000;
-            }
-            getFontRenderer().drawString(stack, s, 0, 0, clr);
+                s = "x" + WorkspaceHats.FORMATTER.format(hatLevel.count); // we count from the level
 
-            stack.pop();
-        }
-
-
-        if(parentFragment instanceof ElementHatsScrollView && !(disabled || hasConflict))
-        {
-            if(hover) //only if we're hovering
-            {
                 stack.push();
+                stack.translate(getLeft() + 3, getBottom() - (getFontRenderer().FONT_HEIGHT) * scale - 1, 375F);
+                stack.scale(scale, scale, scale);
 
-                stack.translate(0F, 0F, 375F);
-
-                boolean isHoveringHamburger = isOverHamburger(mouseX, mouseY);
-
-                getFontRenderer().drawString(stack, HAMBURGER, getLeft() + 3, getTop() + 2, renderMinecraftStyle() ? isHoveringHamburger ? 16777120 : 14737632 : Theme.getAsHex(isHoveringHamburger ? getTheme().font : getTheme().fontDim));
+                //draw the text
+                int clr = renderMinecraftStyle() ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim);
+                if(hatLevel.count <= 0)
+                {
+                    clr = 0xaa0000;
+                }
+                getFontRenderer().drawString(stack, s, 0, 0, clr);
 
                 stack.pop();
             }
-            else if(!hatLevel.hatParts.isEmpty())
+
+            if(parentFragment instanceof ElementHatsScrollView && !(disabled || hasConflict))
             {
-                stack.push();
+                if(hover) //only if we're hovering
+                {
+                    stack.push();
 
-                stack.translate(0F, 0F, 375F);
+                    stack.translate(0F, 0F, 375F);
 
-                getFontRenderer().drawString(stack, "+", getLeft() + 3, getTop() + 2, renderMinecraftStyle() ? 14737632 : Theme.getAsHex(getTheme().fontDim));
+                    boolean isHoveringHamburger = isOverHamburger(mouseX, mouseY);
 
-                stack.pop();
+                    getFontRenderer().drawString(stack, HAMBURGER, getLeft() + 3, getTop() + 2, renderMinecraftStyle() ? isHoveringHamburger ? 16777120 : 14737632 : Theme.getAsHex(isHoveringHamburger ? getTheme().font : getTheme().fontDim));
+
+                    stack.pop();
+                }
+                else if(!hatLevel.hatParts.isEmpty())
+                {
+                    stack.push();
+
+                    stack.translate(0F, 0F, 375F);
+
+                    getFontRenderer().drawString(stack, "+", getLeft() + 3, getTop() + 2, renderMinecraftStyle() ? 14737632 : Theme.getAsHex(getTheme().fontDim));
+
+                    stack.pop();
+                }
             }
         }
     }

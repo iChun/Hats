@@ -6,7 +6,6 @@ import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
-import me.ichun.mods.ichunutil.client.gui.bns.window.WindowPopup;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
@@ -48,6 +47,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
     {
         public static ResourceLocation TEX_CANCEL = new ResourceLocation("hats", "textures/icon/cancel.png");
         public static ResourceLocation TEX_RANDOMISE = new ResourceLocation("hats", "textures/icon/randomise.png");
+        public static ResourceLocation TEX_HATS = new ResourceLocation("hats", "textures/icon/hat.png");
         public static ResourceLocation TEX_CATEGORIES = new ResourceLocation("hats", "textures/icon/categories.png");
         public static ResourceLocation TEX_RELOAD = new ResourceLocation("hats", "textures/icon/reload.png");
         public static ResourceLocation TEX_CONFIRM = new ResourceLocation("hats", "textures/icon/confirm.png");
@@ -126,6 +126,16 @@ public class WindowSidebar extends Window<WorkspaceHats>
 
             if(parent.parent.hatLauncher == null)
             {
+                //SORTING OPTIONS
+                btnStack = new ElementButtonTextured<>(this, TEX_HATS, btn -> {
+                    parent.parent.openWindowInCenter(new WindowAllHats(parent.parent), 0.0D, 0.0D, true);
+                });
+                btnStack.setTooltip(I18n.format("hats.gui.window.allHats.title"));
+                btnStack.setSize(20, 20);
+                btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
+                elements.add(btnStack);
+                btnStackLast = btnStack;
+
                 //SORTING OPTIONS
                 btnStack = new ElementButtonTextured<>(this, TEX_CATEGORIES, btn -> {
                     parent.parent.openWindowInCenter(new WindowHatSorter(parent.parent), 0.7D, 0.7D, true);

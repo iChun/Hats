@@ -169,9 +169,28 @@ public class HatsSavedData extends WorldSavedData
             HatPart part = new HatPart();
             part.copy(this);
 
-            randomize(random);
+            part.randomize(random);
 
             return part;
+        }
+
+        public HatPart get(HatPart part)
+        {
+            if(part.name.equals(name))
+            {
+                return this;
+            }
+
+            for(HatPart hatPart : hatParts)
+            {
+                HatPart accPart = hatPart.get(part);
+                if(accPart != null)
+                {
+                    return accPart;
+                }
+            }
+
+            return null;
         }
 
         public void randomize(Random random)
@@ -504,6 +523,16 @@ public class HatsSavedData extends WorldSavedData
             for(HatPart hatPart : hatParts)
             {
                 hatPart.removeHiddenChildren();
+            }
+        }
+
+        public void setBrightnessZero()
+        {
+            hsbiser[2] = 1F;
+
+            for(HatPart hatPart : hatParts)
+            {
+                hatPart.setBrightnessZero();
             }
         }
 
