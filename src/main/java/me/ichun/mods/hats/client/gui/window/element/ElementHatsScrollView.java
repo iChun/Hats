@@ -70,9 +70,9 @@ public class ElementHatsScrollView extends ElementFertile
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
     {
-        if(renderMinecraftStyle())
+        if(renderMinecraftStyle() > 0)
         {
-            bindTexture(Fragment.VANILLA_HORSE);
+            bindTexture(resourceHorse());
             cropAndStitch(stack, getLeft() - 1, getTop() - 1, width + 2, height + 2, 2, 79, 17, 90, 54, 256, 256);
         }
         else

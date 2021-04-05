@@ -130,10 +130,13 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
     {
+        RenderSystem.enableAlphaTest();
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+
         super.render(stack, mouseX, mouseY, partialTick);
-        if(renderMinecraftStyle())
+        if(renderMinecraftStyle() > 0)
         {
-            renderMinecraftStyleButton(stack, getLeft(), getTop(), width, height, (disabled || hasConflict) || parentFragment.isDragging() && parentFragment.getListener() == this || toggleState ? ButtonState.CLICK : hover ? ButtonState.HOVER : ButtonState.IDLE);
+            renderMinecraftStyleButton(stack, getLeft(), getTop(), width, height, (disabled || hasConflict) || parentFragment.isDragging() && parentFragment.getListener() == this || toggleState ? ButtonState.CLICK : hover ? ButtonState.HOVER : ButtonState.IDLE, renderMinecraftStyle());
         }
         else
         {
@@ -281,7 +284,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
                 stack.translate(0F, 0F, 375F);
 
-                getFontRenderer().drawString(stack, "!", renderIconX + 3, getTop() + 2, renderMinecraftStyle() ? 16777120 : Theme.getAsHex(getTheme().font));
+                getFontRenderer().drawString(stack, "!", renderIconX + 3, getTop() + 2, renderMinecraftStyle() > 0 ? 16777120 : Theme.getAsHex(getTheme().font));
 
                 stack.pop();
             }
@@ -297,7 +300,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         stack.scale(scale, scale, scale);
 
         //draw the text
-        getFontRenderer().drawString(stack, s, 0, 0, renderMinecraftStyle() ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim));
+        getFontRenderer().drawString(stack, s, 0, 0, renderMinecraftStyle() > 0 ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim));
 
         stack.pop();
 
@@ -312,7 +315,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
                 stack.scale(scale, scale, scale);
 
                 //draw the text
-                int clr = renderMinecraftStyle() ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim);
+                int clr = renderMinecraftStyle() > 0 ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim);
                 if(hatLevel.count <= 0)
                 {
                     clr = 0xaa0000;
@@ -332,7 +335,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
                     boolean isHoveringHamburger = isOverHamburger(mouseX, mouseY);
 
-                    getFontRenderer().drawString(stack, HAMBURGER, getLeft() + 3, getTop() + 2, renderMinecraftStyle() ? isHoveringHamburger ? 16777120 : 14737632 : Theme.getAsHex(isHoveringHamburger ? getTheme().font : getTheme().fontDim));
+                    getFontRenderer().drawString(stack, HAMBURGER, getLeft() + 3, getTop() + 2, renderMinecraftStyle() > 0 ? isHoveringHamburger ? 16777120 : 14737632 : Theme.getAsHex(isHoveringHamburger ? getTheme().font : getTheme().fontDim));
 
                     stack.pop();
                 }
@@ -342,7 +345,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
                     stack.translate(0F, 0F, 375F);
 
-                    getFontRenderer().drawString(stack, "+", getLeft() + 3, getTop() + 2, renderMinecraftStyle() ? 14737632 : Theme.getAsHex(getTheme().fontDim));
+                    getFontRenderer().drawString(stack, "+", getLeft() + 3, getTop() + 2, renderMinecraftStyle() > 0 ? 14737632 : Theme.getAsHex(getTheme().fontDim));
 
                     stack.pop();
                 }

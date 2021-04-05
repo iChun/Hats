@@ -134,7 +134,7 @@ public class WindowHatSorter extends Window<WorkspaceHats>
                 Hats.configClient.filterSorterConfig = filterSorterText;
                 Hats.configClient.save(); //This calls onConfigLoaded. No need to reset the config.
 
-                ((WorkspaceHats)parent.parent).windowHatsList.getCurrentView().updateSearch("");
+                parent.parent.windowHatsList.getCurrentView().updateSearch("");
 
                 parent.parent.removeWindow(parent);
             });

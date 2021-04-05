@@ -26,7 +26,8 @@ public class ConfigClient extends ConfigBase
     @Prop(min = 0, max = 5)
     public int hatUnlockString = 0;
 
-    public boolean guiMinecraftStyle = true;
+    @Prop(min = 0, max = 2)
+    public int guiMinecraftStyle = 2;
 
     @Prop(min = 1)
     public int guiAnimationTime = 10;

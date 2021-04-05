@@ -185,7 +185,7 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                             }
                             if(button == 1 || isOverHamburger(mouseX, mouseY))
                             {
-                                if(renderMinecraftStyle())
+                                if(renderMinecraftStyle() > 0)
                                 {
                                     Minecraft.getInstance().getSoundHandler().play(SimpleSound.master(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                                 }
@@ -305,11 +305,11 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             posY -= singProg;
             height += doubProg;
 
-            if(renderMinecraftStyle())
+            if(renderMinecraftStyle() > 0)
             {
                 RenderSystem.enableAlphaTest();
                 //draw the corners
-                bindTexture(Fragment.VANILLA_TABS);
+                bindTexture(resourceTabs());
 
                 //fill space
                 RenderHelper.draw(stack, getLeft() + 4, getTop() + 4, width - 8, height - 8, 0, 4D/256D, 24D/256D, 36D/256D, 60D/256D); //fill space
@@ -419,14 +419,14 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
             windowDummy.pos(parentFragment.parentElement.getLeft(), parentFragment.parentElement.getTop());
             windowDummy.size(parentFragment.parentElement.getWidth(), parentFragment.parentElement.getHeight());
 
-            if(renderMinecraftStyle())
+            if(renderMinecraftStyle() > 0)
             {
                 int width = parentFragment.parentElement.width;
                 int height = parentFragment.parentElement.height;
 
                 RenderSystem.enableAlphaTest();
                 //draw the corners
-                bindTexture(Fragment.VANILLA_TABS);
+                bindTexture(resourceTabs());
 
                 //fill space
                 RenderHelper.draw(stack, parentFragment.parentElement.getLeft() + 4, parentFragment.parentElement.getTop() + 4, width - 8, height - 8, 0, 4D/256D, 24D/256D, 36D/256D, 60D/256D); //fill space

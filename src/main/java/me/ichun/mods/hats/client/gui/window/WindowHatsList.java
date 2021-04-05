@@ -28,9 +28,9 @@ public class WindowHatsList extends Window<WorkspaceHats>
 {
     public WindowHatsList(WorkspaceHats parent)
     {
-        super(parent); //TODO allow option for default MC texture pack rather than the player texture pack.
+        super(parent);
 
-        setBorderSize(() -> (renderMinecraftStyle() ? 6 : 3));
+        setBorderSize(() -> (renderMinecraftStyle() > 0 ? 6 : 3));
 
         disableBringToFront();
         disableDocking();

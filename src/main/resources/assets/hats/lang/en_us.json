@@ -11,7 +11,7 @@
   "config.hats.prop.hatUnlockString.name": "Hat Unlocked Message",
   "config.hats.prop.hatUnlockString.desc": "The Toast title when a hat/accessory is unlocked. 0 = Random, 1 = Hat Unlocked, 2 = New Hat, 3 = Hat Acquired, 4 = Hat Collected, 5 = Hat Get",
   "config.hats.prop.guiMinecraftStyle.name": "Render GUI in Minecraft Style",
-  "config.hats.prop.guiMinecraftStyle.desc": "Do we render the GUI in Minecraft Style (as opposed to Boxes & Stuff style)?",
+  "config.hats.prop.guiMinecraftStyle.desc": "Do we render the GUI in Minecraft Style (as opposed to Boxes & Stuff style)? 1 = Vanilla Style, 2 = Texture Pack Style",
   "config.hats.prop.guiAnimationTime.name": "GUI Animation Time",
   "config.hats.prop.guiAnimationTime.desc": "The time (in ticks) for most of the GUI animations. Set to 1 if you want to practically skip animation.",
   "config.hats.prop.forceRenderToasts.name": "Force Render Toasts",
