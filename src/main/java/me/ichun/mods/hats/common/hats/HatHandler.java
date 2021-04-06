@@ -284,7 +284,10 @@ public class HatHandler //Handles most of the server-related things.
             if(!foundBase || !accessoryNames.isEmpty()) //there's something new
             {
                 inventoryHat.setNew(); //copying the personalisation may have reset it.
-                Hats.channel.sendTo(new PacketNewHatPart(!foundBase, hatToAdd, names), player);
+                if(Hats.configServer.sendNewHatToastPrompt)
+                {
+                    Hats.channel.sendTo(new PacketNewHatPart(!foundBase, hatToAdd, names), player);
+                }
             }
 
             Hats.channel.sendTo(new PacketUpdateHats(inventoryHat.write(new CompoundNBT()), false), player);

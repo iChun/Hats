@@ -1,6 +1,7 @@
 package me.ichun.mods.hats.common.packet;
 
 import me.ichun.mods.hats.client.toast.NewHatPartToast;
+import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.network.AbstractPacket;
 import net.minecraft.client.Minecraft;
@@ -66,6 +67,9 @@ public class PacketNewHatPart extends AbstractPacket
     @OnlyIn(Dist.CLIENT)
     public void handleClient()
     {
-        Minecraft.getInstance().getToastGui().add(new NewHatPartToast(details, newHat, names));
+        if(Hats.configClient.newHatToast)
+        {
+            Minecraft.getInstance().getToastGui().add(new NewHatPartToast(details, newHat, names));
+        }
     }
 }

@@ -27,11 +27,11 @@ import java.util.stream.Collectors;
 
 public class CommandHats
 {
-    public static void register(CommandDispatcher<CommandSource> dispatcher)
+    public static void register(CommandDispatcher<CommandSource> dispatcher) //TODO the rest of this
     {
         dispatcher.register(Commands.literal("hats").requires(p -> p.hasPermissionLevel(2)) //set to permission level 2
             .then(Commands.literal("setHat")
-                .then(Commands.argument("targets", EntityArgument.entities())
+                .then(Commands.argument("targets", EntityArgument.entities()) //TODO simple set hat
                     .then(Commands.literal("silent")
                         .then(Commands.argument("nbt", NBTCompoundTagArgument.nbt())
                             .executes(context -> setHat(context.getSource(), EntityArgument.getEntities(context, "targets"), NBTCompoundTagArgument.getNbt(context, "nbt"), true))

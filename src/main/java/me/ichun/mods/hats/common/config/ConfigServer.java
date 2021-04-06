@@ -56,7 +56,7 @@ public class ConfigServer extends ConfigBase
     public double bossHatChanceBonus = 0.1D;
 
     @Prop(min = 0.0D, max = 1.0D)
-    public double bossRarityBonus = 0.2D; //TODO new hat toast config
+    public double bossRarityBonus = 0.2D;
 
     //TODO reorganise the configs
     @CategoryDivider(name = "others")
@@ -70,6 +70,8 @@ public class ConfigServer extends ConfigBase
 
     @Prop(min = 0, max = 2)
     public int enabledGuiStyle = 2; //0 = disabled, 1 = simple, 2 = fancy
+
+    public boolean sendNewHatToastPrompt = true;
 
     public boolean enableCreativeModeHatHunting = false;
 
