@@ -14,6 +14,8 @@
   "config.hats.prop.guiMinecraftStyle.desc": "Do we render the GUI in Minecraft Style (as opposed to Boxes & Stuff style)? 1 = Vanilla Style, 2 = Texture Pack Style",
   "config.hats.prop.guiAnimationTime.name": "GUI Animation Time",
   "config.hats.prop.guiAnimationTime.desc": "The time (in ticks) for most of the GUI animations. Set to 1 if you want to practically skip animation.",
+  "config.hats.prop.shownTutorial.name": "Shown GUI Tutorial",
+  "config.hats.prop.shownTutorial.desc": "Have we shown the GUI tutorial? (Set to true to skip it)",
   "config.hats.prop.newHatToast.name": "New Hat Toast",
   "config.hats.prop.newHatToast.desc": "Enable the New Hat toast?",
   "config.hats.prop.forceRenderToasts.name": "Force Render Toasts",
@@ -113,6 +115,9 @@
   "hats.gui.window.management.sync.clientMissing": "We are missing:",
   "hats.gui.window.management.sync.serverMissing": "Server is missing:",
   "hats.gui.window.management.sync.syncReq": "Do we want to sync?",
+
+  "hats.gui.tutorial.title": "Tutorial",
+  "hats.gui.tutorial.intro": "Do you want to start the GUI tutorial?",
 
   "hats.gui.button.removeHat": "Remove Hat",
   "hats.gui.button.randomHat": "Random Hat\n +SHIFT: Random Hue",

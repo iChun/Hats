@@ -55,7 +55,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
         public ElementButtonTextured<?> cancelButton;
         public ElementButtonTextured<?> randomButton;
 
-        public ViewSidebar(@Nonnull WindowSidebar parent) //TODO head analyser for Tabula
+        public ViewSidebar(@Nonnull WindowSidebar parent)
         {
             super(parent, "hats.gui.window.sidebar");
 

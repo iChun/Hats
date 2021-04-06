@@ -32,6 +32,8 @@ public class ConfigClient extends ConfigBase
     @Prop(min = 1)
     public int guiAnimationTime = 10;
 
+    public boolean shownTutorial = false;
+
     public boolean newHatToast = true;
 
     public boolean forceRenderToasts = true;

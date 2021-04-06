@@ -107,7 +107,7 @@ public class ItemHatLauncher extends Item
                 }
             }
 
-            if(part != null && !part.name.isEmpty() && part.count > 0) //TODO if the inventory runs out swap to next item/random item
+            if(part != null && !part.name.isEmpty() && part.count > 0)
             {
                 if(!world.isRemote)
                 {

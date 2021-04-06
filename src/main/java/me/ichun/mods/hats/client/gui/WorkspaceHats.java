@@ -15,6 +15,7 @@ import me.ichun.mods.hats.common.packet.PacketHatLauncherCustomisation;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.Workspace;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
+import me.ichun.mods.ichunutil.client.gui.bns.window.WindowConfirmation;
 import me.ichun.mods.ichunutil.client.gui.bns.window.WindowPopup;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
@@ -29,6 +30,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.vector.Matrix4f;
@@ -284,6 +286,14 @@ public class WorkspaceHats extends Workspace
         super.tick();
 
         age++;
+
+        if(age == Hats.configClient.guiAnimationTime + 21 && !Hats.configClient.shownTutorial)
+        {
+//            openWindowInCenter(new WindowConfirmation(this, renderMinecraftStyle() == 0 ? "window.popup.title" : "", I18n.format("hats.gui.tutorial.intro"), this::startTutorial, w -> {
+//                //Cancel callback
+//                //TODO this
+//            }), 0.5D, 0.5D, true);
+        }
     }
 
     @Override
@@ -388,7 +398,7 @@ public class WorkspaceHats extends Workspace
 
     public void popup(double widthRatio, double heightRatio, Consumer<Workspace> callback, String...text)
     {
-        openWindowInCenter(new WindowPopup(this, "window.popup.title", callback, text) {
+        openWindowInCenter(new WindowPopup(this, renderMinecraftStyle() == 0 ? "window.popup.title" : "", callback, text) {
             @Override
             public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
             {
@@ -409,5 +419,10 @@ public class WorkspaceHats extends Workspace
         windowHatsList.getCurrentView().updateSearch(windowHatsList.getCurrentView().textField.getText());
 
         resize(getMinecraft(), width, height);
+    }
+
+    public void startTutorial(Workspace workspace)
+    {
+        //TODO check for hat.
     }
 }

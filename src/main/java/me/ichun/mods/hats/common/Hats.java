@@ -76,7 +76,7 @@ public class Hats
 
     private static ThreadReadHats threadReadHats;
 
-    public Hats()
+    public Hats() //TODO ADVANCEMENTS!!!
     {
         if(!HatResourceHandler.init())
         {
