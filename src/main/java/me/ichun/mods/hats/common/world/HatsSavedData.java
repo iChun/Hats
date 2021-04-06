@@ -1,5 +1,6 @@
 package me.ichun.mods.hats.common.world;
 
+import me.ichun.mods.hats.common.hats.HatHandler;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
@@ -414,6 +415,31 @@ public class HatsSavedData extends WorldSavedData
             for(HatPart hatPart : hatParts)
             {
                 hatPart.hideAll();
+            }
+        }
+
+        public void eventDay(int age, float partialTick)
+        {
+            if(colouriser[0] == 0F  && colouriser[1] == 0F && colouriser[2] == 0F)
+            {
+                HatHandler.RAND.setSeed(Math.abs(name.hashCode()));
+
+                int ageR = 40 + HatHandler.RAND.nextInt(60);
+                int ageG = 40 + HatHandler.RAND.nextInt(60);
+                int ageB = 40 + HatHandler.RAND.nextInt(60);
+
+                float offsetR = 180 * HatHandler.RAND.nextFloat();
+                float offsetG = 180 * HatHandler.RAND.nextFloat();
+                float offsetB = 180 * HatHandler.RAND.nextFloat();
+
+                colouriser[0] = ((float)Math.sin(Math.toRadians(offsetR + ((age + partialTick) / (float)ageR) * 360F)) * 0.5F) + 0.5F;
+                colouriser[1] = ((float)Math.sin(Math.toRadians(offsetG + ((age + partialTick) / (float)ageG) * 360F)) * 0.5F) + 0.5F;
+                colouriser[2] = ((float)Math.sin(Math.toRadians(offsetB + ((age + partialTick) / (float)ageB) * 360F)) * 0.5F) + 0.5F;
+            }
+
+            for(HatPart hatPart : hatParts)
+            {
+                hatPart.eventDay(age, partialTick);
             }
         }
 

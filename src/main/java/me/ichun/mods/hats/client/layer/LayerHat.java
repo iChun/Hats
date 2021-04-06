@@ -8,6 +8,8 @@ import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
+import me.ichun.mods.ichunutil.common.iChunUtil;
+import me.ichun.mods.ichunutil.common.util.EventCalendar;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
@@ -185,6 +187,12 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 {
                     stack.scale(armorScale, armorScale, armorScale);
                 }
+            }
+
+            if(EventCalendar.isEventDay() && iChunUtil.configClient.easterEgg)
+            {
+                hatDetails = hatDetails.createCopy();
+                hatDetails.eventDay(living.ticksExisted, partialTicks);
             }
 
             //render the project

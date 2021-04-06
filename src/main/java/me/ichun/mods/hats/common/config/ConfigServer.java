@@ -35,7 +35,7 @@ public class ConfigServer extends ConfigBase
     public List<String> disabledMobs = new ArrayList<>();
 
     @Prop(validator = "numbersOnly")
-    public List<String> rarityWeight = new ArrayList<String>(){{ //TODO GUI fallback fails in the END dimension?
+    public List<String> rarityWeight = new ArrayList<String>(){{
         add("21"); //Common - White
         add("13"); //Uncommon - Green
         add("8"); //Rare - Blue
@@ -58,12 +58,11 @@ public class ConfigServer extends ConfigBase
     @Prop(min = 0.0D, max = 1.0D)
     public double bossRarityBonus = 0.2D;
 
-    //TODO reorganise the configs
-    @CategoryDivider(name = "others")
+    @CategoryDivider(name = "gameplay")
     public boolean allowFileTransfer = true;
 
     @Prop(min = 0)
-    public double accessoryCostMultiplier = 1.5D; //TODO easter egg rainbow hats
+    public double accessoryCostMultiplier = 1.5D;
 
     @Prop(min = 0)
     public double salesCostMultiplier = 10D;

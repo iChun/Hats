@@ -62,6 +62,8 @@ public class EventHandlerClient
     {
         serverHasMod = false;
         connectionAge = 0;
+
+        resetSyncToast();
     }
 
     @SubscribeEvent
