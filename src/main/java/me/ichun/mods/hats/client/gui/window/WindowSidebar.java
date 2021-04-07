@@ -42,6 +42,12 @@ public class WindowSidebar extends Window<WorkspaceHats>
     @Override
     public void renderBackground(MatrixStack stack){} //no BG
 
+    @Override
+    public ViewSidebar getCurrentView()
+    {
+        return super.getCurrentView();
+    }
+
     public static class ViewSidebar extends View<WindowSidebar>
             implements IHatSetter
     {
@@ -126,7 +132,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
 
             if(parent.parent.hatLauncher == null)
             {
-                //SORTING OPTIONS
+                //ALL HATS
                 btnStack = new ElementButtonTextured<>(this, TEX_HATS, btn -> {
                     parent.parent.openWindowInCenter(new WindowAllHats(parent.parent), 0.0D, 0.0D, true);
                 });
@@ -152,6 +158,7 @@ public class WindowSidebar extends Window<WorkspaceHats>
                 });
                 btnStack.setTooltip(I18n.format("hats.gui.button.hatResourceManagement"));
                 btnStack.setSize(20, 20);
+                btnStack.setId("btnResourceManagement");
                 btnStack.constraints().left(this, Constraint.Property.Type.LEFT, 0).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
                 elements.add(btnStack);
                 btnStackLast = btnStack;

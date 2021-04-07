@@ -15,6 +15,7 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
@@ -326,6 +327,10 @@ public class HatHandler //Handles most of the server-related things.
     {
         if(player.world.isRemote)
         {
+            if(Hats.eventHandlerClient.hatsInventory == null)
+            {
+                Hats.eventHandlerClient.hatsInventory = new HatsSavedData.PlayerHatData(player.getGameProfile().getId());
+            }
             return Hats.eventHandlerClient.hatsInventory.hatParts;
         }
         else
@@ -424,7 +429,7 @@ public class HatHandler //Handles most of the server-related things.
 
     public static boolean useInventory(@Nonnull PlayerEntity player)
     {
-        return !(player.isCreative() && !Hats.configServer.enableCreativeModeHatHunting);
+        return !(player.isCreative() && !Hats.configServer.enableCreativeModeHatHunting) && (EffectiveSide.get().isServer() || Hats.eventHandlerClient.serverHasMod);
     }
 
 

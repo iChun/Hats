@@ -10,6 +10,7 @@ import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementButton;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementButtonTextured;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
@@ -42,8 +43,10 @@ public class WindowHatManagement extends Window<WorkspaceHats>
                 parent.parent.removeWindow(parent);
             });
             button.setSize(60, 20);
-            button.constraints().bottom(this, Constraint.Property.Type.BOTTOM, padding).right(this, Constraint.Property.Type.RIGHT, padding);
+            button.constraints().bottom(this, Constraint.Property.Type.BOTTOM, padding);
             elements.add(button);
+
+            ElementButton<?> btnStackLast;
 
             ElementButton<?> btnReload = new ElementButton<>(this, "hats.gui.window.management.reloadAllHats", btn -> {
                 HatResourceHandler.HATS.forEach((name, info) -> info.destroy());
@@ -57,6 +60,7 @@ public class WindowHatManagement extends Window<WorkspaceHats>
             btnReload.setSize(80, 20);
             btnReload.constraints().width(this, Constraint.Property.Type.WIDTH, 60).top(this, Constraint.Property.Type.TOP, padding);
             elements.add(btnReload);
+            btnStackLast = btnReload;
 
             if(Hats.eventHandlerClient.serverHasMod && !(ServerLifecycleHooks.getCurrentServer() != null && ServerLifecycleHooks.getCurrentServer().isSinglePlayer())) //server has the mod and we're not in single player
             {
@@ -66,9 +70,21 @@ public class WindowHatManagement extends Window<WorkspaceHats>
                     Hats.channel.sendToServer(new PacketHatsList(HatResourceHandler.compileHatNames(), false));
                 });
                 btnSync.setSize(80, 20);
-                btnSync.constraints().width(this, Constraint.Property.Type.WIDTH, 60).top(btnReload, Constraint.Property.Type.BOTTOM, padding);
+                btnSync.constraints().width(this, Constraint.Property.Type.WIDTH, 60).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
                 elements.add(btnSync);
+                btnStackLast = btnSync;
             }
+
+            ElementButton<?> btnRestartTuto = new ElementButton<>(this, "hats.gui.tutorial.restart", btn -> {
+                parent.parent.removeWindow(parent);
+
+                parent.parent.age = Hats.configClient.guiAnimationTime + 20;
+                Hats.configClient.shownTutorial = false;
+            });
+            btnRestartTuto.setSize(80, 20);
+            btnRestartTuto.constraints().width(this, Constraint.Property.Type.WIDTH, 60).top(btnStackLast, Constraint.Property.Type.BOTTOM, padding);
+            elements.add(btnRestartTuto);
+            btnStackLast = btnRestartTuto;
         }
 
         @Override

@@ -59,6 +59,23 @@ public class WindowTutorial extends Window<WorkspaceHats>
         this.posX = dir == Direction.LEFT ? pointX + 30 : pointX - 30 - finalWidth;
         this.posY = pointY - finalHeight / 2;
 
+        if(this.posX < 0)
+        {
+            this.posX = 0;
+        }
+        else if (this.posX + finalWidth > parent.getRight())
+        {
+            this.posX = parent.getRight() - finalWidth;
+        }
+        if(this.posY < 0)
+        {
+            this.posY = 0;
+        }
+        else if(this.posY + finalHeight > parent.getBottom())
+        {
+            this.posY = parent.getBottom() - finalHeight;
+        }
+
         disableDockingEntirely();
         disableDrag();
         disableTitle();
@@ -69,35 +86,37 @@ public class WindowTutorial extends Window<WorkspaceHats>
     @Override
     public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
     {
+        float prog = (float)Math.sin(Math.toRadians(MathHelper.clamp(((age + partialTick) / Hats.configClient.guiAnimationTime), 0F, 1F) * 90F));
+        float revProg = 1F - prog;
+
         if(age <= Hats.configClient.guiAnimationTime)
         {
-            float prog = (float)Math.sin(Math.toRadians(MathHelper.clamp(((age + partialTick) / Hats.configClient.guiAnimationTime), 0F, 1F) * 90F));
-
             width = (int)(finalWidth * prog);
             height = (int)(finalHeight * prog);
             this.resize(parent.getMinecraft(), parent.getWidth(), parent.getHeight());
         }
 
-        RenderSystem.pushMatrix();
-        RenderSystem.translatef(0F, 0F, 300F);
+        stack.push();
+        stack.translate(0F, 0F, 375F); //silly ElementHatRender
 
         super.render(stack, mouseX, mouseY, partialTick);
 
+        RenderSystem.enableAlphaTest();
+        RenderSystem.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+
         //This is called after end scissor
-        if(age > Hats.configClient.guiAnimationTime / 2)
+        float sin = (float)Math.sin(Math.toRadians(((age + partialTick) / Hats.configClient.guiAnimationTime) * 90F));
+        bindTexture(TEX_ARROW);
+        if(direction == Direction.LEFT)
         {
-            bindTexture(TEX_ARROW);
-            if(direction == Direction.LEFT)
-            {
-                RenderHelper.draw(stack, pointX + 2, pointY - 4, 10, 9, 0, 25/512F, 15/512F, 171/256F, 180/256F);
-            }
-            else
-            {
-                RenderHelper.draw(stack, pointX - 2 - 10, pointY - 4, 10, 9, 0, 15/512F, 25/512F, 171/256F, 180/256F);
-            }
+            RenderHelper.draw(stack, pointX + 2 + (int)(35 * revProg + 3 * sin), pointY - 9, 20, 18, 0, 25/512F, 15/512F, 171/256F, 180/256F);
+        }
+        else
+        {
+            RenderHelper.draw(stack, pointX - 2 - 20 - (int)(35 * revProg + 3 * sin), pointY - 9, 20, 18, 0, 15/512F, 25/512F, 171/256F, 180/256F);
         }
 
-        RenderSystem.popMatrix();
+        stack.pop();
     }
 
     @Override
@@ -125,7 +144,7 @@ public class WindowTutorial extends Window<WorkspaceHats>
 
             ElementTextWrapper text1 = new ElementTextWrapper(this);
             text1.setText(text);
-            text1.setConstraint(new Constraint(text1).top(this, Constraint.Property.Type.TOP, padding).bottom(this, Constraint.Property.Type.BOTTOM, 30));
+            text1.constraints().top(this, Constraint.Property.Type.TOP, padding).bottom(this, Constraint.Property.Type.BOTTOM, 30).left(this, Constraint.Property.Type.LEFT, padding).right(this, Constraint.Property.Type.RIGHT, padding);
             elements.add(text1);
 
             ElementButton<?> button = new ElementButton<>(this, I18n.format("gui.ok"), elementClickable ->

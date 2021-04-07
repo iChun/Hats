@@ -9,6 +9,7 @@ import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.packet.PacketRequestEntityHatDetails;
 import me.ichun.mods.hats.common.world.HatsSavedData;
+import me.ichun.mods.ichunutil.client.key.KeyBind;
 import me.ichun.mods.ichunutil.client.tracker.ClientEntityTracker;
 import me.ichun.mods.ichunutil.client.tracker.entity.EntityTracker;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
@@ -41,6 +42,8 @@ import java.util.Map;
 
 public class EventHandlerClient
 {
+    public KeyBind keyBindHats;
+
     public boolean serverHasMod;
     public int connectionAge;
     public int renderCount;

@@ -111,7 +111,8 @@ public class Hats
                 PacketHatLauncherCustomisation.class,
                 PacketHatsList.class,
                 PacketHatsListResponse.class,
-                PacketHatFragment.class
+                PacketHatFragment.class,
+                PacketGiveHat.class
         );
 
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
@@ -156,7 +157,7 @@ public class Hats
     @OnlyIn(Dist.CLIENT)
     private void onClientSetup(FMLClientSetupEvent event)
     {
-        new KeyBind(new KeyBinding("hats.key.hatsMenu", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM.getOrMakeInput(GLFW.GLFW_KEY_H), "key.categories.ui"), keyBind -> eventHandlerClient.openHatsMenu(), null);
+        Hats.eventHandlerClient.keyBindHats = new KeyBind(new KeyBinding("hats.key.hatsMenu", KeyConflictContext.IN_GAME, InputMappings.Type.KEYSYM.getOrMakeInput(GLFW.GLFW_KEY_H), "key.categories.ui"), keyBind -> eventHandlerClient.openHatsMenu(), null);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityTypes.HAT.get(), new RenderHatEntity.RenderFactory());
     }

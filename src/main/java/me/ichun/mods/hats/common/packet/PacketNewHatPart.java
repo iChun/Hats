@@ -1,12 +1,15 @@
 package me.ichun.mods.hats.common.packet;
 
+import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.client.toast.NewHatPartToast;
+import me.ichun.mods.hats.client.toast.Toast;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.network.AbstractPacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkEvent;
@@ -69,6 +72,11 @@ public class PacketNewHatPart extends AbstractPacket
     {
         if(Hats.configClient.newHatToast)
         {
+            if(!Hats.configClient.shownTutorial && !(Minecraft.getInstance().currentScreen instanceof WorkspaceHats))
+            {
+                Minecraft.getInstance().getToastGui().add(new Toast(new TranslationTextComponent("hats.gui.tutorial.toast.title"), new TranslationTextComponent("hats.gui.tutorial.toast.subtitle", Hats.eventHandlerClient.keyBindHats.keyBinding.func_238171_j_()), 0));
+            }
+
             Minecraft.getInstance().getToastGui().add(new NewHatPartToast(details, newHat, names));
         }
     }

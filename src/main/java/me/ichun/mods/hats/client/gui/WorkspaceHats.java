@@ -2,10 +2,7 @@ package me.ichun.mods.hats.client.gui;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
-import me.ichun.mods.hats.client.gui.window.WindowHalfGreyout;
-import me.ichun.mods.hats.client.gui.window.WindowHatsList;
-import me.ichun.mods.hats.client.gui.window.WindowInputReceiver;
-import me.ichun.mods.hats.client.gui.window.WindowSidebar;
+import me.ichun.mods.hats.client.gui.window.*;
 import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
@@ -287,12 +284,20 @@ public class WorkspaceHats extends Workspace
 
         age++;
 
-        if(age == Hats.configClient.guiAnimationTime + 21 && !Hats.configClient.shownTutorial)
+        if(age == Hats.configClient.guiAnimationTime + 21 && !Hats.configClient.shownTutorial && hatLauncher == null)
         {
-//            openWindowInCenter(new WindowConfirmation(this, renderMinecraftStyle() == 0 ? "window.popup.title" : "", I18n.format("hats.gui.tutorial.intro"), this::startTutorial, w -> {
-//                //Cancel callback
-//                //TODO this
-//            }), 0.5D, 0.5D, true);
+            openWindowInCenter(new WindowConfirmation(this, renderMinecraftStyle() == 0 ? "window.popup.title" : "", I18n.format("hats.gui.tutorial.intro"), w -> startTutorial(), w -> cancelTutorial()){
+                @Override
+                public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
+                {
+                    stack.push();
+                    stack.translate(0F, 0F, 375F); //silly ElementHatRender
+
+                    super.render(stack, mouseX, mouseY, partialTick);
+
+                    stack.pop();
+                }
+            }, 0.55D, 0.4D, true);
         }
     }
 
@@ -421,8 +426,31 @@ public class WorkspaceHats extends Workspace
         resize(getMinecraft(), width, height);
     }
 
-    public void startTutorial(Workspace workspace)
+    public void startTutorial()
     {
-        //TODO check for hat.
+        TutorialHandler.startTutorial(this);
+    }
+
+    public void cancelTutorial()
+    {
+        Element btn = windowSidebar.getCurrentView().getById("btnResourceManagement");
+        if(btn != null)
+        {
+            WindowTutorial dragTut = new WindowTutorial(this, WindowTutorial.Direction.RIGHT, btn.getLeft(), btn.getTop() + (btn.getHeight() / 2), (int)(this.windowHatsList.getLeft() * 0.8F), 150, w7 -> {
+                finishTutorial();
+            }, I18n.format("hats.gui.tutorial.skip"));
+            addWindowWithGreyout(dragTut);
+            dragTut.init();
+        }
+        else
+        {
+            popup(0.6D, 0.4D, w1 -> finishTutorial(), I18n.format("hats.gui.tutorial.skip"));
+        }
+    }
+
+    public void finishTutorial()
+    {
+        Hats.configClient.shownTutorial = true;
+        Hats.configClient.save();
     }
 }
