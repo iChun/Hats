@@ -11,6 +11,7 @@ import me.ichun.mods.hats.common.config.ConfigServer;
 import me.ichun.mods.hats.common.core.EventHandlerServer;
 import me.ichun.mods.hats.common.entity.EntityHat;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.hats.advancement.Advancements;
 import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.packet.*;
 import me.ichun.mods.hats.common.thread.ThreadReadHats;
@@ -152,6 +153,8 @@ public class Hats
 
             }
         }, () -> null);
+
+        Advancements.CriteriaTriggers.init();
     }
 
     @OnlyIn(Dist.CLIENT)

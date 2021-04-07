@@ -3,18 +3,13 @@ package me.ichun.mods.hats.client.gui.window;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
 import me.ichun.mods.hats.client.gui.WorkspaceHats;
-import me.ichun.mods.hats.client.gui.window.element.ElementHatRender;
-import me.ichun.mods.hats.client.gui.window.element.ElementHatsScrollView;
 import me.ichun.mods.hats.common.Hats;
-import me.ichun.mods.hats.common.hats.HatInfo;
-import me.ichun.mods.hats.common.hats.HatResourceHandler;
-import me.ichun.mods.hats.common.hats.sort.SortHandler;
-import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.gui.bns.Workspace;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.*;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementButton;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTextWrapper;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
@@ -22,11 +17,7 @@ import net.minecraft.util.math.MathHelper;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class WindowTutorial extends Window<WorkspaceHats>
 {

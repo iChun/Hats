@@ -6,10 +6,12 @@ import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.hats.advancement.Advancements;
 import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.client.model.item.IModel;
 import me.ichun.mods.ichunutil.client.model.item.ItemModelRenderer;
+import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import me.ichun.mods.ichunutil.common.iChunUtil;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -26,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.vector.Vector3f;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -52,6 +55,7 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
     //Stuff to do in relation to getting the current perspective and the current player holding it
     private ItemCameraTransforms.TransformType currentPerspective;
     private AbstractClientPlayerEntity lastPlayer;
+    private boolean isAdvancementRender;
 
     private ModelHatLauncher launcherModel;
 
@@ -64,6 +68,14 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
     public void func_239207_a_(ItemStack is, ItemCameraTransforms.TransformType transformType, MatrixStack stack, IRenderTypeBuffer bufferIn, int combinedLightIn, int combinedOverlayIn)
     {
         setToOrigin(stack);
+
+        if(isAdvancementRender)
+        {
+            stack.scale(-1.0F, 1.0F, 1.0F);
+
+            RenderHelper.drawTexture(stack, Advancements.DAMAGE_TO_TEXTURE_MAP.get(is.getDamage()), -0.5D, -0.5D, 1D, 1D, 0D);
+            return;
+        }
 
         Minecraft mc = Minecraft.getInstance();
 
@@ -149,7 +161,7 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
     @Override
     public ItemCameraTransforms getCameraTransforms()
     {
-        return ITEM_CAMERA_TRANSFORMS;
+        return isAdvancementRender ? ItemCameraTransforms.DEFAULT : ITEM_CAMERA_TRANSFORMS;
     }
 
     @Override
@@ -159,8 +171,9 @@ public class ItemRenderHatLauncher extends ItemStackTileEntityRenderer
     }
 
     @Override
-    public void handleItemState(ItemStack stack, ClientWorld world, LivingEntity entity)
+    public void handleItemState(ItemStack stack, @Nullable ClientWorld world, @Nullable LivingEntity entity)
     {
+        isAdvancementRender = stack.getDamage() > 0;
         if(entity instanceof AbstractClientPlayerEntity)
         {
             lastPlayer = (AbstractClientPlayerEntity)entity;

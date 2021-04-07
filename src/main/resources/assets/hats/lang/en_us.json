@@ -125,7 +125,7 @@
   "hats.gui.tutorial.cameraFallback": "You can control the view on the left using your mouse.\n\nUsually, you can click and drag using your mouse buttons and scroll wheel, but we are in fallback mode right now, so maybe try it later?",
   "hats.gui.tutorial.hatsHere": "Hats you have unlocked are here.",
   "hats.gui.tutorial.clickForHatMissing": "You're supposed to have a hat now, but it seems we can't find one.\n\nMaybe your filters may have hidden them?\n\nAnyways...",
-  "hats.gui.tutorial.clickForHat": "You can click on a hat to wear it, or right click for additional options",
+  "hats.gui.tutorial.clickForHat": "You can click on a hat to wear it, or right click for additional options\n\n(Don't actually click now, the interactive part of the tutorial is over, you'll just cancel the tutorial)",
   "hats.gui.tutorial.search": "You can search for a specific hat here.\n\nRight click to clear.",
   "hats.gui.tutorial.additionalButtons": "Additional buttons up here.\n\nMouse over for tooltips.",
   "hats.gui.tutorial.dragBar": "Need more space to see your hats?\n\nDrag this to the left.",
@@ -162,6 +162,9 @@
   "hats.gui.tooltip.rarity": "Rarity: %s",
   "hats.gui.tooltip.notUnlocked": "Not Unlocked",
   "hats.gui.tooltip.worth": "Worth %s Humorously Acronymed Token(s)",
+
+  "hats.advancement.root.title": "Hats",
+  "hats.advancement.root.description": "What goes on the top of your head? No, the other thing!",
 
   "hats.plugin.tabula.button": "Open Hat",
   "hats.plugin.tabula.button.new": "New",

@@ -47,7 +47,7 @@ public class TutorialHandler
 
     private static void hatSelectIntro(WorkspaceHats workspace)
     {
-        WindowTutorial hatSelectTut = new WindowTutorial(workspace, WindowTutorial.Direction.RIGHT, workspace.windowHatsList.getCurrentView().list.getLeft() + 25, workspace.windowHatsList.getCurrentView().list.getTop() + 40, (int)(workspace.windowHatsList.getLeft() * 0.8F), 125, w -> {
+        WindowTutorial hatSelectTut = new WindowTutorial(workspace, WindowTutorial.Direction.RIGHT, workspace.windowHatsList.getCurrentView().list.getLeft() + 25, workspace.windowHatsList.getCurrentView().list.getTop() + 40, (int)(workspace.windowHatsList.getLeft() * 0.8F), 200, w -> {
             WindowTutorial searchTut = new WindowTutorial(workspace, WindowTutorial.Direction.RIGHT, workspace.windowHatsList.getCurrentView().textField.getLeft(), workspace.windowHatsList.getCurrentView().textField.getTop() + (workspace.windowHatsList.getCurrentView().textField.getHeight() / 2), (int)(workspace.windowHatsList.getLeft() * 0.8F), 150, w1 -> {
                 WindowTutorial addBtnTut = new WindowTutorial(workspace, WindowTutorial.Direction.RIGHT, workspace.windowSidebar.getCurrentView().randomButton.getLeft(), workspace.windowSidebar.getCurrentView().randomButton.getBottom(), (int)(workspace.windowHatsList.getLeft() * 0.8F), 150, w2 -> {
                     WindowTutorial dragTut = new WindowTutorial(workspace, WindowTutorial.Direction.RIGHT, workspace.windowHatsList.getLeft(), workspace.windowHatsList.getTop() + (workspace.windowHatsList.getHeight() / 2), (int)(workspace.windowHatsList.getLeft() * 0.8F), 200, w7 -> {
