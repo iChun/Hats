@@ -3,9 +3,12 @@ package me.ichun.mods.hats.common.core;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.command.CommandHats;
 import me.ichun.mods.hats.common.hats.HatHandler;
+import me.ichun.mods.hats.common.hats.advancement.Advancements;
 import me.ichun.mods.hats.common.packet.PacketPing;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
+import me.ichun.mods.ichunutil.common.head.HeadHandler;
+import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -64,6 +67,17 @@ public class EventHandlerServer
             if(hatPart.isAHat())
             {
                 HatHandler.addHat((ServerPlayerEntity)event.getSource().getTrueSource(), hatPart);
+
+                HeadInfo info = HeadHandler.getHelper(event.getEntityLiving().getClass());
+                if(info != null && info.isBoss)
+                {
+                    Advancements.CriteriaTriggers.KILL_BOSS_WITH_HAT.trigger((ServerPlayerEntity)event.getSource().getTrueSource());
+                }
+
+                if(!event.getEntityLiving().getClass().getName().contains("minecraft"))
+                {
+                    Advancements.CriteriaTriggers.NON_VANILLA_HAT.trigger((ServerPlayerEntity)event.getSource().getTrueSource());
+                }
             }
         }
     }

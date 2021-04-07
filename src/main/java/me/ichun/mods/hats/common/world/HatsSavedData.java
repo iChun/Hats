@@ -418,6 +418,17 @@ public class HatsSavedData extends WorldSavedData
             }
         }
 
+        public int accessoriesUnlocked()
+        {
+            int count = 0;
+            count += hatParts.size();
+            for(HatPart hatPart : hatParts)
+            {
+                count += hatPart.accessoriesUnlocked();
+            }
+            return count;
+        }
+
         public void eventDay(int age, float partialTick)
         {
             if(colouriser[0] == 0F  && colouriser[1] == 0F && colouriser[2] == 0F)

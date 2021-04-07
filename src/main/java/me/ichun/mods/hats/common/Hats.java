@@ -6,7 +6,6 @@ import me.ichun.mods.hats.client.entity.EntityDummy;
 import me.ichun.mods.hats.client.module.tabula.HatsTabulaPlugin;
 import me.ichun.mods.hats.client.render.ItemRenderHatLauncher;
 import me.ichun.mods.hats.client.render.RenderHatEntity;
-import me.ichun.mods.hats.common.config.ConfigCommon;
 import me.ichun.mods.hats.common.config.ConfigServer;
 import me.ichun.mods.hats.common.core.EventHandlerServer;
 import me.ichun.mods.hats.common.entity.EntityHat;
@@ -66,7 +65,6 @@ public class Hats
 
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static ConfigCommon configCommon;
     public static ConfigClient configClient;
     public static ConfigServer configServer;
 
@@ -83,7 +81,6 @@ public class Hats
         {
             return;
         }
-        configCommon = new ConfigCommon().init();
         configServer = new ConfigServer().init();
 
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();

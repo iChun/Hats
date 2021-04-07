@@ -1,6 +1,7 @@
 package me.ichun.mods.hats.common.hats;
 
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.hats.common.hats.advancement.Advancements;
 import me.ichun.mods.hats.common.item.ItemHatLauncher;
 import me.ichun.mods.hats.common.packet.PacketEntityHatDetails;
 import me.ichun.mods.hats.common.packet.PacketNewHatPart;
@@ -270,14 +271,22 @@ public class HatHandler //Handles most of the server-related things.
 
             inventoryHat.add(hatToAdd);
 
+            Advancements.triggerHatCount(player, inventoryHat.count);
+
             if(!accessoryNames.isEmpty())
             {
                 for(String accessoryName : accessoryNames)
                 {
-                    String dispName = info.getDisplayNameFor(accessoryName);
-                    if(dispName != null)
+                    HatInfo accessoryInfo = info.getInfoFor(accessoryName);
+                    if(accessoryInfo != null)
                     {
+                        String dispName = accessoryInfo.getDisplayName();
                         names.add("- " + dispName);
+
+                        if(accessoryInfo.accessoryParent != null)
+                        {
+                            Advancements.CriteriaTriggers.ACCESSORY_IN_ACCESSORY.trigger(player);
+                        }
                     }
                 }
             }
@@ -285,6 +294,14 @@ public class HatHandler //Handles most of the server-related things.
             if(!foundBase || !accessoryNames.isEmpty()) //there's something new
             {
                 inventoryHat.setNew(); //copying the personalisation may have reset it.
+
+                Advancements.checkHatsAndAccessoriesUnlocked(player);
+
+                if(inventoryHat.hatParts.size() >= 3)
+                {
+                    Advancements.CriteriaTriggers.HAT_WITH_THREE_OR_MORE_ACCESSORIES.trigger(player);
+                }
+
                 if(Hats.configServer.sendNewHatToastPrompt)
                 {
                     Hats.channel.sendTo(new PacketNewHatPart(!foundBase, hatToAdd, names), player);
@@ -389,6 +406,77 @@ public class HatHandler //Handles most of the server-related things.
         HashMap<Integer, HatsSavedData.HatPart> deets = new HashMap<>();
         deets.put(player.getEntityId(), part);
         Hats.channel.sendTo(new PacketEntityHatDetails(deets), PacketDistributor.TRACKING_ENTITY.with(() -> player));
+
+        //Bleh shoddy code
+        if(part.isAHat())
+        {
+            Advancements.CriteriaTriggers.WEAR_HAT.trigger(player);
+
+            boolean accessorised = false;
+            boolean colourised = false;
+
+            for(HatsSavedData.HatPart hatPart : part.hatParts)
+            {
+                if(hatPart.isShowing)
+                {
+                    if(!accessorised)
+                    {
+                        accessorised = true;
+                        Advancements.CriteriaTriggers.WEAR_HAT_WITH_ACCESSORY.trigger(player);
+                    }
+                    if(!colourised)
+                    {
+                        for(float v : hatPart.hsbiser)
+                        {
+                            if(v != 0F)
+                            {
+                                colourised = true;
+                                break;
+                            }
+                        }
+                    }
+                    if(!colourised)
+                    {
+                        for(float v : hatPart.colouriser)
+                        {
+                            if(v != 0F)
+                            {
+                                colourised = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if(!colourised)
+            {
+                for(float v : part.hsbiser)
+                {
+                    if(v != 0F)
+                    {
+                        colourised = true;
+                        break;
+                    }
+                }
+            }
+            if(!colourised)
+            {
+                for(float v : part.colouriser)
+                {
+                    if(v != 0F)
+                    {
+                        colourised = true;
+                        break;
+                    }
+                }
+            }
+
+            if(colourised)
+            {
+                Advancements.CriteriaTriggers.COLOURISE_HAT.trigger(player);
+            }
+        }
     }
 
     public static @Nonnull CompoundNBT getPlayerHatsNBT(PlayerEntity player)

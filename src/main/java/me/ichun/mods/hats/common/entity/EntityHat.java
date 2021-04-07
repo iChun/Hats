@@ -4,6 +4,7 @@ import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
+import me.ichun.mods.hats.common.hats.advancement.Advancements;
 import me.ichun.mods.hats.common.packet.PacketEntityHatDetails;
 import me.ichun.mods.hats.common.packet.PacketEntityHatEntityDetails;
 import me.ichun.mods.hats.common.packet.PacketRehatify;
@@ -23,6 +24,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerChunkProvider;
+import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.NetworkHooks;
@@ -192,7 +194,7 @@ public class EntityHat extends Entity
             }
 
             //No colliding entities, ray trace our motion
-            if(collidedEnt != null)
+            if(collidedEnt == null)
             {
                 EntityRayTraceResult entResult = ProjectileHelper.rayTraceEntities(this.world, this, posEye, posEye.add(getMotion()), this.getBoundingBox().expand(this.getMotion()).grow(1.0D), this::canPutOnHat);
                 if(entResult != null)
@@ -219,6 +221,12 @@ public class EntityHat extends Entity
 
                         ((ServerChunkProvider)getEntityWorld().getChunkProvider()).sendToAllTracking(collidedEnt, new SEntityVelocityPacket(collidedEnt));
                     }
+                }
+
+                Entity shooter = ((ServerWorld)world).getEntityByUuid(lastInteractedEntity);
+                if(shooter instanceof ServerPlayerEntity)
+                {
+                    Advancements.CriteriaTriggers.CHANGE_MOB_HAT.trigger((ServerPlayerEntity)shooter);
                 }
 
                 LivingEntity collidedEntFinal = collidedEnt;
@@ -254,6 +262,11 @@ public class EntityHat extends Entity
                         {
                             HatHandler.removeOneFromInventory(player, oriHat); //remove one hat from the inventory and update inventory
                         }
+                    }
+
+                    if(isRogue)
+                    {
+                        Advancements.CriteriaTriggers.ROGUE_HAT.trigger(player);
                     }
                 }
 
