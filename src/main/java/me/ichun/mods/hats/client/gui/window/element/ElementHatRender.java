@@ -380,7 +380,10 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
                 {
                     sb.append(accessoryInfo.description).append("\n").append("\n");
                 }
-                sb.append(I18n.format("hats.gui.tooltip.worth", info.getWorthFor(accessoryInfo.name, 0)));
+                if(Hats.eventHandlerClient.serverHasMod)
+                {
+                    sb.append(I18n.format("hats.gui.tooltip.worth", info.getWorthFor(accessoryInfo.name, 0)));
+                }
 
                 return sb.toString();
             }

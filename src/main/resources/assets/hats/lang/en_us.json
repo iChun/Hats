@@ -76,6 +76,9 @@
   "hats.toast.unlock.hat": "Hat",
   "hats.toast.unlock.accessory": "Accessory",
 
+  "hats.toast.clientOnly.title": "Server Lacking!",
+  "hats.toast.clientOnly.subtitle": "We think the server doesn't have Hats (or you have a slow connection)\n\nClient-Only mode enabled.",
+
   "hats.toast.sync.title": "Error Rendering Hat",
   "hats.toast.sync.subtitle": "Consider Syncing with Server in Hat Resource Management",
 

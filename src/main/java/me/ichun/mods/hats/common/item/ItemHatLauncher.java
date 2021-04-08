@@ -75,6 +75,11 @@ public class ItemHatLauncher extends Item
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, PlayerEntity player, Hand hand)
     {
+        if(world.isRemote && !Hats.eventHandlerClient.serverHasMod)
+        {
+            return ActionResult.resultPass(player.getHeldItem(hand));
+        }
+
         ItemStack is = player.getHeldItem(hand);
         if(DualHandedItem.getUsableDualHandedItem(player) == is)
         {

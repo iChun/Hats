@@ -51,7 +51,10 @@ public class WindowHatManagement extends Window<WorkspaceHats>
                 HatResourceHandler.HATS.forEach((name, info) -> info.destroy());
 
                 HatResourceHandler.loadAllHats();
-                HatHandler.allocateHatPools();
+                if(Hats.eventHandlerClient.serverHasMod)
+                {
+                    HatHandler.allocateHatPools();
+                }
                 parent.parent.refreshHats();
 
                 parent.parent.popup(0.6D, 0.6D, w -> {}, I18n.format("hats.gui.window.management.reloadedAllHats"));

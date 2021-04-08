@@ -1,5 +1,6 @@
 package me.ichun.mods.hats.common.hats;
 
+import me.ichun.mods.hats.client.gui.WorkspaceHats;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.advancement.Advancements;
 import me.ichun.mods.hats.common.item.ItemHatLauncher;
@@ -12,6 +13,7 @@ import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.item.DualHandedItem;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -154,7 +156,7 @@ public class HatHandler //Handles most of the server-related things.
     {
         HatsSavedData.HatPart hatPart = getHatPart(ent);
 
-        RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID().toString()).hashCode()) * 425480085L); //Chat contributed random
+        RAND.setSeed(Math.abs((Hats.configServer.randSeed + ent.getUniqueID()).hashCode()) * 425480085L); //Chat contributed random
 
         double chance = RAND.nextDouble();
         HeadInfo info = HeadHandler.getHelper(ent.getClass());
@@ -173,6 +175,40 @@ public class HatHandler //Handles most of the server-related things.
         hatPart.isShowing = true;
 
         hatInfo.assignAccessoriesToPart(hatPart, ent);
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static void assignHatClient(LivingEntity ent)
+    {
+        RAND.setSeed(Math.abs((Minecraft.getInstance().getSession().getUsername() + ent.getUniqueID()).hashCode()) * 425480085L); //Chat contributed random
+        if(RAND.nextDouble() < Hats.configClient.hatChance)
+        {
+            HatsSavedData.HatPart hatPart = getHatPart(ent);
+
+            ArrayList<HatInfo> infos = new ArrayList<>(HatResourceHandler.HATS.values());
+            if(!infos.isEmpty())
+            {
+                HatInfo hatInfo = infos.get(RAND.nextInt(infos.size()));
+                hatPart.name = hatInfo.name;
+                hatPart.count = 1;
+                hatPart.isShowing = true;
+
+                hatInfo.assignAccessoriesToPartClient(hatPart, ent);
+
+                if(ent == Minecraft.getInstance().player && Minecraft.getInstance().currentScreen instanceof WorkspaceHats)
+                {
+                    ((WorkspaceHats)Minecraft.getInstance().currentScreen).refreshHats();
+                }
+            }
+            else
+            {
+                assignNoHat(ent);
+            }
+        }
+        else
+        {
+            assignNoHat(ent);
+        }
     }
 
     public static void assignSpecificHat(LivingEntity ent, HatsSavedData.HatPart part)
@@ -525,10 +561,10 @@ public class HatHandler //Handles most of the server-related things.
 
     public static boolean useInventory(@Nonnull PlayerEntity player)
     {
-        return !(player.isCreative() && !Hats.configServer.enableCreativeModeHatHunting) && (!player.world.isRemote || Hats.eventHandlerClient.serverHasMod) && !hasCompletedAllVariants(player);
+        return (!player.world.isRemote || Hats.eventHandlerClient.serverHasMod) && !(player.isCreative() && !Hats.configServer.enableCreativeModeHatHunting) && !hasCompletedAllVariants(player);
     }
 
-    public static boolean hasCompletedAllVariants(@Nonnull PlayerEntity player) //TODO test the 100% reward & the recipe
+    public static boolean hasCompletedAllVariants(@Nonnull PlayerEntity player)
     {
         if(!player.world.isRemote)
         {

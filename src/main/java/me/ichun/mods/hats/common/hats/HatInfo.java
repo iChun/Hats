@@ -469,6 +469,50 @@ public class HatInfo
         }
     }
 
+    @OnlyIn(Dist.CLIENT)
+    public void assignAccessoriesToPartClient(HatsSavedData.HatPart hatPart, LivingEntity ent) //simplified version for clients on servers without Hats.
+    {
+        ArrayList<HatInfo> spawningAccessories = new ArrayList<>();
+        HashMap<String, ArrayList<HatInfo>> conflicts = new HashMap<>();
+        HatHandler.RAND.setSeed(Math.abs((Minecraft.getInstance().getSession().getUsername() + ent.getUniqueID()).hashCode()) * 53579997854L); //Chat contributed random
+        for(HatInfo accessory : accessories)
+        {
+            if(HatHandler.RAND.nextBoolean()) //spawn the accessory
+            {
+                spawningAccessories.add(accessory);
+                if(!accessory.accessoryLayer.isEmpty()) //look for conflicts for accessories that already got to spawn
+                {
+                    for(String layer : accessory.accessoryLayer)
+                    {
+                        conflicts.computeIfAbsent(layer, k -> new ArrayList<>()).add(accessory);
+                    }
+                }
+            }
+        }
+
+        //if there are no conflicts, remove
+        conflicts.entrySet().removeIf(entry -> entry.getValue().size() <= 1);
+
+        for(ArrayList<HatInfo> conflictAccessories : conflicts.values())
+        {
+            while(conflictAccessories.size() > 1)
+            {
+                HatInfo acc = conflictAccessories.get(ent.getRNG().nextInt(conflictAccessories.size()));// YOU LOST THE COIN TOSS
+                spawningAccessories.remove(acc);
+                conflictAccessories.remove(acc);
+            }
+        }
+
+        for(HatInfo accessory : spawningAccessories)
+        {
+            HatsSavedData.HatPart accToSpawn = new HatsSavedData.HatPart(accessory.name);
+            accToSpawn.isShowing = true;
+            hatPart.hatParts.add(accToSpawn);
+
+            accessory.assignAccessoriesToPartClient(accToSpawn, ent);
+        }
+    }
+
     public void matchPart(HatsSavedData.HatPart part)
     {
         for(HatInfo accessory : accessories)

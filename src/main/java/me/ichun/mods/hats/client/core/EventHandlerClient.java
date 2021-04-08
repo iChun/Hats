@@ -16,6 +16,7 @@ import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.item.DualHandedItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.IngameMenuScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.renderer.entity.EnderDragonRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
 import net.minecraft.client.renderer.entity.LivingRenderer;
@@ -86,6 +87,11 @@ public class EventHandlerClient
             if(mc.world != null)
             {
                 connectionAge++;
+
+                if(connectionAge == 100 && !serverHasMod)
+                {
+                    Minecraft.getInstance().getToastGui().add(new Toast(new TranslationTextComponent("hats.toast.clientOnly.title"), new TranslationTextComponent("hats.toast.clientOnly.subtitle"), 2));
+                }
 
                 if(!requestedHats.isEmpty())
                 {
@@ -206,7 +212,7 @@ public class EventHandlerClient
 
     public void openHatsMenu()
     {
-        if(Hats.configServer.enabledGuiStyle <= 0) //disable opening.
+        if(serverHasMod && Hats.configServer.enabledGuiStyle <= 0) //disable opening.
         {
             return;
         }
@@ -220,12 +226,13 @@ public class EventHandlerClient
             }
 
             boolean fallback = Hats.configClient.forceGuiFallback
-                    || Hats.configServer.enabledGuiStyle == 1
+                    || serverHasMod && Hats.configServer.enabledGuiStyle == 1
                     || !(mc.player.getPose() == Pose.STANDING || mc.player.getPose() == Pose.CROUCHING)
                     || mc.player != mc.renderViewEntity
-                    || mc.player.getBrightness() <= 0.15F //TODO does this cause issues in the END dimension??
+                    || Screen.hasControlDown()
                     || mc.player.isInvisible()
                     ;
+
             if(!fallback)
             {
                 float yawFromPlayer = mc.renderViewEntity.rotationYaw - 160F;

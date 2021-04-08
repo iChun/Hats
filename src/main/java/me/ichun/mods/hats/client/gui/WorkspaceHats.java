@@ -306,35 +306,38 @@ public class WorkspaceHats extends Workspace
     {
         super.onClose();
 
-        //Send to the server our customisations, and our new hat if we hit confirmed
-        if(hatLauncher != null)
+        if(Hats.eventHandlerClient.serverHasMod)
         {
-            Hats.channel.sendToServer(new PacketHatLauncherCustomisation(HatHandler.getHatPart(hatLauncher)));
-
-        }
-        //Send the details of what we changed to the server. Server end only copies the customisation, not the count as well.
-        //Don't send the new hat that we selected to the server if we're editing the item.
-        Hats.channel.sendToServer(new PacketHatCustomisation(changedHats, true, hatLauncher == null ? HatHandler.getHatPart(hatEntity) : new HatsSavedData.HatPart()));
-
-        //Update our inventory with what has been changed
-        for(HatsSavedData.HatPart hatPart : Hats.eventHandlerClient.hatsInventory.hatParts)
-        {
-            for(int i = changedHats.size() - 1; i >= 0; i--)
+            //Send to the server our customisations, and our new hat if we hit confirmed
+            if(hatLauncher != null)
             {
-                HatsSavedData.HatPart changedHat = changedHats.get(i);
-                if(hatPart.copyPersonalisation(changedHat))
+                Hats.channel.sendToServer(new PacketHatLauncherCustomisation(HatHandler.getHatPart(hatLauncher)));
+
+            }
+            //Send the details of what we changed to the server. Server end only copies the customisation, not the count as well.
+            //Don't send the new hat that we selected to the server if we're editing the item.
+            Hats.channel.sendToServer(new PacketHatCustomisation(changedHats, true, hatLauncher == null ? HatHandler.getHatPart(hatEntity) : new HatsSavedData.HatPart()));
+
+            //Update our inventory with what has been changed
+            for(HatsSavedData.HatPart hatPart : Hats.eventHandlerClient.hatsInventory.hatParts)
+            {
+                for(int i = changedHats.size() - 1; i >= 0; i--)
                 {
-                    changedHats.remove(i);
+                    HatsSavedData.HatPart changedHat = changedHats.get(i);
+                    if(hatPart.copyPersonalisation(changedHat))
+                    {
+                        changedHats.remove(i);
+                    }
                 }
             }
-        }
 
-        //If we somehow modified hats we don't own
-        for(HatsSavedData.HatPart customisedHat : changedHats) //these are hats we don't own.
-        {
-            HatsSavedData.HatPart copy = customisedHat.createCopy();
-            copy.setCountOfAllTo(0);
-            Hats.eventHandlerClient.hatsInventory.hatParts.add(copy);
+            //If we somehow modified hats we don't own
+            for(HatsSavedData.HatPart customisedHat : changedHats) //these are hats we don't own.
+            {
+                HatsSavedData.HatPart copy = customisedHat.createCopy();
+                copy.setCountOfAllTo(0);
+                Hats.eventHandlerClient.hatsInventory.hatParts.add(copy);
+            }
         }
 
         changedHats.clear();

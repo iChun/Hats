@@ -94,9 +94,9 @@ public class ModelRendererDragonHook extends ModelRenderer
                 Hats.eventHandlerClient.requestHatDetails(living);
                 HatHandler.assignNoHat(living);
             }
-            else if(living.getRNG().nextDouble() < Hats.configClient.hatChance && Hats.eventHandlerClient.connectionAge > 100) //assign a random hat, client-only after all. 5 second connection cooldown
+            else if(Hats.eventHandlerClient.connectionAge > 100) //assign a random hat, client-only after all. 5 second connection cooldown
             {
-                HatHandler.assignHat(living);
+                HatHandler.assignHatClient(living);
             }
         }
     }
