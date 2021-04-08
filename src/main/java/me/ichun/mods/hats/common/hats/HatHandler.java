@@ -8,13 +8,11 @@ import me.ichun.mods.hats.common.packet.PacketEntityHatDetails;
 import me.ichun.mods.hats.common.packet.PacketNewHatPart;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
+import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.item.DualHandedItem;
-import net.minecraft.advancements.Advancement;
-import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
@@ -561,47 +559,7 @@ public class HatHandler //Handles most of the server-related things.
 
     public static boolean useInventory(@Nonnull PlayerEntity player)
     {
-        return (!player.world.isRemote || Hats.eventHandlerClient.serverHasMod) && !(player.isCreative() && !Hats.configServer.enableCreativeModeHatHunting) && !hasCompletedAllVariants(player);
-    }
-
-    public static boolean hasCompletedAllVariants(@Nonnull PlayerEntity player)
-    {
-        if(!player.world.isRemote)
-        {
-            ServerPlayerEntity serverPlayer = ((ServerPlayerEntity)player);
-            Advancement advancement = serverPlayer.getServer().getAdvancementManager().getAdvancement(Advancements.ALL_VARIANTS);
-            if(advancement != null)
-            {
-                return serverPlayer.getAdvancements().getProgress(advancement).isDone();
-            }
-            return false;
-        }
-        else
-        {
-            return hasCompletedAllVariantsClient(player);
-        }
-    }
-
-    @OnlyIn(Dist.CLIENT)
-    public static boolean hasCompletedAllVariantsClient(@Nonnull PlayerEntity player)
-    {
-        if(player instanceof ClientPlayerEntity)
-        {
-            ClientPlayerEntity clientPlayer = (ClientPlayerEntity)player;
-            if(clientPlayer.connection != null)
-            {
-                Advancement advancement = clientPlayer.connection.getAdvancementManager().getAdvancementList().getAdvancement(Advancements.ALL_VARIANTS);
-                if(advancement != null)
-                {
-                    AdvancementProgress progress = clientPlayer.connection.getAdvancementManager().advancementToProgress.get(advancement);
-                    if(progress != null && progress.isDone())
-                    {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        return (!player.world.isRemote || Hats.eventHandlerClient.serverHasMod) && !(player.isCreative() && !Hats.configServer.enableCreativeModeHatHunting) && !EntityHelper.hasCompletedAdvancement(Advancements.ALL_VARIANTS, player);
     }
 
     // ItemStack based functions

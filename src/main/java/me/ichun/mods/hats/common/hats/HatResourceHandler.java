@@ -185,29 +185,24 @@ public class HatResourceHandler
                 Hats.LOGGER.warn("Loaded an old Tabula file. Updating to new Tabula & Hats format: {}", file);
             }
 
-            //            if(file.getAbsolutePath().contains("mods\\hats\\Miner Hat") || file.getName().equals("Hotdog Hotdog.tbl") || file.getName().equals("Sombrero.tbl") || file.getName().equals("Straw Hat.tbl"))
-            //            {
-            //                for(Project.Part allPart : project.getAllParts())
-            //                {
-            //                    allPart.rotPY += 1F;
-            //                }
-            //                project.save(file);
-            //                Hats.LOGGER.info("Resaved: {}", file);
-            //            }
-
-            //                                    if(file.getName().equals("Ushanka.tbl"))
-            //                        {
-            //                            for(Project.Part allPart : project.getAllParts())
-            //                            {
-            //                                allPart.rotPY += 1F;
-            //                            }
-            //                            project.save(file);
-            //                            Hats.LOGGER.info("Resaved: {}", file);
-            //                        }
-            //            if(file.getName().startsWith("(C) ")) //it's a contributor hat
-            //            {
-            //                parseMeta(file, project);
-            //            }
+//            if(file.getAbsolutePath().contains("mods\\hats\\_PORTALCRAFTER51"))
+//            {
+//                project.author = "Portalcrafter51";
+//                project.save(file);
+//                Hats.LOGGER.info("Resaved: {}", file);
+//            }
+//            if(file.getAbsolutePath().contains("mods\\hats\\_THEMUSHROOMCOW"))
+//            {
+//                project.author = "The_Mushroomcow";
+//                project.save(file);
+//                Hats.LOGGER.info("Resaved: {}", file);
+//            }
+//            if(file.getAbsolutePath().contains("mods\\hats\\_MRHAZARD"))
+//            {
+//                project.author = "Mr_Hazard";
+//                project.save(file);
+//                Hats.LOGGER.info("Resaved: {}", file);
+//            }
 
             String hatName = file.getName().substring(0, file.getName().length() - 4);
 
