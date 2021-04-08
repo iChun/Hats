@@ -384,6 +384,26 @@ public class HatInfo
         return part;
     }
 
+    public HatsSavedData.HatPart getFromList(ArrayList<String> names, int count)
+    {
+        HatsSavedData.HatPart hatPart = getAsHatPartShowingAll(count);
+        hatPart.stripIfNameNotInList(names);
+        return hatPart;
+    }
+
+    private HatsSavedData.HatPart getAsHatPartShowingAll(int count)
+    {
+        HatsSavedData.HatPart part = new HatsSavedData.HatPart(name);
+        part.isShowing = true;
+        part.count = count;
+        for(HatInfo accessory : accessories)
+        {
+            HatsSavedData.HatPart childPart = accessory.getAsHatPartShowingAll(count);
+            part.hatParts.add(childPart);
+        }
+        return part;
+    }
+
     @Override
     public int compareTo(HatInfo o)
     {
@@ -415,6 +435,16 @@ public class HatInfo
         for(HatInfo accessory : accessories)
         {
             accessory.addFullNames(names);
+        }
+    }
+
+    public void addNameWithOrigin(ArrayList<String> names, String origin)
+    {
+        names.add(origin + ":" + name);
+
+        for(HatInfo accessory : accessories)
+        {
+            accessory.addNameWithOrigin(names, origin);
         }
     }
 

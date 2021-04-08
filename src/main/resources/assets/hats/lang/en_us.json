@@ -65,6 +65,10 @@
   "commands.hats.setHat.success": "Successfully rehatified %s entities.",
   "commands.hats.getHat.value": "Hat NBT Data (Click to Copy): ",
   "commands.hats.getHat.fail": "That entity does not have a hat.",
+  "commands.hats.addCount.success": "Successfully added count of %1$s to %2$s.",
+  "commands.hats.remove.success": "Successfully removed %1$s from %2$s.",
+  "commands.hats.remove.fail": "Failed to remove %1$s from %2$s. Not found.",
+  "commands.hats.remove.success": "Successfully removed all of %s's Hats. I hope you're happy. You monster.",
 
   "hats.key.hatsMenu": "Hats Menu",
 
@@ -92,6 +96,7 @@
   "hats.gui.window.hat.sidebar": "Hat Sidebar",
   "hats.gui.window.hat.colorizer": "Hat Colorizer",
   "hats.gui.window.hat.personaliser": "Hat Accessorizer",
+  "hats.gui.window.hat.noHat": "No Hats? Maybe check your filters.",
 
   "hats.gui.window.hatsList.title": "Your Hats",
   "hats.gui.window.allHats.title": "All Hat Variants",

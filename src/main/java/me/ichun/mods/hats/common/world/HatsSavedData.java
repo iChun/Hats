@@ -194,6 +194,25 @@ public class HatsSavedData extends WorldSavedData
             return null;
         }
 
+        public boolean remove(HatPart part)
+        {
+            if(hatParts.removeIf(hatPart -> part.name.equals(hatPart.name)))
+            {
+                return true;
+            }
+            else
+            {
+                for(HatPart hatPart : hatParts)
+                {
+                    if(hatPart.remove(part))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
         public void randomize(Random random)
         {
             this.count = 1;
@@ -274,6 +293,10 @@ public class HatsSavedData extends WorldSavedData
                 {
                     count = 999999999; //blame jackylam5
                 }
+                else if(count < 0)
+                {
+                    count = 0;
+                }
 
                 copyPersonalisation(part);
 
@@ -292,7 +315,10 @@ public class HatsSavedData extends WorldSavedData
 
                 for(HatPart newPart : partParts)
                 {
-                    newPart.setNew();
+                    if(newPart.count > 0)
+                    {
+                        newPart.setNew();
+                    }
                 }
 
                 hatParts.addAll(partParts); //add the accessories that don't match
@@ -383,6 +409,15 @@ public class HatsSavedData extends WorldSavedData
             for(HatPart hatPart : hatParts)
             {
                 hatPart.setCountOfAllTo(count);
+            }
+        }
+
+        public void stripIfNameNotInList(ArrayList<String> names)
+        {
+            hatParts.removeIf(part -> !names.contains(part.name));
+            for(HatPart hatPart : hatParts)
+            {
+                hatPart.stripIfNameNotInList(names);
             }
         }
 

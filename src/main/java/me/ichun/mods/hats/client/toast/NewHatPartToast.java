@@ -70,7 +70,7 @@ public class NewHatPartToast implements IToast
             this.func_238533_a_(stack, toastGui, i, 0, 0, 28);
 
             for(int j1 = 28; j1 < k - i1; j1 += 10) {
-                this.func_238533_a_(stack, toastGui, i, 16, j1, Math.min(16, k - j1 - i1));
+                this.func_238533_a_(stack, toastGui, i, 16, j1, Math.min(10, k - j1 - i1));
             }
 
             this.func_238533_a_(stack, toastGui, i, 32 - i1, k - i1, i1);
@@ -90,7 +90,7 @@ public class NewHatPartToast implements IToast
             stack.rotate(Vector3f.YP.rotationDegrees(225F -(delta - this.firstDrawTime) / 10F));
 
             IRenderTypeBuffer.Impl irendertypebuffer$impl = Minecraft.getInstance().getRenderTypeBuffers().getBufferSource();
-            hatInfo.render(stack, irendertypebuffer$impl, 15728880, OverlayTexture.NO_OVERLAY, false);
+            hatInfo.render(stack, irendertypebuffer$impl, 0xf000f0, OverlayTexture.NO_OVERLAY, false);
             irendertypebuffer$impl.finish();
 
             stack.pop();

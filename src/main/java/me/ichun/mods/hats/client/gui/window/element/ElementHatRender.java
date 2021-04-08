@@ -368,7 +368,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
                 sb.append(accessoryInfo.getDisplayName()).append("\n");
                 if(!accessoryInfo.project.author.isEmpty())
                 {
-                    sb.append(I18n.format("hats.gui.tooltip.author", accessoryInfo.project.author)).append("\n"); //TODO update the hat authors (and hat packs)
+                    sb.append(I18n.format("hats.gui.tooltip.author", accessoryInfo.project.author)).append("\n");
                 }
                 sb.append(I18n.format("hats.gui.tooltip.rarity", accessoryInfo.getRarity().getColour().toString() + accessoryInfo.getRarity().toString())).append("\n");
                 if(hatLevel.count == 0 && hatLevel.hsbiser[2] == 1F)

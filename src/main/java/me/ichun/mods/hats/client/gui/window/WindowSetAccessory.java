@@ -17,9 +17,12 @@ import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementScrollBar;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTextField;
+import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTextWrapper;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SimpleSound;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.MathHelper;
 
@@ -208,6 +211,24 @@ public class WindowSetAccessory extends Window<WorkspaceHats>
                 hat.setToggled(isShowing);
                 hat.setSize(50, 70);
                 list.addElement(hat);
+            }
+
+            if(list.elements.isEmpty())
+            {
+                ElementTextWrapper text = new ElementTextWrapper(this)
+                {
+                    @Override
+                    public void render(MatrixStack stack, int mouseX, int mouseY, float partialTick)
+                    {
+                        stack.push();
+                        stack.translate(0F, 0F, 375F);
+                        super.render(stack, mouseX, mouseY, partialTick);
+                        stack.pop();
+                    }
+                };
+                text.setConstraint(Constraint.matchParent(text, this, 3));
+                text.setText(I18n.format("hats.gui.window.hat.noHat"));
+                elements.add(text);
             }
 
             updateConflicts();

@@ -269,6 +269,11 @@ public class HatHandler //Handles most of the server-related things.
         }
     }
 
+    public static void markSaveDirty()
+    {
+        saveData.markDirty();
+    }
+
     public static void addHat(ServerPlayerEntity player, HatsSavedData.HatPart hatToAdd)
     {
         HatInfo info = HatResourceHandler.HATS.get(hatToAdd.name);
@@ -350,7 +355,7 @@ public class HatHandler //Handles most of the server-related things.
 
             Hats.channel.sendTo(new PacketUpdateHats(inventoryHat.write(new CompoundNBT()), false), player);
 
-            saveData.markDirty();
+            markSaveDirty();
         }
     }
 
@@ -436,7 +441,7 @@ public class HatHandler //Handles most of the server-related things.
                 customisedHat.setCountOfAllTo(0);
                 playerHatData.hatParts.add(customisedHat);
             }
-            saveData.markDirty();
+            markSaveDirty();
         }
     }
 
@@ -604,7 +609,7 @@ public class HatHandler //Handles most of the server-related things.
 
                             part = partToReturn;
 
-                            saveData.markDirty();
+                            markSaveDirty();
                             break;
                         }
                     }
@@ -627,7 +632,7 @@ public class HatHandler //Handles most of the server-related things.
             {
                 Hats.channel.sendTo(new PacketUpdateHats(hatPart.write(new CompoundNBT()), false), player);
 
-                saveData.markDirty();
+                markSaveDirty();
                 break;
             }
         }
