@@ -1,0 +1,32 @@
+{
+  "parent": "hats:hats/change_mob_hat",
+  "display": {
+    "icon": {
+      "item": "minecraft:creeper_head"
+    },
+    "title": {
+      "translate": "hats.advancement.rogueHat.title"
+    },
+    "description": {
+      "translate": "hats.advancement.rogueHat.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 100
+  },
+  "criteria": {
+    "code_trigger": {
+      "trigger": "hats:rogue_hat",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "code_trigger"
+    ]
+  ]
+}

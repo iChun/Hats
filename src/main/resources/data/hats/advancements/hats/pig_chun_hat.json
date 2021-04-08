@@ -1,0 +1,33 @@
+{
+  "parent": "hats:hats/rogue_hat",
+  "display": {
+    "icon": {
+      "item": "minecraft:player_head",
+      "nbt": "{SkullOwner:{Id:[I;192219632,609763680,-1662965902,-1180411198]}}"
+    },
+    "title": {
+      "translate": "hats.advancement.pigChunHat.title"
+    },
+    "description": {
+      "translate": "hats.advancement.pigChunHat.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "rewards": {
+    "experience": 500
+  },
+  "criteria": {
+    "code_trigger": {
+      "trigger": "hats:pig_chun_hat",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "code_trigger"
+    ]
+  ]
+}

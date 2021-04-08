@@ -58,7 +58,7 @@ public class WorkspaceHats extends Workspace
 
     public ArrayList<HatsSavedData.HatPart> changedHats = new ArrayList<>();
 
-    public WorkspaceHats(Screen lastScreen, boolean fallback, @Nonnull LivingEntity hatEntity, @Nullable ItemStack hatLauncher) //TODO new hat tutorial.
+    public WorkspaceHats(Screen lastScreen, boolean fallback, @Nonnull LivingEntity hatEntity, @Nullable ItemStack hatLauncher)
     {
         super(lastScreen, new TranslationTextComponent("hats.gui.selection.title"), Hats.configClient.guiMinecraftStyle);
         windows.add(windowInput = new WindowInputReceiver(this));

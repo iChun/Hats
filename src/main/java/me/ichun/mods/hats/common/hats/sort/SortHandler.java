@@ -12,11 +12,13 @@ public class SortHandler
         put("filterContributor", FilterContributor.class);
         put("filterHas", FilterHas.class);
         put("filterHasAccessories", FilterHasAccessories.class);
+        put("filterNotFavourite", FilterNotFavourite.class);
         put("filterUndiscovered", FilterUndiscovered.class);
 
         put("sorterAlphabetical", SorterAlphabetical.class); //This is the only sorter that doesn't create a new category to sort.
         put("sorterCount", SorterCount.class);
         put("sorterDiscovered", SorterDiscovered.class);
+        put("sorterFavourite", SorterFavourite.class);
         put("sorterRarity", SorterRarity.class);
     }};
 

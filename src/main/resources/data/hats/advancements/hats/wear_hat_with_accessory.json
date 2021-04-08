@@ -1,0 +1,33 @@
+{
+  "parent": "hats:hats/wear_hat",
+  "display": {
+    "icon": {
+      "item": "hats:hat_launcher",
+      "nbt": "{Damage:15}"
+    },
+    "title": {
+      "translate": "hats.advancement.wearHatWithAccessory.title"
+    },
+    "description": {
+      "translate": "hats.advancement.wearHatWithAccessory.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 50
+  },
+  "criteria": {
+    "code_trigger": {
+      "trigger": "hats:wear_hat_with_accessory",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "code_trigger"
+    ]
+  ]
+}

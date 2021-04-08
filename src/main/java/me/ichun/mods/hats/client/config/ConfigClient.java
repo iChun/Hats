@@ -47,6 +47,7 @@ public class ConfigClient extends ConfigBase
 
     public List<String> filterSorterConfig = new ArrayList<String>(){{
         add("filterUndiscovered");
+        add("sorterFavourite");
         add("sorterRarity:inverse");
         add("sorterAlphabetical");
     }};

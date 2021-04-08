@@ -6,13 +6,13 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterHasAccessories extends HatSorter
+public class FilterNotFavourite extends HatSorter
 {
     @Override
     @Nonnull
     public String type()
     {
-        return "filterHasAccessories";
+        return "filterNotFavourite";
     }
 
     @Override
@@ -24,19 +24,19 @@ public class FilterHasAccessories extends HatSorter
     @Override
     public void sort(List hats)
     {
-        ArrayList<HatsSavedData.HatPart> hasAccessories = new ArrayList<>();
-        ArrayList<HatsSavedData.HatPart> noAccessories = new ArrayList<>();
+        ArrayList<HatsSavedData.HatPart> notFavourite = new ArrayList<>();
+        ArrayList<HatsSavedData.HatPart> favourite = new ArrayList<>();
 
         for(Object o : hats)
         {
             HatsSavedData.HatPart hat = (HatsSavedData.HatPart)o;
-            if(!hat.hasUnlockedAccessory())
+            if(hat.hasFavourite())
             {
-                noAccessories.add(hat);
+                favourite.add(hat);
             }
             else
             {
-                hasAccessories.add(hat);
+                notFavourite.add(hat);
             }
         }
 
@@ -44,11 +44,11 @@ public class FilterHasAccessories extends HatSorter
 
         if(isInverse)
         {
-            hats.addAll(noAccessories);
+            hats.addAll(notFavourite);
         }
         else
         {
-            hats.addAll(hasAccessories);
+            hats.addAll(favourite);
         }
     }
 }

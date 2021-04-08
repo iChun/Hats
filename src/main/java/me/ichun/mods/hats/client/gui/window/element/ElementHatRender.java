@@ -93,7 +93,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
     public void spawnOptionsButtons()
     {
-        if(Screen.hasControlDown() && !this.hatLevel.hatParts.isEmpty())
+        if(Screen.hasControlDown() && this.hatLevel.hasUnlockedAccessory())
         {
             WindowHatOptions.ViewHatOptions.openPersonalizer((WorkspaceHats)getWorkspace(), this);
         }
@@ -339,7 +339,7 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
 
                     stack.pop();
                 }
-                else if(!hatLevel.hatParts.isEmpty())
+                else if(hatLevel.hasUnlockedAccessory())
                 {
                     stack.push();
 

@@ -1,0 +1,35 @@
+{
+  "parent": "hats:hats/hats_unlocked_50",
+  "display": {
+    "icon": {
+      "item": "hats:hat_launcher",
+      "nbt": "{Damage:12}"
+    },
+    "title": {
+      "translate": "hats.advancement.variants50.title"
+    },
+    "description": {
+      "translate": "hats.advancement.variants50.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 500
+  },
+  "criteria": {
+    "variants": {
+      "trigger": "hats:variants",
+      "conditions": {
+        "count": 50
+      }
+    }
+  },
+  "requirements": [
+    [
+      "variants"
+    ]
+  ]
+}

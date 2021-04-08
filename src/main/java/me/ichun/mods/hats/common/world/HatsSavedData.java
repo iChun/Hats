@@ -429,6 +429,20 @@ public class HatsSavedData extends WorldSavedData
             return count;
         }
 
+        public boolean hasUnlockedAccessory()
+        {
+            boolean flag = false;
+            for(HatPart hatPart : hatParts)
+            {
+                if(!(hatPart.count == 0 && hatPart.hsbiser[2] == 1F) || hatPart.hasUnlockedAccessory())
+                {
+                    flag = true;
+                    break;
+                }
+            }
+            return flag;
+        }
+
         public void eventDay(int age, float partialTick)
         {
             if(colouriser[0] == 0F  && colouriser[1] == 0F && colouriser[2] == 0F)

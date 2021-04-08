@@ -1,0 +1,35 @@
+{
+  "parent": "hats:hats/hat_count_25",
+  "display": {
+    "icon": {
+      "item": "hats:hat_launcher",
+      "nbt": "{Damage:11}"
+    },
+    "title": {
+      "translate": "hats.advancement.hatCount50.title"
+    },
+    "description": {
+      "translate": "hats.advancement.hatCount50.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 500
+  },
+  "criteria": {
+    "hat_count": {
+      "trigger": "hats:hat_count",
+      "conditions": {
+        "count": 50
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hat_count"
+    ]
+  ]
+}

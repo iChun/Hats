@@ -85,7 +85,7 @@ public class EventHandlerServer
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event)
     {
-        Hats.channel.sendTo(new PacketPing(), (ServerPlayerEntity)event.getPlayer()); //TODO disable this and the client will think the server doesn't have the mod.
+        Hats.channel.sendTo(new PacketPing(), (ServerPlayerEntity)event.getPlayer());
         Hats.channel.sendTo(new PacketUpdateHats(HatHandler.getPlayerHatsNBT(event.getPlayer()), true), (ServerPlayerEntity)event.getPlayer());
     }
 

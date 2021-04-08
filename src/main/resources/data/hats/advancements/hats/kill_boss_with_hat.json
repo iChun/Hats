@@ -1,0 +1,34 @@
+{
+  "parent": "hats:hats/hats_unlocked_10",
+  "display": {
+    "icon": {
+      "item": "minecraft:dragon_head"
+    },
+    "title": {
+      "translate": "hats.advancement.killBossWithHat.title"
+    },
+    "description": {
+      "translate": "hats.advancement.killBossWithHat.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "recipes": [
+      "hats:hat_launcher"
+    ]
+  },
+  "criteria": {
+    "code_trigger": {
+      "trigger": "hats:kill_boss_with_hat",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "code_trigger"
+    ]
+  ]
+}

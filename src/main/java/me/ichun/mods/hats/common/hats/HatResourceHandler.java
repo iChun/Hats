@@ -231,7 +231,7 @@ public class HatResourceHandler
         return new HatInfo(name, project);
     }
 
-    public static void accessoriseHatInfos() //TODO sticky piston hat?
+    public static void accessoriseHatInfos()
     {
         HashMap<String, ArrayList<HatInfo>> accessoriesByHat = new HashMap<>();
         for(HatInfo hatAccessory : HAT_ACCESSORIES)

@@ -1,0 +1,35 @@
+{
+  "parent": "hats:hats/variants_75",
+  "display": {
+    "icon": {
+      "item": "hats:hat_launcher",
+      "nbt": "{Damage:14}"
+    },
+    "title": {
+      "translate": "hats.advancement.variants100.title"
+    },
+    "description": {
+      "translate": "hats.advancement.variants100.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 5000
+  },
+  "criteria": {
+    "variants": {
+      "trigger": "hats:variants",
+      "conditions": {
+        "count": 100
+      }
+    }
+  },
+  "requirements": [
+    [
+      "variants"
+    ]
+  ]
+}

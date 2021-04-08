@@ -1,0 +1,33 @@
+{
+  "parent": "hats:hats/acc_unlocked_1",
+  "display": {
+    "icon": {
+      "item": "hats:hat_launcher",
+      "nbt": "{Damage:17}"
+    },
+    "title": {
+      "translate": "hats.advancement.hatWithThreeOrMoreAccessories.title"
+    },
+    "description": {
+      "translate": "hats.advancement.hatWithThreeOrMoreAccessories.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "rewards": {
+    "experience": 50
+  },
+  "criteria": {
+    "code_trigger": {
+      "trigger": "hats:hat_with_three_or_more_accessories",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "code_trigger"
+    ]
+  ]
+}

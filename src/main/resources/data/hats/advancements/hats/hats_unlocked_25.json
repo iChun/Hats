@@ -1,0 +1,32 @@
+{
+  "parent": "hats:hats/hats_unlocked_10",
+  "display": {
+    "icon": {
+      "item": "hats:hat_launcher",
+      "nbt": "{Damage:3}"
+    },
+    "title": {
+      "translate": "hats.advancement.hatsUnlocked25.title"
+    },
+    "description": {
+      "translate": "hats.advancement.hatsUnlocked25.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "hats_unlocked": {
+      "trigger": "hats:hats_unlocked",
+      "conditions": {
+        "count": 25
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hats_unlocked"
+    ]
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "parent": "hats:hats/craft_hat_launcher",
+  "display": {
+    "icon": {
+      "item": "minecraft:zombie_head"
+    },
+    "title": {
+      "translate": "hats.advancement.changeMobHat.title"
+    },
+    "description": {
+      "translate": "hats.advancement.changeMobHat.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "code_trigger": {
+      "trigger": "hats:change_mob_hat",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "code_trigger"
+    ]
+  ]
+}

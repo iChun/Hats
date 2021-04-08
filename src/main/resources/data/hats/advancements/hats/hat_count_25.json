@@ -1,0 +1,32 @@
+{
+  "parent": "hats:hats/hat_count_10",
+  "display": {
+    "icon": {
+      "item": "hats:hat_launcher",
+      "nbt": "{Damage:10}"
+    },
+    "title": {
+      "translate": "hats.advancement.hatCount25.title"
+    },
+    "description": {
+      "translate": "hats.advancement.hatCount25.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "criteria": {
+    "hat_count": {
+      "trigger": "hats:hat_count",
+      "conditions": {
+        "count": 25
+      }
+    }
+  },
+  "requirements": [
+    [
+      "hat_count"
+    ]
+  ]
+}

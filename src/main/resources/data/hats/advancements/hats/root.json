@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "item": "hats:hat_launcher",
+      "nbt": "{Damage:1}"
+    },
+    "title": {
+      "translate": "hats.advancement.root.title"
+    },
+    "description": {
+      "translate": "hats.advancement.root.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": false,
+    "background": "minecraft:textures/block/basalt_side.png"
+  },
+  "criteria": {
+    "killed_something": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {}
+    }
+  },
+  "requirements": [
+    [
+      "killed_something"
+    ]
+  ]
+}

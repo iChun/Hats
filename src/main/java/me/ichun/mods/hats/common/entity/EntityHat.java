@@ -11,6 +11,7 @@ import me.ichun.mods.hats.common.packet.PacketRehatify;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import net.minecraft.entity.*;
+import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.entity.projectile.ProjectileHelper;
@@ -227,6 +228,11 @@ public class EntityHat extends Entity
                 if(shooter instanceof ServerPlayerEntity)
                 {
                     Advancements.CriteriaTriggers.CHANGE_MOB_HAT.trigger((ServerPlayerEntity)shooter);
+
+                    if(collidedEnt instanceof PigEntity && "iChun".equals(collidedEnt.getName().getUnformattedComponentText()))
+                    {
+                        Advancements.CriteriaTriggers.PIG_CHUN_HAT.trigger((ServerPlayerEntity)shooter);
+                    }
                 }
 
                 LivingEntity collidedEntFinal = collidedEnt;

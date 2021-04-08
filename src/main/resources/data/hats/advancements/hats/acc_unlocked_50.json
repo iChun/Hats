@@ -1,0 +1,35 @@
+{
+  "parent": "hats:hats/acc_unlocked_25",
+  "display": {
+    "icon": {
+      "item": "hats:hat_launcher",
+      "nbt": "{Damage:8}"
+    },
+    "title": {
+      "translate": "hats.advancement.accUnlocked50.title"
+    },
+    "description": {
+      "translate": "hats.advancement.accUnlocked50.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 500
+  },
+  "criteria": {
+    "acc_unlocked": {
+      "trigger": "hats:acc_unlocked",
+      "conditions": {
+        "count": 50
+      }
+    }
+  },
+  "requirements": [
+    [
+      "acc_unlocked"
+    ]
+  ]
+}

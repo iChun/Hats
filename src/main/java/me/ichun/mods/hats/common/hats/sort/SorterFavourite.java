@@ -6,49 +6,46 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterHasAccessories extends HatSorter
+public class SorterFavourite extends HatSorter
 {
     @Override
     @Nonnull
     public String type()
     {
-        return "filterHasAccessories";
-    }
-
-    @Override
-    public boolean isFilter()
-    {
-        return true;
+        return "sorterFavourite";
     }
 
     @Override
     public void sort(List hats)
     {
-        ArrayList<HatsSavedData.HatPart> hasAccessories = new ArrayList<>();
-        ArrayList<HatsSavedData.HatPart> noAccessories = new ArrayList<>();
+        ArrayList<HatsSavedData.HatPart> favourite = new ArrayList<>();
+        ArrayList<HatsSavedData.HatPart> notFavourite = new ArrayList<>();
 
         for(Object o : hats)
         {
             HatsSavedData.HatPart hat = (HatsSavedData.HatPart)o;
-            if(!hat.hasUnlockedAccessory())
+            if(hat.hasFavourite())
             {
-                noAccessories.add(hat);
+                favourite.add(hat);
             }
             else
             {
-                hasAccessories.add(hat);
+                notFavourite.add(hat);
             }
         }
 
         hats.clear();
 
+        //sorter, not a filter, add the entire array list.
         if(isInverse)
         {
-            hats.addAll(noAccessories);
+            hats.add(notFavourite);
+            hats.add(favourite);
         }
         else
         {
-            hats.addAll(hasAccessories);
+            hats.add(favourite);
+            hats.add(notFavourite);
         }
     }
 }

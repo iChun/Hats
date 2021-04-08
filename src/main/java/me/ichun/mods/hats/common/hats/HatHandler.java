@@ -10,13 +10,17 @@ import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.item.DualHandedItem;
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementProgress;
+import net.minecraft.client.entity.player.ClientPlayerEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.thread.EffectiveSide;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.network.PacketDistributor;
 
 import javax.annotation.Nonnull;
@@ -237,6 +241,8 @@ public class HatHandler //Handles most of the server-related things.
         if(info != null) //it's a valid hat
         {
             //hide all the children but show itself
+            HatsSavedData.HatPart mobHat = hatToAdd.createCopy();
+
             hatToAdd.hideAll();
             hatToAdd.isShowing = true;
 
@@ -304,7 +310,7 @@ public class HatHandler //Handles most of the server-related things.
 
                 if(Hats.configServer.sendNewHatToastPrompt)
                 {
-                    Hats.channel.sendTo(new PacketNewHatPart(!foundBase, hatToAdd, names), player);
+                    Hats.channel.sendTo(new PacketNewHatPart(!foundBase, mobHat, names), player);
                 }
             }
 
@@ -503,7 +509,9 @@ public class HatHandler //Handles most of the server-related things.
                     {
                         if(hatInfo.contributorUUID != null && hatInfo.contributorUUID.equals(player.getGameProfile().getId())) //AMAGA WE FOUND A CONTRIBUTOR
                         {
-                            playerHatData.hatParts.add(new HatsSavedData.HatPart(hatInfo.name));//this already sets the count to 1.
+                            HatsSavedData.HatPart part = new HatsSavedData.HatPart(hatInfo.name);
+                            part.isShowing = true;
+                            playerHatData.hatParts.add(part);//this already sets the count to 1.
                         }
                     }
                 }
@@ -517,9 +525,48 @@ public class HatHandler //Handles most of the server-related things.
 
     public static boolean useInventory(@Nonnull PlayerEntity player)
     {
-        return !(player.isCreative() && !Hats.configServer.enableCreativeModeHatHunting) && (EffectiveSide.get().isServer() || Hats.eventHandlerClient.serverHasMod);
+        return !(player.isCreative() && !Hats.configServer.enableCreativeModeHatHunting) && (!player.world.isRemote || Hats.eventHandlerClient.serverHasMod) && !hasCompletedAllVariants(player);
     }
 
+    public static boolean hasCompletedAllVariants(@Nonnull PlayerEntity player) //TODO test the 100% reward & the recipe
+    {
+        if(!player.world.isRemote)
+        {
+            ServerPlayerEntity serverPlayer = ((ServerPlayerEntity)player);
+            Advancement advancement = serverPlayer.getServer().getAdvancementManager().getAdvancement(Advancements.ALL_VARIANTS);
+            if(advancement != null)
+            {
+                return serverPlayer.getAdvancements().getProgress(advancement).isDone();
+            }
+            return false;
+        }
+        else
+        {
+            return hasCompletedAllVariantsClient(player);
+        }
+    }
+
+    @OnlyIn(Dist.CLIENT)
+    public static boolean hasCompletedAllVariantsClient(@Nonnull PlayerEntity player)
+    {
+        if(player instanceof ClientPlayerEntity)
+        {
+            ClientPlayerEntity clientPlayer = (ClientPlayerEntity)player;
+            if(clientPlayer.connection != null)
+            {
+                Advancement advancement = clientPlayer.connection.getAdvancementManager().getAdvancementList().getAdvancement(Advancements.ALL_VARIANTS);
+                if(advancement != null)
+                {
+                    AdvancementProgress progress = clientPlayer.connection.getAdvancementManager().advancementToProgress.get(advancement);
+                    if(progress != null && progress.isDone())
+                    {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
 
     // ItemStack based functions
 

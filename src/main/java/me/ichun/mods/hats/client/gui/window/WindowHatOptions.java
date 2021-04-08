@@ -121,7 +121,7 @@ public class WindowHatOptions extends Window<WorkspaceHats>
             buttons.add(btnStack);
             btnStackLast = btnStack;
 
-            if(!parent.parentElement.hatLevel.hatParts.isEmpty())
+            if(parent.parentElement.hatLevel.hasUnlockedAccessory())
             {
                 //ACCESSORISE
                 btnStack = new ElementButtonTextured<>(this, TEX_PERSONALISE, btn -> {
