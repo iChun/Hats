@@ -40,6 +40,8 @@ public class ConfigClient extends ConfigBase
 
     public boolean forceGuiFallback = false;
 
+    public boolean disableHatNameRenderInHatSelector = false;
+
     public boolean invisibleEntityInHatSelector = false;
 
     @Prop(min = 1)

@@ -3,7 +3,7 @@
   "display": {
     "icon": {
       "item": "minecraft:player_head",
-      "nbt": "{SkullOwner:{Id:[I;192219632,609763680,-1662965902,-1180411198]}}"
+      "nbt": "{SkullOwner:{Id:[I;192219632,609763680,-1662965902,-1180411198],Properties:{textures:[{Value:\"ewogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTVmM2M3MGJiNmMxNGU0MjM5Y2IxMzA5YWNjMDUzZTBiOGE3YjFkYTNlMzhlN2RhMTVlNzVkNjE3YWY5OTZmNSIKICAgIH0KICB9Cn0=\"}]}}}"
     },
     "title": {
       "translate": "hats.advancement.pigChunHat.title"

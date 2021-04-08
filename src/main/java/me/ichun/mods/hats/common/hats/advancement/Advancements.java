@@ -10,6 +10,7 @@ import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.advancement.criterion.CodeDefinedTrigger;
 import me.ichun.mods.ichunutil.common.advancement.criterion.ValueAtOrAboveTrigger;
 import me.ichun.mods.ichunutil.common.data.AdvancementGen;
+import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.FrameType;
@@ -22,6 +23,8 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.ListNBT;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -115,6 +118,13 @@ public class Advancements implements Consumer<Consumer<Advancement>>
         ItemStack is = new ItemStack(Items.PLAYER_HEAD);
         CompoundNBT tag = new CompoundNBT();
         tag.putUniqueId("Id", UUIDTypeAdapter.fromString("0b7509f0-2458-4160-9ce1-2772b9a45ac2")); //iChun's UUID (how meta eh?)
+        CompoundNBT props = new CompoundNBT();
+        ListNBT tex = new ListNBT();
+        CompoundNBT actualTex = new CompoundNBT();
+        actualTex.putString("Value", "ewogICJ0ZXh0dXJlcyIgOiB7CiAgICAiU0tJTiIgOiB7CiAgICAgICJ1cmwiIDogImh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZTVmM2M3MGJiNmMxNGU0MjM5Y2IxMzA5YWNjMDUzZTBiOGE3YjFkYTNlMzhlN2RhMTVlNzVkNjE3YWY5OTZmNSIKICAgIH0KICB9Cn0=");
+        tex.add(actualTex);
+        props.put("textures", tex);
+        tag.put("Properties", props);
         is.getOrCreateTag().put("SkullOwner", tag);
         return is;
     }

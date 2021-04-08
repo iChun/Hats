@@ -254,7 +254,10 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
             RenderHelper.drawColour(stack, 0, 0, 0, 120, getLeft() + 1, getTop() + 1, width - 2, height - 2, 0); //greyout
         }
 
-        RenderHelper.drawColour(stack, 0, 0, 0, 150, getRight() - 10, getTop() + 1, 9, height - 2, 0);
+        if(!Hats.configClient.disableHatNameRenderInHatSelector)
+        {
+            RenderHelper.drawColour(stack, 0, 0, 0, 150, getRight() - 10, getTop() + 1, 9, height - 2, 0);
+        }
 
         HatInfo info = HatResourceHandler.getInfo(partForRender);
         String hatName = info != null ? info.getDisplayNameFor(hatLevel.name) : "";
@@ -291,24 +294,28 @@ public class ElementHatRender<T extends ElementHatRender>  extends ElementClicka
         }
 
         float scale = 0.5F;
-        String s = reString(hatName, (int)((topDist) / scale));
 
-        stack.push();
-        stack.translate(getRight() - 5, getTop() + (height * scale), 0F);
-        stack.rotate(Vector3f.ZP.rotationDegrees(-90F));
-        stack.translate(-(height * scale) + 3, -(getFontRenderer().FONT_HEIGHT) * scale + 2, 375F);
-        stack.scale(scale, scale, scale);
+        if(!Hats.configClient.disableHatNameRenderInHatSelector)
+        {
+            String s = reString(hatName, (int)((topDist) / scale));
 
-        //draw the text
-        getFontRenderer().drawString(stack, s, 0, 0, renderMinecraftStyle() > 0 ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim));
+            stack.push();
+            stack.translate(getRight() - 5, getTop() + (height * scale), 0F);
+            stack.rotate(Vector3f.ZP.rotationDegrees(-90F));
+            stack.translate(-(height * scale) + 3, -(getFontRenderer().FONT_HEIGHT) * scale + 2, 375F);
+            stack.scale(scale, scale, scale);
 
-        stack.pop();
+            //draw the text
+            getFontRenderer().drawString(stack, s, 0, 0, renderMinecraftStyle() > 0 ? getMinecraftFontColour() : Theme.getAsHex(toggleState ? getTheme().font : getTheme().fontDim));
+
+            stack.pop();
+        }
 
         if(!isViewAllHats)
         {
             if(((WorkspaceHats)getWorkspace()).usePlayerInventory())
             {
-                s = "x" + WorkspaceHats.FORMATTER.format(hatLevel.count); // we count from the level
+                String s = "x" + WorkspaceHats.FORMATTER.format(hatLevel.count); // we count from the level
 
                 stack.push();
                 stack.translate(getLeft() + 3, getBottom() - (getFontRenderer().FONT_HEIGHT) * scale - 1, 375F);

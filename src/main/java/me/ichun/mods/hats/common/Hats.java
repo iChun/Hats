@@ -96,8 +96,6 @@ public class Hats
 
         MinecraftForge.EVENT_BUS.register(eventHandlerServer = new EventHandlerServer());
 
-        //TODO check the iChun head in obf env
-        //TODO quarris' UI bug
         channel = new PacketChannel(new ResourceLocation(MOD_ID, "channel"), PROTOCOL, true, false,
                 PacketPing.class,
                 PacketRequestEntityHatDetails.class,

@@ -183,7 +183,7 @@ public class CommandHats
         {
             for(HatsSavedData.HatPart part : playerInventory)
             {
-                if(part.remove(hatPart))
+                if(part.remove(new HatsSavedData.HatPart(hatInfos.get(hatInfos.size() - 1).name)))
                 {
                     flag = true;
                     break;

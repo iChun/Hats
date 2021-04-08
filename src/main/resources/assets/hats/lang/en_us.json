@@ -21,7 +21,9 @@
   "config.hats.prop.forceRenderToasts.name": "Force Render Toasts",
   "config.hats.prop.forceRenderToasts.desc": "The Fancy Hat Selector GUI hides the game GUI. This disables toast rendering. Force the toast render after our UI renders?",
   "config.hats.prop.forceGuiFallback.name": "Force GUI Fallback",
-  "config.hats.prop.forceGuiFallback.desc": "Don't like the camera spinning out when you choose a hat? Turn this on to force the in-screen entity render, always.",
+  "config.hats.prop.forceGuiFallback.desc": "Don't like the camera spinning out when you choose a hat? Turn this on to force the in-screen entity render, always. Holding Control/Command when opening the GUI also forces this.",
+  "config.hats.prop.disableHatNameRenderInHatSelector.name": "Disable Hat Name Render in Hat Selector",
+  "config.hats.prop.disableHatNameRenderInHatSelector.desc": "Lagging? This might help give you back some frames.",
   "config.hats.prop.invisibleEntityInHatSelector.name": "Invisible Player in Hat Selector",
   "config.hats.prop.invisibleEntityInHatSelector.desc": "Lagging? This might help give you back some frames.",
   "config.hats.prop.hatLauncherRandomHatSpeed.name": "Hat Launcher - Random Hat Cycle Speed",
@@ -68,7 +70,7 @@
   "commands.hats.addCount.success": "Successfully added count of %1$s to %2$s.",
   "commands.hats.remove.success": "Successfully removed %1$s from %2$s.",
   "commands.hats.remove.fail": "Failed to remove %1$s from %2$s. Not found.",
-  "commands.hats.remove.success": "Successfully removed all of %s's Hats. I hope you're happy. You monster.",
+  "commands.hats.clear.success": "Successfully removed all of %s's Hats. I hope you're happy. You monster.",
 
   "hats.key.hatsMenu": "Hats Menu",
 

@@ -243,10 +243,10 @@ public class EventHandlerClient
                 float pitchFromPlayer = 0F;
                 Vector3d revLookVec = EntityHelper.getVectorForRotation(pitchFromPlayer, yawFromPlayer);
                 double dist = 1.4D;
-                if(!mc.gameSettings.getPointOfView().func_243192_a()) //func_243192_a == isFirstPerson
-                {
-                    dist -= (4.0D); //minus the third person dist. 4.0D from ActiveRenderInfo
-                }
+//                if(!mc.gameSettings.getPointOfView().func_243192_a()) //func_243192_a == isFirstPerson
+//                {
+//                    dist -= (4.0D); //minus the third person dist. 4.0D from ActiveRenderInfo
+//                }
 
                 Vector3d upHeadVec = EntityHelper.getVectorForRotation(mc.renderViewEntity.rotationPitch - 90F, mc.renderViewEntity.rotationYaw);
                 double upOff = 0.25D;
