@@ -165,6 +165,8 @@ public class WindowHatSorter extends Window<WorkspaceHats>
                     }
                 }
 
+                btn.toggleState = true;
+
                 item.getObject().isInverse = false;
             });
             btnStack.setSize(14, 14).setId("btnDisabled");
@@ -182,6 +184,8 @@ public class WindowHatSorter extends Window<WorkspaceHats>
                     }
                 }
 
+                btn.toggleState = true;
+
                 item.getObject().isInverse = true;
             });
             btnStack.setSize(14, 14).setId("btnInverse");
@@ -198,6 +202,8 @@ public class WindowHatSorter extends Window<WorkspaceHats>
                         ((ElementToggleTextured<?>)element).toggleState = false;
                     }
                 }
+
+                btn.toggleState = true;
 
                 item.getObject().isInverse = false;
             });

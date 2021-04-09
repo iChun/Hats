@@ -36,6 +36,7 @@ public class HatInfo
     public final @Nonnull Project project;
     public final ArrayList<HatInfo> accessories = new ArrayList<>();
     public final ArrayList<String> hideParent = new ArrayList<>();
+    public final ArrayList<Project.Part> allParts = new ArrayList<>();
 
     private EnumRarity rarity; //Config synching should set this for the client
     private int worth = -1;
@@ -69,6 +70,7 @@ public class HatInfo
         this.name = name;
         this.project = project;
         this.project.name = name;
+        this.allParts.addAll(this.project.getAllParts()); //yay optimising?
 
         if(FMLEnvironment.dist.isClient())
         {
@@ -154,7 +156,7 @@ public class HatInfo
     {
         if(!hidden)
         {
-            for(Project.Part part : project.getAllParts())
+            for(Project.Part part : allParts)
             {
                 part.showModel = true;
             }
@@ -165,7 +167,7 @@ public class HatInfo
                 {
                     for(String s : accessory.hideParent)
                     {
-                        for(Project.Part part : project.getAllParts())
+                        for(Project.Part part : allParts)
                         {
                             if(part.name.equals(s))
                             {
@@ -585,7 +587,7 @@ public class HatInfo
         float y2 = -10000;
 
 
-        for(Project.Part part : project.getAllParts())
+        for(Project.Part part : allParts)
         {
             for(Project.Part.Box box : part.boxes)
             {

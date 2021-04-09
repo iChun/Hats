@@ -111,20 +111,20 @@ public class WindowHalfGreyout extends WindowGreyout<WorkspaceHats>
         if(!parent.getEventListeners().contains(attachedWindow))
         {
             parent.removeWindow(this);
-            if(closeConsumer != null)
-            {
-                closeConsumer.accept(this);
-            }
         }
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button)
     {
-        if(mouseX > parent.windowHatsList.getLeft() && isMouseOver(mouseX, mouseY)) //only the second half of the screen
+        if(!disableClickOut && mouseX > parent.windowHatsList.getLeft() && isMouseOver(mouseX, mouseY)) //only the second half of the screen
         {
             parent.removeWindow(attachedWindow);
             parent.removeWindow(this);
+            if(closeConsumer != null)
+            {
+                closeConsumer.accept(this);
+            }
             return true;
         }
         return false;

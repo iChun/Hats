@@ -135,7 +135,7 @@ public class WindowTutorial extends Window<WorkspaceHats>
 
             ElementTextWrapper text1 = new ElementTextWrapper(this);
             text1.setText(text);
-            text1.constraints().top(this, Constraint.Property.Type.TOP, padding).bottom(this, Constraint.Property.Type.BOTTOM, 30).left(this, Constraint.Property.Type.LEFT, padding).right(this, Constraint.Property.Type.RIGHT, padding);
+            text1.constraints().top(this, Constraint.Property.Type.TOP, padding).bottom(this, Constraint.Property.Type.BOTTOM, 30).left(this, Constraint.Property.Type.LEFT, 10).right(this, Constraint.Property.Type.RIGHT, 10);
             elements.add(text1);
 
             ElementButton<?> button = new ElementButton<>(this, I18n.format("gui.ok"), elementClickable ->
