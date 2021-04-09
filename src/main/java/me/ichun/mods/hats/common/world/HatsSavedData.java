@@ -519,6 +519,7 @@ public class HatsSavedData extends WorldSavedData
 
             int count = tag.getInt("partCount");
 
+            hatParts.clear();
             for(int i = 0; i < count; i++)
             {
                 CompoundNBT partTag = tag.getCompound("part_" + i);
