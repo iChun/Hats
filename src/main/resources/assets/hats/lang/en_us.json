@@ -71,6 +71,8 @@
   "commands.hats.remove.success": "Successfully removed %1$s from %2$s.",
   "commands.hats.remove.fail": "Failed to remove %1$s from %2$s. Not found.",
   "commands.hats.clear.success": "Successfully removed all of %s's Hats. I hope you're happy. You monster.",
+  "commands.hats.reextract.success": "Successfully reextracted and reloaded %s files.",
+  "commands.hats.reextract.failed": "Failed to reextract and reload all files. Check server console for more information.",
 
   "hats.key.hatsMenu": "Hats Menu",
 

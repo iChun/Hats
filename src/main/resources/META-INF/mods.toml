@@ -13,9 +13,9 @@ issueTrackerURL="https://github.com/iChun/Hats/issues"
     You get a hat, and you get a hat, everybody gets a hat!
     '''
 
-[[dependencies.googlyeyes]]
+[[dependencies.hats]]
     modId="ichunutil"
     mandatory=true
-    versionRange="[10.1.0,11)"
+    versionRange="[10.2.0,11)"
     ordering="NONE"
     side="BOTH"

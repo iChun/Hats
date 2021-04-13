@@ -12,6 +12,7 @@ import me.ichun.mods.hats.common.packet.PacketEntityHatDetails;
 import me.ichun.mods.hats.common.packet.PacketRehatify;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
+import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
@@ -77,6 +78,47 @@ public class CommandHats
                         .then(Commands.literal("clear")
                                 .then(Commands.argument("player", EntityArgument.player())
                                         .executes(context -> clear(context.getSource(), EntityArgument.getPlayer(context, "player"))))
+                        )
+                        .then(Commands.literal("reextract")
+                                .then(Commands.literal("heads")
+                                        .executes(context -> {
+                                            try
+                                            {
+                                                int i = HeadHandler.extractFiles();
+                                                HeadHandler.loadHeadInfos();
+
+                                                context.getSource().sendFeedback(new TranslationTextComponent("commands.hats.reextract.success", i), true);
+                                            }
+                                            catch(Throwable e)
+                                            {
+                                                Hats.LOGGER.error("Error reextracting heads.");
+                                                context.getSource().sendFeedback(new TranslationTextComponent("commands.hats.reextract.failed"), true);
+                                                e.printStackTrace();
+                                            }
+
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
+                                .then(Commands.literal("hats")
+                                        .executes(context -> {
+                                            try
+                                            {
+                                                int i = HatResourceHandler.extractHats();
+                                                HatResourceHandler.loadAllHats();
+                                                HatHandler.allocateHatPools();
+
+                                                context.getSource().sendFeedback(new TranslationTextComponent("commands.hats.reextract.success", i), true);
+                                            }
+                                            catch(Throwable e)
+                                            {
+                                                Hats.LOGGER.error("Error reextracting hats.");
+                                                context.getSource().sendFeedback(new TranslationTextComponent("commands.hats.reextract.failed"), true);
+                                                e.printStackTrace();
+                                            }
+
+                                            return Command.SINGLE_SUCCESS;
+                                        })
+                                )
                         )
                 //            .then(Commands.literal("setToken") //TODO this during the trading update
                 //                .then(Commands.argument("player", EntityArgument.player()))

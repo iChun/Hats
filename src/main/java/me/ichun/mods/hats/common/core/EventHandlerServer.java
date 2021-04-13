@@ -7,8 +7,8 @@ import me.ichun.mods.hats.common.hats.advancement.Advancements;
 import me.ichun.mods.hats.common.packet.PacketPing;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
+import me.ichun.mods.ichunutil.api.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
-import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -44,6 +44,11 @@ public class EventHandlerServer
         if(!event.getWorld().isRemote && event.getEntity() instanceof LivingEntity && !(event.getEntity() instanceof PlayerEntity)) //don't allocate player hats.
         {
             LivingEntity living = (LivingEntity)event.getEntity();
+            if(HatHandler.hasBeenRandomlyAllocated(living))
+            {
+                HatHandler.checkValidity(living);
+            }
+
             if(!HatHandler.hasBeenRandomlyAllocated(living))
             {
                 if(HatHandler.canWearHat(living) && living.getRNG().nextDouble() < HatHandler.getHatChance(living))

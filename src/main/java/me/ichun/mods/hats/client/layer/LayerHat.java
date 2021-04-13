@@ -6,8 +6,8 @@ import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
+import me.ichun.mods.ichunutil.api.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
-import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.iChunUtil;
 import me.ichun.mods.ichunutil.common.util.EventCalendar;
 import net.minecraft.client.Minecraft;
@@ -71,7 +71,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                     Hats.eventHandlerClient.requestHatDetails(living);
                     HatHandler.assignNoHat(living);
                 }
-                else if(Hats.eventHandlerClient.connectionAge > 100) //assign a random hat, client-only after all. 5 second connection cooldown
+                else if(Minecraft.getInstance().player.ticksExisted > 100) //assign a random hat, client-only after all. 5 second connection cooldown
                 {
                     HatHandler.assignHatClient(living);
                 }

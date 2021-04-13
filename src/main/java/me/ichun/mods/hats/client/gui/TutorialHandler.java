@@ -2,7 +2,6 @@ package me.ichun.mods.hats.client.gui;
 
 import me.ichun.mods.hats.client.gui.window.WindowTutorial;
 import me.ichun.mods.hats.common.Hats;
-import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.packet.PacketGiveHat;
 import me.ichun.mods.ichunutil.client.gui.bns.window.Window;
 import me.ichun.mods.ichunutil.client.gui.bns.window.WindowGreyout;

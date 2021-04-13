@@ -170,7 +170,7 @@ public class EntityHat extends Entity
         if(!world.isRemote)
         {
             //Check to see if the origin entity is still colliding with us
-            List<Entity> list = world.getEntitiesInAABBexcluding(this, getBoundingBox(), null);
+            List<Entity> list = world.getEntitiesInAABBexcluding(this, getBoundingBox(), e -> e instanceof LivingEntity && !e.isSpectator());
             if(!leftEntity)
             {
                 leftEntity = true;

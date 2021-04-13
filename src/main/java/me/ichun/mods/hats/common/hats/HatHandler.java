@@ -8,9 +8,9 @@ import me.ichun.mods.hats.common.packet.PacketEntityHatDetails;
 import me.ichun.mods.hats.common.packet.PacketNewHatPart;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
+import me.ichun.mods.ichunutil.api.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.entity.util.EntityHelper;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
-import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.item.DualHandedItem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.LivingEntity;
@@ -143,6 +143,15 @@ public class HatHandler //Handles most of the server-related things.
     public static HatsSavedData.HatPart getHatPart(LivingEntity ent)
     {
         return ent.getCapability(HatsSavedData.HatPart.CAPABILITY_INSTANCE).orElseThrow(() -> new IllegalArgumentException("Entity " + ent.getName().getUnformattedComponentText() + " has no hat capabilities"));
+    }
+
+    public static void checkValidity(LivingEntity ent)
+    {
+        HatsSavedData.HatPart part = getHatPart(ent);
+        if(!HatResourceHandler.HATS.containsKey(part.name)) // we don't have the hat on the server somehow.
+        {
+            part.read((new HatsSavedData.HatPart()).write(new CompoundNBT()));
+        }
     }
 
     public static boolean hasBeenRandomlyAllocated(LivingEntity ent)

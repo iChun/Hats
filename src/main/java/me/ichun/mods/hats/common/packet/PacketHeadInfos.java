@@ -2,8 +2,8 @@ package me.ichun.mods.hats.common.packet;
 
 import com.google.gson.JsonSyntaxException;
 import me.ichun.mods.hats.common.Hats;
+import me.ichun.mods.ichunutil.api.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
-import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.network.AbstractPacket;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.network.NetworkEvent;

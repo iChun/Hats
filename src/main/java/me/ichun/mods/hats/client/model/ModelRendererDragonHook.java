@@ -6,8 +6,8 @@ import me.ichun.mods.hats.client.layer.LayerHat;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
+import me.ichun.mods.ichunutil.api.common.head.HeadInfo;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
-import me.ichun.mods.ichunutil.common.head.HeadInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.RenderType;
@@ -94,7 +94,7 @@ public class ModelRendererDragonHook extends ModelRenderer
                 Hats.eventHandlerClient.requestHatDetails(living);
                 HatHandler.assignNoHat(living);
             }
-            else if(Hats.eventHandlerClient.connectionAge > 100) //assign a random hat, client-only after all. 5 second connection cooldown
+            else if(Minecraft.getInstance().player.ticksExisted > 100) //assign a random hat, client-only after all. 5 second connection cooldown
             {
                 HatHandler.assignHatClient(living);
             }

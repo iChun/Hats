@@ -50,42 +50,7 @@ public class HatResourceHandler
                 File extractedMarker = new File(hatsDir.toFile(), "files.extracted");
                 if(!extractedMarker.exists()) //presume we haven't extracted anything yet
                 {
-                    InputStream in = Hats.class.getResourceAsStream("/hats.zip");
-                    if(in != null)
-                    {
-                        ZipInputStream zipStream = new ZipInputStream(in);
-                        ZipEntry entry = null;
-
-                        while((entry = zipStream.getNextEntry()) != null)
-                        {
-                            File file = new File(hatsDir.toFile(), entry.getName());
-                            if(file.exists() && file.length() > 3L)
-                            {
-                                continue;
-                            }
-
-                            if(entry.isDirectory())
-                            {
-                                if(!file.exists())
-                                {
-                                    file.mkdirs();
-                                }
-                            }
-                            else
-                            {
-                                FileOutputStream out = new FileOutputStream(file);
-
-                                byte[] buffer = new byte[8192];
-                                int len;
-                                while((len = zipStream.read(buffer)) != -1)
-                                {
-                                    out.write(buffer, 0, len);
-                                }
-                                out.close();
-                            }
-                        }
-                        zipStream.close();
-                    }
+                    Hats.LOGGER.info("Extracted {} Hat files.", extractHats());
 
                     FileUtils.writeStringToFile(extractedMarker, "", StandardCharsets.UTF_8);
                 }
@@ -98,6 +63,50 @@ public class HatResourceHandler
             }
         }
         return init;
+    }
+
+    public static int extractHats() throws IOException
+    {
+        int i = 0;
+        InputStream in = Hats.class.getResourceAsStream("/hats.zip");
+        if(in != null)
+        {
+            ZipInputStream zipStream = new ZipInputStream(in);
+            ZipEntry entry = null;
+
+            while((entry = zipStream.getNextEntry()) != null)
+            {
+                File file = new File(hatsDir.toFile(), entry.getName());
+                if(file.exists() && file.length() > 3L)
+                {
+                    continue;
+                }
+
+                if(entry.isDirectory())
+                {
+                    if(!file.exists())
+                    {
+                        file.mkdirs();
+                    }
+                }
+                else
+                {
+                    FileOutputStream out = new FileOutputStream(file);
+
+                    byte[] buffer = new byte[8192];
+                    int len;
+                    while((len = zipStream.read(buffer)) != -1)
+                    {
+                        out.write(buffer, 0, len);
+                    }
+                    out.close();
+
+                    i++;
+                }
+            }
+            zipStream.close();
+        }
+        return i;
     }
 
     public static Path getHatsDir()

@@ -17,7 +17,6 @@ import me.ichun.mods.ichunutil.client.gui.bns.window.constraint.Constraint;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.View;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.Element;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementScrollBar;
-import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTextField;
 import me.ichun.mods.ichunutil.client.gui.bns.window.view.element.ElementTextWrapper;
 import me.ichun.mods.ichunutil.client.render.RenderHelper;
 import net.minecraft.client.Minecraft;

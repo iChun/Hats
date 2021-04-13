@@ -46,7 +46,6 @@ public class EventHandlerClient
     public KeyBind keyBindHats;
 
     public boolean serverHasMod;
-    public int connectionAge;
     public int renderCount;
     public ArrayList<Integer> requestedHats = new ArrayList<>();
 
@@ -65,8 +64,6 @@ public class EventHandlerClient
     public void onClientConnection(ClientPlayerNetworkEvent.LoggedInEvent event)
     {
         serverHasMod = false;
-        connectionAge = 0;
-
         resetSyncToast();
     }
 
@@ -84,13 +81,11 @@ public class EventHandlerClient
         if(event.phase == TickEvent.Phase.END)
         {
             Minecraft mc = Minecraft.getInstance();
-            if(mc.world != null)
+            if(mc.player != null)
             {
-                connectionAge++;
-
-                if(connectionAge == 100 && !serverHasMod)
+                if(mc.player.ticksExisted == 100 && !serverHasMod)
                 {
-                    Minecraft.getInstance().getToastGui().add(new Toast(new TranslationTextComponent("hats.toast.clientOnly.title"), new TranslationTextComponent("hats.toast.clientOnly.subtitle"), 2));
+                    mc.getToastGui().add(new Toast(new TranslationTextComponent("hats.toast.clientOnly.title"), new TranslationTextComponent("hats.toast.clientOnly.subtitle"), 2));
                 }
 
                 if(!requestedHats.isEmpty())
