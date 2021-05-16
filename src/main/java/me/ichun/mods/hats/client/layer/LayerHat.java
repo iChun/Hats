@@ -39,16 +39,10 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
         }
 
         HeadInfo helper = HeadHandler.getHelper(living.getClass());
-        if(helper != null && !helper.noTopInfo)
+        if(helper != null)
         {
             EntityRenderer<?> render = Minecraft.getInstance().getRenderManager().getRenderer(living);
             if(!(render instanceof LivingRenderer))
-            {
-                return;
-            }
-            LivingRenderer<?, ?> renderer = (LivingRenderer<?, ?>)render;
-            helper.setHeadModel(renderer);
-            if(helper.headModel == null)
             {
                 return;
             }
@@ -60,7 +54,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 {
                     //we have hat data
                     int overlay = LivingRenderer.getPackedOverlay(living, 0.0F);
-                    renderHat(helper, renderer, stack, bufferIn, packedLightIn, overlay, living, partialTicks, hatPart);
+                    renderHat(helper, (LivingRenderer<?, ?>)render, stack, bufferIn, packedLightIn, overlay, living, partialTicks, hatPart);
                 }
             }
             else
@@ -79,20 +73,38 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
         }
     }
 
-    public static boolean renderHat(HeadInfo helper, LivingRenderer<?, ?> renderer, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks, HatsSavedData.HatPart hatDetails)
+    public static boolean renderHat(HeadInfo parentHelper, LivingRenderer<?, ?> renderer, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks, HatsSavedData.HatPart hatDetails)
     {
-        int headCount = helper.getHeadCount(living);
+        int headCount = parentHelper.getHeadCount(living);
 
         boolean flag = false;
 
-        for(int i = 0; i < headCount; i++)
+        for(int headIndex = 0; headIndex < headCount; headIndex++)
         {
-            if(living.isInvisible() && helper.affectedByInvisibility(living, -1, i) && !Hats.eventHandlerClient.forceRenderWhenInvisible)
+            HeadInfo helper = parentHelper.getHeadInfo(living, headIndex);
+
+            if(helper.noTopInfo)
             {
                 continue;
             }
 
-            float hatScale = helper.getHatScale(living, stack, partialTicks, i);
+            boolean isDragon = living instanceof EnderDragonEntity;
+
+            if(!isDragon)
+            {
+                helper.setHeadModel(renderer);
+                if(helper.headModel == null)
+                {
+                    continue;
+                }
+            }
+
+            if(living.isInvisible() && helper.affectedByInvisibility(living, -1) && !Hats.eventHandlerClient.forceRenderWhenInvisible)
+            {
+                continue;
+            }
+
+            float hatScale = helper.getHatScale(living, stack, partialTicks, headIndex);
 
             if(hatScale <= 0F)
             {
@@ -102,17 +114,17 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
             stack.push();
 
-            if(!(living instanceof EnderDragonEntity))
+            if(!isDragon)
             {
                 // thepatcat: Creatures only get googly eyes in adulthood. It's science.
                 helper.preChildEntHeadRenderCalls(living, stack, renderer);
 
-                float[] joint = helper.getHeadJointOffset(living, stack, partialTicks, -1, i);
+                float[] joint = helper.getHeadJointOffset(living, stack, partialTicks, headIndex);
                 stack.translate(-joint[0], -joint[1], -joint[2]); //to fight Z-fighting
 
-                stack.rotate(Vector3f.ZP.rotationDegrees(helper.getHeadRoll(living, stack, partialTicks, -1, i)));
-                stack.rotate(Vector3f.YP.rotationDegrees(helper.getHeadYaw(living, stack, partialTicks, -1, i)));
-                stack.rotate(Vector3f.XP.rotationDegrees(helper.getHeadPitch(living, stack, partialTicks, -1, i)));
+                stack.rotate(Vector3f.ZP.rotationDegrees(helper.getHeadRoll(living, stack, partialTicks, -1, headIndex)));
+                stack.rotate(Vector3f.YP.rotationDegrees(helper.getHeadYaw(living, stack, partialTicks, -1, headIndex)));
+                stack.rotate(Vector3f.XP.rotationDegrees(helper.getHeadPitch(living, stack, partialTicks, -1, headIndex)));
 
                 helper.postHeadTranslation(living, stack, partialTicks);
             }
@@ -168,21 +180,21 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 else
 */
             {
-                float[] headPoint = helper.getHatOffsetFromJoint(living, stack, partialTicks, i);
+                float[] headPoint = helper.getHatOffsetFromJoint(living, stack, partialTicks, headIndex);
                 stack.translate(-headPoint[0], -headPoint[1] - 0.00225F, -headPoint[2]);
 
-                float[] armorOffset = helper.getHeadArmorOffset(living, stack, partialTicks, i);
+                float[] armorOffset = helper.getHeadArmorOffset(living, stack, partialTicks, headIndex);
                 if(armorOffset != null)
                 {
                     stack.translate(-armorOffset[0], -armorOffset[1], -armorOffset[2]);
                 }
 
-                stack.rotate(Vector3f.YP.rotationDegrees(helper.getHatYaw(living, stack, partialTicks, i)));
-                stack.rotate(Vector3f.XP.rotationDegrees(helper.getHatPitch(living, stack, partialTicks, i)));
+                stack.rotate(Vector3f.YP.rotationDegrees(helper.getHatYaw(living, stack, partialTicks, headIndex)));
+                stack.rotate(Vector3f.XP.rotationDegrees(helper.getHatPitch(living, stack, partialTicks, headIndex)));
 
                 stack.scale(hatScale, hatScale, hatScale);
 
-                float armorScale = helper.getHeadArmorScale(living, stack, partialTicks, i);
+                float armorScale = helper.getHeadArmorScale(living, stack, partialTicks, headIndex);
                 if(armorScale != 1F)
                 {
                     stack.scale(armorScale, armorScale, armorScale);

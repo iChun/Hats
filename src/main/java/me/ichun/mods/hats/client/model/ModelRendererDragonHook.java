@@ -69,7 +69,7 @@ public class ModelRendererDragonHook extends ModelRenderer
             return;
         }
 
-        helper.headModel = new ModelRenderer[] { parentModel.head };
+        helper.headModel = parentModel.head;
 
         LivingEntity living = parentModel.dragonInstance;
 
