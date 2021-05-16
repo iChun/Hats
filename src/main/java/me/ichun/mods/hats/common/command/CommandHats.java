@@ -84,7 +84,7 @@ public class CommandHats
                                         .executes(context -> {
                                             try
                                             {
-                                                int i = HeadHandler.extractFiles();
+                                                int i = HeadHandler.extractFiles(true);
                                                 HeadHandler.loadHeadInfos();
 
                                                 context.getSource().sendFeedback(new TranslationTextComponent("commands.hats.reextract.success", i), true);
@@ -103,7 +103,7 @@ public class CommandHats
                                         .executes(context -> {
                                             try
                                             {
-                                                int i = HatResourceHandler.extractHats();
+                                                int i = HatResourceHandler.extractHats(true);
                                                 HatResourceHandler.loadAllHats();
                                                 HatHandler.allocateHatPools();
 

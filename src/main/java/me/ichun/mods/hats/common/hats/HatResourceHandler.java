@@ -50,7 +50,7 @@ public class HatResourceHandler
                 File extractedMarker = new File(hatsDir.toFile(), "files.extracted");
                 if(!extractedMarker.exists()) //presume we haven't extracted anything yet
                 {
-                    Hats.LOGGER.info("Extracted {} Hat files.", extractHats());
+                    Hats.LOGGER.info("Extracted {} Hat files.", extractHats(true));
 
                     FileUtils.writeStringToFile(extractedMarker, "", StandardCharsets.UTF_8);
                 }
@@ -65,7 +65,7 @@ public class HatResourceHandler
         return init;
     }
 
-    public static int extractHats() throws IOException
+    public static int extractHats(boolean overwrite) throws IOException
     {
         int i = 0;
         InputStream in = Hats.class.getResourceAsStream("/hats.zip");
@@ -77,7 +77,7 @@ public class HatResourceHandler
             while((entry = zipStream.getNextEntry()) != null)
             {
                 File file = new File(hatsDir.toFile(), entry.getName());
-                if(file.exists() && file.length() > 3L)
+                if(!overwrite && file.exists() && file.length() > 3L)
                 {
                     continue;
                 }
