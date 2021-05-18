@@ -28,6 +28,9 @@ public class ModelHatLauncher<T extends Entity> extends EntityModel<T> {
         this.headL = new ModelRenderer(64, 64, 0, 0);
         this.headL.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.headL.addBox(-4.0F, -6.75F, -3.0F, 8.0F, 8.0F, 8.0F, -3.25F, -3.25F, -3.25F);
+        this.headL.setTextureOffset(32, 0);
+        this.headL.addBox(-4.0F, -6.75F, -3.0F, 8.0F, 8.0F, 8.0F, -3.15625F, -3.15625F, -3.15625F);
+        this.headL.setTextureOffset(0, 0);
         this.setRotateAngle(headL, 0.0F, 3.141592653589793F, -1.5707963267948966F);
         this.gasL = new ModelRenderer(this, 30, 0);
         this.gasL.setRotationPoint(0.0F, 0.0F, 0.0F);
@@ -60,6 +63,9 @@ public class ModelHatLauncher<T extends Entity> extends EntityModel<T> {
         this.headR = new ModelRenderer(64, 64, 0, 0);
         this.headR.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.headR.addBox(-4.0F, -6.75F, -3.0F, 8.0F, 8.0F, 8.0F, -3.25F, -3.25F, -3.25F);
+        this.headR.setTextureOffset(32, 0);
+        this.headR.addBox(-4.0F, -6.75F, -3.0F, 8.0F, 8.0F, 8.0F, -3.15625F, -3.15625F, -3.15625F);
+        this.headR.setTextureOffset(0, 0);
         this.setRotateAngle(headR, 0.0F, 3.141592653589793F, 0.0F);
         this.barrel.addChild(this.headL);
         this.barrel.addChild(this.gasL);

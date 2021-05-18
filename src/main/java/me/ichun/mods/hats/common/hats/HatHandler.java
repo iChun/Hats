@@ -629,7 +629,57 @@ public class HatHandler //Handles most of the server-related things.
                 part = source.get(player.getRNG().nextInt(source.size())).createRandom(player.getRNG()); //This creates a copy of
             }
         }
+        if(part != null)
+        {
+            HatInfo info = HatResourceHandler.getInfo(part);
+            if(info != null)
+            {
+                resolvePartConflicts(part, info, player.getRNG());
+            }
+        }
         return part;
+    }
+
+    private static void resolvePartConflicts(HatsSavedData.HatPart part, HatInfo info, Random random)
+    {
+        HashMap<HatsSavedData.HatPart, HatInfo> parts = new HashMap<>();
+        HashMap<String, ArrayList<HatInfo>> conflicts = new HashMap<>();
+        for(HatsSavedData.HatPart hatPart : part.hatParts)
+        {
+            HatInfo accessory = info.getInfoFor(hatPart.name);
+            if(accessory == null)
+            {
+                continue;
+            }
+
+            parts.put(hatPart, accessory);
+
+            if(!accessory.accessoryLayer.isEmpty()) //look for conflicts for accessories that already got to spawn
+            {
+                for(String layer : accessory.accessoryLayer)
+                {
+                    conflicts.computeIfAbsent(layer, k -> new ArrayList<>()).add(accessory);
+                }
+            }
+        }
+
+        //if there are no conflicts, remove
+        conflicts.entrySet().removeIf(entry -> entry.getValue().size() <= 1);
+
+        for(ArrayList<HatInfo> conflictAccessories : conflicts.values())
+        {
+            while(conflictAccessories.size() > 1)
+            {
+                HatInfo acc = conflictAccessories.get(random.nextInt(conflictAccessories.size()));// YOU LOST THE COIN TOSS
+                part.remove(acc.getAsHatPart(1));
+                conflictAccessories.remove(acc);
+            }
+        }
+
+        for(HatsSavedData.HatPart hatPart : part.hatParts)
+        {
+            resolvePartConflicts(hatPart, parts.get(hatPart), random);
+        }
     }
 
     public static void removeOneFromInventory(ServerPlayerEntity player, HatsSavedData.HatPart part)
