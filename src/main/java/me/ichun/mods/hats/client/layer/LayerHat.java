@@ -75,6 +75,11 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
     public static boolean renderHat(HeadInfo parentHelper, LivingRenderer<?, ?> renderer, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, int packedOverlayIn, LivingEntity living, float partialTicks, HatsSavedData.HatPart hatDetails)
     {
+        if(!parentHelper.setup(living, renderer))
+        {
+            return false;
+        }
+
         int headCount = parentHelper.getHeadCount(living);
 
         boolean flag = false;
@@ -92,7 +97,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
             if(!isDragon)
             {
-                helper.setHeadModel(renderer);
+                helper.setHeadModel(living, renderer);
                 if(helper.headModel == null)
                 {
                     continue;
@@ -122,9 +127,9 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
                 float[] joint = helper.getHeadJointOffset(living, stack, partialTicks, headIndex);
                 stack.translate(-joint[0], -joint[1], -joint[2]); //to fight Z-fighting
 
-                stack.rotate(Vector3f.ZP.rotationDegrees(helper.getHeadRoll(living, stack, partialTicks, -1, headIndex)));
-                stack.rotate(Vector3f.YP.rotationDegrees(helper.getHeadYaw(living, stack, partialTicks, -1, headIndex)));
-                stack.rotate(Vector3f.XP.rotationDegrees(helper.getHeadPitch(living, stack, partialTicks, -1, headIndex)));
+                stack.rotate(Vector3f.ZP.rotationDegrees(helper.getHeadRoll(living, stack, partialTicks, headIndex, -1)));
+                stack.rotate(Vector3f.YP.rotationDegrees(helper.getHeadYaw(living, stack, partialTicks, headIndex, -1)));
+                stack.rotate(Vector3f.XP.rotationDegrees(helper.getHeadPitch(living, stack, partialTicks, headIndex, -1)));
 
                 helper.postHeadTranslation(living, stack, partialTicks);
             }

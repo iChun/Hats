@@ -178,7 +178,7 @@ public class HatHandler //Handles most of the server-related things.
 
         HatInfo hatInfo = pool.getRandomHat();
         hatPart.name = hatInfo.name;
-        hatPart.count = info != null ? info.getHeadCount(ent) : 1;
+        hatPart.count = info != null && info.setup(ent) ? info.getHeadCount(ent) : 1;
         hatPart.isShowing = true;
 
         hatInfo.assignAccessoriesToPart(hatPart, ent);

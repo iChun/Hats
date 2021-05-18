@@ -7,6 +7,7 @@ import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.api.common.head.HeadInfo;
+import me.ichun.mods.ichunutil.api.common.head.HeadInfoDelegate;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
@@ -64,7 +65,7 @@ public class ModelRendererDragonHook extends ModelRenderer
         }
 
         HeadInfo helper = HeadHandler.getHelper(parentModel.dragonInstance.getClass());
-        if(helper == null || helper.noTopInfo)
+        if(helper == null || helper.noTopInfo || helper instanceof HeadInfoDelegate) //Dragons are special, do not allow HeadInfoDelegate.
         {
             return;
         }
