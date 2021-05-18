@@ -4,7 +4,9 @@ import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.command.CommandHats;
 import me.ichun.mods.hats.common.hats.HatHandler;
 import me.ichun.mods.hats.common.hats.advancement.Advancements;
+import me.ichun.mods.hats.common.packet.PacketEntityHatDetails;
 import me.ichun.mods.hats.common.packet.PacketPing;
+import me.ichun.mods.hats.common.packet.PacketRehatify;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.api.common.head.HeadInfo;
@@ -25,6 +27,9 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.event.server.FMLServerStoppedEvent;
+import net.minecraftforge.fml.network.PacketDistributor;
+
+import java.util.HashMap;
 
 public class EventHandlerServer
 {
@@ -66,22 +71,44 @@ public class EventHandlerServer
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event)
     {
-        if(!event.getEntityLiving().getEntityWorld().isRemote && !(event.getEntityLiving() instanceof PlayerEntity) && event.getSource().getTrueSource() instanceof ServerPlayerEntity && !(event.getSource().getTrueSource() instanceof FakePlayer))
+        if(!event.getEntityLiving().getEntityWorld().isRemote && !event.getEntityLiving().removed && !(event.getEntityLiving() instanceof PlayerEntity))
         {
-            HatsSavedData.HatPart hatPart = HatHandler.getHatPart(event.getEntityLiving());
-            if(hatPart.isAHat())
+            if(event.getSource().getTrueSource() instanceof ServerPlayerEntity && !(event.getSource().getTrueSource() instanceof FakePlayer))
             {
-                HatHandler.addHat((ServerPlayerEntity)event.getSource().getTrueSource(), hatPart);
-
-                HeadInfo info = HeadHandler.getHelper(event.getEntityLiving().getClass());
-                if(info != null && info.isBoss)
+                HatsSavedData.HatPart hatPart = HatHandler.getHatPart(event.getEntityLiving());
+                if(hatPart.isAHat())
                 {
-                    Advancements.CriteriaTriggers.KILL_BOSS_WITH_HAT.trigger((ServerPlayerEntity)event.getSource().getTrueSource());
+                    HatHandler.addHat((ServerPlayerEntity)event.getSource().getTrueSource(), hatPart);
+
+                    HeadInfo info = HeadHandler.getHelper(event.getEntityLiving().getClass());
+                    if(info != null && info.isBoss)
+                    {
+                        Advancements.CriteriaTriggers.KILL_BOSS_WITH_HAT.trigger((ServerPlayerEntity)event.getSource().getTrueSource());
+                    }
+
+                    if(!event.getEntityLiving().getClass().getName().contains("minecraft"))
+                    {
+                        Advancements.CriteriaTriggers.NON_VANILLA_HAT.trigger((ServerPlayerEntity)event.getSource().getTrueSource());
+                    }
                 }
-
-                if(!event.getEntityLiving().getClass().getName().contains("minecraft"))
+            }
+            else if(event.getSource().getTrueSource() instanceof LivingEntity && event.getSource().getTrueSource().isAlive() && Hats.configServer.mobHatTakeover)
+            {
+                LivingEntity killer = (LivingEntity)event.getSource().getTrueSource();
+                HatsSavedData.HatPart killerHat = HatHandler.getHatPart(killer);
+                if(!killerHat.isAHat())
                 {
-                    Advancements.CriteriaTriggers.NON_VANILLA_HAT.trigger((ServerPlayerEntity)event.getSource().getTrueSource());
+                    HatsSavedData.HatPart hatPart = HatHandler.getHatPart(event.getEntityLiving());
+                    if(hatPart.isAHat())
+                    {
+                        killerHat.read(hatPart.write(new CompoundNBT()));
+
+                        HashMap<Integer, HatsSavedData.HatPart> entIdToHat = new HashMap<>();
+                        entIdToHat.put(killer.getEntityId(), hatPart);
+
+                        Hats.channel.sendTo(new PacketRehatify(killer.getEntityId()), PacketDistributor.TRACKING_ENTITY.with(() -> killer));
+                        Hats.channel.sendTo(new PacketEntityHatDetails(entIdToHat), PacketDistributor.TRACKING_ENTITY.with(() -> killer));
+                    }
                 }
             }
         }

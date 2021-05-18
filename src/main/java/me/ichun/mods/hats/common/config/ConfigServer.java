@@ -74,6 +74,8 @@ public class ConfigServer extends ConfigBase
 
     public boolean enableCreativeModeHatHunting = false;
 
+    public boolean mobHatTakeover = true;
+
     @Prop(min = 0)
     public int hatEntityLifespan = 6000;
 

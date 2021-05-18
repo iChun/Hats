@@ -142,7 +142,7 @@ public class HatHandler //Handles most of the server-related things.
 
     public static HatsSavedData.HatPart getHatPart(LivingEntity ent)
     {
-        return ent.getCapability(HatsSavedData.HatPart.CAPABILITY_INSTANCE).orElseThrow(() -> new IllegalArgumentException("Entity " + ent.getName().getUnformattedComponentText() + " has no hat capabilities"));
+        return ent.getCapability(HatsSavedData.HatPart.CAPABILITY_INSTANCE).orElseThrow(() -> new IllegalArgumentException("Entity " + ent.getClass().getSimpleName() + ":" + ent.getName().getUnformattedComponentText() + " has no hat capabilities"));
     }
 
     public static void checkValidity(LivingEntity ent)

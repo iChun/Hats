@@ -1,6 +1,7 @@
 package me.ichun.mods.hats.common.command;
 
 import com.google.common.base.Splitter;
+import com.google.gson.JsonObject;
 import com.mojang.brigadier.StringReader;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -10,6 +11,8 @@ import com.mojang.brigadier.suggestion.SuggestionsBuilder;
 import me.ichun.mods.hats.common.hats.HatInfo;
 import me.ichun.mods.hats.common.hats.HatResourceHandler;
 import net.minecraft.command.ISuggestionProvider;
+import net.minecraft.command.arguments.IArgumentSerializer;
+import net.minecraft.network.PacketBuffer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -107,5 +110,26 @@ public class HatInfosArgument implements ArgumentType<ArrayList<HatInfo>>
     public Collection<String> getExamples()
     {
         return multi ? EXAMPLES_MULTI :EXAMPLES_SINGLE;
+    }
+
+    public static class Serializer implements IArgumentSerializer<HatInfosArgument>
+    {
+        @Override
+        public void write(HatInfosArgument argument, PacketBuffer buffer)
+        {
+            buffer.writeBoolean(argument.multi);
+        }
+
+        @Override
+        public HatInfosArgument read(PacketBuffer buffer)
+        {
+            return new HatInfosArgument(buffer.readBoolean());
+        }
+
+        @Override
+        public void write(HatInfosArgument argument, JsonObject json)
+        {
+            json.addProperty("multi", argument.multi);
+        }
     }
 }

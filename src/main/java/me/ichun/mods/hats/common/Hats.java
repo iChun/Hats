@@ -6,6 +6,7 @@ import me.ichun.mods.hats.client.entity.EntityDummy;
 import me.ichun.mods.hats.client.module.tabula.HatsTabulaPlugin;
 import me.ichun.mods.hats.client.render.ItemRenderHatLauncher;
 import me.ichun.mods.hats.client.render.RenderHatEntity;
+import me.ichun.mods.hats.common.command.HatInfosArgument;
 import me.ichun.mods.hats.common.config.ConfigServer;
 import me.ichun.mods.hats.common.core.EventHandlerServer;
 import me.ichun.mods.hats.common.entity.EntityHat;
@@ -23,6 +24,7 @@ import me.ichun.mods.ichunutil.common.network.PacketChannel;
 import net.minecraft.client.renderer.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.client.util.InputMappings;
+import net.minecraft.command.arguments.ArgumentTypes;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.item.Item;
@@ -156,6 +158,8 @@ public class Hats
         }, () -> null);
 
         Advancements.CriteriaTriggers.init();
+
+        ArgumentTypes.register("hats:hat", HatInfosArgument.class, new HatInfosArgument.Serializer());
     }
 
     @OnlyIn(Dist.CLIENT)
