@@ -119,6 +119,8 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
             stack.push();
 
+            helper.correctPosition(living, stack, partialTicks);
+
             if(!isDragon)
             {
                 // thepatcat: Creatures only get googly eyes in adulthood. It's science.
@@ -229,6 +231,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
             stack.pop();
         }
+
         return flag;
     }
 }
