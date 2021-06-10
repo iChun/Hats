@@ -96,7 +96,7 @@ public class EventHandlerServer
             {
                 LivingEntity killer = (LivingEntity)event.getSource().getTrueSource();
                 HatsSavedData.HatPart killerHat = HatHandler.getHatPart(killer);
-                if(!killerHat.isAHat())
+                if(HatHandler.canWearHat(killer) && !killerHat.isAHat())
                 {
                     HatsSavedData.HatPart hatPart = HatHandler.getHatPart(event.getEntityLiving());
                     if(hatPart.isAHat())
