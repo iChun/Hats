@@ -7,6 +7,7 @@ import me.ichun.mods.hats.common.hats.sort.SortHandler;
 import me.ichun.mods.ichunutil.common.config.ConfigBase;
 import me.ichun.mods.ichunutil.common.config.annotations.CategoryDivider;
 import me.ichun.mods.ichunutil.common.config.annotations.Prop;
+import net.minecraft.util.Util;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 
@@ -47,12 +48,12 @@ public class ConfigClient extends ConfigBase
     @Prop(min = 1)
     public int hatLauncherRandomHatSpeed = 5;
 
-    public List<String> filterSorterConfig = new ArrayList<String>(){{
-        add("filterUndiscovered");
-        add("sorterFavourite");
-        add("sorterRarity:inverse");
-        add("sorterAlphabetical");
-    }};
+    public List<String> filterSorterConfig = Util.make(new ArrayList<>(), list -> {
+        list.add("filterUndiscovered");
+        list.add("sorterFavourite");
+        list.add("sorterRarity:inverse");
+        list.add("sorterAlphabetical");
+    });
 
     //======================================================//
 

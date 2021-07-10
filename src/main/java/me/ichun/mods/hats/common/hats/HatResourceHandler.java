@@ -7,12 +7,12 @@ import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.module.tabula.formats.ImportList;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
+import me.ichun.mods.ichunutil.common.util.IOUtil;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.io.FileUtils;
 
 import javax.annotation.Nonnull;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 public class HatResourceHandler
 {
@@ -50,7 +48,15 @@ public class HatResourceHandler
                 File extractedMarker = new File(hatsDir.toFile(), "files.extracted");
                 if(!extractedMarker.exists()) //presume we haven't extracted anything yet
                 {
-                    Hats.LOGGER.info("Extracted {} Hat files.", extractHats(true));
+                    InputStream in = Hats.class.getResourceAsStream("/hats.zip");
+                    if(in != null)
+                    {
+                        Hats.LOGGER.info("Extracted {} Hat files.", IOUtil.extractFiles(hatsDir, in, true));
+                    }
+                    else
+                    {
+                        Hats.LOGGER.error("Error extracting hats.zip. InputStream was null.");
+                    }
 
                     FileUtils.writeStringToFile(extractedMarker, "", StandardCharsets.UTF_8);
                 }
@@ -65,50 +71,6 @@ public class HatResourceHandler
         return init;
     }
 
-    public static int extractHats(boolean overwrite) throws IOException
-    {
-        int i = 0;
-        InputStream in = Hats.class.getResourceAsStream("/hats.zip");
-        if(in != null)
-        {
-            ZipInputStream zipStream = new ZipInputStream(in);
-            ZipEntry entry = null;
-
-            while((entry = zipStream.getNextEntry()) != null)
-            {
-                File file = new File(hatsDir.toFile(), entry.getName());
-                if(!overwrite && file.exists() && file.length() > 3L)
-                {
-                    continue;
-                }
-
-                if(entry.isDirectory())
-                {
-                    if(!file.exists())
-                    {
-                        file.mkdirs();
-                    }
-                }
-                else
-                {
-                    FileOutputStream out = new FileOutputStream(file);
-
-                    byte[] buffer = new byte[8192];
-                    int len;
-                    while((len = zipStream.read(buffer)) != -1)
-                    {
-                        out.write(buffer, 0, len);
-                    }
-                    out.close();
-
-                    i++;
-                }
-            }
-            zipStream.close();
-        }
-        return i;
-    }
-
     public static Path getHatsDir()
     {
         return hatsDir;
@@ -120,8 +82,15 @@ public class HatResourceHandler
         HAT_ACCESSORIES.clear();
 
         int count = 0;
-        File dir = getHatsDir().toFile();
-        count += scourForHats(dir);
+        try
+        {
+            count += IOUtil.scourDirectoryForFiles(getHatsDir(), p -> p.getFileName().toString().endsWith(".tbl") && readHat(p.toFile())); //tabula format
+        }
+        catch(IOException e)
+        {
+            Hats.LOGGER.error("Error loading Hat files.");
+            e.printStackTrace();
+        }
 
         int accessoryCount = HAT_ACCESSORIES.size();
 
@@ -147,24 +116,6 @@ public class HatResourceHandler
             return true;
         }
         return false;
-    }
-
-    private static int scourForHats(File dir)
-    {
-        int count = 0;
-        File[] files = dir.listFiles();
-        for(File file : files)
-        {
-            if(file.isDirectory())
-            {
-                count += scourForHats(file);
-            }
-            else if(file.getName().endsWith(".tbl") && readHat(file)) //tabula format
-            {
-                count++;
-            }
-        }
-        return count;
     }
 
     public static boolean readHat(File file)
@@ -194,24 +145,24 @@ public class HatResourceHandler
                 Hats.LOGGER.warn("Loaded an old Tabula file. Updating to new Tabula & Hats format: {}", file);
             }
 
-//            if(file.getAbsolutePath().contains("mods\\hats\\_PORTALCRAFTER51"))
-//            {
-//                project.author = "Portalcrafter51";
-//                project.save(file);
-//                Hats.LOGGER.info("Resaved: {}", file);
-//            }
-//            if(file.getAbsolutePath().contains("mods\\hats\\_THEMUSHROOMCOW"))
-//            {
-//                project.author = "The_Mushroomcow";
-//                project.save(file);
-//                Hats.LOGGER.info("Resaved: {}", file);
-//            }
-//            if(file.getAbsolutePath().contains("mods\\hats\\_MRHAZARD"))
-//            {
-//                project.author = "Mr_Hazard";
-//                project.save(file);
-//                Hats.LOGGER.info("Resaved: {}", file);
-//            }
+            //            if(file.getAbsolutePath().contains("mods\\hats\\_PORTALCRAFTER51"))
+            //            {
+            //                project.author = "Portalcrafter51";
+            //                project.save(file);
+            //                Hats.LOGGER.info("Resaved: {}", file);
+            //            }
+            //            if(file.getAbsolutePath().contains("mods\\hats\\_THEMUSHROOMCOW"))
+            //            {
+            //                project.author = "The_Mushroomcow";
+            //                project.save(file);
+            //                Hats.LOGGER.info("Resaved: {}", file);
+            //            }
+            //            if(file.getAbsolutePath().contains("mods\\hats\\_MRHAZARD"))
+            //            {
+            //                project.author = "Mr_Hazard";
+            //                project.save(file);
+            //                Hats.LOGGER.info("Resaved: {}", file);
+            //            }
 
             String hatName = file.getName().substring(0, file.getName().length() - 4);
 

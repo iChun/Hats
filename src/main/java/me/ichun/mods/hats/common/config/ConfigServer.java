@@ -9,6 +9,7 @@ import me.ichun.mods.ichunutil.common.config.annotations.Prop;
 import me.ichun.mods.ichunutil.common.module.tabula.project.Project;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.ResourceLocationException;
+import net.minecraft.util.Util;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.thread.EffectiveSide;
 import net.minecraftforge.fml.config.ModConfig;
@@ -35,22 +36,22 @@ public class ConfigServer extends ConfigBase
     public List<String> disabledMobs = new ArrayList<>();
 
     @Prop(validator = "numbersOnly")
-    public List<String> rarityWeight = new ArrayList<String>(){{
-        add("21"); //Common - White
-        add("13"); //Uncommon - Green
-        add("8"); //Rare - Blue
-        add("5"); //Epic - Purple
-        add("3"); //Legendary - Gold
-    }};
+    public List<String> rarityWeight = Util.make(new ArrayList<>(), list -> {
+        list.add("21"); //Common - White
+        list.add("13"); //Uncommon - Green
+        list.add("8"); //Rare - Blue
+        list.add("5"); //Epic - Purple
+        list.add("3"); //Legendary - Gold
+    });
 
     @Prop(validator = "numbersOnly")
-    public List<String> rarityCost = new ArrayList<String>(){{
-        add("10"); //Common - White
-        add("20"); //Uncommon - Green
-        add("40"); //Rare - Blue
-        add("70"); //Epic - Purple
-        add("110"); //Legendary - Gold
-    }};
+    public List<String> rarityCost = Util.make(new ArrayList<>(), list -> {
+        list.add("10"); //Common - White
+        list.add("20"); //Uncommon - Green
+        list.add("40"); //Rare - Blue
+        list.add("70"); //Epic - Purple
+        list.add("110"); //Legendary - Gold
+    });
 
     @Prop(min = 0.0D, max = 1.0D)
     public double bossHatChanceBonus = 0.1D;

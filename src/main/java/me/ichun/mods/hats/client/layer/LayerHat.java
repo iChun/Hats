@@ -33,7 +33,27 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
     @Override
     public void render(MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn, LivingEntity living, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch)
     {
-        if(Hats.eventHandlerClient.renderCount >= Hats.configClient.maxHatRenders && !(living instanceof PlayerEntity) || living.removed)
+        LivingEntity referenceEnt = living;
+        if(living.getPersistentData().contains("Morph_Player_ID"))
+        {
+            PlayerEntity player = Minecraft.getInstance().world.getPlayerByUuid(living.getPersistentData().getUniqueId("Morph_Player_ID"));
+            if(player != null)
+            {
+                referenceEnt = player;
+
+                if(!HatHandler.hasBeenRandomlyAllocated(referenceEnt))
+                {
+                    //we don't have the hat data
+                    if(Hats.eventHandlerClient.serverHasMod)
+                    {
+                        Hats.eventHandlerClient.requestHatDetails(referenceEnt);
+                        HatHandler.assignNoHat(referenceEnt);
+                    }
+                }
+            }
+        }
+
+        if(Hats.eventHandlerClient.renderCount >= Hats.configClient.maxHatRenders && !(referenceEnt instanceof PlayerEntity) || living.removed)
         {
             return;
         }
@@ -49,7 +69,7 @@ public class LayerHat<T extends LivingEntity, M extends EntityModel<T>> extends 
 
             if(HatHandler.hasBeenRandomlyAllocated(living))
             {
-                HatsSavedData.HatPart hatPart = HatHandler.getHatPart(living);
+                HatsSavedData.HatPart hatPart = HatHandler.getHatPart(referenceEnt);
                 if(hatPart.isAHat())
                 {
                     //we have hat data

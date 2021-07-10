@@ -13,6 +13,8 @@ import me.ichun.mods.hats.common.packet.PacketRehatify;
 import me.ichun.mods.hats.common.packet.PacketUpdateHats;
 import me.ichun.mods.hats.common.world.HatsSavedData;
 import me.ichun.mods.ichunutil.common.head.HeadHandler;
+import me.ichun.mods.ichunutil.common.iChunUtil;
+import me.ichun.mods.ichunutil.common.util.IOUtil;
 import net.minecraft.command.CommandSource;
 import net.minecraft.command.Commands;
 import net.minecraft.command.arguments.EntityArgument;
@@ -26,6 +28,7 @@ import net.minecraft.util.text.TranslationTextComponent;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraftforge.fml.network.PacketDistributor;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -84,10 +87,20 @@ public class CommandHats
                                         .executes(context -> {
                                             try
                                             {
-                                                int i = HeadHandler.extractFiles(true);
-                                                HeadHandler.loadHeadInfos();
+                                                InputStream in = iChunUtil.class.getResourceAsStream("/heads.zip");
+                                                if(in != null)
+                                                {
+                                                    int i = IOUtil.extractFiles(HeadHandler.getHeadsDir(), in, true);
 
-                                                context.getSource().sendFeedback(new TranslationTextComponent("commands.hats.reextract.success", i), true);
+                                                    HeadHandler.loadHeadInfos();
+
+                                                    context.getSource().sendFeedback(new TranslationTextComponent("commands.hats.reextract.success", i), true);
+                                                }
+                                                else
+                                                {
+                                                    iChunUtil.LOGGER.error("Error extracting heads.zip. InputStream was null.");
+                                                    context.getSource().sendFeedback(new TranslationTextComponent("commands.hats.reextract.failed"), true);
+                                                }
                                             }
                                             catch(Throwable e)
                                             {
@@ -103,11 +116,20 @@ public class CommandHats
                                         .executes(context -> {
                                             try
                                             {
-                                                int i = HatResourceHandler.extractHats(true);
-                                                HatResourceHandler.loadAllHats();
-                                                HatHandler.allocateHatPools();
+                                                InputStream in = Hats.class.getResourceAsStream("/hats.zip");
+                                                if(in != null)
+                                                {
+                                                    int i = IOUtil.extractFiles(HatResourceHandler.getHatsDir(), in, true);
+                                                    HatResourceHandler.loadAllHats();
+                                                    HatHandler.allocateHatPools();
 
-                                                context.getSource().sendFeedback(new TranslationTextComponent("commands.hats.reextract.success", i), true);
+                                                    context.getSource().sendFeedback(new TranslationTextComponent("commands.hats.reextract.success", i), true);
+                                                }
+                                                else
+                                                {
+                                                    Hats.LOGGER.error("Error reextracting hats. InputStream was null.");
+                                                    context.getSource().sendFeedback(new TranslationTextComponent("commands.hats.reextract.failed"), true);
+                                                }
                                             }
                                             catch(Throwable e)
                                             {

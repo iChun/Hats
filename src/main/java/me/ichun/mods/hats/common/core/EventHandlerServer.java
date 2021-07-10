@@ -143,7 +143,7 @@ public class EventHandlerServer
     }
 
     @SubscribeEvent
-    public void onServerStoppedDown(FMLServerStoppedEvent event)
+    public void onServerStopped(FMLServerStoppedEvent event)
     {
         HatHandler.setSaveData(null);
     }

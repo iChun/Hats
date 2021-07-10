@@ -83,6 +83,7 @@ public class Hats
     {
         if(!HatResourceHandler.init())
         {
+            LOGGER.fatal("Error initialising Resource Handler! Terminating init.");
             return;
         }
         configServer = new ConfigServer().init();
