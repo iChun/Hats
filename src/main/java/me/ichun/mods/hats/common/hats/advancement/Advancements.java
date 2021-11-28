@@ -63,9 +63,19 @@ public class Advancements implements Consumer<Consumer<Advancement>>
 
     public static final ResourceLocation ALL_VARIANTS = new ResourceLocation("hats", "hats/variants_100");
 
+    @SubscribeEvent
+    public static void onGatherData(GatherDataEvent event)
+    {
+        DataGenerator gen = event.getGenerator();
+        if(event.includeServer()) {
+            gen.addProvider(new AdvancementGen(gen, new Advancements()));
+        }
+    }
+
     @Override
     public void accept(Consumer<Advancement> consumer)
     {
+        //Advancement Data Gen
         Advancement root = Advancement.Builder.builder().withDisplay(getItemWithDamage(1), new TranslationTextComponent("hats.advancement.root.title"), new TranslationTextComponent("hats.advancement.root.description"), new ResourceLocation("textures/block/basalt_side.png"), FrameType.TASK, false, false, false).withCriterion("killed_something", KilledTrigger.Instance.playerKilledEntity()).register(consumer, "hats:hats/root");
         Advancement hatsUnlocked1 = Advancement.Builder.builder().withParent(root).withDisplay(Items.WOODEN_SWORD, new TranslationTextComponent("hats.advancement.hatsUnlocked1.title"), new TranslationTextComponent("hats.advancement.hatsUnlocked1.description"), null, FrameType.TASK, true, true, false).withCriterion("hats_unlocked", ValueAtOrAboveTrigger.Instance.count(CriteriaTriggers.HATS_UNLOCKED.getId(), 1)).register(consumer, "hats:hats/hats_unlocked_1");
         Advancement hatsUnlocked10 = Advancement.Builder.builder().withParent(hatsUnlocked1).withDisplay(getItemWithDamage(2), new TranslationTextComponent("hats.advancement.hatsUnlocked10.title"), new TranslationTextComponent("hats.advancement.hatsUnlocked10.description"), null, FrameType.TASK, true, true, false).withCriterion("hats_unlocked", ValueAtOrAboveTrigger.Instance.count(CriteriaTriggers.HATS_UNLOCKED.getId(), 10)).register(consumer, "hats:hats/hats_unlocked_10");
@@ -125,15 +135,6 @@ public class Advancements implements Consumer<Consumer<Advancement>>
         tag.put("Properties", props);
         is.getOrCreateTag().put("SkullOwner", tag);
         return is;
-    }
-
-    @SubscribeEvent
-    public static void onGatherData(GatherDataEvent event)
-    {
-        DataGenerator gen = event.getGenerator();
-        if(event.includeServer()) {
-            gen.addProvider(new AdvancementGen(gen, new Advancements()));
-        }
     }
 
     public static void triggerHatCount(ServerPlayerEntity player, int count)
