@@ -133,7 +133,7 @@
   "hats.gui.tutorial.intro": "Vill du starta gränssnittsguiden?",
   "hats.gui.tutorial.noHat": "Ajdå, du verkar inte ha fått några hattar.\n\nVi har bett servern att ge dig en.\n\nIngen fara, jag bjuder på en!",
   "hats.gui.tutorial.camera": "Du kan kontrollera vyn till vänster med din mus.\n\nKlicka gärna och dra med dina musknappar och ditt mushjul.\n\nProva att göra det nu!",
-  "hats.gui.tutorial.cameraFallback": "Du kan kontrollera vyn till vänster med din mus.\n\nVanligtvis kan du klicka och dra med dina musknappar och ditt mushjul, men eftersom vi just nu använder ett alternativ utseende kanske du kan prova senare?",
+  "hats.gui.tutorial.cameraFallback": "Du kan kontrollera vyn till vänster med din mus.\n\nVanligtvis kan du klicka och dra med dina musknappar och ditt mushjul, men eftersom vi just nu använder ett alternativ gränssnitt kanske du kan prova senare?",
   "hats.gui.tutorial.hatsHere": "Hattar du har låst upp finns här.\n\n(Klicka inte nu, den interaktiva delen av guiden är över)",
   "hats.gui.tutorial.clickForHatMissing": "Du ska egentligen ha en hatt nu, men det verkar som vi inte kan hitta en.\n\nKanske dina filter har dolt dem?\n\nHur som helst...",
   "hats.gui.tutorial.clickForHat": "Du kan klicka på en hatt för att bära den eller högerklicka för ytterligare alternativ",
