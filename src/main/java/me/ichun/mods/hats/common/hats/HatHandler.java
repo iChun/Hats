@@ -142,7 +142,7 @@ public class HatHandler //Handles most of the server-related things.
 
     public static HatsSavedData.HatPart getHatPart(LivingEntity ent)
     {
-        return ent.getCapability(HatsSavedData.HatPart.CAPABILITY_INSTANCE).orElseThrow(() -> new IllegalArgumentException("Entity " + ent.getClass().getSimpleName() + ":" + ent.getName().getUnformattedComponentText() + " has no hat capabilities"));
+        return ent.getCapability(HatsSavedData.HatPart.CAPABILITY_INSTANCE).orElse(new HatsSavedData.HatPart());
     }
 
     public static void checkValidity(LivingEntity ent)
@@ -599,6 +599,12 @@ public class HatHandler //Handles most of the server-related things.
             if(HatHandler.useInventory(player))
             {
                 source = source.stream().filter(hatPart -> hatPart.count > 0).collect(Collectors.toCollection(ArrayList::new)); //remove the hats that have no count
+
+                //Our hats still have accessories with no count. Remove them too.
+                for(HatsSavedData.HatPart hatPart : source)
+                {
+                    hatPart.removeCountlessChildren();
+                }
 
                 HatsSavedData.HatPart currentlyWearing = HatHandler.getHatPart(player);
 

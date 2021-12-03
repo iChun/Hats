@@ -613,6 +613,15 @@ public class HatsSavedData extends WorldSavedData
             }
         }
 
+        public void removeCountlessChildren()
+        {
+            hatParts.removeIf(hatPart -> hatPart.count <= 0);
+            for(HatPart hatPart : hatParts)
+            {
+                hatPart.removeCountlessChildren();
+            }
+        }
+
         public void setBrightnessZero()
         {
             hsbiser[2] = 1F;
