@@ -97,6 +97,12 @@ public class WorkspaceHats extends Workspace
     }
 
     @Override
+    public boolean isPauseScreen()
+    {
+        return false; //don't pause as it pauses the render tick and affects our camera panning when not in fallback
+    }
+
+    @Override
     public void resize(Minecraft mc, int width, int height)
     {
         int padding = 10;

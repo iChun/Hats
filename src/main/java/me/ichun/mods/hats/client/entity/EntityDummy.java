@@ -3,6 +3,7 @@ package me.ichun.mods.hats.client.entity;
 import me.ichun.mods.hats.common.Hats;
 import me.ichun.mods.ichunutil.client.tracker.entity.EntityTracker;
 import me.ichun.mods.ichunutil.client.tracker.render.RenderTracker;
+import me.ichun.mods.ichunutil.common.iChunUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.*;
 import net.minecraft.world.World;
@@ -67,6 +68,7 @@ public class EntityDummy extends EntityTracker// iChunUtil's client entity track
                     .disableSummoning()
                     .immuneToFire()
                     .build("an entity from " + Hats.MOD_NAME + ". Ignore this.");
+            DUMMY.setRegistryName(Hats.MOD_ID, "client_entity_dummy");
         }
     }
 }

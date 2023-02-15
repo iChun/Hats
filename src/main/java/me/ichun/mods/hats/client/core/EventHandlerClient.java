@@ -83,7 +83,7 @@ public class EventHandlerClient
             Minecraft mc = Minecraft.getInstance();
             if(mc.player != null)
             {
-                if(mc.player.ticksExisted == 100 && !serverHasMod)
+                if(mc.player.ticksExisted == 100 && !serverHasMod && !Hats.configClient.disableClientOnlyModeWarning)
                 {
                     mc.getToastGui().add(new Toast(new TranslationTextComponent("hats.toast.clientOnly.title"), new TranslationTextComponent("hats.toast.clientOnly.subtitle"), 2));
                 }

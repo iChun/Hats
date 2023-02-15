@@ -26,6 +26,8 @@
   "config.hats.prop.disableHatNameRenderInHatSelector.desc": "Lagging? This might help give you back some frames.",
   "config.hats.prop.invisibleEntityInHatSelector.name": "Invisible Player in Hat Selector",
   "config.hats.prop.invisibleEntityInHatSelector.desc": "Lagging? This might help give you back some frames.",
+  "config.hats.prop.disableClientOnlyModeWarning.name": "Disable Client-Only Mode Warning",
+  "config.hats.prop.disableClientOnlyModeWarning.desc": "Disable the toast pop-up that tells you that Hats is running in Client-Only Mode.",
   "config.hats.prop.hatLauncherRandomHatSpeed.name": "Hat Launcher - Random Hat Cycle Speed",
   "config.hats.prop.hatLauncherRandomHatSpeed.desc": "On a \"Random Hat\" option for the Hat Launcher, a new hat shows every X ticks. Increase this to slow down the cycle.",
   "config.hats.prop.filterSorterConfig.name": "Hat Sorter Config",

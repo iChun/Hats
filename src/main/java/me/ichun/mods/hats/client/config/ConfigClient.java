@@ -45,6 +45,8 @@ public class ConfigClient extends ConfigBase
 
     public boolean invisibleEntityInHatSelector = false;
 
+    public boolean disableClientOnlyModeWarning = false;
+
     @Prop(min = 1)
     public int hatLauncherRandomHatSpeed = 5;
 
